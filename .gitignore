@@ -1,0 +1,7 @@
+/application/cache/*
+/application/logs
+/application/config/database.php
+/application/config/config.php
+/vendor
+/uploads
+/catatan

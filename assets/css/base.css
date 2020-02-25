@@ -1,0 +1,187 @@
+/*  tambahan dari TU */
+
+table.custom_table thead tr th:not(.search) {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 14px;
+}
+
+table.custom_table thead th>div {
+    margin: 0 auto;
+}
+
+
+/*
+table.custom_table td,
+table.custom_table th {
+    background-color: #FFFFFF;
+}
+*/
+
+table.custom_table tbody td {
+    vertical-align: middle;
+    line-height: 14px;
+}
+
+
+table.table-form>tbody>tr>td,
+.table>tbody>tr>th,
+.table>tfoot>tr>td,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>thead>tr>th {
+    padding: 4px;
+}
+
+table.table-form>tfoot input {
+    margin: 0;
+}
+
+table.table-form>tbody>tr>td input,
+table.table-form>tfoot>tr>td input {
+    padding: inherit;
+    font-size: 11px;
+}
+
+div.header-btn {
+    margin-bottom: 10px;
+}
+
+ins.cBox {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+    border: 0px none;
+    opacity: 0;
+}
+
+.reg bdo {
+    float: left;
+    margin-bottom: 10px;
+    position: relative;
+    margin-right: 14px;
+}
+
+.reg bdo input[type="radio"] {
+    cursor: pointer;
+    opacity: 0;
+    position: relative;
+    z-index: 999996;
+}
+
+.reg bdo span {
+    border: 1px solid #555;
+    border-radius: 100%;
+    /* background: rgba(0, 0, 0, 0) url("../images/radio_btn.png") no-repeat scroll center bottom;*/
+    cursor: pointer;
+    left: -2px;
+    padding: 8px;
+    position: absolute;
+    top: 5px;
+    z-index: 0;
+}
+
+.reg bdo span:hover {
+    border: 1px solid black;
+    /* background: rgba(0, 0, 0, 0) url("../images/radio_btn_ho.png") no-repeat scroll center bottom;*/
+}
+
+.reg bdo input[type="radio"]:checked+span {
+    /* background: rgba(0, 0, 0, 0) url("../images/radio_btn_ho.png") no-repeat scroll center bottom;*/
+}
+
+.reg bdo input[type="radio"]:checked+span::after {
+    background: #000 none repeat scroll 0 0;
+    border-radius: 100%;
+    bottom: 0;
+    content: " ";
+    height: 8px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 8px;
+}
+
+[data-tipe="integer"],
+[data-tipe="decimal"],
+[data-tipe="angka"],
+[data-tipe="decimal3"] {
+    text-align: right;
+}
+
+.btn-collapse {
+    cursor: pointer;
+}
+
+.expand-row {
+    display: table-row;
+}
+
+
+/* enable absolute positioning */
+
+.inner-addon {
+    position: relative;
+}
+
+
+/* style icon */
+
+.inner-addon .glyphicon {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+}
+
+
+/* align icon */
+
+.left-addon .glyphicon {
+    left: 0px;
+}
+
+.right-addon .glyphicon {
+    right: 5px;
+}
+
+
+/* add padding  */
+
+.left-addon input {
+    padding-left: 30px;
+}
+
+.right-addon input {
+    padding-right: 30px;
+}
+
+tr.terpilih td {
+    background-color: greenyellow;
+}
+
+thead.default tr>th {
+    background-color: #EAF5FF;
+}
+
+table.text-center>thead>tr>th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.fa-input {
+    font-family: FontAwesome, ‘Helvetica Neue’, Helvetica, Arial, sans-serif;
+}
+
+.tile-stats .count {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.65857;
+}
