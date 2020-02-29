@@ -5,7 +5,7 @@
 */
 class Contract_model extends Base_model{
     protected $_table = 'contracts';
-    
+    protected $searchLookupColumn = 'letter_number';   
     protected $primary_key = 'id';
     protected $columnTableData = ['id','type','letter_number','subject','description','start_date','end_date','signed_date','tags','used'];
     protected $headerTableData = [				[['data' => 'type'],['data' => 'letter_number'],['data' => 'subject'],['data' => 'description'],['data' => 'start_date'],['data' => 'end_date'],['data' => 'signed_date'],['data' => 'tags'],['data' => 'used']]];

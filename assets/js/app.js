@@ -3,16 +3,22 @@ var App = {
     mainElm: '#content_area',
     calendar: {},
     hariLibur: null,
-    currentUrl: { data: {}, url: '' },
-    prevUrl: { data: {}, url: '' },
+    currentUrl: {
+        data: {},
+        url: ''
+    },
+    prevUrl: {
+        data: {},
+        url: ''
+    },
 
-    setHariLibur: function() {
+    setHariLibur: function () {
         $.ajax({
             url: 'master/jadwal/getHariLibur',
             data: {},
             type: 'post',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 if (data.status) {
                     if (!empty(data.content)) {
                         App.hariLibur = data.content;
@@ -27,7 +33,7 @@ var App = {
         });
     },
 
-    isHariLibur: function(hariH, hariLibur) {
+    isHariLibur: function (hariH, hariLibur) {
         /* jika hari minggu atau ada dalam hari libur return true*/
         var _t = this.getDateStr(hariH);
         var _h = new Date(_t);
@@ -36,7 +42,7 @@ var App = {
         return _r;
     },
 
-    getDateStr: function(dt, separator) {
+    getDateStr: function (dt, separator) {
         if (separator == undefined) {
             separator = '-';
         }
@@ -47,7 +53,7 @@ var App = {
         var _arr = [dt.getFullYear(), _month, dt.getDate()];
         return _arr.join(separator);
     },
-    inArray: function(item, arr) {
+    inArray: function (item, arr) {
         if (!arr) {
             return false;
         } else {
@@ -60,7 +66,7 @@ var App = {
         }
     },
 
-    confirmComplexDialog: function(_title, _message, callback) {
+    confirmComplexDialog: function (_title, _message, callback) {
         var modal = bootbox.dialog({
             message: $(_message).html(),
             title: _title,
@@ -68,7 +74,7 @@ var App = {
                 confirm: {
                     label: 'Ya',
                     className: 'btn-primary',
-                    callback: function(result) {
+                    callback: function (result) {
                         callback(result);
                     },
                 },
@@ -78,14 +84,14 @@ var App = {
                 }
             },
             show: false,
-            onEscape: function() {
+            onEscape: function () {
                 modal.modal("hide");
             }
         });
         modal.modal("show");
     }, // end -  confirmRejectDialog
 
-    saveDialog: function(_title, _message, callback) {
+    saveDialog: function (_title, _message, callback) {
         var modal = bootbox.dialog({
             message: _message,
             title: _title,
@@ -93,20 +99,20 @@ var App = {
                 confirm: {
                     label: 'Simpan',
                     className: 'btn-primary',
-                    callback: function(result) {
+                    callback: function (result) {
                         callback(result);
                     },
                 },
             },
             show: false,
-            onEscape: function() {
+            onEscape: function () {
                 modal.modal("hide");
             }
         });
         modal.modal("show");
     }, // end -  confirmRejectDialog
 
-    confirmRejectDialog: function(elm, message, callback) {
+    confirmRejectDialog: function (elm, message, callback) {
         bootbox.prompt({
             title: message,
             inputType: 'textarea',
@@ -121,7 +127,7 @@ var App = {
                     className: 'btn-danger'
                 }
             },
-            callback: function(result) {
+            callback: function (result) {
                 var st = true;
                 if (result != null) {
                     if (empty(result)) {
@@ -136,7 +142,7 @@ var App = {
         });
     }, // end -  confirmRejectDialog
 
-    confirmDialog: function(message, callback) {
+    confirmDialog: function (message, callback) {
         bootbox.confirm({
             title: 'Konfirmasi',
             message: message,
@@ -150,13 +156,13 @@ var App = {
                     className: 'btn-danger'
                 }
             },
-            callback: function(result) {
+            callback: function (result) {
                 callback(result);
             }
         });
     }, // end - confirmDialog
 
-    alertDialog: function(title, message, callback) {
+    alertDialog: function (title, message, callback) {
         bootbox.alert({
             title: title,
             message: message,
@@ -166,7 +172,7 @@ var App = {
                     className: 'btn-primary'
                 }
             },
-            callback: function(result) {
+            callback: function (result) {
                 if (callback !== undefined) {
                     callback(result);
                 }
@@ -175,7 +181,7 @@ var App = {
     },
 
 
-    showLoadingContentView: function(_is) {
+    showLoadingContentView: function (_is) {
         if (_is) {
             $('#main_content').hide();
             $('#loadingContentView').show();
@@ -185,26 +191,29 @@ var App = {
         }
     }, // end - showLoadingContentView
 
-    loadContentView: function(_url, _data, _type, refreshFn = function() {}) {
+    loadContentView: function (_url, _data, _type, refreshFn = function () {}) {
         this.prevUrl = this.currentUrl;
-        this.currentUrl = { url: _url, data: _data };
+        this.currentUrl = {
+            url: _url,
+            data: _data
+        };
         $.ajax({
             url: _url,
             type: _type,
             data: _data,
-            beforeSend: function() {
+            beforeSend: function () {
                 App.showLoadingContentView(true);
             },
-            success: function(data) {
+            success: function (data) {
                 $('#main_content').html(data);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 var pesan = xhr.responseText;
-                bootbox.alert('Terjadi error di server \n' + pesan, function() {
+                bootbox.alert('Terjadi error di server \n' + pesan, function () {
                     App.showLoadingContentView(false);
                 });
             }
-        }).done(function() {
+        }).done(function () {
             refreshFn();
             App.showLoadingContentView(false);
             App.initFormatInput();
@@ -212,7 +221,7 @@ var App = {
             if ($('#calendar').length) {
                 App.initCalendar($('#calendar'));
             }
-            if(('.select2_ajax').length){
+            if (('.select2_ajax').length) {
                 App.initSelect2Ajax();
             }
             if ($('.modal-backdrop').length) {
@@ -221,49 +230,49 @@ var App = {
         });
     }, // end - loadContentView
 
-    getContentView: function(_url, _data, refreshFn = function() {}) {
+    getContentView: function (_url, _data, refreshFn = function () {}) {
         this.loadContentView(_url, _data, 'GET', refreshFn);
     },
 
-    postContentView: function(_url, _data, refreshFn = function() {}) {
+    postContentView: function (_url, _data, refreshFn = function () {}) {
         this.loadContentView(_url, _data, 'POST', refreshFn);
     },
 
-    loadMainContent: function(_url, _data, _type, _callback) {
+    loadMainContent: function (_url, _data, _type, _callback) {
         var _mainElm = $(this.mainElm);
         $.ajax({
             url: _url,
             data: _data,
             dataType: 'html',
             type: _type,
-            beforeSend: function() {
+            beforeSend: function () {
                 _mainElm.html('Loading ......');
             },
-            success: function(data) {
+            success: function (data) {
                 _mainElm.html(data);
             }
-        }).done(function() {
+        }).done(function () {
             if (_callback !== undefined) {
                 _callback();
             }
         });
     },
 
-    getMainContentView: function(_url, _data, refreshFn = function() {}) {
+    getMainContentView: function (_url, _data, refreshFn = function () {}) {
         this.loadMainContent(_url, _data, 'GET', refreshFn);
     },
 
-    postMainContentView: function(_url, _data, refreshFn = function() {}) {
+    postMainContentView: function (_url, _data, refreshFn = function () {}) {
         this.loadMainContent(_url, _data, 'POST', refreshFn);
     },
 
-    refresh: function() {
+    refresh: function () {
         window.location.reload();
     },
 
-    collapseRow: function() {
+    collapseRow: function () {
         // NOTE: setup untuk expand collapse row table
-        $('tr.header td span.btn-collapse').click(function() {
+        $('tr.header td span.btn-collapse').click(function () {
             var row = $(this).closest('tr.header');
             $(row).toggleClass('expand-row').nextUntil('tr.header').slideToggle(100);
             var _el = $(row).closest('tr').find('span.btn-collapse');
@@ -277,7 +286,7 @@ var App = {
         });
     }, // end - collapseRow
 
-    checkRequired: function(targets, callback) {
+    checkRequired: function (targets, callback) {
 
         var data = {
             count: 0,
@@ -286,7 +295,7 @@ var App = {
         };
 
         $(targets).parent().removeClass('has-error');
-        $.map($(targets), function(elm) {
+        $.map($(targets), function (elm) {
             var value = $(elm).val();
             var error = false;
             var eName = $(elm).attr('name');
@@ -320,7 +329,7 @@ var App = {
     }, // end - checkRequired
 
     /* execute Function By Name */
-    execFunction: function(functionName, context /*, args */ ) {
+    execFunction: function (functionName, context /*, args */ ) {
         console.log(functionName);
         var args, namespaces, func;
 
@@ -357,14 +366,14 @@ var App = {
 
         return context[func].apply(context, args);
     }, // end - executeFunctionByName
-    initTooltipster: function(content) {
-        $('.tooltipster').hover(function(e) {
+    initTooltipster: function (content) {
+        $('.tooltipster').hover(function (e) {
             // alert('tes');
             console.log(e.target);
             App.showTooltip(e.target, content);
         });
     },
-    showTooltip: function(element, content) {
+    showTooltip: function (element, content) {
         $(element).tooltipster({
             content: content,
             contentAsHTML: true,
@@ -376,7 +385,7 @@ var App = {
         });
     },
     _tglServer: null,
-    _setTglServer: function(tgl) {
+    _setTglServer: function (tgl) {
         this._tglServer = new Date(tgl);
     },
     _regional: {
@@ -392,11 +401,11 @@ var App = {
 
     },
 
-    _setCurrentFarm: function(idFarm) {
+    _setCurrentFarm: function (idFarm) {
         this._currentFarm = idFarm;
     },
     /* dt adalah object date */
-    _getDateStr: function(dt, separator) {
+    _getDateStr: function (dt, separator) {
         if (separator == undefined) {
             separator = '-';
         }
@@ -404,7 +413,7 @@ var App = {
         return _arr.join(separator);
     },
     /* convert 2015-5-1 menjadi 2015-05-01 supaya valid tanggalnya di javascript */
-    _convertTgl: function(tgl) {
+    _convertTgl: function (tgl) {
         var _t = tgl.split('-');
         var _new = [];
         for (var x in _t) {
@@ -417,17 +426,17 @@ var App = {
         return _new.join('-');
     },
     /* convert dari Mei menjadi 05 */
-    _indexBulan: function(bulan) {
+    _indexBulan: function (bulan) {
         var _reg = $.datepicker.regional['id'] || this._regional;
         var _bulan = _reg.monthNamesShort;
         return _bulan.indexOf(bulan) + 1;
     },
-    _namaBulan: function(indexBulan) {
+    _namaBulan: function (indexBulan) {
         var _reg = $.datepicker.regional['id'] || this._regional;
         return _reg.monthNamesShort[indexBulan - 1];
     },
     /* tgldb = 2015-05-26 dirubah jadi 26-Mei-2015 */
-    _tanggalLocal: function(tgldb, separator_asal, separator_tujuan) {
+    _tanggalLocal: function (tgldb, separator_asal, separator_tujuan) {
         if (separator_asal == undefined) {
             separator_asal = '-';
         }
@@ -442,7 +451,7 @@ var App = {
         return _new.join(separator_tujuan);
     },
     /* 26-Mei-2015 dirubah menjadi tgldb 2015-05-26 */
-    _tanggalDb: function(tgllocal, separator_asal, separator_tujuan) {
+    _tanggalDb: function (tgllocal, separator_asal, separator_tujuan) {
         if (separator_asal == undefined) {
             separator_asal = '-';
         }
@@ -459,7 +468,7 @@ var App = {
         return _new.join(separator_tujuan);
     },
 
-    load_main_content: function(event, elm, url, target) {
+    load_main_content: function (event, elm, url, target) {
         var _url = url.split('#')[1] || null;
         if (!empty(_url)) {
             //$(target).empty().load(_url);
@@ -470,7 +479,7 @@ var App = {
                 },
                 url: _url,
                 async: false,
-                success: function(data) {
+                success: function (data) {
                     $(target).html(data);
                 },
             });
@@ -479,7 +488,7 @@ var App = {
         event.preventDefault();
     },
 
-    changePassword: function() {
+    changePassword: function () {
         var oldPassword = $('#divChangePassword input[name=oldPassword]').val();
         var newPassword = $('#divChangePassword input[name=newPassword]').val();
         var confirmPassword = $('#divChangePassword input[name=confirmPassword]').val();
@@ -490,11 +499,14 @@ var App = {
         if (sama) {
             $.ajax({
                 url: 'user/changePassword',
-                data: { oldPassword: oldPassword, newPassword: newPassword },
+                data: {
+                    oldPassword: oldPassword,
+                    newPassword: newPassword
+                },
                 type: 'POST',
                 dataType: 'json',
-                beforeSend: function() {},
-                success: function(data) {
+                beforeSend: function () {},
+                success: function (data) {
                     if (data.status) {
                         toastr.success(data.message);
                         bootbox.hideAll();
@@ -502,51 +514,61 @@ var App = {
                         toastr.error(data.message);
                     }
                 },
-                error: function() {}
+                error: function () {}
             });
         } else {
             toastr.error('Password belum sama');
         }
         return false;
     },
-    addRecord: function(elm) {
+    addRecord: function (elm) {
         var _url = $(elm).data('url');
         var _key = $(elm).data('key');
-        this.postContentView(_url, { key: _key });
+        this.postContentView(_url, {
+            key: _key
+        });
     },
-    editRecord: function(elm) {
+    editRecord: function (elm) {
         var _key = $(elm).closest('tr').data('key');
         var _url = $(elm).data('url');
-        this.postContentView(_url, { key: _key });
+        this.postContentView(_url, {
+            key: _key
+        });
     },
 
-    detailRecord: function(elm) {
+    detailRecord: function (elm) {
         var _key = $(elm).closest('tr').data('key');
         if (_key == undefined) {
             _key = $(elm).data('key');
         }
         var _url = $(elm).data('url');
         var _nexturl = $(elm).data('nexturl');
-        this.postContentView(_url, { key: _key, nexturl: _nexturl });
+        this.postContentView(_url, {
+            key: _key,
+            nexturl: _nexturl
+        });
     },
 
-    gotoUrl: function(elm) {
+    gotoUrl: function (elm) {
         var _key = $(elm).data('key');
         var _url = $(elm).data('url');
         if (_key != undefined) {
             _url += '/' + _key;
         }
         var _nexturl = $(elm).data('nexturl');
-        this.postContentView(_url, { key: _key, nexturl: _nexturl });
+        this.postContentView(_url, {
+            key: _key,
+            nexturl: _nexturl
+        });
     },
 
-    backUrl: function() {
+    backUrl: function () {
         var _url = this.prevUrl.url;
         var _data = this.prevUrl.data;
         this.postContentView(_url, _data);
     },
 
-    redirectUrl: function(elm) {
+    redirectUrl: function (elm) {
         var _url = $(elm).data('url');
         var _key = $(elm).closest('tr').data('key');
         if (_key == undefined) {
@@ -556,21 +578,27 @@ var App = {
         if ($(elm).data('target') !== undefined) {
             _target = $(elm).data('target');
         }
-        $.redirect(_url, { key: _key }, 'post', _target);
+        $.redirect(_url, {
+            key: _key
+        }, 'post', _target);
     },
 
-    deleteRecord: function(elm) {
+    deleteRecord: function (elm) {
         var _key = $(elm).closest('tr').data('key');
         var _url = $(elm).data('url');
         var _nexturl = $(elm).data('nexturl');
         var _urlMessage = $(elm).data('urlmessage');
         var _ini = this;
 
-        $.post(_urlMessage, { key: _key }, function(_message) {
-            _ini.confirmDialog(_message, function(result) {
+        $.post(_urlMessage, {
+            key: _key
+        }, function (_message) {
+            _ini.confirmDialog(_message, function (result) {
                 if (result) {
-                    $.post(_url, { key: _key }, function(data) {
-                        _ini.alertDialog('Informasi', data.message, function() {
+                    $.post(_url, {
+                        key: _key
+                    }, function (data) {
+                        _ini.alertDialog('Informasi', data.message, function () {
                             _ini.postContentView(_nexturl);
                         });
                     }, 'json')
@@ -579,17 +607,21 @@ var App = {
         }, 'html');
     },
 
-    updateRecord: function(elm, callback) {
+    updateRecord: function (elm, callback) {
         var _key = $(elm).closest('tr').data('key');
         var _url = $(elm).data('url');
         var _urlMessage = $(elm).data('urlmessage');
         var _ini = this;
 
-        $.post(_urlMessage, { key: _key }, function(_message) {
-            _ini.confirmDialog(_message, function(result) {
+        $.post(_urlMessage, {
+            key: _key
+        }, function (_message) {
+            _ini.confirmDialog(_message, function (result) {
                 if (result) {
-                    $.post(_url, { key: _key }, function(data) {
-                        _ini.alertDialog('Informasi', data.message, function() {
+                    $.post(_url, {
+                        key: _key
+                    }, function (data) {
+                        _ini.alertDialog('Informasi', data.message, function () {
                             if (data.status) {
                                 if (callback != undefined) {
                                     if (callback instanceof Function) {
@@ -604,26 +636,27 @@ var App = {
         }, 'html');
     },
 
-    saveRecord: function(elm) {
+    saveRecord: function (elm) {
         var _url = $(elm).attr('action');
         var _nexturl = $(elm).data('nexturl');
         var _ini = this;
         var _message = 'Apakah anda yakin akan menyimpan data ini ?';
-        _ini.confirmDialog(_message, function(result) {
+        _ini.confirmDialog(_message, function (result) {
             if (result) {
                 var _key = {},
                     _numeric = [],
                     _dates = [];
-                $(elm).find('input:hidden').each(function() {
+                var _key = {};
+                $(elm).find('input:hidden').not('.references').each(function () {
                     _key[$(this).attr('name')] = $(this).val();
                 });
 
-                $(elm).find('[data-tipe=integer],[data-tipe=angka],[data-tipe=decimal]').each(function() {
+                $(elm).find('[data-tipe=integer],[data-tipe=angka],[data-tipe=decimal]').each(function () {
                     _numeric.push($(this).attr('name'));
                 });
 
-                $(elm).find('input.hasDatepicker').each(function() {
-                    if($(this).attr('name') != undefined){
+                $(elm).find('input.hasDatepicker').each(function () {
+                    if ($(this).attr('name') != undefined) {
                         _dates.push($(this).attr('name'));
                     }
                 });
@@ -657,7 +690,10 @@ var App = {
                         }
                     }
                 }
-                var _sendData = { data: _data, key: _key };
+                var _sendData = {
+                    data: _data,
+                    key: _key
+                };
                 if ($('#attachment').length) {
                     var attachment = $('#attachment').get(0).files[0];
                     if (attachment !== undefined) {
@@ -666,8 +702,8 @@ var App = {
                     }
                 }
 
-                $.post(_url, _sendData, function(data) {
-                    _ini.alertDialog('Informasi', data.message, function() {
+                $.post(_url, _sendData, function (data) {
+                    _ini.alertDialog('Informasi', data.message, function () {
                         if (data.status) {
                             _ini.postContentView(_nexturl);
                         }
@@ -679,7 +715,7 @@ var App = {
     },
 
 
-    searchRecord: function(elm) {
+    searchRecord: function (elm) {
         var _url = $(elm).attr('action');
         var _ini = this;
 
@@ -688,8 +724,8 @@ var App = {
             _tmpVal;
         var _nilai, _dates = [];
 
-        $(elm).find('input.hasDatepicker').each(function() {
-            if($(this).attr('name') != undefined){
+        $(elm).find('input.hasDatepicker').each(function () {
+            if ($(this).attr('name') != undefined) {
                 _dates.push($(this).attr('name'));
             }
         });
@@ -717,11 +753,13 @@ var App = {
             }
         }
 
-        _ini.postContentView(_url, { data: _data });
+        _ini.postContentView(_url, {
+            data: _data
+        });
         return false;
     },
 
-    getRequest: function(elm) {
+    getRequest: function (elm) {
         var _url = $(elm).data('url');
         var _key = $(elm).data('key');
         var _nexturl = $(elm).data('nexturl');
@@ -731,34 +769,36 @@ var App = {
         var _ini = this;
         $.ajax({
             url: _url,
-            beforeSend: function() {
+            beforeSend: function () {
                 _ini.showLoadingContentView(true);
             },
             data: _key,
             type: 'GET',
-            success: function(data) {
-                _ini.alertDialog('Informasi', data.message, function() {
+            success: function (data) {
+                _ini.alertDialog('Informasi', data.message, function () {
                     if (_nexturl != undefined) {
                         _ini.postContentView(_nexturl);
                     }
                 });
             },
             dataType: 'json'
-        }).done(function() {
+        }).done(function () {
             _ini.showLoadingContentView(false);
         });
     },
 
-    postRequest: function(_url, _data, _nexturl) {
+    postRequest: function (_url, _data, _nexturl) {
         $.ajax({
             url: _url,
             type: 'POST',
-            beforeSend: function() {
+            beforeSend: function () {
                 App.showLoadingContentView(true);
             },
-            data: { data: _data },
-            success: function(data) {
-                App.alertDialog('Informasi', data.message, function() {
+            data: {
+                data: _data
+            },
+            success: function (data) {
+                App.alertDialog('Informasi', data.message, function () {
                     if (_nexturl != undefined) {
                         App.postContentView(_nexturl);
                     }
@@ -766,12 +806,12 @@ var App = {
                 });
             },
             dataType: 'json'
-        }).done(function(data) {
+        }).done(function (data) {
             App.showLoadingContentView(false);
         });
     },
 
-    checkAll: function(elm) {
+    checkAll: function (elm) {
         var _table = $(elm).closest('table');
         var _tbody = _table.find('tbody');
         var _checked = $(elm).is(':checked') ? 1 : 0;
@@ -780,7 +820,7 @@ var App = {
         //}
     },
 
-    setDependency: function(elm) {
+    setDependency: function (elm) {
         var _dependency = $(elm).data('dependency');
         var _tbody = $(elm).closest('tbody');
         var _checked = $(elm).is(':checked') ? 1 : 0;
@@ -791,9 +831,9 @@ var App = {
         }
 
     },
-    initFormatInput: function() {
+    initFormatInput: function () {
         $('form').validate({
-            submitHandler: function() {
+            submitHandler: function () {
                 var _form = this.currentForm;
                 var _action = _form.getAttribute('data-actiontype');
                 switch (_action) {
@@ -809,11 +849,11 @@ var App = {
 
             }
         });
-        $('[data-tipe=date],input[name=startDate],input[name=endDate],input[name=start_date],input[name=end_date]').each(function() {
+        $('[data-tipe=date],input[name=startDate],input[name=endDate],input[name=start_date],input[name=end_date]').each(function () {
             var _datepickerParam = {
                 dateFormat: 'dd M yy',
                 locale: 'id',
-                onSelect: function(date) {
+                onSelect: function (date) {
                     var _n = $(this).attr('name');
                     if (App.inArray(_n, ['startDate', 'start_date'])) {
                         $('input[name=endDate]').datepicker('option', 'minDate', date);
@@ -824,19 +864,19 @@ var App = {
                     }
                 },
             };
-            if($(this).data('mindate') != undefined){
+            if ($(this).data('mindate') != undefined) {
                 _datepickerParam['minDate'] = $(this).data('mindate');
             }
             $(this).datepicker(_datepickerParam);
         });
 
         /* format numeral */
-        $('[data-tipe=integer],[data-tipe=angka],[data-tipe=decimal]').each(function() {
+        $('[data-tipe=integer],[data-tipe=angka],[data-tipe=decimal]').each(function () {
             $(this).priceFormat(Config[$(this).data('tipe')]);
         });
 
         /* format alpha-numeric */
-        $('[data-tipe=alpha-numeric]').keyup(function() {
+        $('[data-tipe=alpha-numeric]').keyup(function () {
             if (this.value.match(/[^a-zA-Z0-9]/g)) {
                 this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');
             }
@@ -845,7 +885,7 @@ var App = {
         /** untuk select2 */
         $(".select2_single").select2({
             placeholder: "&#xf002 silakan dipilih",
-            escapeMarkup: function(m) {
+            escapeMarkup: function (m) {
                 return m;
             },
             allowClear: true
@@ -856,10 +896,12 @@ var App = {
             placeholder: "silakan dipilih",
             allowClear: true
         });
+
+        $('.form-control.hide').closest('.form-group').hide();
     },
 
-    initSelect2Ajax: function() {
-        $(".select2_ajax").each(function() {
+    initSelect2Ajax: function () {
+        $(".select2_ajax").each(function () {
             var url = $(this).data('url');
             $(this).select2({
                 ajax: {
@@ -867,13 +909,13 @@ var App = {
                     type: 'post',
                     dataType: 'json',
                     delay: 500,
-                    data: function(params) {
+                    data: function (params) {
                         return {
                             q: $.trim(params.term), // search term
                             page: params.page
                         };
                     },
-                    processResults: function(data) {
+                    processResults: function (data) {
                         data.page = data.page || 1;
                         return {
                             results: data.items,
@@ -892,21 +934,23 @@ var App = {
         });
     },
 
-    initPagination: function() {
+    initPagination: function () {
         var _ini = this;
-        $('#divPagination ul.pagination a').click(function(e) {
+        $('#divPagination ul.pagination a').click(function (e) {
             var _href = $(this).attr('href');
             //_href.pop();
             var _url = _href;
             //var _page = $(this).data('ci-pagination-page');
             var _data = {};
-            _ini.postContentView(_url, { data: _data });
+            _ini.postContentView(_url, {
+                data: _data
+            });
             e.preventDefault();
             return false;
         });
     },
 
-    initCalendar: function(elm) {
+    initCalendar: function (elm) {
         this.calendar = $(elm).fullCalendar({
             height: 650,
             showNonCurrentDates: false,
@@ -917,7 +961,7 @@ var App = {
                     /*custom_param1: 'something',
                     custom_param2: 'somethingelse'*/
                 },
-                error: function() {
+                error: function () {
                     alert('there was an error while fetching events!');
                 },
                 color: 'none', // a non-ajax option
@@ -941,7 +985,7 @@ var App = {
                     }
                 }
         },*/
-            eventRender: function(event, element) {
+            eventRender: function (event, element) {
                 if (!empty(event.className)) {
                     //$day = $date.getDate();
                     var title = element.find('.fc-title');
@@ -951,7 +995,7 @@ var App = {
             },
         });
     },
-    filterPage: function(elm) {
+    filterPage: function (elm) {
         $('#searchModal').modal('show');
     }
 };

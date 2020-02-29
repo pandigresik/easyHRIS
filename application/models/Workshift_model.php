@@ -5,10 +5,10 @@
 */
 class Workshift_model extends Base_model{
     protected $_table = 'workshifts';
-    
+	
     protected $primary_key = 'id';
-    protected $columnTableData = ['employee_id','shiftment_id','description','start_date','end_date'];
-    protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'Reference'],['data' => 'description'],['data' => 'start_date'],['data' => 'end_date']]];
+    protected $columnTableData = ['employee_id','shiftment_id','description','work_date'];
+    protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'Reference'],['data' => 'description'],['data' => 'work_date']]];
 
     protected $form = [			
 			'employee_id' => [
@@ -41,24 +41,15 @@ class Workshift_model extends Base_model{
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
-			'start_date' => [
-				'id' => 'start_date',
-				'label' => 'start_date',
-				'placeholder' => 'Isikan start_date',
+			'work_date' => [
+				'id' => 'work_date',
+				'label' => 'Tanggal',
+				'placeholder' => 'Isikan tanggal',
 				            'type' => 'input',
             'data-tipe' => 'date',
 				'value' => '',	
 				'required' => 'required'	
-			]	,			
-			'end_date' => [
-				'id' => 'end_date',
-				'label' => 'end_date',
-				'placeholder' => 'Isikan end_date',
-				            'type' => 'input',
-            'data-tipe' => 'date',
-				'value' => '',	
-				'required' => 'required'	
-			]	,
+			]	,						
 		'submit' => [
             'id' => 'submit',
             'type' => 'submit',

@@ -16,8 +16,8 @@ class User extends MX_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('user_model', 'm_user');
-        $this->load->library('session');
+        $this->load->model('user_model', 'm_user');        
+        $this->load->library(array('session','form_builder'));
     }
 
     public function login()
@@ -65,6 +65,7 @@ class User extends MX_Controller
         
         $dataUser = array(
             'isLogin' => 1,
+            'userId' => $userLogin->id,
             'permission' => serialize($accessRoute),
             'restrictroute' => serialize($allRoute),
             'menuId' => serialize($menuArr),
@@ -123,34 +124,79 @@ class User extends MX_Controller
         return $this->session->userdata('kode_user');
     }
 
-    public function changePassword()
+        public function changePassword()
     {
-        if (isset($_POST['newPassword'])) {
-            $username = $this->getUsername();
-            $newPassword = $this->input->post('newPassword');
-            $oldPassword = $this->input->post('oldPassword');
-            $result = array(
+        $form_options = [
+            'old_password' => array(
+                'id' => 'old_password',
+                'label' => 'Password Lama',
+                'placeholder' => 'password lama',
+                'type' => 'password',
+                'required' => 'required',
+                'value' => '',
+            ),
+            'password' => array(
+                'id' => 'new_password',
+                'label' => 'Password Baru',
+                'placeholder' => 'password baru',
+                'type' => 'password',
+                'required' => 'required',
+                'value' => '',
+            ),
+            'confirm_password' => array(
+                'id' => 'confirm_password',
+                'label' => 'Konfirmasi Password',
+                'placeholder' => 'password baru',
+                'type' => 'password',
+                'required' => 'required',
+                'value' => '',
+            ),
+            'submit' => [
+                'id' => 'submit',
+                'type' => 'submit',
+                'label' => 'Simpan',
+            ],
+        ];
+        $dataForm = array(
+            'form_header' => array('data-actiontype' => 'save', 'data-nexturl' => site_url('home/dashboard'), 'action' => site_url('user/user/setNewPassword')),
+            'form_options' => $form_options,
+        );
+        $this->load->view('layout/form', $dataForm);
+    }
+
+    public function setNewPassword()
+    {
+        $idUser = $this->session->userdata('idUser');
+        $data = $this->input->post('data');
+        $oldPassword = $data['old_password'];
+        $newPassword = $data['new_password'];
+        $confirmPassword = $data['confirm_password'];
+        $result = array(
                 'status' => 0,
                 'message' => '',
             );
-            if (!empty($username)) {
-                $this->m_user->changePassword($username, $oldPassword, $newPassword);
-                if ($this->m_user->affectedRow() > 0) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Password telah berhasil dirubah.';
+
+        if (!empty($idUser)) {
+            if ($newPassword == $confirmPassword) {
+                $userLogin = $this->m_user->get($idUser);
+                if (SecurityManager::validate($oldPassword, $userLogin->password, $userLogin->password_salt)) {
+                    if ($this->m_user->update($idUser, ['password' => SecurityManager::hashPassword($newPassword, $userLogin->password_salt)])) {
+                        $result['status'] = 1;
+                        $result['message'] = 'Password telah berhasil dirubah.';
+                    } else {
+                        $result['message'] = 'Password gagal dirubah, password lama mungkin tidak sesuai.';
+                    }
                 } else {
-                    $result['status'] = 0;
-                    $result['message'] = 'Password gagal dirubah, password lama mungkin tidak sesuai.';
+                    $result['message'] = 'Password lama tidak sesuai.';
                 }
             } else {
-                $result['status'] = 0;
-                $result['message'] = 'Login terlebih dahulu. ';
+                $result['message'] = 'Password baru tidak sama dengan konfirmasi password';
             }
-            echo json_encode($result);
         } else {
-            $data['nama'] = $this->input->post('nama_user');
-            $this->load->view('changePassword', $data);
+            $result['message'] = 'Login terlebih dahulu. ';
         }
+
+        echo json_encode($result);
     }
 
     public function getPassword()
@@ -170,7 +216,5 @@ class User extends MX_Controller
 
     public function setPermission()
     {
-    }
-
-    
+    }    
 }

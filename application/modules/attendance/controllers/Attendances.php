@@ -11,5 +11,10 @@ class Attendances extends MY_Controller {
         $this->load->model('Attendance_model','attendance_model');
         $this->model = $this->attendance_model;
     }
+
+    public function index($referenceId = NULL){
+        $this->model->setWithReferences(TRUE);
+        parent::index($referenceId);        
+    }
 }
 

@@ -5,8 +5,7 @@
 */
 class Job_title_model extends Base_model{
     protected $_table = 'job_titles';
-	private $withReferences = FALSE;
-    protected $before_get = array('joinReference');    
+	
     protected $primary_key = 'id';
     protected $columnTableData = ['job_levels.name as references','job_titles.code','job_titles.name'];
     protected $headerTableData = [				[['data' => 'Reference'],['data' => 'Kode'],['data' => 'Nama']]];
@@ -59,24 +58,6 @@ class Job_title_model extends Base_model{
     }
     */
 
-	/**
-	 * Get the value of withReferences
-	 */ 
-	public function getWithReferences()
-	{
-		return $this->withReferences;
-	}
-
-	/**
-	 * Set the value of withReferences
-	 *
-	 * @return  self
-	 */ 
-	public function setWithReferences($withReferences)
-	{
-		$this->withReferences = $withReferences;
-
-		return $this;
-	}
+	
 }
 ?>

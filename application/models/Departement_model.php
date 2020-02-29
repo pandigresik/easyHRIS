@@ -5,9 +5,7 @@
 */
 class Departement_model extends Base_model{
     protected $_table = 'departments';
-	protected $searchLookupColumn = 'name';    
-	private $withReferences = FALSE;
-    protected $before_get = array('joinReference');    
+	protected $searchLookupColumn = 'name';    	
     protected $primary_key = 'id';
     protected $columnTableData = ['departments.id','a.name as references','departments.code','departments.name'];
     protected $headerTableData = [				[['data' => 'Reference'],['data' => 'Kode'],['data' => 'Nama']]];
@@ -60,25 +58,5 @@ class Departement_model extends Base_model{
         $this->form['parent_id']['options'] = $parentMenu;
     }
     */
-
-	/**
-	 * Get the value of withReferences
-	 */ 
-	public function getWithReferences()
-	{
-		return $this->withReferences;
-	}
-
-	/**
-	 * Set the value of withReferences
-	 *
-	 * @return  self
-	 */ 
-	public function setWithReferences($withReferences)
-	{
-		$this->withReferences = $withReferences;
-
-		return $this;
-	}
 }
 ?>

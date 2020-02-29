@@ -2,9 +2,22 @@
 
 class Crud extends MX_Controller
 {
+	private $sm;	
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('inflector');
+		$dbConfig = $this->db;
+		$connectionParams = array(
+			'dbname' => $dbConfig->database,
+			'user' => $dbConfig->username,
+			'password' => $dbConfig->password,
+			'host' => '127.0.0.1',
+			'driver' => 'pdo_mysql',
+		);
+		\Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');		
+		$conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams);
+		$this->sm = $conn->getSchemaManager();
+		$this->sm->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 	}
 	
     public function index()
@@ -17,13 +30,21 @@ class Crud extends MX_Controller
 			'form_element' => $this->input->post('form_element'),
 			'field_table' => array()
 		);
-		$data['tables'] = $this->db->list_tables();
+		$listTables = [];
+		foreach($this->sm->listTables() as $table){			
+			array_push($listTables,$table->getName());
+		}
+		$data['tables'] = $listTables;//$this->db->list_tables();
 		if(empty($data['form_element'])){
-			if(!empty($data['table_name'])){
+			if(!empty($data['table_name'])){				
 				$data['module'] = $this->setModuleName(singular($data['table_name']));
 				$data['controller'] = $this->setControllerName($data['table_name']);
 				$data['model'] = $this->setModelName(singular($data['table_name'])).'_model';
-				$data['field_table'] = $this->db->field_data($data['table_name']);
+				$data['field_table'] = [];//$this->db->field_data($data['table_name']);				
+				$columns = $this->sm->listTableColumns($data['table_name']);			
+				foreach($columns as $column){
+					array_push($data['field_table'],$column);					
+				}				
 			}
 		}else{
 			/** generate code */

@@ -1,6 +1,6 @@
 <?php
 
-class Permission_model extends Base_model
+class Permission_model extends MY_Model
 {   
     protected $columnTableData = ['id', 'name', 'route'];
     protected $return_type = 'array';

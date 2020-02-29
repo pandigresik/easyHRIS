@@ -38,6 +38,7 @@ class MY_Controller extends MX_Controller
     protected $withPagination = true;
     protected $aliasClass;
     private $transaction = false;
+    protected $referenceColumn;
     protected $viewPage = [
         'index' => 'master/default',
     ];
@@ -358,7 +359,19 @@ class MY_Controller extends MX_Controller
     /** untuk CRUD master */
     public function index($referenceId = null)
     {
-        $buttonAdd = $this->setBtnAdd();
+        if(empty($referenceId)){
+            $key = $this->input->post('key');
+            $referenceId = isset($key['id']) ? $key['id'] : NULL ;
+        }
+
+        if(!empty($referenceId)){
+            $this->setTitle($referenceId);
+            if(!empty($this->referenceColumn)){
+                $this->filters = [$this->referenceColumn => $referenceId];
+            }
+        }
+
+        $buttonAdd = $this->setBtnAdd($referenceId);
         $buttonFilter = generateFilterButton('Filter', ['onclick' => 'App.filterPage(this)', 'data-url' => $this->pathView.'/filter']);
         $this->setButtonRight($buttonFilter.'&nbsp;'.$buttonAdd);
         $this->loadView($this->viewPage['index'], $this->setIndexData());
@@ -376,8 +389,8 @@ class MY_Controller extends MX_Controller
     {
         if ($this->getTransaction()) {
             $text = ucwords(str_replace('_', ' ', $this->aliasClass));
-
-            return generateAddButton($text, ['onclick' => 'App.addRecord(this)', 'data-url' => site_url($this->pathView.'/add')]);
+            $urlAddAction = empty($key) ? $this->pathView.'/add' : $this->pathView.'/add/'.$key ;
+            return generateAddButton($text, ['onclick' => 'App.addRecord(this)', 'data-url' => site_url($urlAddAction)]);
         } else {
             return '';
         }
@@ -452,13 +465,26 @@ class MY_Controller extends MX_Controller
 
     public function add($referenceId = null)
     {
-        $this->_formEdit();
+        $references = [];
+        if(!empty($referenceId)){
+            $this->model->setReferencesValue($referenceId);
+            $references = [$this->referenceColumn => $referenceId];
+            $this->actionMethodIndex .= '/'.$referenceId;
+            $this->setTitle($referenceId);
+        }
+        $this->_formEdit($references);
     }
 
     public function edit()
     {
         $where = $this->input->post('key');
         $data = $this->model->getEditData($where, false);
+        if(!empty($this->referenceColumn)){
+            $referenceId = $data->$this->referenceColumn;
+            $this->model->setReferencesValue();
+            $this->actionMethodIndex .= '/'.$referenceId;
+            $this->setTitle($referenceId);
+        }        
         $this->_formEdit($data, $where);
     }
 
@@ -496,9 +522,12 @@ class MY_Controller extends MX_Controller
                 unset($data[$_k]);
             }
         }
-
-        $saved = $this->model->saveData($where, $data);        
-        if ($this->db->affected_rows() > 0) {
+        $this->db->trans_begin();
+        $saved = $this->model->saveData($where, $data);                
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+        } else {
+            $this->db->trans_commit();
             $this->result['status'] = 1;
             $this->result['message'] = 'Sudah disimpan';
         }
@@ -876,6 +905,24 @@ class MY_Controller extends MX_Controller
     {
         $this->transaction = $transaction;
 
+        return $this;
+    }
+
+        /**
+     * Get the value of title
+     */ 
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set the value of title
+     *
+     * @return  self
+     */ 
+    public function setTitle($referenceId)
+    {                
         return $this;
     }
 }

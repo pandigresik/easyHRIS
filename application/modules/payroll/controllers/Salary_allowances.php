@@ -11,5 +11,10 @@ class Salary_allowances extends MY_Controller {
         $this->load->model('Salary_allowance_model','salary_allowance_model');
         $this->model = $this->salary_allowance_model;
     }
+
+    public function index($referenceId = NULL){
+        $this->model->setWithReferences(TRUE);
+        parent::index($referenceId);        
+    }
 }
 

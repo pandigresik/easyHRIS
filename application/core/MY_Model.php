@@ -199,7 +199,7 @@ class MY_Model extends CI_Model
             $row = $this->trigger('after_get', $row, ($key == count($result) - 1));
         }
         $this->_with = array();
-        log_message('error',$this->_database->last_query());
+       // log_message('error',$this->_database->last_query());
         return $result;
     }
 

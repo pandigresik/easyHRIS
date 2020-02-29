@@ -1,6 +1,6 @@
 <?php
 
-class Role_model extends Base_model
+class Role_model extends MY_Model
 {   
     public $has_many = array('role_menu' => array('primary_key' => 'roles_id'));
     protected $columnTableData = ['id', 'role_name as name', 'status', 'created_at'];

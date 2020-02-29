@@ -7,7 +7,7 @@ class Company_model extends Base_model{
     protected $_table = 'companies';
 	protected $searchLookupColumn = 'name';    
     protected $primary_key = 'id';
-    protected $columnTableData = ['id','parent_id','address_id','code','name','birth_day','email','tax_number'];
+    protected $columnTableData = ['id','parent_id','address','code','name','birth_day','email','tax_number'];
     protected $headerTableData = [				[['data' => 'Reference'],['data' => 'Alamat'],['data' => 'Kode'],['data' => 'Nama'],['data' => 'Tanggal Lahir'],['data' => 'email'],['data' => 'NPWP']]];
 
     protected $form = [			
@@ -22,11 +22,11 @@ class Company_model extends Base_model{
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
-			'address_id' => [
-				'id' => 'address_id',
+			'address' => [
+				'id' => 'address',
 				'label' => 'Alamat',
 				'placeholder' => 'Isikan Alamat',
-				'type' => 'input',
+				'type' => 'textarea',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			

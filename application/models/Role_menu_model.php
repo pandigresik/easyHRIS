@@ -1,6 +1,6 @@
 <?php
 
-class Role_menu_model extends Base_model
+class Role_menu_model extends MY_Model
 {   
     public function __construct()
     {

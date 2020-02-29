@@ -3,5 +3,9 @@
         "faisalman/simple-excel-php": "^0.3.15",
         "fzaninotto/faker": "^1.9",
         "ramsey/uuid": "^3.9"
+    },
+    "require-dev": {
+        "doctrine/dbal": "^2",
+        "ramsey/uuid-doctrine": "^1.6"
     }
 }

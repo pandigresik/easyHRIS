@@ -28,7 +28,7 @@ class Role_permission extends MY_Controller
         $this->filters = ['roles_id' => $referenceId];
 
         $menus = $this->menus->as_array()->with('permissions')->get_many_by(array('status' => 1));
-        log_message('error',json_encode($menus));
+     //   log_message('error',json_encode($menus));
         $this->db->where($this->filters);
         $rolemenus = $this->role_menus->dropdown('menus_id', 'menus_id');
         $rolePermissions = $this->setTableData();
@@ -62,9 +62,7 @@ class Role_permission extends MY_Controller
         $where = $this->input->post('key');
         /* set statusnya menjadi non aktif */
         $this->role_permissions->delete_by($where);
-        $this->role_menus->delete_by($where);
-        //\Model\Storage\Rolepermissions::active()->where($where)->delete();
-        //\Model\Storage\Rolemenu::active()->where($where)->delete();
+        $this->role_menus->delete_by($where);        
         /** simpan datanya */
         $tmpMenu = [];
         $tmpPermissions = [];
@@ -72,8 +70,9 @@ class Role_permission extends MY_Controller
             $tmpKey = explode('_', $k);
             if ($tmpKey[0] == 'menu') {
                 array_push($tmpMenu, array_merge($where, array('menus_id' => $v)));
-            } else {
-                array_push($tmpPermissions, array_merge($where, array('permissions_id' => $v)));
+            } 
+            if ($tmpKey[0] == 'permissions') {
+                $tmpPermissions[$v] = array_merge($where, array('permissions_id' => $v));
             }
         }
         if (!empty($tmpMenu)) {

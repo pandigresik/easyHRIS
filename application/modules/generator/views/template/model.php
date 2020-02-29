@@ -2,10 +2,9 @@
 $text = <<<HTML
 <?php
 /** Generate by crud generator model pada {$created_at}
-*   Menggunakan ORM eloquent
 *   Author afandi
 */
-class {$namaModel} extends MY_Model{
+class {$namaModel} extends Base_model{
     protected \$_table = '{$namaTable}';
     
     protected \$primary_key = '{$primaryKey}';

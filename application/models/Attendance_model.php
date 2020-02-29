@@ -5,7 +5,7 @@
 */
 class Attendance_model extends Base_model{
     protected $_table = 'attendances';
-    
+	
     protected $primary_key = 'id';
     protected $columnTableData = ['id','employee_id','shiftment_id','reason_id','attendance_date','description','check_in','check_out','early_in','early_out','late_in','late_out','absent'];
     protected $headerTableData = [				[['data' => 'employee_id'],['data' => 'shiftment_id'],['data' => 'reason_id'],['data' => 'attendance_date'],['data' => 'description'],['data' => 'check_in'],['data' => 'check_out'],['data' => 'early_in'],['data' => 'early_out'],['data' => 'late_in'],['data' => 'late_out'],['data' => 'absent']]];

@@ -11,5 +11,10 @@ class Salary_benefits extends MY_Controller {
         $this->load->model('Salary_benefit_model','salary_benefit_model');
         $this->model = $this->salary_benefit_model;
     }
+
+    public function index($referenceId = NULL){
+        $this->model->setWithReferences(TRUE);
+        parent::index($referenceId);        
+    }
 }
 

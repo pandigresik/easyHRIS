@@ -5,9 +5,7 @@
 */
 class Job_level_model extends Base_model{
     protected $_table = 'job_levels';
-	protected $searchLookupColumn = 'name'; 
-	private $withReferences = FALSE;
-    protected $before_get = array('joinReference');       
+	protected $searchLookupColumn = 'name'; 	
     protected $primary_key = 'id';
     protected $columnTableData = ['a.name as references','job_levels.code','job_levels.name'];
     protected $headerTableData = [				[['data' => 'Reference'],['data' => 'Kode'],['data' => 'Nama']]];
@@ -58,26 +56,6 @@ class Job_level_model extends Base_model{
         ksort($parentMenu);
         $this->form['parent_id']['options'] = $parentMenu;
     }
-    */
-
-	/**
-	 * Get the value of withReferences
-	 */ 
-	public function getWithReferences()
-	{
-		return $this->withReferences;
-	}
-
-	/**
-	 * Set the value of withReferences
-	 *
-	 * @return  self
-	 */ 
-	public function setWithReferences($withReferences)
-	{
-		$this->withReferences = $withReferences;
-
-		return $this;
-	}
+    */	
 }
 ?>

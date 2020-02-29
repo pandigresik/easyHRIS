@@ -128,15 +128,15 @@
 								}
 								foreach($field_table as $ft){
 									echo '<tr>
-											<td>'.$ft->name.'</td>
-											<td>'.$ft->type.'</td>
-											<td>'.$ft->max_length.'</td>
-											<td><select name="form_element[options]['.$ft->name.']" value="'.$ft->name.'">'.implode('',$listOptionStr).'</select></td>
-											<td><input type="text" name="form_element[alias]['.$ft->name.']" value="'.$ft->name.'" checked></td>
-											<td><input type="checkbox" name="form_element[inform][]" value="'.$ft->name.'" checked></td>
-											<td><input type="checkbox" name="form_element[required]['.$ft->name.']" value="'.$ft->name.'" checked></td>
-											<td><input type="checkbox" name="form_element[fillable][]" value="'.$ft->name.'" checked></td>
-											<td><input type="checkbox" name="form_element[heading][]" value="'.$ft->name.'" checked></td>
+											<td>'.$ft->getName().'</td>
+											<td>'.$ft->getType().'</td>
+											<td>'.$ft->getLength().'</td>
+											<td><select name="form_element[options]['.$ft->getName().']" value="'.$ft->getName().'">'.implode('',$listOptionStr).'</select></td>
+											<td><input type="text" name="form_element[alias]['.$ft->getName().']" value="'.$ft->getName().'" checked></td>
+											<td><input type="checkbox" name="form_element[inform][]" value="'.$ft->getName().'" checked></td>
+											<td><input type="checkbox" name="form_element[required]['.$ft->getName().']" value="'.$ft->getName().'" checked></td>
+											<td><input type="checkbox" name="form_element[fillable][]" value="'.$ft->getName().'" checked></td>
+											<td><input type="checkbox" name="form_element[heading][]" value="'.$ft->getName().'" checked></td>
 											<td></td>
 										</tr>';
 								}

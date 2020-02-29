@@ -4,10 +4,9 @@
 *   Author afandi
 */
 class Salary_benefit_model extends Base_model{
-    protected $_table = 'salary_benefits';
-    
+    protected $_table = 'salary_benefits';	
     protected $primary_key = 'id';
-    protected $columnTableData = ['employee_id','component_id','benefit_value','benefit_key'];
+    protected $columnTableData = ['employees.full_name','salary_components.name','benefit_value','benefit_key'];
     protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'component_id'],['data' => 'benefit_value'],['data' => 'benefit_key']]];
 
     protected $form = [			
@@ -16,9 +15,9 @@ class Salary_benefit_model extends Base_model{
 				'label' => 'Pegawai',
 				'placeholder' => 'Isikan Pegawai',
 				'type' => 'dropdown',
-'class' => 'select2_ajax',
-'options' => [''],
-'data-url' => 'master/employees/searchPaging',
+				'class' => 'select2_ajax',
+				'options' => [''],
+				'data-url' => 'master/employees/searchPaging',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
@@ -27,9 +26,9 @@ class Salary_benefit_model extends Base_model{
 				'label' => 'component_id',
 				'placeholder' => 'Isikan component_id',
 				'type' => 'dropdown',
-'class' => 'select2_ajax',
-'options' => [''],
-'data-url' => 'master/employees/searchPaging',
+				'class' => 'select2_ajax',
+				'options' => [''],
+				'data-url' => 'master/salary_components/searchPaging',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
@@ -63,6 +62,13 @@ class Salary_benefit_model extends Base_model{
         ksort($parentMenu);
         $this->form['parent_id']['options'] = $parentMenu;
     }
-    */
+	*/
+	
+	public function joinReference(){
+		if($this->getWithReferences()){
+			$this->db->join('employees','employees.id = salary_benefits.employee_id');
+			$this->db->join('salary_components','salary_components.id = salary_benefits.component_id');
+		}		
+	}
 }
 ?>
