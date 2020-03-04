@@ -7,8 +7,8 @@ class Workshift_model extends Base_model{
     protected $_table = 'workshifts';
 	
     protected $primary_key = 'id';
-    protected $columnTableData = ['employee_id','shiftment_id','description','work_date'];
-    protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'Reference'],['data' => 'description'],['data' => 'work_date']]];
+    protected $columnTableData = ['employees.full_name','employees.code as nip','shiftments.code as shiftment','workshifts.description as description','work_date'];
+    protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'NIP'],['data' => 'Shift'],['data' => 'Keterangan'],['data' => 'Tanggal']]];
 
     protected $form = [			
 			'employee_id' => [
@@ -24,8 +24,8 @@ class Workshift_model extends Base_model{
 			]	,			
 			'shiftment_id' => [
 				'id' => 'shiftment_id',
-				'label' => 'Reference',
-				'placeholder' => 'Isikan Reference',
+				'label' => 'Shift',
+				'placeholder' => 'Isikan shift',
 				'type' => 'dropdown',
 				'class' => 'select2_ajax',
 				'options' => [''],
@@ -45,8 +45,8 @@ class Workshift_model extends Base_model{
 				'id' => 'work_date',
 				'label' => 'Tanggal',
 				'placeholder' => 'Isikan tanggal',
-				            'type' => 'input',
-            'data-tipe' => 'date',
+				'type' => 'input',
+            	'data-tipe' => 'date',
 				'value' => '',	
 				'required' => 'required'	
 			]	,						
@@ -55,7 +55,13 @@ class Workshift_model extends Base_model{
             'type' => 'submit',
             'label' => 'Simpan'
         ]];
-
+	public function joinReference(){
+		if($this->getWithReferences()){			
+			$this->db->join('employees','employees.id = workshifts.employee_id');
+			$this->db->join('shiftments','shiftments.id = workshifts.shiftment_id');			
+		}
+	}
+		
     /** uncomment function ini untuk memberikan nilai default form,
       * misalkan mengisi data pilihan dropdown dari database dll
     protected function setOptionDataForm($where = array()){

@@ -494,7 +494,6 @@ if (!defined('BASEPATH')) {
             function tglSetelah($hari, $tgl = null)
             {
                 $date = new \DateTime($tgl);
-
                 return $date->add(new \DateInterval('P'.$hari.'D'));
             }
         }
@@ -503,8 +502,18 @@ if (!defined('BASEPATH')) {
             function tglSebelum($hari, $tgl = null)
             {
                 $date = new \DateTime($tgl);
-
                 return $date->sub(new \DateInterval('P'.$hari.'D'));
+            }
+        }
+
+        if (!function_exists('akhirBulan')) {
+            function akhirBulan($tgl = null)
+            {
+                $date = new \DateTime($tgl);
+                $date->add(new \DateInterval('P1M'));
+                $nextMonth = new \DateTime($date->format('Y-m').'-01');
+                $nextMonth->sub(new \DateInterval('P1D'));                
+                return $nextMonth->format('Y-m-d');
             }
         }
 

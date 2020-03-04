@@ -227,6 +227,7 @@ var App = {
             if ($('.modal-backdrop').length) {
                 if ($('.modal-backdrop').is(':visible')) $('.modal-backdrop').fadeOut();
             }
+            window.scrollTo(0, 0);
         });
     }, // end - loadContentView
 
@@ -702,13 +703,22 @@ var App = {
                     }
                 }
 
-                $.post(_url, _sendData, function (data) {
-                    _ini.alertDialog('Informasi', data.message, function () {
-                        if (data.status) {
-                            _ini.postContentView(_nexturl);
-                        }
-                    });
-                }, 'json');
+                $.ajax({
+                    url: _url,
+                    beforeSend: function () {
+                        _ini.showLoadingContentView(true);
+                    },
+                    data: _sendData,
+                    type: 'POST',
+                    success: function (data) {
+                        _ini.alertDialog('Informasi', data.message, function () {
+                            if (data.status) {
+                                _ini.postContentView(_nexturl);
+                            }
+                        });
+                    },
+                    dataType: 'json'
+                })
             }
         });
         return false;

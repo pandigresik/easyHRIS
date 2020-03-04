@@ -11,5 +11,13 @@ class Attendance_summaries extends MY_Controller {
         $this->load->model('Attendance_summary_model','attendance_summary_model');
         $this->model = $this->attendance_summary_model;
     }
+
+    protected function setBtnAdd($key = null)
+    {
+        return generateButton('Generate Summary', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url('master/workshifts/generate'),'class' => 'btn btn-dark active'],'<i class="fa fa-gear"></i>')
+            .generateButton('Import Jadwal', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url('master/importWorkshift/add'),'class' => 'btn btn-dark active'],'<i class="fa fa-upload"></i>')
+            .generateAddButton('Tambah', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url($this->pathView.'/add')])
+        ;
+    }
 }
 

@@ -62,7 +62,7 @@ class Modules
 			$method = substr($module, $pos + 1);		
 			$module = substr($module, 0, $pos);
 		}
-
+		
 		if($class = self::load($module)) 
 		{	
 			if (method_exists($class, $method))	{
@@ -103,7 +103,7 @@ class Modules
 			
 			/* create and register the new controller */
 			$controller = ucfirst($class);	
-			self::$registry[$alias] = new $controller($params);
+			self::$registry[$alias] = new $controller($params);			
 		}
 		
 		return self::$registry[$alias];

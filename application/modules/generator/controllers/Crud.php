@@ -3,6 +3,8 @@
 class Crud extends MX_Controller
 {
 	private $sm;	
+	private $primaryKey;
+	const SKIP_COLUMN = ['id','deleted_at','created_at','updated_at','created_by','updated_by'];
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('inflector');
@@ -66,8 +68,9 @@ class Crud extends MX_Controller
 		$dataController = ['controller' => $data['controller'], 'model' => $data['model'],'alias' => strtolower($data['model']), 'title' => 'Data '.$data['controller'], 'created_at' => $sekarang];
 		$contentController = $this->load->view('generator/template/controller',$dataController,TRUE);
 		$result[] = $this->createFile($controller,$contentController);
-
 		$dataModel = ['created_at' => $sekarang,'namaModel' => $data['model']];
+		//$detailInfo = $this->detailTableInfo($data['table_name']);
+        //$form = $this->generateColumnField($detailInfo);
 		$dataModel = array_merge($dataModel,$this->setDataModelTemplate($data));
 		$contentModel = $this->load->view('generator/template/model',$dataModel,TRUE);	
 		$result[] = $this->createFile($model,$contentModel);
@@ -85,7 +88,6 @@ class Crud extends MX_Controller
 			$_label = !empty($_alias[$_f]) ? $_alias[$_f] : $_f;
 			$_type = $_options[$_f];
 			$_tmp = <<<ARR
-			
 			'{$_f}' => [
 				'id' => '{$_f}',
 				'label' => '{$_label}',
@@ -171,6 +173,131 @@ TTT;
 		return <<<AAA
 				[{$str}]
 AAA;
+	}
+
+	private function detailTableInfo($table){
+        $dataColumn = [];        
+        $info = $this->sm->listTableDetails($table);        
+        $i = 0;
+        foreach($info->getcolumns() as $column){
+            $tmp = $column->toArray();
+            if(!$i){
+                $this->setPrimaryKey($tmp['name']);
+                $i++;
+            }
+            
+            $tmp['type'] = $tmp['type']->getName();
+            if(in_array($tmp['name'],self::SKIP_COLUMN)) continue;
+            $dataColumn[$tmp['name']] = $tmp;
+        }
+
+        foreach($info->getForeignKeys() as $fk){
+            $names = $fk->getLocalColumns();
+            foreach($names as $name){
+                $dataColumn[$name]['fk'] = ['table' => $fk->getForeignTableName(), 'column' => $fk->getForeignColumns()[0]];
+            }
+        }
+        return $dataColumn;
+	}
+	
+	private function generateColumnField($fields){
+        $result = [];        
+        if(!empty($fields)){
+            foreach($fields as $field){
+                if(in_array($field['name'],self::SKIP_COLUMN)) continue;
+                array_push($result,$this->prepareGenerateColumnField($field));
+            }
+		}
+		$_tmp = <<<ARR
+
+		'submit' => [
+            'id' => 'submit',
+            'type' => 'submit',
+            'label' => 'Simpan'
+        ]
+ARR;
+		array_push($result,$_tmp);
+        return $result;
+    }
+    private function prepareGenerateColumnField($field){
+        $name = $field['name'];
+        $type = 'text';
+        $additionalAttr = '';
+        $choices = '';
+        $attr = '';
+        $rules = [];
+        if($field['notnull']){
+            array_push($rules,'required');
+        }
+        if($field['length']){
+			//array_push($rules,'max:'.$field['length'].'');
+			//maxLength
+        }
+        
+        if(in_array($field['type'],['date','datetime','time'])){
+            switch($field['type']){
+                case 'date':
+                $attr =<<<STR
+                'attr' => ['class_append' => 'date'],
+STR;
+                    break;
+                case 'datetime':
+                $attr =<<<STR
+                'attr' => ['class_append' => 'date-time'],
+STR;
+                    break;
+                case 'time':
+                $attr =<<<STR
+                    'attr' => ['class_append' => 'time'],
+STR;
+                        break;
+            }
+        }
+
+        if(isset($field['fk'])){
+            $type = 'select';
+            $model = '\App\Models\\'.ucfirst(\Str::camel(\Str::singular($field['fk']['table'])));
+            $columnId = $field['fk']['column'];
+            $columnDisplay = $this->displayNameFk($field['fk']['table']);
+            $choices = <<<STR
+                'choices' => {$model}::all()->pluck('{$columnDisplay}','{$columnId}')->toArray(),
+STR;
+            $attr = <<<STR
+                'attr' => ['class_append' => 'select2-allowclear'],
+STR;
+        }
+        if(!empty($choices) || !empty($attr)){
+            $additionalAttr .= join(PHP_EOL,[$choices,$attr]);
+        }
+        
+        $ruleStr = !empty($rules) ? join('|',$rules) : '';
+        return <<<STR
+('{$name}', '{$type}',[
+                'label' => __form('form.{$name}'),
+                'rules' => '{$ruleStr}',{$additionalAttr}                 
+            ])
+STR;
+
+    }
+
+	/**
+	 * Get the value of primaryKey
+	 */ 
+	public function getPrimaryKey()
+	{
+		return $this->primaryKey;
+	}
+
+	/**
+	 * Set the value of primaryKey
+	 *
+	 * @return  self
+	 */ 
+	public function setPrimaryKey($primaryKey)
+	{
+		$this->primaryKey = $primaryKey;
+
+		return $this;
 	}
 }
 

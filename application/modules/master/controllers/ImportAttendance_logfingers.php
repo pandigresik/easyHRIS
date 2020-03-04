@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Jadwal extends MY_Controller
+class ImportAttendance_logfingers extends MY_Controller
 {
     public $title = 'Jadwal Kerja';
     private $filterNik = [];
@@ -15,38 +15,14 @@ class Jadwal extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('jadwal_model', 'jadwal');
-        $this->model = $this->jadwal;
-        $this->load->model('timetables_model', 'ttable');
-    }
-
-    public function index($referenceId = null)
-    {
-        if(!$this->isAdministrator()){
-            $this->addFilters('created_by', $this->getIdUser());
-        }
-        
-        parent::index($referenceId);
-    }
-
-    public function active($referenceId = null)
-    {
-        $this->addFilters('created_by', $this->getIdUser());        
-        $this->addFilters('status', ['A']);
-        parent::index($referenceId);
-    }
-
-    public function approvalList($referenceId = null)
-    {
-        $this->addFilters('user_approval', $this->getIdUser());
-        $this->addFilters('status', ['A']);
-        parent::index($referenceId);
-    }
+        $this->load->model('Attendance_logfinger_model','attendance_logfinger_model');
+        $this->model = $this->attendance_logfinger_model;
+    }        
 
     public function setTableConfig()
     {
         $this->table->key_record = array($this->model->getKeyName());
-        $this->table->setHiddenField(['id', 'status_asli']);
+        $this->table->setHiddenField(['id']);
         $this->table->extra_columns = ['btnEdit' => [
             'data' => generateButton('<i class="fa fa-file"></i>', ['onclick' => 'App.editRecord(this)', 'data-url' => site_url($this->pathView.'/'.$this->actionMethodEdit)]), ],
             ];
@@ -100,18 +76,7 @@ class Jadwal extends MY_Controller
 
     private function getEntryForm($data = array())
     {
-        if (empty($data)) {
-            $this->load->model('hris/User_hris_model', 'uhris');
-            $jabatanAtasan = $this->getJabatanAtasan();
-            $listPenyetuju = $this->uhris->getNikJabatanAtasan($jabatanAtasan);
-
-            $optionPenyetuju = [];
-            if (!empty($listPenyetuju)) {
-                foreach ($listPenyetuju as $_idUser => $lp) {
-                    array_push($optionPenyetuju, '<option value="'.$_idUser.'">'.$lp['NAMA'].' - '.$lp['NAMAJABATAN'].'</option>');
-                }
-            }
-
+        if (empty($data)) {            
             return '<div class="row" style="height:75%">
                     <div class="col-md-3">
                         <div class="dropzone" data-url="'.$this->pathView.'/uploadFile">
@@ -127,65 +92,13 @@ class Jadwal extends MY_Controller
                         <div><label>File yang diunggah : </label></div>
                         <div><input class="form-control" type="text" name="file_name" readonly /></div>
                         <div class="hide"><input type="text" name="attachment"  /></div>
-                        <br />
-                        <div class="form-group">
-                            <label class="col-md-3">Penyetuju</label>
-                            <div class="col-md-9">
-                                <select class="form-control" name="user_approval" required><option value="">Pilih penyetuju</option>'.implode(' ', $optionPenyetuju).'</select>
-                            </div>
-                        </div>
+                        <br />                        
                     </div>
                     <div class="col-md-3">
                         '.generateButton('<a href="uploads/template/jadwal_kerja.xls" >Unduh Template Jadwal Kerja</a>', ['class' => 'btn btn-default'], '<i class="fa fa-file-pdf-o"></i>').'
                     </div>
                 </div>';
-        } else {
-            $status = $this->config->item('status');
-            $approvalBtn = '';
-            $this->load->model('hris/User_hris_model', 'uhris');
-            $this->load->model('User_model', 'um');
-            $nikPenyetuju = $this->um->fields('ref_nik')->get($data['user_approval']);
-            $userPenyetuju = $this->uhris->fields('NAMABP,NAMAJABATAN')->get_by(['NIK' => $nikPenyetuju->ref_nik]);
-            $namaPenyetuju = $userPenyetuju->NAMABP.' - '.$userPenyetuju->NAMAJABATAN;
-            if ($this->canApprove($data)) {
-                $approvalBtn = generatePrimaryButton('Approve', ['onclick' => 'Jadwal.approve(this)', 'data-id' => $data['id']]).' '.generateDangerButton('Reject', ['onclick' => 'Jadwal.reject(this)', 'data-id' => $data['id']]);
-            }
-            $comment = $data['status_asli'] == $status['rejected'] ? '<span style="margin-left:50px"> - '.$data['comment'].'</span>' : '';
-
-            if ($data['status_asli'] == $status['inactive']) {
-                if(!$this->getFilterNik()){
-                    $comment = '<div class="pull-right"><div style="margin-left:50px">'.generateButton('<a href="'.$data['attachment'].'" >Cetak</a>', ['class' => 'btn btn-default'], '<i class="fa fa-print"></i>').'</div></div>';
-                }
-            }
-
-            return '<div class="row">
-                        <form class="form form-horizontal">    
-                        <div class="">
-                            <div class="form-group">
-                                <label class="col-md-2">Status Pengajuan</label>
-                                <div class="col-md-10">
-                                    '.$data['status'].$comment.'
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="col-md-2">Detail Persetujuan</label>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2">Persetujuan 1</label>
-                                <div class="col-md-10">
-                                    '.$namaPenyetuju.'
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    '.$approvalBtn.'
-                                </div>
-                            </div>
-                        </div>
-                        </form>
-                    </div>';
-        }
+        } 
     }
 
     public function uploadFile()
@@ -232,11 +145,13 @@ class Jadwal extends MY_Controller
 
     /** pastikan periode untuk departemen tersebut belum ada dengan status in ('A','I') */
     private function periksaPeriode($header)
-    {
+    {        
         $result = [];
         $periode = $header['periode'];
         $kodeorg = $header['kodeorg'];
-        $ada = $this->model->count_by(['periode' => $periode, 'kodeorg' => $kodeorg, 'status' => ['I', 'A']]);
+        $tglAwal = $periode.'-01';
+        $tglAkhir = akhirBulan($tglAwal);
+        $ada = $this->model->count_by('work_date between \''.$tglAwal.'\'and \''.$tglAkhir.'\'');
         if ($ada) {
             list($year, $month) = explode('-', $periode);
             array_push($result, 'Periode <span class="blue">'.convert_ke_bulan($month).' '.$year.'</span> sudah ada');
@@ -250,10 +165,10 @@ class Jadwal extends MY_Controller
     {
         $result = [];
         $listNik = array_keys($detail);
-        $this->load->model('User_model', 'um');
-        $nikTidakAktif = $this->um->fields('ref_nik')->as_array()->get_many_by(['ref_nik' => $listNik, 'status' => ['I']]);
+        $this->load->model('Employee_model', 'pm');
+        $nikTidakAktif = $this->pm->fields('code')->as_array()->get_many_by(['code' => $listNik, 'resign_date is not null']);
         if (!empty($nikTidakAktif)) {
-            array_push($result, 'Nik berikut ini <br /> <span class="red">'.implode(',', array_column($nikTidakAktif, 'ref_nik')).' </span><br /> tidak aktif');
+            array_push($result, 'Nip berikut ini <br /> <span class="red">'.implode(',', array_column($nikTidakAktif, 'code')).' </span><br /> tidak aktif');
         } else {
             $result = $this->periksaNikBelumUpload($kodeorg, $listNik);
         }
@@ -264,17 +179,13 @@ class Jadwal extends MY_Controller
     private function periksaNikBelumUpload($kodeorg, $listNik)
     {
         $result = [];
-        $this->load->model('hris/User_hris_model', 'uhris');
-        $tmp = $this->uhris->checkNikUpload($kodeorg, $listNik);
+        $this->load->model('Employee_model', 'pm');
+        $tmp = $this->pm->as_array()->fields(['code','full_name'])->get_many_by('resign_date is null and code not in (\''.implode("','",$listNik).'\')');
         if (!empty($tmp)) {
             foreach ($tmp as $t) {
-                if (empty($t['REF_NIK'])) {
-                    array_push($result, $t['NIK'].' '.$t['NAMABP'].' '.$t['NAMAORG'].' belum diupload');
-                }
-
-                if (empty($t['NIK'])) {
-                    array_push($result, $t['REF_NIK'].' bukan karyawan departemen ini');
-                }
+                if (!empty($t['code'])) {
+                    array_push($result, $t['code'].' '.$t['full_name'].' belum diupload');
+                }                
             }
         }
 
@@ -288,13 +199,13 @@ class Jadwal extends MY_Controller
         $excel = new SpreadsheetReader($pathFile);
         $maxHeaderIndex = 5;
         $indexHeader = [
-            1 => ['name' => 'departemen', 'value' => 32],
-            2 => ['name' => 'periode', 'value' => 32],
-            3 => ['name' => 'kodeorg', 'value' => 32],
-            4 => ['name' => 'jumlah_karyawan', 'value' => 32],
+            1 => ['name' => 'departemen', 'value' => 31],
+            2 => ['name' => 'periode', 'value' => 31],
+            3 => ['name' => 'kodeorg', 'value' => 31],
+            4 => ['name' => 'jumlah_karyawan', 'value' => 31],
         ];
         
-        $timetable = convertArr($this->ttable->fields('id,1 as value')->as_array()->get_many_by(['status' => 'A']), 'id');
+        $timetable = convertArr($this->shiftment->fields('code,id')->as_array()->get_many_by('1 = true'), 'code');
         $this->setTimetable($timetable);
         $jmlhari = 0;
         foreach ($excel as $k => $row) {
@@ -320,6 +231,7 @@ class Jadwal extends MY_Controller
                 }
 
                 $detail = $this->parseDetail($row, $k, $jmlhari);
+                
                 if (!empty($detail['error'])) {
                     array_push($result['error'], $detail['error']);
                     break;
@@ -349,15 +261,16 @@ class Jadwal extends MY_Controller
         $timetable = $this->getTimetable();
 
         $indexDetail = [
-            2 => 'nik',
-            3 => 'nama',
-            4 => 'jabatan',
-            5 => 'tglmasuk',
+            1 => 'nik',
+            2 => 'nama',
+            3 => 'jabatan',
+            4 => 'tglmasuk',
         ];
 
         foreach ($row as $k => $r) {
-            $tgl = $k - 5;
-            if ($k > 5) {
+            
+            $tgl = $k - 4;
+            if ($k > 4) {
                 $r = trim($r);
                 if (empty($r)) {
                     array_push($result['error'], 'Jam kerja karyawan belum diisi baris ke '.($baris));
@@ -371,10 +284,10 @@ class Jadwal extends MY_Controller
                         array_push($result['error'], 'Kode timetable '.$r.' di baris '.($baris).' tidak terdaftar');
                         break;
                     }
-                    $result['data']['tanggal'][$tgl] = $r;
+                    $result['data']['tanggal'][$tgl] = $timetable[$r];
                 }
             } else {
-                if ($k >= 2) {
+                if ($k >= 1) {
                     $result['data'][$indexDetail[$k]] = $r;
                 }
             }
@@ -398,11 +311,15 @@ class Jadwal extends MY_Controller
         ], true);
     }
 
+    public function generateTableJadwal($arr){                
+        return $this->tableJadwal($arr);             
+    }
+
     private function currentJadwal($detail,$periode){
         /** cek apakah ada pengajuan untuk user dalam detail */
-        $nik = array_keys($detail);
+        /*$nik = array_keys($detail);
         $awalBulan = $periode.'-01';
-        $akhirBulan = LastDateOfMonth($awalBulan)->format('Y-m-d');
+        $akhirBulan = akhirBulan($awalBulan);
         $this->load->model('absent_detail_model','adm');
         $nikPengajuan = $this->adm->setWithHeader(TRUE)->as_array()->distinct()->fields(['absent_details.nik','absent_details.tanggalabsensi'])->where([['absent_details.nik' => $nik]])->get_many_by(['absents.status = \'I\' and absent_details.tanggalabsensi between \''.$awalBulan.'\' and \''.$akhirBulan.'\'']);
         if(!empty($nikPengajuan)){
@@ -425,7 +342,7 @@ class Jadwal extends MY_Controller
                 }
             }
         }
-
+*/
       //log_message('error',$periode);
         return $detail;
     }
@@ -440,20 +357,8 @@ class Jadwal extends MY_Controller
             $pathFile = $where['attachment'];
             unset($where['attachment']);
         }
-        unset($data['file_name']);
-        if (empty($where)) {
-            $where = [$this->model->getKeyName() => null];
-            $data['status'] = $status['active'];
-            $data['no_pengajuan'] = $this->model->getNoPengajuan();
-            $data['created_by'] = $this->getIdUser();
-            $data['attachment'] = $pathFile;
-        }
-        $headerOnly = true;
-        $arr = $this->bacaFile($pathFile, $headerOnly);
-        $header = $arr['header'];
-        $data = array_merge($data, $header);
-
-        $saved = $this->model->saveData($where, $data);
+        
+        $saved = $this->saveDetail($pathFile);         
 	if($saved){
 	     $this->result['status'] = 1;
 	     $this->result['message'] = 'Jadwal kerja berhasil diupload';	
@@ -517,25 +422,32 @@ class Jadwal extends MY_Controller
         return $result;
     }
 
-    private function saveDetail($id)
-    {
-        $this->load->model('Jadwal_detail_model', 'jdm');
-        $data = $this->model->as_object()->fields('attachment,periode')->get($id);
-        $periode = $data->periode;
-        $arr = $this->bacaFile($data->attachment);
+    private function saveDetail($attachment)
+    {                        
+        $this->load->model('Employee_model', 'pm');
+        $arr = $this->bacaFile($attachment);        
         $detail = $arr['detail'];
+        $header = $arr['header'];        
+        $periode = $header['periode'];
+        $niks = array_keys($detail);
+        $idEmployee = convertArr($this->pm->fields('code,id')->as_array()->get_many_by(['code' => $niks]), 'code');
         $tmp = [];
         list($year, $month) = explode('-', $periode);
         $jmlhari = cal_days_in_month(CAL_GREGORIAN, $month, $year);
         foreach ($detail as $d) {
             $nik = $d['nik'];
-            foreach ($d['tanggal'] as $tgl => $timetable) {
-                if ($tgl <= $jmlhari) {
-                    array_push($tmp, ['jadwal_id' => $id, 'nik' => $nik, 'timetables_id' => $timetable, 'tanggalabsensi' => $periode.'-'.$tgl]);
+            if(isset($idEmployee[$nik])){
+                $idUser = $idEmployee[$nik]['id'];
+                foreach ($d['tanggal'] as $tgl => $timetable) {
+                    if ($tgl <= $jmlhari) {
+                        array_push($tmp, ['employee_id' => $idUser, 'shiftment_id' => $timetable['id'], 'work_date' => $periode.'-'.$tgl]);
+                    }
                 }
-            }
+            }            
         }
-        $this->jdm->insert_many($tmp);
+        if(!empty($tmp)){
+            return $this->model->insert_many($tmp);
+        }        
     }
 
     /**

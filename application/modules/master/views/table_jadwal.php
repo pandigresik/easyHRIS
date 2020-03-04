@@ -20,8 +20,8 @@
             <tr class="sticky-row">
                 <th class="sticky-cell">No</th>
                 <th class="sticky-cell">NIK</th>
-                <th class="sticky-cell">Nama</th>
-                <th class="sticky-cell">Jabatan</th>
+                <!-- <th class="sticky-cell">Nama</th>
+                <th class="sticky-cell">Jabatan</th> -->
                 <th class="sticky-cell">Tgl Masuk</th>
             <?php 
                 for ($i = 1; $i <= $jmlhari; $i++) {
@@ -39,11 +39,11 @@
                     echo '<td class="sticky-cell">'.($no++).'</td>';
                     echo '<td class="sticky-cell">'.$dc['nik'].'</td>';
                     echo '<td class="sticky-cell">'.$dc['nama'].'</td>';
-                    echo '<td class="sticky-cell">'.$dc['jabatan'].'</td>';
-                    echo '<td class="sticky-cell">'.$dc['tglmasuk'].'</td>';
+                    //echo '<td class="sticky-cell">'.$dc['jabatan'].'</td>';
+                    //echo '<td class="sticky-cell">'.$dc['tglmasuk'].'</td>';
                     foreach ($dc['tanggal'] as $tgl => $item) {
                         if($tgl > $jmlhari) continue;
-                        echo '<td>'.$item.'</td>';
+                        echo '<td>'.$item['code'].'</td>';
                     }
                     echo '</tr>';
                 }

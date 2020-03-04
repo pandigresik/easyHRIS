@@ -16,5 +16,13 @@ class Attendances extends MY_Controller {
         $this->model->setWithReferences(TRUE);
         parent::index($referenceId);        
     }
+
+    protected function setBtnAdd($key = null)
+    {
+        return generateButton('Process Finger', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url('master/workshifts/generate'),'class' => 'btn btn-dark active'],'<i class="fa fa-gear"></i>')
+            .generateButton('Import Log Finger', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url('master/importWorkshift/add'),'class' => 'btn btn-dark active'],'<i class="fa fa-upload"></i>')
+            .generateAddButton('Tambah', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url($this->pathView.'/add')])
+        ;
+    }
 }
 
