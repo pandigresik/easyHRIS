@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 class Role_permission extends MY_Controller
-{
+{    
     public $title = 'Data Permission';
     public function __construct()
     {
@@ -36,7 +36,7 @@ class Role_permission extends MY_Controller
         $table = $this->load->view('master/role_permission', ['rolePermissions' => $rolePermissions, 'menus' => $menus, 'rolemenus' => $rolemenus, 'form_header' => array('data-actiontype' => 'save', 'data-nexturl' => site_url('master/role'), 'action' => site_url($this->pathView.'/'.$this->actionMethodSave)), 'referenceId' => $referenceId,
                             ], true);
         $data = ['table' => $table, 'title' => $this->title, 'btnAdd' => '&nbsp;'];
-        $this->loadView('master/default', $data);
+        $this->loadView('master/default_form', $data);
     }
 
     public function setBtnBack()

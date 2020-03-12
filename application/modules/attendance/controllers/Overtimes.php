@@ -11,5 +11,10 @@ class Overtimes extends MY_Controller {
         $this->load->model('Overtime_model','overtime_model');
         $this->model = $this->overtime_model;
     }
+
+    public function index($referenceId = NULL){
+        $this->model->setWithReferences(TRUE);
+        parent::index($referenceId);        
+    }
 }
 

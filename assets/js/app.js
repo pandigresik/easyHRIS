@@ -3,14 +3,9 @@ var App = {
     mainElm: '#content_area',
     calendar: {},
     hariLibur: null,
-    currentUrl: {
-        data: {},
-        url: ''
-    },
-    prevUrl: {
-        data: {},
-        url: ''
-    },
+    currentUrl: null,
+    isBackUrl: false,
+    prevUrl: [],
 
     setHariLibur: function () {
         $.ajax({
@@ -192,8 +187,13 @@ var App = {
     }, // end - showLoadingContentView
 
     loadContentView: function (_url, _data, _type, refreshFn = function () {}) {
-        this.prevUrl = this.currentUrl;
-        this.currentUrl = {
+        var _ini = this;
+        if (empty(_data)) {
+            _ini.prevUrl = [];
+        } else {
+            if (!_ini.isBackUrl) _ini.prevUrl.push(_ini.currentUrl);
+        }
+        _ini.currentUrl = {
             url: _url,
             data: _data
         };
@@ -202,7 +202,7 @@ var App = {
             type: _type,
             data: _data,
             beforeSend: function () {
-                App.showLoadingContentView(true);
+                _ini.showLoadingContentView(true);
             },
             success: function (data) {
                 $('#main_content').html(data);
@@ -210,19 +210,20 @@ var App = {
             error: function (xhr, status, error) {
                 var pesan = xhr.responseText;
                 bootbox.alert('Terjadi error di server \n' + pesan, function () {
-                    App.showLoadingContentView(false);
+                    _ini.showLoadingContentView(false);
                 });
             }
         }).done(function () {
+            _ini.isBackUrl = false;
             refreshFn();
-            App.showLoadingContentView(false);
-            App.initFormatInput();
-            App.initPagination();
+            _ini.showLoadingContentView(false);
+            _ini.initFormatInput();
+            _ini.initPagination();
             if ($('#calendar').length) {
-                App.initCalendar($('#calendar'));
+                _ini.initCalendar($('#calendar'));
             }
             if (('.select2_ajax').length) {
-                App.initSelect2Ajax();
+                _ini.initSelect2Ajax();
             }
             if ($('.modal-backdrop').length) {
                 if ($('.modal-backdrop').is(':visible')) $('.modal-backdrop').fadeOut();
@@ -564,9 +565,13 @@ var App = {
     },
 
     backUrl: function () {
-        var _url = this.prevUrl.url;
-        var _data = this.prevUrl.data;
-        this.postContentView(_url, _data);
+        if (this.prevUrl.length > 0) {
+            var _tmp = this.prevUrl.pop();
+            var _url = _tmp.url;
+            var _data = _tmp.data;
+            this.isBackUrl = true;
+            this.postContentView(_url, _data);
+        }
     },
 
     redirectUrl: function (elm) {

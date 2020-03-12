@@ -10,15 +10,7 @@ class Holiday_model extends Base_model{
     protected $columnTableData = ['id','holiday_date','name'];
     protected $headerTableData = [				[['data' => 'holiday_date'],['data' => 'Nama']]];
 
-    protected $form = [			
-			'id' => [
-				'id' => 'id',
-				'label' => 'id',
-				'placeholder' => 'Isikan id',
-				'type' => 'input',
-				'value' => '',	
-				'required' => 'required'	
-			]	,			
+    protected $form = [						
 			'holiday_date' => [
 				'id' => 'holiday_date',
 				'label' => 'holiday_date',

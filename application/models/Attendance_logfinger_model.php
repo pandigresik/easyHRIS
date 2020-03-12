@@ -6,7 +6,7 @@ class Attendance_logfinger_model extends Base_model{
     protected $_table = 'attendance_logfingers';
     
     protected $primary_key = 'id';
-    protected $columnTableData = ['id','employee_id','type_absen','fingertime','fingerprint_device_id'];
+    protected $columnTableData = ['attendance_logfingers.id','employees.full_name as employee','type_absen','fingertime','fingerprint_devices.display_name as fingerprint_device'];
     protected $headerTableData = [				[['data' => 'employee_id'],['data' => 'type_absen'],['data' => 'fingertime'],['data' => 'fingerprint_device_id']]];
 
     protected $form = [			
@@ -56,7 +56,14 @@ class Attendance_logfinger_model extends Base_model{
             'type' => 'submit',
             'label' => 'Simpan'
         ]];
-
+	
+	public function joinReference(){
+		if($this->getWithReferences()){					
+			$this->db->join('employees','employees.id = attendance_logfingers.employee_id');			
+			$this->db->join('fingerprint_devices','fingerprint_devices.id = attendance_logfingers.fingerprint_device_id','left');
+		}
+	}
+		
     /** uncomment function ini untuk memberikan nilai default form,
       * misalkan mengisi data pilihan dropdown dari database dll
     protected function setOptionDataForm($where = array()){

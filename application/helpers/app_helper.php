@@ -331,8 +331,9 @@ if (!defined('BASEPATH')) {
 
     if (!function_exists('convertArr')) {
         function convertArr($arr, $key)
-        {
+        {            
             $tmp = array();
+            if(empty($arr)) return $tmp;
             foreach ($arr as $val) {
                 $id = $val[$key];
                 $tmp[$id] = $val;
@@ -341,6 +342,30 @@ if (!defined('BASEPATH')) {
             return $tmp;
         }
     }
+
+    if (!function_exists('convertArr2Key')) {
+        function convertArr2Key($arr, $key1, $key2,$arr_child = FALSE)
+        {
+            $tmp = array();
+            if(empty($arr)) return $tmp;
+            foreach ($arr as $val) {
+                if(!isset($tmp[$val[$key1]])){
+                    $tmp[$val[$key1]] = array();
+                }
+                if($arr_child){
+                    if(!isset($tmp[$val[$key1]][$val[$key2]])){
+                        $tmp[$val[$key1]][$val[$key2]] = array();
+                    }
+                    $tmp[$val[$key1]][$val[$key2]][] = $val;
+                }else{
+                    $tmp[$val[$key1]][$val[$key2]] = $val;
+                }
+            }
+
+            return $tmp;
+        }
+    }
+
 
     if (!function_exists('dropdown')) {
         function dropdown($arr, $key, $keytext)

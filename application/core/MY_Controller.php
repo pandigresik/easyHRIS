@@ -359,6 +359,7 @@ class MY_Controller extends MX_Controller
     /** untuk CRUD master */
     public function index($referenceId = null)
     {
+        $backButton = '';
         if(empty($referenceId)){
             $key = $this->input->post('key');
             $referenceId = isset($key['id']) ? $key['id'] : NULL ;
@@ -369,11 +370,18 @@ class MY_Controller extends MX_Controller
             if(!empty($this->referenceColumn)){
                 $this->filters = [$this->referenceColumn => $referenceId];
             }
+            $this->setButtonRight();
+            $backButton = $this->getButtonRight();
         }
 
         $buttonAdd = $this->setBtnAdd($referenceId);
         $buttonFilter = generateFilterButton('Filter', ['onclick' => 'App.filterPage(this)', 'data-url' => $this->pathView.'/filter']);
-        $this->setButtonRight($buttonFilter.'&nbsp;'.$buttonAdd);
+        $buttonRight = [];
+        if(!empty($backButton)){
+            array_push($buttonRight,$backButton);
+        }
+        $buttonRight = array_merge($buttonRight,[$buttonFilter,$buttonAdd]);
+        $this->setButtonRight(implode('&nbsp;',$buttonRight));
         $this->loadView($this->viewPage['index'], $this->setIndexData());
     }
 
@@ -672,6 +680,29 @@ class MY_Controller extends MX_Controller
         $this->index();
     }
 
+    public function download()
+    {
+        $this->setFilters($this->input->post('data'));
+        $this->removeFilters('limit');
+        $this->removeFilters('offset');
+        $where = $this->getFilters();
+        $limit = -1;
+        $offset = 0;
+        $tmp = $this->paginate($limit, $offset, $where);
+        $dataModel = $tmp['data'];
+        
+        $templateTable = $this->config->item('table');
+        $this->table->set_heading($this->model->getHeading());
+        $this->table->set_template($templateTable);
+
+        $table = $this->table->generate($dataModel);
+
+        header("content-type: application/vnd-ms-excel");
+        header("Content-Disposition: attachment; filename = ".$this->aliasClass.".xls");
+        echo $table;
+        //$this->index();
+    }
+    
     private function removeEmptyFilter()
     {
         if (!empty($this->filters)) {
@@ -761,11 +792,11 @@ class MY_Controller extends MX_Controller
         $config['per_page'] = $limit;
 
         $this->pagination->initialize($config);
+        
         if(!empty($this->model->getDefaultOrderColumn())){
             $this->model->order_by($this->model->getDefaultOrderColumn());
         }
         
-
         $_result['data'] = empty($where) ? $this->model->columnTable()->as_array()->limit($config['per_page'], $offset)->get_all() : $this->model->columnTable()->as_array()->limit($config['per_page'], $offset)->get_many_by($where);
         $_result['links'] = $this->pagination->create_links();
 

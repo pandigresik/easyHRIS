@@ -5,10 +5,10 @@
 */
 class Attendance_model extends Base_model{
     protected $_table = 'attendances';
-	
+	protected $defaultOrderColumn = ['employee_id' => 'asc','attendance_date'=> 'asc'];	
     protected $primary_key = 'id';
-    protected $columnTableData = ['id','employee_id','shiftment_id','reason_id','attendance_date','description','check_in','check_out','early_in','early_out','late_in','late_out','absent'];
-    protected $headerTableData = [				[['data' => 'employee_id'],['data' => 'shiftment_id'],['data' => 'reason_id'],['data' => 'attendance_date'],['data' => 'description'],['data' => 'check_in'],['data' => 'check_out'],['data' => 'early_in'],['data' => 'early_out'],['data' => 'late_in'],['data' => 'late_out'],['data' => 'absent']]];
+    protected $columnTableData = ['attendances.id','employees.full_name','shiftments.code as shiftment','reason_id','attendance_date','description','shift_checkin','shift_checkout','check_in','early_in','late_in','check_out','early_out','late_out','absent'];
+    protected $headerTableData = [				[['data' => 'Nama'],['data' => 'Shift'],['data' => 'Alasan'],['data' => 'Tanggal'],['data' => 'keterangan'],['data' => 'Jam Masuk'],['data' => 'Jam Pulang'],['data' => 'Masuk'],['data' => 'Datang Awal (menit)'],['data' => 'Terlambat Awal (menit)'],['data' => 'Pulang'],['data' => 'Pulang Cepat (menit)'],['data' => 'Pulang Akhir (menit)'],['data' => 'absent']]];
 
     protected $form = [			
 			'id' => [
@@ -123,7 +123,12 @@ class Attendance_model extends Base_model{
             'type' => 'submit',
             'label' => 'Simpan'
         ]];
-
+	public function joinReference(){
+		if($this->getWithReferences()){			
+			$this->db->join('employees','employees.id = attendances.employee_id');
+			$this->db->join('shiftments','shiftments.id = attendances.shiftment_id');			
+		}
+	}		
     /** uncomment function ini untuk memberikan nilai default form,
       * misalkan mengisi data pilihan dropdown dari database dll
     protected function setOptionDataForm($where = array()){

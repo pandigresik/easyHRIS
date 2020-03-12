@@ -14,7 +14,7 @@ class Salary_group_details extends MY_Controller {
     public function index($referenceId = NULL){
         $this->model->setWithReferences(TRUE);        
         parent::index($referenceId);        
-    }
+    }    
 
     public function setTitle($referenceId){
         $this->load->model('salary_group_model','sgm');                        

@@ -7,25 +7,25 @@ class Fingerprint_device_model extends Base_model{
     
     protected $primary_key = 'id';
     protected $columnTableData = ['id','serial_number','ip','display_name'];
-    protected $headerTableData = [				[['data' => 'serial_number'],['data' => 'ip'],['data' => 'display_name']]];
+    protected $headerTableData = [				[['data' => 'Nomer Seri'],['data' => 'Ip'],['data' => 'Nama Mesin']]];
 
     protected $form = [			'serial_number' => [
 				'id' => 'serial_number',
-				'label' => 'serial_number',
+				'label' => 'Nomer Seri',
 				'placeholder' => 'Isikan serial_number',
 				'type' => 'input',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			'ip' => [
 				'id' => 'ip',
-				'label' => 'ip',
+				'label' => 'IP',
 				'placeholder' => 'Isikan ip',
 				'type' => 'input',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			'display_name' => [
 				'id' => 'display_name',
-				'label' => 'display_name',
+				'label' => 'Nama Mesin',
 				'placeholder' => 'Isikan display_name',
 				'type' => 'input',
 				'value' => '',	

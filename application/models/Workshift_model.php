@@ -5,7 +5,8 @@
 */
 class Workshift_model extends Base_model{
     protected $_table = 'workshifts';
-	
+	private $withShiftment = FALSE;	
+	protected $before_get = array('joinReference','joinShiftment');  
     protected $primary_key = 'id';
     protected $columnTableData = ['employees.full_name','employees.code as nip','shiftments.code as shiftment','workshifts.description as description','work_date'];
     protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'NIP'],['data' => 'Shift'],['data' => 'Keterangan'],['data' => 'Tanggal']]];
@@ -61,6 +62,12 @@ class Workshift_model extends Base_model{
 			$this->db->join('shiftments','shiftments.id = workshifts.shiftment_id');			
 		}
 	}
+
+	public function joinShiftment(){
+		if($this->getWithShiftment()){			
+			$this->db->join('shiftments','shiftments.id = workshifts.shiftment_id');			
+		}
+	}	
 		
     /** uncomment function ini untuk memberikan nilai default form,
       * misalkan mengisi data pilihan dropdown dari database dll
@@ -71,5 +78,25 @@ class Workshift_model extends Base_model{
         $this->form['parent_id']['options'] = $parentMenu;
     }
     */
+
+	/**
+	 * Get the value of withShiftment
+	 */ 
+	public function getWithShiftment()
+	{
+		return $this->withShiftment;
+	}
+
+	/**
+	 * Set the value of withShiftment
+	 *
+	 * @return  self
+	 */ 
+	public function setWithShiftment($withShiftment)
+	{
+		$this->withShiftment = $withShiftment;
+
+		return $this;
+	}
 }
 ?>

@@ -7,65 +7,45 @@ class Overtime_model extends Base_model{
     protected $_table = 'overtimes';
     
     protected $primary_key = 'id';
-    protected $columnTableData = ['employee_id','shiftment_id','approved_by_id','overtime_date','start_hour','end_hour','raw_value','calculated_value','holiday','overday','description'];
-    protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'Shift'],['data' => 'Approve Oleh'],['data' => 'overtime_date'],['data' => 'start_hour'],['data' => 'end_hour'],['data' => 'raw_value'],['data' => 'calculated_value'],['data' => 'holiday'],['data' => 'overday'],['data' => 'description']]];
+    protected $columnTableData = ['overtimes.id','employees.full_name','shiftments.code as shiftment','approvedBy.full_name as approved_by_id','overtime_date','overtimes.start_hour','overtimes.end_hour','raw_value','calculated_value','holiday','description'];
+    protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'Shift'],['data' => 'Approve Oleh'],['data' => 'Tanggal'],['data' => 'Awal'],['data' => 'Akhir'],['data' => 'Lembur (menit)'],['data' => 'Lembur Dibayar (menit)'],['data' => 'Libur'],['data' => 'Keterangan']]];
 
-    protected $form = [			
-			'employee_id' => [
-				'id' => 'employee_id',
-				'label' => 'Pegawai',
-				'placeholder' => 'Isikan Pegawai',
-				'type' => 'dropdown',
-'class' => 'select2_ajax',
-'options' => [''],
-'data-url' => 'master/employees/searchPaging',
-				'value' => '',	
-				'required' => 'required'	
-			]	,			
-			'shiftment_id' => [
-				'id' => 'shiftment_id',
-				'label' => 'Shift',
-				'placeholder' => 'Isikan Shift',
-				'type' => 'dropdown',
-'class' => 'select2_ajax',
-'options' => [''],
-'data-url' => 'master/employees/searchPaging',
-				'value' => '',	
-				'required' => 'required'	
-			]	,			
+    protected $form = [						
 			'approved_by_id' => [
 				'id' => 'approved_by_id',
 				'label' => 'Approve Oleh',
 				'placeholder' => 'Isikan Approve Oleh',
 				'type' => 'dropdown',
-'class' => 'select2_ajax',
-'options' => [''],
-'data-url' => 'master/employees/searchPaging',
+				'class' => 'select2_ajax',
+				'options' => [''],
+				'data-url' => 'master/employees/searchPaging',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
 			'overtime_date' => [
 				'id' => 'overtime_date',
-				'label' => 'overtime_date',
+				'label' => 'Tanggal Lembur',
 				'placeholder' => 'Isikan overtime_date',
 				            'type' => 'input',
-            'data-tipe' => 'date',
+            	'data-tipe' => 'date',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
 			'start_hour' => [
 				'id' => 'start_hour',
-				'label' => 'start_hour',
+				'label' => 'Awal',
 				'placeholder' => 'Isikan start_hour',
+				'readonly' => 'readonly',
 				'type' => 'input',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
 			'end_hour' => [
 				'id' => 'end_hour',
-				'label' => 'end_hour',
+				'label' => 'Akhir',
 				'placeholder' => 'Isikan end_hour',
 				'type' => 'input',
+				'readonly' => 'readonly',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
@@ -74,6 +54,7 @@ class Overtime_model extends Base_model{
 				'label' => 'raw_value',
 				'placeholder' => 'Isikan raw_value',
 				'type' => 'number',
+				'readonly' => 'readonly',
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
@@ -84,23 +65,7 @@ class Overtime_model extends Base_model{
 				'type' => 'input',
 				'value' => '',	
 				'required' => 'required'	
-			]	,			
-			'holiday' => [
-				'id' => 'holiday',
-				'label' => 'holiday',
-				'placeholder' => 'Isikan holiday',
-				'type' => 'input',
-				'value' => '',	
-				'required' => 'required'	
-			]	,			
-			'overday' => [
-				'id' => 'overday',
-				'label' => 'overday',
-				'placeholder' => 'Isikan overday',
-				'type' => 'number',
-				'value' => '',	
-				'required' => 'required'	
-			]	,			
+			]	,									
 			'description' => [
 				'id' => 'description',
 				'label' => 'description',
@@ -115,6 +80,13 @@ class Overtime_model extends Base_model{
             'label' => 'Simpan'
         ]];
 
+	public function joinReference(){
+		if($this->getWithReferences()){			
+			$this->db->join('employees','employees.id = overtimes.employee_id');
+			$this->db->join('shiftments','shiftments.id = overtimes.shiftment_id');			
+			$this->db->join('employees as approvedBy','approvedBy.id = overtimes.approved_by_id','left');
+		}
+	}	
     /** uncomment function ini untuk memberikan nilai default form,
       * misalkan mengisi data pilihan dropdown dari database dll
     protected function setOptionDataForm($where = array()){

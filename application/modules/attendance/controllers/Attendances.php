@@ -9,7 +9,7 @@ class Attendances extends MY_Controller {
     function __construct(){
         parent::__construct();
         $this->load->model('Attendance_model','attendance_model');
-        $this->model = $this->attendance_model;
+        $this->model = $this->attendance_model;        
     }
 
     public function index($referenceId = NULL){
@@ -19,8 +19,7 @@ class Attendances extends MY_Controller {
 
     protected function setBtnAdd($key = null)
     {
-        return generateButton('Process Finger', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url('master/workshifts/generate'),'class' => 'btn btn-dark active'],'<i class="fa fa-gear"></i>')
-            .generateButton('Import Log Finger', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url('master/importWorkshift/add'),'class' => 'btn btn-dark active'],'<i class="fa fa-upload"></i>')
+        return generateButton('Process Summary Attendance', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url('master/workshifts/generate'),'class' => 'btn btn-dark active'],'<i class="fa fa-gear"></i>')            
             .generateAddButton('Tambah', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url($this->pathView.'/add')])
         ;
     }

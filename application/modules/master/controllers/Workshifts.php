@@ -13,8 +13,7 @@ class Workshifts extends MY_Controller {
     }
 
     public function index($referenceId = NULL){        
-        $this->model->setWithReferences(TRUE);
-        $this->addFilters('periode','2019-08');
+        $this->model->setWithReferences(TRUE);        
         if(empty($this->getFilters('periode'))){
             $this->addFilters('periode',date('Y-m'));
         }

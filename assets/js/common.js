@@ -1,9 +1,3 @@
-/**
- * @title : Kumpulan fungsi-fungsi(baca: method) u/ global proses.
- * @author: mursito&prends <02-04@mitraunggassejati.com>
- *
- */
-
 'use strict';
 var Config = {
     decimal: {
@@ -171,7 +165,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
         dec = (typeof dec_point === 'undefined') ? '.' :
         dec_point,
         s = '',
-        toFixedFix = function(n, prec) {
+        toFixedFix = function (n, prec) {
             var k = Math.pow(10, prec);
             return '' + (Math.round(n * k) / k).toFixed(prec);
         };
@@ -205,13 +199,13 @@ function parse_number(string_number, thousands_sep, decimal_sep) {
 }
 
 function empty(data) {
-    if (typeof(data) == 'number' || typeof(data) == 'boolean') {
+    if (typeof (data) == 'number' || typeof (data) == 'boolean') {
         return false;
     }
-    if (typeof(data) == 'undefined' || data === null || data == 'null') {
+    if (typeof (data) == 'undefined' || data === null || data == 'null') {
         return true;
     }
-    if (typeof(data.length) != 'undefined') {
+    if (typeof (data.length) != 'undefined') {
         return data.length == 0;
     }
     var count = 0;
@@ -291,7 +285,7 @@ function createTree(arr) {
         var tmp = '<ul>';
         for (var i in arr) {
             var val = arr[i];
-            if (typeof(val) === 'string') {
+            if (typeof (val) === 'string') {
                 tmp += '<li><a href="#">' + val + '</a></li>';
             } else {
                 var _id = getRandomInt(1001, 2000);
@@ -320,7 +314,7 @@ function messageBox(title, message) {
             success: {
                 label: "OK",
                 className: "btn-success",
-                callback: function() {
+                callback: function () {
                     return true;
                 }
             }
@@ -334,7 +328,7 @@ function messageBox(title, message) {
 }
 
 function setNumberFormatOnLoadPage() {
-    $('[data-tipe=integer],[data-tipe=angka],[data-tipe=decimal],[data-tipe=decimal3]').each(function() {
+    $('[data-tipe=integer],[data-tipe=angka],[data-tipe=decimal],[data-tipe=decimal3]').each(function () {
         $(this).priceFormat(Config[$(this).data('tipe')]);
     });
 } // end - setNumberFormatOnLoadPage
@@ -362,7 +356,7 @@ function filter_content(elm) {
     var _tbody = _tr.closest('table').find('tbody');
     var _content, _target;
     _tbody.find('tr').show();
-    _tr.find('input,select').each(function() {
+    _tr.find('input,select').each(function () {
         _content = $(this).val();
         if (!empty(_content)) {
             _target = $(this).data('target');
@@ -390,22 +384,22 @@ function showNameFile(elm) {
 }
 
 var numeral = {
-    unformat: function(string_number) {
+    unformat: function (string_number) {
         string_number = (empty(string_number)) ? 0 : string_number;
         return parse_number(string_number, '.', ',');
     },
 
-    format: function(string_number, dec = 2) {
+    format: function (string_number, dec = 2) {
         string_number = (empty(string_number)) ? 0 : string_number;
         return number_format(string_number, dec, ',', '.');
     },
 
-    formatInt: function(string_number, dec = 2) {
+    formatInt: function (string_number, dec = 2) {
         string_number = (empty(string_number)) ? 0 : string_number;
         return number_format(string_number, 0, ',', '.');
     },
 
-    formatDec: function(string_number, dec = 2) {
+    formatDec: function (string_number, dec = 2) {
         string_number = (empty(string_number)) ? 0 : string_number;
         return number_format(string_number, dec, ',', '.');
     }
@@ -444,9 +438,9 @@ function getValueDateTimeSQL(elm) {
     return result;
 }
 
-$.fn.enterKey = function(fnc, mod) {
-    return this.each(function() {
-        $(this).keypress(function(ev) {
+$.fn.enterKey = function (fnc, mod) {
+    return this.each(function () {
+        $(this).keypress(function (ev) {
             var keycode = (ev.keyCode ? ev.keyCode : ev.which);
             if ((keycode == '13' || keycode == '10') && (!mod || ev[mod + 'Key'])) {
                 fnc.call(this, ev);
@@ -455,7 +449,7 @@ $.fn.enterKey = function(fnc, mod) {
     })
 }
 
-Number.prototype.round = function(decLength = 2) {
+Number.prototype.round = function (decLength = 2) {
     var num = Math.round(this + 'e' + decLength)
     return Number(num + 'e-' + decLength)
 }
@@ -483,7 +477,7 @@ function sleep(milliseconds) {
 
 /* fungsi untuk inisialisasi input format angka ketika klik baris baru*/
 function reinitiateNumber(elm) {
-    $(elm).each(function(i) {
+    $(elm).each(function (i) {
         console.log($(this).data('tipe'));
         if ($(this).data('tipe') != undefined) {
             $(this).priceFormat(Config[$(this).data('tipe')]);
@@ -494,7 +488,7 @@ function reinitiateNumber(elm) {
 function serializeArrayFull(elm) {
     var data_params = [];
     var data = {};
-    $(elm).find('input[type!=checkbox]').each(function(i, v) {
+    $(elm).find('input[type!=checkbox]').each(function (i, v) {
         data = {
             'name': $(v).attr('name'),
             'value': ($(v).attr('data-tipe') == 'integer' || $(v).attr('data-tipe') == 'decimal') ? numeral.unformat($(v).val()) : $(v).val(),
@@ -505,7 +499,7 @@ function serializeArrayFull(elm) {
         data_params.push(data);
     });
 
-    $(elm).find('input[type=checkbox]').each(function(i, v) {
+    $(elm).find('input[type=checkbox]').each(function (i, v) {
         data = {
             'name': $(v).attr('name'),
             'value': $(v).is(':checked') ? 1 : 0,
@@ -516,7 +510,7 @@ function serializeArrayFull(elm) {
         data_params.push(data);
     });
 
-    $(elm).find('select').each(function(i, v) {
+    $(elm).find('select').each(function (i, v) {
         data = {
             'name': $(v).attr('name'),
             'value': $(v).find('option:selected').val(),
@@ -531,12 +525,12 @@ function serializeArrayFull(elm) {
     // console.log(data_params);
     return data_params;
 }
-File.prototype.convertToBase64 = function(callback) {
+File.prototype.convertToBase64 = function (callback) {
     var reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         callback(e.target.result)
     };
-    reader.onerror = function(e) {
+    reader.onerror = function (e) {
         callback(null);
     };
     reader.readAsDataURL(this);
@@ -547,7 +541,7 @@ function validationSave(data_params, confirm_msg, callback) {
     var count = 0;
     var jenis_grade = '';
 
-    $.each(data_params, function(i, v) {
+    $.each(data_params, function (i, v) {
         if (v.required == true && v.value == '') {
             result = 0;
         }
@@ -563,12 +557,12 @@ function validationSave(data_params, confirm_msg, callback) {
             buttons: {
                 cancel: {
                     label: 'Tidak',
-                    callback: function() {}
+                    callback: function () {}
                 },
                 confirm: {
                     label: 'Ya',
-                    callback: function() {
-                        box2.bind('hidden.bs.modal', function() {
+                    callback: function () {
+                        box2.bind('hidden.bs.modal', function () {
                             callback(result);
                         });
                     }
@@ -585,7 +579,7 @@ function validationSave(data_params, confirm_msg, callback) {
         };
         var box = bootbox.dialog(_options);
 
-        box.bind('shown.bs.modal', function() {
+        box.bind('shown.bs.modal', function () {
             $('div.bootbox .btn-checkmark').addClass('hide');
         });
     }
@@ -598,12 +592,12 @@ function executeSave(data_params, url, callback) {
         data: data_params,
         type: 'post',
         dataType: 'json',
-        beforeSend: function() {
+        beforeSend: function () {
             bootbox.dialog({
                 message: "Sedang proses simpan..."
             });
         },
-        success: function(data) {
+        success: function (data) {
             $('.bootbox').modal('hide');
             callback(data);
         }

@@ -30,12 +30,12 @@ EasyHRIS belum dapat digunakan untuk produksi dan sedang dalam proses pengembang
 - [x] Promosi, Mutasi, dan Demosi
 - [x] Manajemen Shift Kerja
 - [x] Manajemen Jadwal Kerja
-- [x] Manajemen Absensi dengan fitur _rules_
+- [x] Manajemen Absensi
 - [x] Manajemen Hari Libur
 - [x] Manajemen dan Perhitungan Lembur
 - [x] Manajemen BPJS Kesehatan
 - [x] Manajemen dan Perhitungan BPJS
-- [x] Pajak PPH21 sesuai
+- [x] Pajak PPH21
 - [x] Gaji
 - [x] Laporan Penggajian
 - [x] Laporan Beban Gaji Perusahaan
