@@ -7,18 +7,10 @@ class Attendance_summary_model extends Base_model{
     protected $_table = 'attendance_summaries';
     
     protected $primary_key = 'id';
-    protected $columnTableData = ['id','employee_id','year','month','total_workday','total_in','total_loyality','total_absent','total_overtime'];
-    protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'Tahun'],['data' => 'Bulan'],['data' => 'Total Hari Kerja'],['data' => 'Total Masuk'],['data' => 'total_loyality'],['data' => 'Total Absent'],['data' => 'Total Overtime']]];
+    protected $columnTableData = ['attendance_summaries.id','employees.full_name as employee','periode','total_workday','total_in','total_absent','total_overtime'];
+    protected $headerTableData = [				[['data' => 'Pegawai'],['data' => 'Periode'],['data' => 'Total Hari Kerja'],['data' => 'Total Masuk'],['data' => 'Total Libur'],['data' => 'Total Overtime (menit)']]];
 
     protected $form = [			
-			'id' => [
-				'id' => 'id',
-				'label' => 'id',
-				'placeholder' => 'Isikan id',
-				'type' => 'input',
-				'value' => '',	
-				'required' => 'required'	
-			]	,			
 			'employee_id' => [
 				'id' => 'employee_id',
 				'label' => 'Pegawai',
@@ -30,22 +22,14 @@ class Attendance_summary_model extends Base_model{
 				'value' => '',	
 				'required' => 'required'	
 			]	,			
-			'year' => [
-				'id' => 'year',
-				'label' => 'Tahun',
-				'placeholder' => 'Isikan Tahun',
+			'periode' => [
+				'id' => 'periode',
+				'label' => 'Periode',
+				'placeholder' => 'Isikan Periode (ex: 2020-05)',
 				'type' => 'input',
 				'value' => '',	
 				'required' => 'required'	
-			]	,			
-			'month' => [
-				'id' => 'month',
-				'label' => 'Bulan',
-				'placeholder' => 'Isikan Bulan',
-				'type' => 'input',
-				'value' => '',	
-				'required' => 'required'	
-			]	,			
+			]	,						
 			'total_workday' => [
 				'id' => 'total_workday',
 				'label' => 'Total Hari Kerja',
@@ -91,7 +75,12 @@ class Attendance_summary_model extends Base_model{
             'type' => 'submit',
             'label' => 'Simpan'
         ]];
-
+	
+	public function joinReference(){
+		if($this->getWithReferences()){			
+			$this->db->join('employees','employees.id = attendance_summaries.employee_id');			
+		}
+	}
     /** uncomment function ini untuk memberikan nilai default form,
       * misalkan mengisi data pilihan dropdown dari database dll
     protected function setOptionDataForm($where = array()){

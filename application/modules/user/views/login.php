@@ -44,7 +44,7 @@
 
                 <div>
                   <h1><?php echo $appTitle ?></h1>
-                  <p>©2019 CV. Syariah Solution</p>
+                  <p><?php echo $appCopyright ?></p>
                 </div>
               </div>
             </form>

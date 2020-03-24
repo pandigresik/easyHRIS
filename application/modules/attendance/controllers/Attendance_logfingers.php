@@ -103,7 +103,17 @@ class Attendance_logfingers extends MY_Controller {
         $startDate = $data['start_date'];
         $endDate = $data['end_date'];
         $nik = !empty($data['nik']) ? explode(',',$data['nik']) : NULL;
-        $result = Modules::run('attendance/process/fingerDetail',$startDate,$endDate,$nik);        
+        /** pastikan attendance_summary belum digenerate untuk periode ini */
+        $this->load->model('attendance_summary_model','asm');
+        $periodeStart = new \DateTime($startDate);
+        $periodeEnd = new \DateTime($endDate);        
+        $summaryAttendance = $this->asm->count_by(['periode' => [$periodeStart->format('Y-m'),$periodeEnd->format('Y-m')]]);
+        if(!$summaryAttendance){
+            $result = Modules::run('attendance/process/fingerDetail',$startDate,$endDate,$nik);        
+        }else{
+            $result = ['status' => 0, 'message' => 'Transaksi periode '.$startDate.' sd '.$endDate.' telah dikunci'];
+        }
+        
         $this->display_json($result);
     }
 

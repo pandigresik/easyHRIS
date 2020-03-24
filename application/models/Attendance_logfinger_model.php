@@ -62,8 +62,7 @@ class Attendance_logfinger_model extends Base_model{
 			$this->db->join('employees','employees.id = attendance_logfingers.employee_id');			
 			$this->db->join('fingerprint_devices','fingerprint_devices.id = attendance_logfingers.fingerprint_device_id','left');
 		}
-	}
-		
+	}		
     /** uncomment function ini untuk memberikan nilai default form,
       * misalkan mengisi data pilihan dropdown dari database dll
     protected function setOptionDataForm($where = array()){

@@ -1,5 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-$config['appTitle'] = 'Your Company Name';
+$config['appTitle'] = 'easyHRIS.com';
+$config['appCopyright'] = 'solusikita';
 $config['table'] = [
             'table_open' => '<table class="table text-center table-bordered" id="datatable">',
             'thead_open' => '<thead class="default">',

@@ -23,6 +23,7 @@ class User extends MX_Controller
     public function login()
     {
         $data['appTitle'] = $this->config->item('appTitle');        
+        $data['appCopyright'] = $this->config->item('appCopyright');        
         $this->load->view('user/login',$data);
     }
 

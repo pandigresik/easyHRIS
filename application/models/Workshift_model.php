@@ -67,8 +67,14 @@ class Workshift_model extends Base_model{
 		if($this->getWithShiftment()){			
 			$this->db->join('shiftments','shiftments.id = workshifts.shiftment_id');			
 		}
+	}		
+	
+	public function overDayEmployeeFinger(){		
+		$this->db->join('shiftments','shiftments.id = workshifts.shiftment_id and shiftments.end_hour < shiftments.start_hour');					
+		$this->db->join('attendance_logfingers',"attendance_logfingers.employee_id = workshifts.employee_id and attendance_logfingers.fingertime >= date_sub(concat(DATE_FORMAT(date_add(workshifts.work_date,interval 1 DAY) , '%Y-%m-%d'),' ',shiftments.end_hour), INTERVAL 2 HOUR) and attendance_logfingers.fingertime <= date_add(concat(DATE_FORMAT(date_add(workshifts.work_date,interval 1 DAY) , '%Y-%m-%d'),' ',shiftments.end_hour), INTERVAL 4 HOUR)");							
+		return $this;
 	}	
-		
+
     /** uncomment function ini untuk memberikan nilai default form,
       * misalkan mengisi data pilihan dropdown dari database dll
     protected function setOptionDataForm($where = array()){

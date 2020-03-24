@@ -12,6 +12,11 @@ class Attendance_summaries extends MY_Controller {
         $this->model = $this->attendance_summary_model;
     }
 
+    public function index($referenceId = NULL){
+        $this->model->setWithReferences(TRUE);
+        parent::index($referenceId);        
+    }
+    
     protected function setBtnAdd($key = null)
     {
         return generateButton('Generate Summary', ['onclick' => 'App.addRecord(this)', 'data-url' => site_url('master/workshifts/generate'),'class' => 'btn btn-dark active'],'<i class="fa fa-gear"></i>')            

@@ -26,18 +26,55 @@ class Process extends MY_Controller
         parent::__construct();
     }
 
-    public function fingerDetail($startDate, $endDate , $employeeId = []){        
+    public function fingerDetail($startDate, $endDate , $employeeId = []){                
+        $this->updateWorkDateLogFinger($startDate,$endDate);
         $this->setStartDate($startDate);
-        $this->setEndDate($endDate);
+        $this->setEndDate($endDate);        
         $this->setHolidayDateRange($startDate,$endDate);
         $this->setNik($employeeId);
         $this->bersihkanData();
         $whereFilter = ['work_date between \''.$startDate.'\' and \''.$endDate.'\''];
         
         $jadwalKerja = convertArr2Key($this->wm->as_array()->setWithReferences(TRUE)->fields(['have_overtime_benefit','employee_id','work_date','shiftments.start_hour as jammasuk','shiftments.end_hour as jampulang','shiftment_id','shiftments.code as shift_code'])->get_many_by($whereFilter),'employee_id','work_date');
-        $whereFilterFinger = ['fingertime between \''.$startDate.' 00:00:00\' and \''.$endDate.' 23:59:59\''];
+        $whereFilterFinger = ['work_date between \''.$startDate.'\' and \''.$endDate.'\''];
         $dataFinger = convertArr2Key($this->alm->fields(['employee_id','fingertime','work_date'])->as_array()->get_many_by($whereFilterFinger),'employee_id','work_date',TRUE);
         return $this->isiData($dataFinger,$jadwalKerja);
+    }
+
+    public function summaryAttendance($periode){        
+        $result = ['status' => 0, 'message' => 'gagal proses generate summary attendance'];
+        $this->load->model('attendance_summary_model','asm');
+        $awalBulan = $periode.'-01';
+        $akhirBulan = akhirBulan($awalBulan);
+        $this->bersihkanSummary($periode);
+        $sql = <<<SQL
+        select a.*
+                ,'{$periode}' as periode    
+                , a.total_workday - a.total_absent as total_in 
+                ,coalesce(b.totalOvertime,0) as total_overtime
+        from (
+            select at.employee_id,
+                sum(at.absent) as total_absent,
+                sum(at.iswork_date) as total_workday
+            from attendances at 
+            where at.attendance_date between '{$awalBulan}' and '{$akhirBulan}'
+            group by at.employee_id
+        )a 
+        left join (
+            select employee_id,sum(calculated_value) as totalOvertime 
+            from overtimes 
+            where approved_by_id is not null 
+            and overtime_date between '{$awalBulan}' and '{$akhirBulan}'
+            group by employee_id
+        )b on b.employee_id = a.employee_id   
+SQL;
+        $tmp = $this->db->query($sql)->result_array();    
+        if(!empty($tmp)){            
+            $this->asm->insert_many($tmp);            
+            $result['status'] = 1;
+            $result['message'] = count($tmp).' data berhasil disimpan';
+        }
+        return $result;
     }
 
     private function setHolidayDateRange($startDate,$endDate){
@@ -48,6 +85,16 @@ class Process extends MY_Controller
         }
 
         $this->setHoliday($result);
+    }
+    
+    private function bersihkanSummary($periode){   
+        $this->load->model('attendance_summary_model','asm');        
+        $whereFilter = ['periode' => $periode];
+        /*if(!empty($employeeId)){
+            $whereFilter['nik'] = $employeeId;
+        }*/
+
+        $this->asm->delete_by($whereFilter);           
     }
 
     private function bersihkanData(){   
@@ -87,8 +134,7 @@ class Process extends MY_Controller
             return $result;
         }
         $jmlData = 0;
-        $pengajuan = $this->getLeaveAbsent();        
-        
+        $pengajuan = $this->getLeaveAbsent();                
         foreach($jadwalKerja as $employeeId => $pernik){            
             $pengajuanNik = isset($pengajuan[$employeeId]) ? $pengajuan[$employeeId] : [];
             if(!empty($pernik)){                
@@ -96,17 +142,18 @@ class Process extends MY_Controller
                     $haveOvertimeBenefit = $pertanggal['have_overtime_benefit'];
                     $pengajuanPertanggal = isset($pengajuanNik[$tgl]) ? $pengajuanNik[$tgl] : [];
                     $tglpulang = $pertanggal['jammasuk'] > $pertanggal['jampulang'] ? tglSetelah(1,$tgl)->format('Y-m-d') : $tgl;
+                    $hariKerja = in_array($pertanggal['shift_code'],$this->liburCode) ? 0 : 1;
                     $detailFinger = [
                         'employee_id' => $employeeId,                        
                         'attendance_date' => $tgl,
                         'shift_checkin' => $tgl.' '.$pertanggal['jammasuk'],
                         'shift_checkout' => $tglpulang.' '.$pertanggal['jampulang'],
-                        'absent' => in_array($pertanggal['shift_code'],$this->liburCode) ? 1 : 0,                        
+                        'absent' => $hariKerja ? 1 : 0,/** bukan hari kerja maka set 0 */                        
+                        'iswork_date' => $hariKerja,                        
                         'shiftment_id' => $pertanggal['shiftment_id'],
                         'reason_id' => !empty($pengajuanPertanggal) ? $pengajuanPertanggal['reason_id'] : NULL
                     ];
-                    if(!$detailFinger['absent']){
-                        $detailFinger['absent'] = 1;
+                    if($detailFinger['absent']){                        
                         if(isset($dataFinger[$employeeId])){
                             if(isset($dataFinger[$employeeId][$tgl])){
                                 $_defaultJamKerja = ['jammasuk' => $tgl.' '.$pertanggal['jammasuk'], 'jampulang' => $tglpulang.' '.$pertanggal['jampulang']];
@@ -206,7 +253,7 @@ class Process extends MY_Controller
                 //$break_start = (empty($result['break_start']) or !$breakStartValid) ? true : false;
                 $break_start = false;
                 $tmp = $this->setWaktuFinger($_jam['fingertime'], $defaultJamKerja, $break_start);
-
+                
                 if (!empty($tmp['type'])) {
                     switch ($tmp['type']) {
                         case 'time_come':
@@ -237,6 +284,14 @@ class Process extends MY_Controller
         //unset($result['break']);
         // $result = array_merge($result, $resultBreak);
         return $result;
+    }
+    /** perbaikan untuk menentukan fingertime mengikuti tanggal hari kerja untuk hari ini atau hari kemarin, biasanya kasus finger shift 3 */
+    private function updateWorkDateLogFinger($startDate,$endDate){
+        $listLogFinger = $this->wm->overDayEmployeeFinger()->fields(["attendance_logfingers.id as id"])->as_array()->get_many_by("workshifts.work_date between '$startDate' and '$endDate'");
+        if(!empty($listLogFinger)){
+            $this->db->query("update attendance_logfingers set work_date = date_sub(fingertime, INTERVAL 1 DAY) where id in (\"".implode("\",\"",array_column($listLogFinger,'id'))."\")");
+            //$this->alm->update_by(['id' => array_column($listLogFinger,"id")],'');
+        }
     }
 
     private function setJamIstirahat($arrBreak, $jamIstirahat)
@@ -303,7 +358,6 @@ class Process extends MY_Controller
         //$istirahatawal = FormatterWeb::formatTime($defaultJamKerja['ISTIRAHATAWAL']);
         //$istirahatakhir = FormatterWeb::formatTime($defaultJamKerja['ISTIRAHATAKHIR']);
         $type = null;
-        /** maksimum masuk adalah 1 jam setelah jam masuk */
         $start = $jammasuk;
         $end = $jampulang;
 

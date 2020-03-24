@@ -12,6 +12,7 @@ function init_sidebar() {
     };
     $SIDEBAR_MENU.find("a").on("click", function (b) {
         var c = $(this).parent();
+        c.siblings('.active').removeClass('active');
         c.is(".active") ? (c.removeClass("active active-sm"), $("ul:first", c).slideUp(function () {
             a()
         })) : (c.parent().is(".child_menu") ? $BODY.is(".nav-sm") && ($SIDEBAR_MENU.find("li").removeClass("active active-sm"), $SIDEBAR_MENU.find("li ul").slideUp()) : ($SIDEBAR_MENU.find("li").removeClass("active active-sm"), $SIDEBAR_MENU.find("li ul").slideUp()), c.addClass("active"), $("ul:first", c).slideDown(function () {
@@ -124,8 +125,6 @@ $(document).ready(function () {
     /* jika navbar diklik maka load halaman utama sesuai dengan href */
 
     $('#navbar a.ajax').click(function (e) {
-        //return false;
-        //e.preventDefault();
         var _url = $(this).attr('href').substr(1);
         if (!empty(_url)) {
             App.getContentView(_url, {});
