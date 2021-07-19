@@ -9,10 +9,7 @@ class Tools extends CI_Controller {
             exit('Direct access is not allowed. This is a command line tool, use the terminal');
         }
         $dbCli = $this->load->database('default_cli',TRUE);
-        $this->load->dbforge($dbCli);
-
-        // initiate faker
-        $this->faker = Faker\Factory::create();
+        $this->load->dbforge($dbCli);        
     }
 
     public function message($to = 'World') {

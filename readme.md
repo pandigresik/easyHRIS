@@ -48,10 +48,14 @@ EasyHRIS belum dapat digunakan untuk produksi dan sedang dalam proses pengembang
 ## Cara Install (Manual)
 
 - [x] Clone/Download repository `git clone https://github.com/pandigresik/EasyHRIS.git` dan pindah ke folder `EasyHRIS`
-- [x] Jalankan [Composer](https://getcomposer.org/download) Install/Update `composer update`
+- [x] Jalankan [Composer](https://getcomposer.org/download) Install/Update `composer install`
+- [x] Buat database misal easyhris lalu import db dari file `db_example.sql` contoh dari command line `mysql -u ahmad -h localhost -p easyhris < db_example.sql` atau bisa juga dari phpmyadmin atau lainnya
+- [x] Rename config/database.example.php menjadi config/database.php
+- [x] Rename config/config.example.php menjadi config/config.php
 - [x] Setup koneksi database pada config/database.php
 - [x] Jalankan perintah `php -S <HOST>:<PORT>` untuk mengaktifkan web server local ( kebutuhan development )
 - [x] Buka halaman `<HOST>:<PORT>/`
+- [x] Login using username: `admin` password:`admin`
 
 ## Kontributor
 

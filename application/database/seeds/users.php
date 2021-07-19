@@ -15,18 +15,8 @@ class users extends Seeder {
         $this->model->insert($data);
 
         //seed many records using faker
-        $limit = 3;
-        echo "seeding $limit user accounts";
-
-        for ($i = 0; $i < $limit; $i++) {
-            echo ".";
-
-            $data = array(
-                'username' => $this->faker->unique()->userName,                
-            );
-            $data =  array_merge($data,SecurityManager::encode('1234'));
-            $this->model->insert($data);
-        }
+        $limit = 1;
+        echo "seeding {$limit} user accounts";
 
         echo PHP_EOL;
     }

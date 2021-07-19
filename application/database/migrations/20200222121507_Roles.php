@@ -21,13 +21,13 @@ class Migration_Roles extends CI_Migration {
             ),
             'created_at' => array(
                 'type' => 'DATETIME',                                
-                'default' => 'CURRENT_TIMESTAMP', 
-                'default_string' => false
+                //'default' => 'CURRENT_TIMESTAMP', 
+                //'default_string' => false
             ),
             'updated_at' => array(
                 'type' => 'DATETIME',           
-                'default' => 'CURRENT_TIMESTAMP', 
-                'default_string' => false
+                //'default' => 'CURRENT_TIMESTAMP', 
+                //'default_string' => false
             ),
         ));
         $this->dbforge->add_key('id', TRUE);
