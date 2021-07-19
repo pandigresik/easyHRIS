@@ -26,7 +26,7 @@ CREATE TABLE `activity_log` (
   `created_by` int NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS attendance_logfingers;
 CREATE TABLE `attendance_logfingers` (
@@ -43,7 +43,7 @@ CREATE TABLE `attendance_logfingers` (
   KEY `fk_attendance_log_2` (`fingerprint_device_id`),
   CONSTRAINT `fk_attendance_log_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`),
   CONSTRAINT `fk_attendance_log_2` FOREIGN KEY (`fingerprint_device_id`) REFERENCES `fingerprint_devices` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS attendance_summaries;
 CREATE TABLE `attendance_summaries` (
@@ -353,7 +353,7 @@ CREATE TABLE `fingerprint_devices` (
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `fingerprint_devices_serial_number_IDX` (`serial_number`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS holidays;
 CREATE TABLE `holidays` (
@@ -514,7 +514,7 @@ CREATE TABLE `menus` (
   `parent_id` int DEFAULT '0',
   `descriptions` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS overtimes;
 CREATE TABLE `overtimes` (
@@ -610,7 +610,7 @@ CREATE TABLE `permissions` (
   UNIQUE KEY `uq_menu_details` (`route`,`menus_id`),
   KEY `fk_menu_details` (`menus_id`),
   CONSTRAINT `fk_menu_details` FOREIGN KEY (`menus_id`) REFERENCES `menus` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS regions;
 CREATE TABLE `regions` (
@@ -635,7 +635,7 @@ CREATE TABLE `role_menus` (
   KEY `fk_role_menu_details` (`menus_id`),
   CONSTRAINT `fk_role_menu_details` FOREIGN KEY (`menus_id`) REFERENCES `menus` (`id`),
   CONSTRAINT `fk_role_menu_details2` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS role_permissions;
 CREATE TABLE `role_permissions` (
@@ -646,7 +646,7 @@ CREATE TABLE `role_permissions` (
   KEY `fk_role_permissions` (`permissions_id`),
   CONSTRAINT `fk_role_permissions` FOREIGN KEY (`permissions_id`) REFERENCES `permissions` (`id`),
   CONSTRAINT `fk_role_permissions2` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS roles;
 CREATE TABLE `roles` (
@@ -656,7 +656,7 @@ CREATE TABLE `roles` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS salary_allowances;
 CREATE TABLE `salary_allowances` (
@@ -781,7 +781,7 @@ CREATE TABLE `settings` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS shiftment_groups;
 CREATE TABLE `shiftment_groups` (
@@ -898,7 +898,7 @@ CREATE TABLE `user_roles` (
   KEY `fk_user_role2` (`role_id`),
   CONSTRAINT `fk_user_role1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `fk_user_role2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE `users` (
@@ -912,7 +912,7 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_users` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS workshifts;
 CREATE TABLE `workshifts` (
