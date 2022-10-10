@@ -4,7 +4,7 @@
                     <h4 class="card-title">Unit</h4>
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-group row">
+                            <div class="form-group row mb-3">
                                 @php
                                     $roleUnit = isset($role) ? $role->units->pluck('id','id') : []; 
                                 @endphp                                

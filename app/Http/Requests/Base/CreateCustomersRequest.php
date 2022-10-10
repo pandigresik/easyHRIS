@@ -8,7 +8,6 @@ use App\Models\Base\Customers;
 
 class CreateCustomersRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateCustomersRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Customers)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Customers())->fillable;
         return parent::all($keys);
     }
 }

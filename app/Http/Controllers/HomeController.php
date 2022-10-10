@@ -19,11 +19,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
         $widgets = [];
         \Widget::group('main')->position(3)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-danger']);
         \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-warning']);
-        
+
         array_push($widgets, '<div class="row mb-3">'.\Widget::group('main')->wrap(function ($content, $index, $total) {
             // $total is a total number of widgets in a group.
             $width = intval(12 / $total);

@@ -8,10 +8,10 @@ use Kalnoy\Nestedset\NodeTrait;
 class MenusTree extends Model
 {
     use NodeTrait;
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
-    const CREATED_BY = null;
-    const UPDATED_BY = null;
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
+    public const CREATED_BY = null;
+    public const UPDATED_BY = null;
 
     public $table = 'menus';
     public $fillable = [

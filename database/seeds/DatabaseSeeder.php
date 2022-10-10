@@ -19,6 +19,15 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleHasPermissionsTableSeeder::class);
         $this->call(MenuPermissionsTableSeeder::class);
 
-        \App\Models\Base\MenusTree::fixTree();        
+        \App\Models\Base\MenusTree::fixTree();  
+                
+        $this->call(AbsentReasonsTableSeeder::class);                
+        $this->call(CompaniesTableSeeder::class);        
+        $this->call(DepartmentsTableSeeder::class);
+        $this->call(EducationTitlesTableSeeder::class);
+        $this->call(EducationalInstitutesTableSeeder::class);        
+        $this->call(SalaryComponentsTableSeeder::class);        
+        $this->call(SalaryGroupsTableSeeder::class);        
+        $this->call(ShiftmentsTableSeeder::class);        
     }
 }

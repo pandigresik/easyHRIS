@@ -49,7 +49,7 @@ class SynchronizeTableWithCondition extends Command
                 ->setLimit((int) $this->getLimit())
                 ->setOptions($this->options())
                 ->run()
-    ;
+            ;
         } catch (DatabaseConnectionException $e) {
             $this->error($e->getMessage());
 

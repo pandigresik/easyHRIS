@@ -1,0 +1,78 @@
+[
+    {
+        "name": "id",
+        "dbType": "bigInteger,true,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "employee_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "old_tax_group",
+        "dbType": "string,3:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:3|nullable|string|max:3",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "new_tax_group",
+        "dbType": "string,3:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:3|nullable|string|max:3",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "old_risk_ratio",
+        "dbType": "string,3:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:3|nullable|string|max:3",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "new_risk_ratio",
+        "dbType": "string,3:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:3|nullable|string|max:3",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Employee,employee_id"
+    }
+]

@@ -13,9 +13,9 @@ class CustomersDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
-    
+
     private $mapColumnSearch = [
         //'entity.name' => 'entity_id',
     ];
@@ -32,7 +32,7 @@ class CustomersDataTable extends DataTable
         if (!empty($this->columnFilterOperator)) {
             foreach ($this->columnFilterOperator as $column => $operator) {
                 $columnSearch = $this->mapColumnSearch[$column] ?? $column;
-                $dataTable->filterColumn($column, new $operator($columnSearch));                
+                $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
         return $dataTable->addColumn('action', 'base.customers.datatables_actions');
@@ -88,7 +88,7 @@ class CustomersDataTable extends DataTable
                        'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
                     ],
                 ];
-                
+
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
@@ -103,7 +103,7 @@ class CustomersDataTable extends DataTable
                  ],
                  'responsive' => true,
                  'fixedHeader' => true,
-                 'orderCellsTop' => true     
+                 'orderCellsTop' => true
             ]);
     }
 

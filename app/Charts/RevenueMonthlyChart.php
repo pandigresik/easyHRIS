@@ -38,6 +38,6 @@ class RevenueMonthlyChart
             //     ],
             //     'legend' => ['show' => false],
             // ])
-            ;
+        ;
     }
 }

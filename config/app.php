@@ -172,12 +172,12 @@ return [
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
+        App\Providers\ColumnTypeServiceProvider::class, 
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \InfyOm\Generator\InfyOmGeneratorServiceProvider::class,
-        \InfyOm\CoreUITemplates\CoreUITemplatesServiceProvider::class,
+        \InfyOm\Generator\InfyOmGeneratorServiceProvider::class,        
 
     ],
 
@@ -234,10 +234,5 @@ return [
         'Html'      => Collective\Html\HtmlFacade::class,
         'Flash'     => Laracasts\Flash\Flash::class,
 
-    ],
-
-    'companies' => ['WJC' => 'WJC','KDA' => 'KDA','TSP' => 'TSP'],
-    'jenis' => ['O' => 'Operasional', 'P' => 'Piutang'],
-    'divapp' => ['A' => 'Breeding TSP/KDA', 'B' => 'Breeding', 'D' => 'Feedmill', 'E' => 'Pakan Ikan'],
-    'bankCodeKP' => ['PUS', 'PIU', 'TSP', ' PI', 'LTE']
+    ],    
 ];

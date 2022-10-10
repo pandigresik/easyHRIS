@@ -1,6 +1,6 @@
 <?php
 
-
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
@@ -21,12 +21,12 @@ class RolesTableSeeder extends Seeder
         \DB::table('roles')->insert(array (
             0 => 
             array (
-                'created_at' => '2021-10-26 22:21:21',
-                'guard_name' => 'web',
                 'id' => 1,
                 'name' => 'administrator',
+                'guard_name' => 'web',
+                'created_at' => '2021-10-26 22:21:21',
                 'updated_at' => '2021-10-26 22:21:21',
-            )            
+            ),
         ));
         
         

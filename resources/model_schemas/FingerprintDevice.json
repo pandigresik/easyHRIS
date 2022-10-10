@@ -1,0 +1,54 @@
+[
+    {
+        "name": "id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "serial_number",
+        "dbType": "string,50",
+        "htmlType": "text",
+        "validations": "required|string|max:50|string|max:50",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "ip",
+        "dbType": "string,30",
+        "htmlType": "text",
+        "validations": "required|string|max:30|string|max:30",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "display_name",
+        "dbType": "string,30",
+        "htmlType": "text",
+        "validations": "required|string|max:30|string|max:30",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,AttendanceLogfinger,fingerprint_device_id"
+    }
+]

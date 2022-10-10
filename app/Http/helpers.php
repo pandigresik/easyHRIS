@@ -71,7 +71,9 @@ if (!function_exists('convertArrayStringPair')) {
     function convertArrayStringPair($values, $separator = ':')
     {
         $result = [];
-        array_walk($values, function ($item, $key) use ($separator, &$result) { $result[] = $key.$separator.$item; });
+        array_walk($values, function ($item, $key) use ($separator, &$result) {
+            $result[] = $key.$separator.$item;
+        });
 
         return $result;
     }

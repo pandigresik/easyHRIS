@@ -1,0 +1,58 @@
+[
+    {
+        "name": "id",
+        "dbType": "bigInteger,true,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "component_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "salary_group_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "component_value",
+        "dbType": "text:nullable",
+        "htmlType": "textarea",
+        "validations": "nullable|string|nullable|string",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,SalaryGroup,salary_group_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,SalaryComponent,component_id"
+    }
+]

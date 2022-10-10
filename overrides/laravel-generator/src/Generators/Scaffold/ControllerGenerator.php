@@ -190,7 +190,7 @@ class ControllerGenerator extends BaseGenerator
                     $fieldsArr[] = $field;                                        
                     $instanceModelName = \Str::camel($modelName);
                     $relations['REPOSITORY_REFERENCE_OPTION_ITEM'][] = 'use $NAMESPACE_REPOSITORY$\\'.\Str::singular($modelName).'Repository;';
-                    $relations['REPOSITORY_OPTION_ITEM_INSTANCE'][] = '$'.$instanceModelName.' = new '.\Str::singular($modelName).'Repository(app());';
+                    $relations['REPOSITORY_OPTION_ITEM_INSTANCE'][] = '$'.$instanceModelName.' = new '.\Str::singular($modelName).'Repository();';
                     $relations['LIST_OPTION_ITEM_INSTANCE'][] = '\''.$instanceModelName.'Items\' => [\'\' => __(\'crud.option.'.$instanceModelName.'_placeholder\')] + $'.$instanceModelName.'->pluck()';
                 }
             }

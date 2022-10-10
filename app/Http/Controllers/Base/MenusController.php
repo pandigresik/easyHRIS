@@ -155,8 +155,8 @@ class MenusController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $menuParent = new MenusRepository(app());
-        $permission = new PermissionRepository(app());
+        $menuParent = new MenusRepository();
+        $permission = new PermissionRepository();
 
         return [
             'statusItems' => ['1' => __('crud.state_active'), '0' => __('crud.state_nonactive')],
@@ -187,7 +187,6 @@ class MenusController extends AppBaseController
 
             $listRoute[$route->uri] = $route->uri;
         }
-        \Log::error(json_encode($route));
 
         return $listRoute;
     }

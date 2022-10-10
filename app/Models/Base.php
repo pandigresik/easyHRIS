@@ -19,9 +19,9 @@ class Base extends Model
     use Blameable, BlameableCustomTrait{
         BlameableCustomTrait::bootBlameable insteadof Blameable;
     }
-    
-    const CREATED_BY = 'created_by';
-    const UPDATED_BY = 'updated_by';
+
+    public const CREATED_BY = 'created_by';
+    public const UPDATED_BY = 'updated_by';
 
     protected static $logFillable = true;
 

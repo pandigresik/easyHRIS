@@ -1,0 +1,462 @@
+[
+    {
+        "name": "id",
+        "dbType": "bigInteger,true,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "contract_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "company_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "department_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "joblevel_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "jobtitle_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "supervisor_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "region_of_birth_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "city_of_birth_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "address",
+        "dbType": "string,255:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:255|nullable|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "join_date",
+        "dbType": "date",
+        "htmlType": "date",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "employee_status",
+        "dbType": "string,1:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:1|nullable|string|max:1",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "code",
+        "dbType": "string,17:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:17|nullable|string|max:17",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "full_name",
+        "dbType": "string,255:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:255|nullable|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "gender",
+        "dbType": "string,1:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:1|nullable|string|max:1",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "date_of_birth",
+        "dbType": "date",
+        "htmlType": "date",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "identity_number",
+        "dbType": "string,27:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:27|nullable|string|max:27",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "identity_type",
+        "dbType": "string,1:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:1|nullable|string|max:1",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "marital_status",
+        "dbType": "string,1:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:1|nullable|string|max:1",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "email",
+        "dbType": "string,255:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:255|nullable|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "leave_balance",
+        "dbType": "integer,false",
+        "htmlType": null,
+        "validations": "nullable|integer|nullable|integer",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "tax_group",
+        "dbType": "string,3:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:3|nullable|string|max:3",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "resign_date",
+        "dbType": "date:nullable",
+        "htmlType": "date",
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "have_overtime_benefit",
+        "dbType": "boolean",
+        "htmlType": "checkbox,1",
+        "validations": "required|boolean|boolean",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "risk_ratio",
+        "dbType": "string,3:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:3|nullable|string|max:3",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "profile_image",
+        "dbType": "string,255:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:255|nullable|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "profile_size",
+        "dbType": "integer,false",
+        "htmlType": null,
+        "validations": "nullable|integer|nullable|integer",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "salary_group_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "shiftment_group_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Contract,contract_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,City,city_of_birth_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Company,company_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Department,department_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Region,region_of_birth_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,JobLevel,joblevel_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,JobTitle,jobtitle_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,AttendanceLogfinger,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,AttendanceSummary,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Attendance,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,CareerHistory,supervisor_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,CareerHistory,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,EmployeeShiftment,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,JobMutation,new_supervisor_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,JobMutation,old_supervisor_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,JobMutation,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,JobPlacement,supervisor_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,JobPlacement,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Leaf,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Overtime,approved_by_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Overtime,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Payroll,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,SalaryAllowance,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,SalaryBenefitHistory,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,SalaryBenefit,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,TaxGroupHistory,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Tax,employee_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Workshift,employee_id"
+    }
+]

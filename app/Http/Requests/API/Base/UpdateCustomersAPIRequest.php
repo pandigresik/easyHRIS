@@ -25,7 +25,7 @@ class UpdateCustomersAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Customers::$rules;
-        
+
         return $rules;
     }
 }

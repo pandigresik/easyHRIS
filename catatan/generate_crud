@@ -1,0 +1,48 @@
+base: 
+    cities
+    companies
+    departments
+    regions
+    settings
+
+command ==> php artisan scaffold.all:generate --module=base --table=cities,companies,departments,regions,settings
+
+accounting:
+    tax_group_history
+    taxs
+
+command ==> php artisan scaffold.all:generate --module=accounting --table=tax_group_history,taxs
+
+hr:
+    absent_reasons    
+    attendance_logfingers
+    attendance_summaries
+    attendances    
+    career_histories        
+    contracts
+    education_titles
+    educational_institutes
+    employee_shiftments
+    employees    
+    fingerprint_devices
+    holidays
+    job_levels
+    job_mutations
+    job_placements
+    job_titles
+    leaves    
+    overtimes            
+    salary_allowances
+    salary_benefit_histories
+    salary_benefits
+    salary_components
+    salary_group_details
+    salary_groups
+    shiftment_groups
+    shiftments
+    skill_groups
+    skills    
+    workshifts
+
+command ==> php artisan scaffold.all:generate --module=hr --table=absent_reasons,attendance_logfingers,attendance_summaries,attendances,career_histories,contracts,education_titles,educational_institutes,employee_shiftments,employees,fingerprint_devices,holidays,job_levels,job_mutations,job_placements,job_titles,leaves,overtimes,salary_allowances,salary_benefit_histories,salary_benefits,salary_components,salary_group_details,salary_groups,shiftment_groups,shiftments,skill_groups,skills,workshifts
+command ==> php artisan scaffold.all:generate --module=hr --table=payroll_periods,payrolls,payroll_details

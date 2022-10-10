@@ -1,0 +1,142 @@
+[
+    {
+        "name": "id",
+        "dbType": "bigInteger,true,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "type",
+        "dbType": "string,1:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:1|nullable|string|max:1",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "letter_number",
+        "dbType": "string,27:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:27|nullable|string|max:27",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "subject",
+        "dbType": "string,255:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:255|nullable|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "description",
+        "dbType": "string,255:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:255|nullable|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "start_date",
+        "dbType": "date",
+        "htmlType": "date",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "end_date",
+        "dbType": "date:nullable",
+        "htmlType": "date",
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "signed_date",
+        "dbType": "date",
+        "htmlType": "date",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "tags",
+        "dbType": "text:nullable",
+        "htmlType": "textarea",
+        "validations": "nullable|string|nullable|string",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "used",
+        "dbType": "boolean",
+        "htmlType": "checkbox,1",
+        "validations": "required|boolean|boolean",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,CareerHistory,contract_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Employee,contract_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,JobMutation,contract_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,JobPlacement,contract_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,SalaryBenefitHistory,contract_id"
+    }
+]

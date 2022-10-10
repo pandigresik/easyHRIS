@@ -73,7 +73,7 @@ class ElementGenerator {
         _options['data-optionmask'] = JSON.stringify(localOption.number.currency)
         break
       case 'dropdown':
-        _options.class = 'form-control'
+        _options.class = 'form-control select2'
         break
       default:
         _options.class = 'form-control'

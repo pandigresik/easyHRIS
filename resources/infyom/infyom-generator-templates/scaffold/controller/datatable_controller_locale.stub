@@ -11,6 +11,7 @@ $REPOSITORY_REFERENCE_OPTION_ITEM
 use Flash;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
 use Response;
+use Exception;
 
 class $MODEL_NAME$Controller extends AppBaseController
 {
@@ -55,7 +56,10 @@ class $MODEL_NAME$Controller extends AppBaseController
         $input = $request->all();
 
         $$MODEL_NAME_CAMEL$ = $this->getRepositoryObj()->create($input);
-
+        if($$MODEL_NAME_CAMEL$ instanceof Exception){
+            return redirect()->back()->withInput()->withErrors(['error', $$MODEL_NAME_CAMEL$->getMessage()]);
+        }
+        
         Flash::success(__('messages.saved', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')]));
 
         return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
@@ -97,7 +101,7 @@ class $MODEL_NAME$Controller extends AppBaseController
 
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
-
+        
         return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.edit')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$)->with($this->getOptionItems());
     }
 
@@ -120,6 +124,9 @@ class $MODEL_NAME$Controller extends AppBaseController
         }
 
         $$MODEL_NAME_CAMEL$ = $this->getRepositoryObj()->update($request->all(), $id);
+        if($$MODEL_NAME_CAMEL$ instanceof Exception){
+            return redirect()->back()->withInput()->withErrors(['error', $$MODEL_NAME_CAMEL$->getMessage()]);
+        }
 
         Flash::success(__('messages.updated', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')]));
 
@@ -143,7 +150,11 @@ class $MODEL_NAME$Controller extends AppBaseController
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
-        $this->getRepositoryObj()->delete($id);
+        $delete = $this->getRepositoryObj()->delete($id);
+        
+        if($delete instanceof Exception){
+            return redirect()->back()->withErrors(['error', $delete->getMessage()]);
+        }
 
         Flash::success(__('messages.deleted', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')]));
 

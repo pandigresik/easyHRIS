@@ -1,6 +1,6 @@
 <?php
 
-
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
@@ -42,7 +42,43 @@ class MenuPermissionsTableSeeder extends Seeder
                 'menu_id' => 7,
                 'permission_id' => 13,
                 'status' => '1',
-            )            
+            ),
+            4 => 
+            array (
+                'menu_id' => 9,
+                'permission_id' => 149,
+                'status' => '1',
+            ),
+            5 => 
+            array (
+                'menu_id' => 10,
+                'permission_id' => 141,
+                'status' => '1',
+            ),
+            6 => 
+            array (
+                'menu_id' => 11,
+                'permission_id' => 153,
+                'status' => '1',
+            ),
+            7 => 
+            array (
+                'menu_id' => 12,
+                'permission_id' => 157,
+                'status' => '1',
+            ),
+            8 => 
+            array (
+                'menu_id' => 13,
+                'permission_id' => 145,
+                'status' => '1',
+            ),
+            9 => 
+            array (
+                'menu_id' => 14,
+                'permission_id' => 17,
+                'status' => '1',
+            ),
         ));
         
         

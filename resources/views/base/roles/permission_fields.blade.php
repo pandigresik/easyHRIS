@@ -4,7 +4,7 @@
                     <h4 class="card-title">Permissions</h4>
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-group row">
+                            <div class="form-group row mb-3">
                                 @php
                                     $rolePermission = isset($role) ? $role->permissions()->pluck('permission_id','permission_id') : []; 
                                 @endphp                                

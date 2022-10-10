@@ -11,7 +11,7 @@
     @endpush
      <div class="container-fluid">
           <div class="animated fadeIn">
-                @include('coreui-templates::common.errors')
+                @include('common.errors')
                 <div class="row">
                     <div class="col-lg-12">                        
                         {!! Form::open(['route' => 'base.import.store', 'enctype' => 'multipart/form-data']) !!}

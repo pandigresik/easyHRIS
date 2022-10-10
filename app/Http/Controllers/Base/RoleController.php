@@ -151,5 +151,5 @@ class RoleController extends AppBaseController
 
             return [$index => $message];
         });
-    }    
+    }
 }

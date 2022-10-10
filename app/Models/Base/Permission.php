@@ -43,8 +43,8 @@ class Permission extends Model
 {
     use Cachable;
     use SearchModelTrait;
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
     /**
      * Indicates if the IDs are auto-incrementing.
      *

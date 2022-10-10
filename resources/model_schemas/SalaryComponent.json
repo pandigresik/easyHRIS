@@ -1,0 +1,86 @@
+[
+    {
+        "name": "id",
+        "dbType": "bigInteger,true,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "code",
+        "dbType": "string,7:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:7|nullable|string|max:7",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "name",
+        "dbType": "string,255:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:255|nullable|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "state",
+        "dbType": "string,1:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:1|nullable|string|max:1",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "fixed",
+        "dbType": "boolean",
+        "htmlType": "checkbox,1",
+        "validations": "required|boolean|boolean",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,CompanyCost,component_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,PayrollDetail,component_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,SalaryAllowance,component_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,SalaryBenefitHistory,component_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,SalaryBenefit,component_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,SalaryGroupDetail,component_id"
+    }
+]

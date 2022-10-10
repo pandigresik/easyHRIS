@@ -67,8 +67,8 @@ class User extends Authenticatable
     use HasPermissions;
     use Cachable;
     use SearchModelTrait;
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
     public $table = 'users';
 
     public $fillable = [
@@ -118,7 +118,7 @@ class User extends Authenticatable
             return Permission::select('permissions.*', 'model_has_permissions.*')
                 ->join('model_has_permissions', 'permissions.id', '=', 'model_has_permissions.permission_id')
                 ->get()
-      ;
+            ;
         });
 
         return $permissions->where('model_id', $this->id);
@@ -130,7 +130,7 @@ class User extends Authenticatable
             return Role::select('roles.*', 'model_has_roles.*')
                 ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
                 ->get()
-        ;
+            ;
         });
 
         return $roles->where('model_id', $this->id);

@@ -32,7 +32,7 @@ abstract class BaseRepository
      * @throws \Exception
      */
     public function __construct()
-    {        
+    {
         $this->makeModel();
     }
 
@@ -147,11 +147,13 @@ abstract class BaseRepository
      */
     public function create($input)
     {
-        $model = $this->model->newInstance($input);
-
-        $model->save();
-
-        return $model;
+        try {
+            $model = $this->model->newInstance($input);
+            $model->save();
+            return $model;
+        } catch (\Exception $e) {
+            return $e;
+        }        
     }
 
     /**
@@ -180,15 +182,15 @@ abstract class BaseRepository
      */
     public function update($input, $id)
     {
-        $query = $this->model->newQuery();
-
-        $model = $query->findOrFail($id);
-
-        $model->fill($input);
-
-        $model->save();
-
-        return $model;
+        try{
+            $query = $this->model->newQuery();
+            $model = $query->findOrFail($id);
+            $model->fill($input);
+            $model->save();
+            return $model;
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**
@@ -200,11 +202,13 @@ abstract class BaseRepository
      */
     public function delete($id)
     {
-        $query = $this->model->newQuery();
-
-        $model = $query->findOrFail($id);
-
-        return $model->delete();
+        try{
+            $query = $this->model->newQuery();
+            $model = $query->findOrFail($id);
+            return $model->delete();
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**

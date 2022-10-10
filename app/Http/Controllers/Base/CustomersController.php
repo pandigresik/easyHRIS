@@ -151,16 +151,17 @@ class CustomersController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Customers from storage.         
+     * Provide options item based on relationship model Customers from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        $user = new UserRepository(app());
+    private function getOptionItems()
+    {
+        $user = new UserRepository();
         return [
-            'userItems' => ['' => __('crud.option.user_placeholder')] + $user->pluck()            
+            'userItems' => ['' => __('crud.option.user_placeholder')] + $user->pluck()
         ];
     }
 }

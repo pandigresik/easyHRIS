@@ -10,7 +10,7 @@ $DOCS$
 class $MODEL_NAME$ extends Model
 {
     use HasFactory;
-// $SOFT_DELETE$
+    $SOFT_DELETE$
     public $table = '$TABLE_NAME$';
     $TIMESTAMPS$
 $SOFT_DELETE_DATES$
