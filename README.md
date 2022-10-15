@@ -1,57 +1,107 @@
+# EasyHRIS
 
-<h1 align="center"><img src="https://assets.infyom.com/open-source/infyom-logo.png" alt="InfyOm"></h1>
+EasyHRIS adalah Human Resources Information System (HRIS) yang dapat digunakan untuk membantu memudahkan tugas HRD Perusahaan.
 
-CoreUI Generator
-==========================
+## Tahap Pengembangan
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+EasyHRIS belum dapat digunakan untuk produksi dan sedang dalam proses pengembangan.
 
-If you are starting fresh new laravel project, then boilerplates can be the best option for you to get started. It gives you a full laravel project with everything installed and published.
+## Minimum Requirement
 
-Read [Documentation](http://www.infyom.com/open-source/laravelgenerator/docs/8.0/boilerplates) for detailed installation steps and usage.
+- [x] PHP versi 7.2.1 dan extension yang diperlukan selama instalasi menggunakan composer
+- [x] Mysql Database minimal versi 8
+- [x] Web Server (Apache, Nginx atau IIS)
 
-## Support Us
+**NOTE**:
 
-We have created [14+ Laravel packages](https://github.com/InfyOmLabs) and invested a lot of resources into creating these all packages and maintaining them.
+- [x] Sistem ini dikembangkan menggunakan lingkungan pengembangan Linux, pengembang tidak menjamin jika sistem ini dapat berjalan dengan baik pada sistem operasi lain.
+- [x] Walaupun dapat berjalan pada DB Engine lain selain MySQL, namun sistem ini hanya mensupport untuk database MySQL.
 
-You can support us by either sponsoring us or buying one of our paid products. Or help us by spreading the word about us on social platforms via tweets and posts.
+## Fitur
 
-### Sponsors
+- [x] Manajemen Perusahaan
+- [x] Support Multi Perusahaan
+- [x] Manajemen Jabatan
+- [x] Manajemen Karyawan
+- [x] Support Penempatan Karyawan
+- [x] Manajemen Kontrak Kerja
+- [x] Manajemen Kontrak Perusahaan dengan Rekanan/Klien
+- [x] Karir History
+- [x] Promosi, Mutasi, dan Demosi
+- [x] Manajemen Shift Kerja
+- [x] Manajemen Jadwal Kerja
+- [x] Manajemen Absensi
+- [x] Manajemen Hari Libur
+- [x] Manajemen dan Perhitungan Lembur
+- [x] Manajemen BPJS Kesehatan
+- [x] Manajemen dan Perhitungan BPJS
+- [x] Pajak PPH21
+- [x] Gaji
+- [x] Laporan Penggajian
+- [x] Laporan Beban Gaji Perusahaan
+- [x] Historikal Data Karyawan (Jenjang Karir, Gaji, Tunjangan, dan Pajak)
+- [x] Backend Site
+- [x] Soft Delete (data tidak benar-benar dihapus)
+- [x] Restore Deleted Record
+- [x] Log Activity User untuk proses transaksi
 
-[Become a sponsor](https://opencollective.com/infyomlabs#sponsor) and get your logo on our README on Github with a link to your site.
+## Cara Install (Manual)
 
-<a href="https://opencollective.com/infyomlabs#sponsor"><img src="https://opencollective.com/infyomlabs/sponsors.svg?width=890"></a>
+- [x] Clone/Download repository `git clone https://github.com/pandigresik/EasyHRIS.git` dan pindah ke folder `EasyHRIS`
+- [x] Jalankan [Composer](https://getcomposer.org/download) Install/Update `composer install`
+- [x] Buat database misal easyhris lalu import db dari file `db_example.sql` contoh dari command line `mysql -u ahmad -h localhost -p easyhris < db_example.sql` atau bisa juga dari phpmyadmin atau lainnya
+- [x] Rename config/database.example.php menjadi config/database.php
+- [x] Rename config/config.example.php menjadi config/config.php
+- [x] Setup koneksi database pada config/database.php
+- [x] Jalankan perintah `php -S <HOST>:<PORT>` untuk mengaktifkan web server local ( kebutuhan development )
+- [x] Buka halaman `<HOST>:<PORT>/`
+- [x] Login using username: `admin` password:`admin`
 
-### Backers
+## Kontributor
 
-[Become a backer](https://opencollective.com/infyomlabs#backer) and get your image on our README on Github with a link to your site.
+Proyek ini dikembangkan oleh [Ahmad Afandi](https://github.com/ppandigresik) dan para [kontributor](https://github.com/pandigresik/EasyHRIS/graphs/contributors).
 
-<a href="https://opencollective.com/infyomlabs#backer"><img src="https://opencollective.com/infyomlabs/backers.svg?width=890"></a>
+## TODO
 
-### Buy our Paid Products
+- [x] Generate jadwal kerja group shiftment
+- [] Generate jadwal kerja karyawan berdasarkan group shiftment
+- [] Generate jadwal kerja group shiftment
+- [] Proses absensi, untuk perhitungan hari kerja dan keterlambatan serta overtime jika ada
+- [] Proses perhitungan gaji berdasarkan data absensi
 
-[![InfyJobs](https://assets.infyom.com/open-source/infyjobs-banner.png)](https://bit.ly/3gXar4F)
+## ROADMAP
 
-You can also check out our other paid products on [CodeCanyon](https://codecanyon.net/user/infyomlabs/portfolio).
+Untuk mengetahui roadmap dari aplikasi EasyHRIS bisa melihat [ROADMAP](ROADMAP.md)
 
-### Follow Us
+## Lisensi
 
-- [Twitter](https://twitter.com/infyom)
-- [Facebook](https://www.facebook.com/infyom)
-- [LinkedIn](https://in.linkedin.com/company/infyom-technologies)
-- [Youtube](https://www.youtube.com/channel/UC8IvwfChD6i7Wp4yZp3tNsQ)
-- [Contact Us](https://infyom.com/contact-us)
+Proyek ini menggunakan lisensi [MIT](https://tldrlegal.com/license/mit-license) &copy; Ahmad Afandi.
+Pastikan Anda memahami kewajiban dan hak Anda sebelum Anda memutuskan untuk menggunakan software ini.
 
-## Made with InfyOm Generator
+## Donasi
 
-Also, Do not forget to add your website to [Made with InfyOm Generator List](https://github.com/InfyOmLabs/laravel-generator/blob/develop/made-with-generator.md) list.
+Untuk mensupport proyek ini, Anda dapat memberikan donasi melalui rekening berikut:
 
-## Video Tutorials
+## Profesional Support
 
-Checkout [Video Tutorials](https://github.com/shailesh-ladumor/infyom-laravel-generator-tutorial) - **By**: [Shailesh Ladumor](https://github.com/shailesh-ladumor)
+Bila Anda memerlukan profesional support atau ingin mengadakan kerjasama dengan saya, dapat menghubungi saya melalui:
 
+- Email: [ahmad.afandi85@gmail.com](mailto:ahmad.afandi85@gmail.com)
+- WA: 0857-3365-9400
+- FB: [Pandigresik](https://facebook.com/pandi.cerme)
+
+## Keamanan Aplikasi
+
+Jika Anda menemukan bug/celah keamaan pada aplikasi ini, Anda dapat mengirimkan email dengan subject: **[EasyHRIS][security] SUBJECT** ke alamat [ahmad.afandi85@gmail.com](mailto:ahmad.afandi85@gmail.com)
+
+## Preview
+
+![EasyHRIS Profil Karyawan Preview](preview/preview.png)
+
+![EasyHRIS Laporan Absensi Preview](preview/preview2.png)
+
+![EasyHRIS Detail Gaji](preview/penggajian3.png)
+
+![EasyHRIS API Preview](preview/api-preview.png)
+
+Butuh lebih banyak screenshot? silahkan cek folder [preview](preview)
