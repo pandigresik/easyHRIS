@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Hr\Holiday;
 use App\Models\Hr\Shiftment;
 use App\Models\Hr\ShiftmentGroup;
 use App\Models\Hr\WorkshiftGroup;
@@ -57,7 +58,7 @@ class WorkshiftGroupRepository extends BaseRepository
         $shiftmentGroup = ShiftmentGroup::with(['shiftmentGroupDetails'])->find($data['shiftmentGroup']);
         $shiftmentGroupDetails = $shiftmentGroup->shiftmentGroupDetails;
         /** cari shift terakhir sebelumya */
-        $lastShift = WorkshiftGroup::where(['shiftment_group_id' => $data['shiftmentGroup']])->orderBy('work_date','desc')->first();
+        $lastShift = WorkshiftGroup::where(['shiftment_group_id' => $data['shiftmentGroup']])->where('work_date','<=', $startDate->format('Y-m-d'))->orderBy('work_date','desc')->first();        
         $currentShiftment = NULL;
         if($lastShift){
             $currentShiftment = $lastShift->shiftment_id;
@@ -70,7 +71,8 @@ class WorkshiftGroupRepository extends BaseRepository
     protected function getNextShiftment($shiftmentGroupDetails, $currentShiftment = NULL){
         $shiftmentGroupDetailByShiftment = $shiftmentGroupDetails->pluck('sequence','shiftment_id');
         $shiftmentGroupDetailBySequence = $shiftmentGroupDetails->sortBy('sequence')->pluck('shiftment_id','sequence');
-        $firstShiftment = $shiftmentGroupDetailBySequence->keys()[0];
+        
+        $firstShiftment = $shiftmentGroupDetailBySequence->keys()->min();
         
         if($currentShiftment){
             $sequence = $shiftmentGroupDetailByShiftment[$currentShiftment];
@@ -79,7 +81,7 @@ class WorkshiftGroupRepository extends BaseRepository
                 $nextIndexSequence = $firstShiftment;
             }
         }else{
-            $nextIndexSequence = $shiftmentGroupDetailByShiftment[$firstShiftment];
+            $nextIndexSequence = $firstShiftment;
         }
                 
         $nextShiftment = $shiftmentGroupDetailBySequence[$nextIndexSequence];
@@ -89,18 +91,26 @@ class WorkshiftGroupRepository extends BaseRepository
     private function generateScheduleDay($startDate, $endDate, $shiftmentGroupDetails, $firstShiftment = NULL){
         $result = [];
         $period = CarbonPeriod::create($startDate, $endDate);
+        
         $shifment = Shiftment::with(['schedules'])->get()->keyBy('id');
         $currentShiftment = $firstShiftment ?? $this->getNextShiftment($shiftmentGroupDetails, $firstShiftment);
+        /** cari hari libur di range tanggal tersebut */
+        $holiday = Holiday::whereBetween('holiday_date',[$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])->get()->pluck('holiday_date','holiday_date');
         
         foreach($period as $date){
             if($date->dayOfWeek == $this->shiftmentMovement){
                 $currentShiftment = $this->getNextShiftment($shiftmentGroupDetails, $currentShiftment);
             }                        
             $result[$date->format('Y-m-d')] = $shifment[$currentShiftment];
-            
-            if($date->dayOfWeek == $this->dayOff){
+            $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
+            /* jika jam awal = jam akhir maka hari libur */
+            if($currentScheduleShiftment[$date->dayOfWeek]->start_hour == $currentScheduleShiftment[$date->dayOfWeek]->end_hour){
                 $result[$date->format('Y-m-d')] = $shifment[$this->shiftmentOff];
-            }                        
+            }
+
+            if(isset($holiday[$date->format('Y-m-d')])){
+                $result[$date->format('Y-m-d')] = $shifment[$this->shiftmentOff];
+            }
         }
         return $result;
     }

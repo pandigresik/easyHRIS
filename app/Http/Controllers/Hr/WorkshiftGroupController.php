@@ -196,17 +196,23 @@ class WorkshiftGroupController extends AppBaseController
         $initialDate = $period['startDate'];
         $workshift = $this->getRepositoryObj()->generateWorkshift($data);
         $events = [];
+        $dataInsert = [];
         foreach($workshift['schedule'] as $date => $event){
             $events[] = [
-                'title' => $this->generateTitleSchedule($event),
-                'start' => $date,
+                'title' => $this->generateTitleSchedule($event),                
+                'start' => $date,                
                 'end' => $date,
+                'color' => $event->start_hour == $event->end_hour ? 'red' : 'green'
+            ];
+            $dataInsert[] = [
+                'work_date' => $date,
+                'shiftment_id' => $event->id
             ];
         }
-        return view('hr.workshift_groups.calendar', compact('events', 'initialDate'));
+        return view('hr.workshift_groups.calendar', compact('events', 'initialDate', 'dataInsert'));
     }
 
     private function generateTitleSchedule($shiftment){
-        return $shiftment->code.'_('.$shiftment->start_hour.'_'.$shiftment->end_hour.')';
+        return $shiftment->code.' ('.$shiftment->start_hour.' sd '.$shiftment->end_hour.')';
     }
 }

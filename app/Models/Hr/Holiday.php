@@ -74,5 +74,7 @@ class Holiday extends Model
         'name' => 'nullable|string|max:255'
     ];
 
-    
+    public function getHolidayDateAttribute($value){
+        return $value;
+    }    
 }
