@@ -25,7 +25,7 @@ class UpdateAttendanceAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Attendance::$rules;
-        
+
         return $rules;
     }
 }

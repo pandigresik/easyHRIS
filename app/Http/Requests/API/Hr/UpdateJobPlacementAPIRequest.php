@@ -25,7 +25,7 @@ class UpdateJobPlacementAPIRequest extends APIRequest
     public function rules()
     {
         $rules = JobPlacement::$rules;
-        
+
         return $rules;
     }
 }

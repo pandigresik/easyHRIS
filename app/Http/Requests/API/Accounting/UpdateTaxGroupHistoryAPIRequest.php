@@ -25,7 +25,7 @@ class UpdateTaxGroupHistoryAPIRequest extends APIRequest
     public function rules()
     {
         $rules = TaxGroupHistory::$rules;
-        
+
         return $rules;
     }
 }

@@ -14,6 +14,7 @@ return [
     */
 
     'save' => 'Simpan',
+    'generate' => 'Generate',
     'edit' => 'Edit',
     'sync' => 'Sinkron',
     'detail' => 'Detail',
@@ -21,7 +22,9 @@ return [
     'cancel' => 'Batal',
     'action' => 'Aksi',
     'state_active' => 'Aktif',
-    'state_nonactive' => 'Non Aktif',    
+    'state_nonactive' => 'Non Aktif',
+    'workday' => 'Hari kerja',
+    'choose' => 'Pilih',    
     'option' => [
         'vehicleGroup_placeholder' => 'Pilih group kendaraan',
         'dmsInvVehicle_placeholder' => 'Pilih kendaraan',

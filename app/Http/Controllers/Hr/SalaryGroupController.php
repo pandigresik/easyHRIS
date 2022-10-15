@@ -56,10 +56,10 @@ class SalaryGroupController extends AppBaseController
         $input = $request->all();
 
         $salaryGroup = $this->getRepositoryObj()->create($input);
-        if($salaryGroup instanceof Exception){
+        if ($salaryGroup instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryGroup->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/salaryGroups.singular')]));
 
         return redirect(route('hr.salaryGroups.index'));
@@ -101,7 +101,7 @@ class SalaryGroupController extends AppBaseController
 
             return redirect(route('hr.salaryGroups.index'));
         }
-        
+
         return view('hr.salary_groups.edit')->with('salaryGroup', $salaryGroup)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class SalaryGroupController extends AppBaseController
         }
 
         $salaryGroup = $this->getRepositoryObj()->update($request->all(), $id);
-        if($salaryGroup instanceof Exception){
+        if ($salaryGroup instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryGroup->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class SalaryGroupController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class SalaryGroupController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model SalaryGroup from storage.         
+     * Provide options item based on relationship model SalaryGroup from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

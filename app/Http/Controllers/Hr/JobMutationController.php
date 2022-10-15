@@ -9,10 +9,10 @@ use App\Http\Requests\Hr\UpdateJobMutationRequest;
 use App\Repositories\Hr\JobMutationRepository;
 use App\Repositories\Hr\JobLevelRepository;
 use App\Repositories\Hr\ContractRepository;
-use App\Repositories\Hr\CompanyRepository;
+use App\Repositories\Base\CompanyRepository;
 use App\Repositories\Hr\EmployeeRepository;
 use App\Repositories\Hr\JobTitleRepository;
-use App\Repositories\Hr\DepartmentRepository;
+use App\Repositories\Base\DepartmentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use Response;
@@ -61,10 +61,10 @@ class JobMutationController extends AppBaseController
         $input = $request->all();
 
         $jobMutation = $this->getRepositoryObj()->create($input);
-        if($jobMutation instanceof Exception){
+        if ($jobMutation instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $jobMutation->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/jobMutations.singular')]));
 
         return redirect(route('hr.jobMutations.index'));
@@ -106,7 +106,7 @@ class JobMutationController extends AppBaseController
 
             return redirect(route('hr.jobMutations.index'));
         }
-        
+
         return view('hr.job_mutations.edit')->with('jobMutation', $jobMutation)->with($this->getOptionItems());
     }
 
@@ -129,7 +129,7 @@ class JobMutationController extends AppBaseController
         }
 
         $jobMutation = $this->getRepositoryObj()->update($request->all(), $id);
-        if($jobMutation instanceof Exception){
+        if ($jobMutation instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $jobMutation->getMessage()]);
         }
 
@@ -156,8 +156,8 @@ class JobMutationController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -167,38 +167,33 @@ class JobMutationController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model JobMutation from storage.         
+     * Provide options item based on relationship model JobMutation from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $jobLevel = new JobLevelRepository();
         $contract = new ContractRepository();
-        $company = new CompanyRepository();
-        $jobLevel = new JobLevelRepository();
-        $employee = new EmployeeRepository();
-        $company = new CompanyRepository();
-        $employee = new EmployeeRepository();
-        $jobTitle = new JobTitleRepository();
-        $jobTitle = new JobTitleRepository();
-        $employee = new EmployeeRepository();
-        $department = new DepartmentRepository();
+        $company = new CompanyRepository();                        
+        $employee = new EmployeeRepository();        
+        $jobTitle = new JobTitleRepository();                
         $department = new DepartmentRepository();
         return [
-            'jobLevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
+            'oldJoblevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
             'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->pluck(),
-            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
-            'jobLevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
+            'oldCompanyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
+            'newJoblevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
             'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'jobTitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck(),
-            'jobTitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'departmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck(),
-            'departmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck()            
+            'newCompanyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
+            'oldSupervisorItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
+            'oldJobtitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck(),
+            'newJobtitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck(),
+            'newSupervisorItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
+            'oldDepartmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck(),
+            'newDepartmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck()
         ];
     }
 }

@@ -8,7 +8,7 @@ use App\Models\Accounting\TaxGroupHistory;
 
 class UpdateTaxGroupHistoryRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,7 @@ class UpdateTaxGroupHistoryRequest extends FormRequest
     public function rules()
     {
         $rules = TaxGroupHistory::$rules;
-        
+
         $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
         return $rules;
     }
@@ -41,8 +41,9 @@ class UpdateTaxGroupHistoryRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new TaxGroupHistory)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new TaxGroupHistory())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         return parent::all($keys);
     }

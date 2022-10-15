@@ -1,0 +1,30 @@
+Master Data :
+    - company
+    - departement
+    - shiftment
+    - shiftment_group
+    - employee
+
+Aktivitas Bulanan :
+    - generate jadwal untuk shiftment_group setiap bulan
+    - generate jadwal employee berdasarkan data jadwal shiftment_group
+
+Aktivias Harian :
+    - Pull data attendance ( tergantung metode yang digunakan ( tarik data melalui soap, upload excel atau metode lainnya ) )    
+    - Proses summary attendance harian ( menentukan apakah pegawai sudah melakukan absent sesuai ketentuan atau tidak )
+    - Proses rekap summary attendance berdasarkan data summary attendance harian
+
+Aktivias Mingguan / Bulanan :    
+    - Proses rekap summary attendance berdasarkan data summary attendance harian
+    - Perhitungan gaji berdasarkan data rekap summary attendance
+
+Questions:
+    - Kapan proses pergantian shift dilakukan
+    - Faktor2 yang mempengaruhi gaji    
+
+Todo:
+    - Entry data master
+    - Proses generate jadwal group
+    - Proses generate jadwal per pegawai
+    - Proses absensi, untuk perhitungan hari kerja dan keterlambatan serta overtime jika ada
+    - Proses perhitungan gaji berdasarkan data absensi

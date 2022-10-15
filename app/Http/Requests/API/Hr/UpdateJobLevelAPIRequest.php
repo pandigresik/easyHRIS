@@ -25,7 +25,7 @@ class UpdateJobLevelAPIRequest extends APIRequest
     public function rules()
     {
         $rules = JobLevel::$rules;
-        
+
         return $rules;
     }
 }

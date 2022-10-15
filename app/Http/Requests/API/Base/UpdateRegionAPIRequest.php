@@ -25,7 +25,7 @@ class UpdateRegionAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Region::$rules;
-        
+
         return $rules;
     }
 }

@@ -25,7 +25,7 @@ class UpdateFingerprintDeviceAPIRequest extends APIRequest
     public function rules()
     {
         $rules = FingerprintDevice::$rules;
-        
+
         return $rules;
     }
 }

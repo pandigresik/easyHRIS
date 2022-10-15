@@ -8,7 +8,7 @@ use App\Models\Hr\JobMutation;
 
 class UpdateJobMutationRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,7 @@ class UpdateJobMutationRequest extends FormRequest
     public function rules()
     {
         $rules = JobMutation::$rules;
-        
+
         $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
         return $rules;
     }
@@ -41,8 +41,9 @@ class UpdateJobMutationRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new JobMutation)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new JobMutation())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         return parent::all($keys);
     }

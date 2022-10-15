@@ -56,10 +56,10 @@ class JobLevelController extends AppBaseController
         $input = $request->all();
 
         $jobLevel = $this->getRepositoryObj()->create($input);
-        if($jobLevel instanceof Exception){
+        if ($jobLevel instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $jobLevel->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/jobLevels.singular')]));
 
         return redirect(route('hr.jobLevels.index'));
@@ -101,7 +101,7 @@ class JobLevelController extends AppBaseController
 
             return redirect(route('hr.jobLevels.index'));
         }
-        
+
         return view('hr.job_levels.edit')->with('jobLevel', $jobLevel)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class JobLevelController extends AppBaseController
         }
 
         $jobLevel = $this->getRepositoryObj()->update($request->all(), $id);
-        if($jobLevel instanceof Exception){
+        if ($jobLevel instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $jobLevel->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class JobLevelController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,17 @@ class JobLevelController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model JobLevel from storage.         
+     * Provide options item based on relationship model JobLevel from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
+        $parent = new JobLevelRepository();
         return [
-                        
+            'parentItems' => ['' => __('crud.option.jobLevel_placeholder')] + $parent->pluck(),
         ];
     }
 }

@@ -8,7 +8,6 @@ use App\Models\Hr\AbsentReason;
 
 class CreateAbsentReasonRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateAbsentReasonRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new AbsentReason)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new AbsentReason())->fillable;
         return parent::all($keys);
     }
 }

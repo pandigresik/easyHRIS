@@ -14,35 +14,41 @@ accounting:
 command ==> php artisan scaffold.all:generate --module=accounting --table=tax_group_history,taxs
 
 hr:
-    absent_reasons    
-    attendance_logfingers
-    attendance_summaries
-    attendances    
-    career_histories        
-    contracts
-    education_titles
-    educational_institutes
-    employee_shiftments
-    employees    
-    fingerprint_devices
-    holidays
-    job_levels
-    job_mutations
-    job_placements
-    job_titles
-    leaves    
-    overtimes            
-    salary_allowances
-    salary_benefit_histories
-    salary_benefits
-    salary_components
-    salary_group_details
-    salary_groups
-    shiftment_groups
-    shiftments
-    skill_groups
-    skills    
-    workshifts
+    Absensi 
+        absent_reasons    
+        attendance_logfingers
+        attendance_summaries
+        attendances    
+        fingerprint_devices
+        holidays
+        shiftment_groups
+        shiftments
+        workshifts
+        leaves    
+        overtimes
+        employee_shiftments
+    Employee
+        career_histories
+        contracts
+        education_titles
+        educational_institutes        
+        employees                        
+        salary_allowances
+        salary_benefit_histories
+        salary_benefits
+        salary_components
+        salary_group_details
+        salary_groups        
+        skill_groups
+        skills            
+        job_levels
+        job_mutations
+        job_placements
+        job_titles
+    
+    
+    
 
 command ==> php artisan scaffold.all:generate --module=hr --table=absent_reasons,attendance_logfingers,attendance_summaries,attendances,career_histories,contracts,education_titles,educational_institutes,employee_shiftments,employees,fingerprint_devices,holidays,job_levels,job_mutations,job_placements,job_titles,leaves,overtimes,salary_allowances,salary_benefit_histories,salary_benefits,salary_components,salary_group_details,salary_groups,shiftment_groups,shiftments,skill_groups,skills,workshifts
-command ==> php artisan scaffold.all:generate --module=hr --table=payroll_periods,payrolls,payroll_details
+command ==> php artisan scaffold.all:generate --module=hr --table=payroll_periods,payrolls,payroll_details,shiftment_group_details,shiftment_schedules,workshift_groups
+

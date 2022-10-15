@@ -46,7 +46,7 @@ class JobTitleDataTable extends DataTable
      */
     public function query(JobTitle $model)
     {
-        return $model->newQuery();
+        return $model->with(['jobLevel'])->newQuery();
     }
 
     /**
@@ -115,7 +115,7 @@ class JobTitleDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'job_level_id' => new Column(['title' => __('models/jobTitles.fields.job_level_id'),'name' => 'job_level_id', 'data' => 'job_level_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'job_level_id' => new Column(['title' => __('models/jobTitles.fields.job_level_id'),'name' => 'job_level_id', 'data' => 'job_level.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
             'code' => new Column(['title' => __('models/jobTitles.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/jobTitles.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text'])
         ];

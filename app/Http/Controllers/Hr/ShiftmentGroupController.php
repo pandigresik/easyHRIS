@@ -7,8 +7,7 @@ use App\Http\Requests\Hr;
 use App\Http\Requests\Hr\CreateShiftmentGroupRequest;
 use App\Http\Requests\Hr\UpdateShiftmentGroupRequest;
 use App\Repositories\Hr\ShiftmentGroupRepository;
-use App\Repositories\Hr\CompanyRepository;
-use App\Repositories\Hr\ShiftmentRepository;
+use App\Repositories\Base\CompanyRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use Response;
@@ -171,10 +170,8 @@ class ShiftmentGroupController extends AppBaseController
      */
     private function getOptionItems(){        
         $company = new CompanyRepository();
-        $shiftment = new ShiftmentRepository();
         return [
-            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
-            'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck()            
+            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck()            
         ];
     }
 }

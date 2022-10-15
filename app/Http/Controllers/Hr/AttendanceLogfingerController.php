@@ -57,10 +57,10 @@ class AttendanceLogfingerController extends AppBaseController
         $input = $request->all();
 
         $attendanceLogfinger = $this->getRepositoryObj()->create($input);
-        if($attendanceLogfinger instanceof Exception){
+        if ($attendanceLogfinger instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $attendanceLogfinger->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/attendanceLogfingers.singular')]));
 
         return redirect(route('hr.attendanceLogfingers.index'));
@@ -102,7 +102,7 @@ class AttendanceLogfingerController extends AppBaseController
 
             return redirect(route('hr.attendanceLogfingers.index'));
         }
-        
+
         return view('hr.attendance_logfingers.edit')->with('attendanceLogfinger', $attendanceLogfinger)->with($this->getOptionItems());
     }
 
@@ -125,7 +125,7 @@ class AttendanceLogfingerController extends AppBaseController
         }
 
         $attendanceLogfinger = $this->getRepositoryObj()->update($request->all(), $id);
-        if($attendanceLogfinger instanceof Exception){
+        if ($attendanceLogfinger instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $attendanceLogfinger->getMessage()]);
         }
 
@@ -152,8 +152,8 @@ class AttendanceLogfingerController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -163,18 +163,19 @@ class AttendanceLogfingerController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model AttendanceLogfinger from storage.         
+     * Provide options item based on relationship model AttendanceLogfinger from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $employee = new EmployeeRepository();
         $fingerprintDevice = new FingerprintDeviceRepository();
         return [
             'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'fingerprintDeviceItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $fingerprintDevice->pluck()            
+            'fingerprintDeviceItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $fingerprintDevice->pluck()
         ];
     }
 }

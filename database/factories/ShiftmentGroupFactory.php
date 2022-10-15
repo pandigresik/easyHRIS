@@ -24,7 +24,6 @@ class ShiftmentGroupFactory extends Factory
         return [
             'code' => $this->faker->text($this->faker->numberBetween(5, 7)),
         'company_id' => $this->faker->word,
-        'shiftment_id' => $this->faker->word,
         'name' => $this->faker->text($this->faker->numberBetween(5, 255))
         ];
     }

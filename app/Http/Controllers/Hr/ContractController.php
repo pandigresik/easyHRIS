@@ -56,10 +56,10 @@ class ContractController extends AppBaseController
         $input = $request->all();
 
         $contract = $this->getRepositoryObj()->create($input);
-        if($contract instanceof Exception){
+        if ($contract instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $contract->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/contracts.singular')]));
 
         return redirect(route('hr.contracts.index'));
@@ -101,7 +101,7 @@ class ContractController extends AppBaseController
 
             return redirect(route('hr.contracts.index'));
         }
-        
+
         return view('hr.contracts.edit')->with('contract', $contract)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class ContractController extends AppBaseController
         }
 
         $contract = $this->getRepositoryObj()->update($request->all(), $id);
-        if($contract instanceof Exception){
+        if ($contract instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $contract->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class ContractController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class ContractController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Contract from storage.         
+     * Provide options item based on relationship model Contract from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

@@ -36,8 +36,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Contract extends Model
 {
     use HasFactory;
-        use SoftDeletes;
-
+    use SoftDeletes;
+    
+    protected $showColumnOption = 'letter_number';
     public $table = 'contracts';
     
     const CREATED_AT = 'created_at';

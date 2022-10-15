@@ -56,10 +56,10 @@ class FingerprintDeviceController extends AppBaseController
         $input = $request->all();
 
         $fingerprintDevice = $this->getRepositoryObj()->create($input);
-        if($fingerprintDevice instanceof Exception){
+        if ($fingerprintDevice instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $fingerprintDevice->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/fingerprintDevices.singular')]));
 
         return redirect(route('hr.fingerprintDevices.index'));
@@ -101,7 +101,7 @@ class FingerprintDeviceController extends AppBaseController
 
             return redirect(route('hr.fingerprintDevices.index'));
         }
-        
+
         return view('hr.fingerprint_devices.edit')->with('fingerprintDevice', $fingerprintDevice)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class FingerprintDeviceController extends AppBaseController
         }
 
         $fingerprintDevice = $this->getRepositoryObj()->update($request->all(), $id);
-        if($fingerprintDevice instanceof Exception){
+        if ($fingerprintDevice instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $fingerprintDevice->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class FingerprintDeviceController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class FingerprintDeviceController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model FingerprintDevice from storage.         
+     * Provide options item based on relationship model FingerprintDevice from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

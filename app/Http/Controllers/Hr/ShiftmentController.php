@@ -56,10 +56,10 @@ class ShiftmentController extends AppBaseController
         $input = $request->all();
 
         $shiftment = $this->getRepositoryObj()->create($input);
-        if($shiftment instanceof Exception){
+        if ($shiftment instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $shiftment->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/shiftments.singular')]));
 
         return redirect(route('hr.shiftments.index'));
@@ -101,7 +101,7 @@ class ShiftmentController extends AppBaseController
 
             return redirect(route('hr.shiftments.index'));
         }
-        
+
         return view('hr.shiftments.edit')->with('shiftment', $shiftment)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class ShiftmentController extends AppBaseController
         }
 
         $shiftment = $this->getRepositoryObj()->update($request->all(), $id);
-        if($shiftment instanceof Exception){
+        if ($shiftment instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $shiftment->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class ShiftmentController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class ShiftmentController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Shiftment from storage.         
+     * Provide options item based on relationship model Shiftment from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

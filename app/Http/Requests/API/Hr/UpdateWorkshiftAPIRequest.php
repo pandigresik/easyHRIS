@@ -25,7 +25,7 @@ class UpdateWorkshiftAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Workshift::$rules;
-        
+
         return $rules;
     }
 }

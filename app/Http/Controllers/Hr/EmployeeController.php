@@ -8,14 +8,15 @@ use App\Http\Requests\Hr\CreateEmployeeRequest;
 use App\Http\Requests\Hr\UpdateEmployeeRequest;
 use App\Repositories\Hr\EmployeeRepository;
 use App\Repositories\Hr\ContractRepository;
-use App\Repositories\Hr\CityRepository;
-use App\Repositories\Hr\CompanyRepository;
-use App\Repositories\Hr\DepartmentRepository;
-use App\Repositories\Hr\RegionRepository;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Base\CompanyRepository;
+use App\Repositories\Base\DepartmentRepository;
+use App\Repositories\Base\RegionRepository;
 use App\Repositories\Hr\JobLevelRepository;
 use App\Repositories\Hr\JobTitleRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Hr\ShiftmentGroupRepository;
 use Response;
 use Exception;
 
@@ -62,10 +63,10 @@ class EmployeeController extends AppBaseController
         $input = $request->all();
 
         $employee = $this->getRepositoryObj()->create($input);
-        if($employee instanceof Exception){
+        if ($employee instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $employee->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/employees.singular')]));
 
         return redirect(route('hr.employees.index'));
@@ -107,7 +108,7 @@ class EmployeeController extends AppBaseController
 
             return redirect(route('hr.employees.index'));
         }
-        
+
         return view('hr.employees.edit')->with('employee', $employee)->with($this->getOptionItems());
     }
 
@@ -130,7 +131,7 @@ class EmployeeController extends AppBaseController
         }
 
         $employee = $this->getRepositoryObj()->update($request->all(), $id);
-        if($employee instanceof Exception){
+        if ($employee instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $employee->getMessage()]);
         }
 
@@ -157,8 +158,8 @@ class EmployeeController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -168,13 +169,14 @@ class EmployeeController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Employee from storage.         
+     * Provide options item based on relationship model Employee from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $contract = new ContractRepository();
         $city = new CityRepository();
         $company = new CompanyRepository();
@@ -182,14 +184,21 @@ class EmployeeController extends AppBaseController
         $region = new RegionRepository();
         $jobLevel = new JobLevelRepository();
         $jobTitle = new JobTitleRepository();
+        $employee = new EmployeeRepository();
+        $shiftmentGroup = new ShiftmentGroupRepository();
         return [
             'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->pluck(),
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
             'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
             'departmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck(),
             'regionItems' => ['' => __('crud.option.region_placeholder')] + $region->pluck(),
-            'jobLevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
-            'jobTitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck()            
+            'regionOfBirthItems' => ['' => __('crud.option.region_placeholder')] + $region->pluck(),
+            'cityOfBirthItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
+            'joblevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
+            'jobtitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck(),
+            'supervisorItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
+            'salaryGroupItems' => [],
+            'shiftmentGroupItems' => ['' => __('crud.option.shiftment_group_placeholder')] + $shiftmentGroup->pluck(),
         ];
     }
 }

@@ -56,10 +56,10 @@ class AbsentReasonController extends AppBaseController
         $input = $request->all();
 
         $absentReason = $this->getRepositoryObj()->create($input);
-        if($absentReason instanceof Exception){
+        if ($absentReason instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $absentReason->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/absentReasons.singular')]));
 
         return redirect(route('hr.absentReasons.index'));
@@ -101,7 +101,7 @@ class AbsentReasonController extends AppBaseController
 
             return redirect(route('hr.absentReasons.index'));
         }
-        
+
         return view('hr.absent_reasons.edit')->with('absentReason', $absentReason)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class AbsentReasonController extends AppBaseController
         }
 
         $absentReason = $this->getRepositoryObj()->update($request->all(), $id);
-        if($absentReason instanceof Exception){
+        if ($absentReason instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $absentReason->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class AbsentReasonController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class AbsentReasonController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model AbsentReason from storage.         
+     * Provide options item based on relationship model AbsentReason from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

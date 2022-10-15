@@ -25,7 +25,7 @@ class UpdateEducationalInstituteAPIRequest extends APIRequest
     public function rules()
     {
         $rules = EducationalInstitute::$rules;
-        
+
         return $rules;
     }
 }

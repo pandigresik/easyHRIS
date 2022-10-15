@@ -1,14 +1,16 @@
 {
-    "name": "laravel/laravel",
+    "name": "asligresik/easyhris",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Eashris application, make your life easier",
     "keywords": [
         "framework",
-        "laravel"
+        "laravel",
+        "easyhris"
     ],
     "license": "MIT",
     "require": {
         "php": "^7.4",
+        "acaronlex/laravel-calendar": "^1.6",
         "alfa6661/laravel-autonumber": "dev-master",
         "arielmejiadev/larapex-charts": "dev-master",
         "arrilot/laravel-widgets": "^3.13",
@@ -25,6 +27,7 @@
         "jenssegers/date": "^4.0",
         "kalnoy/nestedset": "^6.0",
         "kronthto/laravel-oauth2-login": "^1.12",
+        "laradevsbd/zkteco-sdk": "^1.0",
         "laravel/framework": "^8",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.0",

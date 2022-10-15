@@ -18,7 +18,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('reason_id', __('models/attendances.fields.reason_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('reason_id', $reasonItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+    {!! Form::select('reason_id', $absentReasonItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -42,7 +42,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('check_in', __('models/attendances.fields.check_in').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('check_in', null, ['class' => 'form-control', 'required' => 'required']) !!}
+    {!! Form::text('check_in', null, ['class' => 'form-control datetime', 'required' => 'required', 'data-optiondate' => json_encode( ['timePicker' => true, 'locale' => ['format' => config('local.datetime_format_javascript') ]]) ]) !!}
 </div>
 </div>
 
@@ -50,7 +50,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('check_out', __('models/attendances.fields.check_out').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('check_out', null, ['class' => 'form-control', 'required' => 'required']) !!}
+    {!! Form::text('check_out', null, ['class' => 'form-control datetime', 'required' => 'required', 'data-optiondate' => json_encode( ['timePicker' => true, 'locale' => ['format' => config('local.datetime_format_javascript') ]]) ]) !!}
 </div>
 </div>
 

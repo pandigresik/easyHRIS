@@ -22,8 +22,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             0 => 
             array (
                 'name' => 'UNIVERSITAS GUNADARMA',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -31,8 +31,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             1 => 
             array (
                 'name' => 'UNIVERSITAS NEGERI JAKARTA',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -40,8 +40,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             2 => 
             array (
                 'name' => 'UNIVERSITAS BISNIS INDONESIA',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -49,8 +49,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             3 => 
             array (
                 'name' => 'UNIVERSITAS MUHAMMADIYAH JAKARTA',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -58,8 +58,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             4 => 
             array (
                 'name' => 'UNIVERSITAS TRISAKSI',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -67,8 +67,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             5 => 
             array (
                 'name' => 'UNIVERSITAS ISLAM INDONESIA',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -76,8 +76,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             6 => 
             array (
                 'name' => 'UNIVERSITAS PANCASILA',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -85,8 +85,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             7 => 
             array (
                 'name' => 'UNIVERSITAS ISLAM NEGERI SYARIF HIDAYATULLAH',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -94,8 +94,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             8 => 
             array (
                 'name' => 'UNIVERSITAS INDONESIA',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',
@@ -103,8 +103,8 @@ class EducationalInstitutesTableSeeder extends Seeder
             9 => 
             array (
                 'name' => 'UNIVERSITAS PENDIDIKAN INDONESIA',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-24 21:23:39',
                 'updated_at' => '2020-02-24 21:23:39',

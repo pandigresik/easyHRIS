@@ -8,7 +8,6 @@ use App\Models\Hr\SalaryGroupDetail;
 
 class CreateSalaryGroupDetailRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateSalaryGroupDetailRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new SalaryGroupDetail)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new SalaryGroupDetail())->fillable;
         return parent::all($keys);
     }
 }

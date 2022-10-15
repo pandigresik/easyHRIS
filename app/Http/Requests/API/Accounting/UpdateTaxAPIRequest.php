@@ -25,7 +25,7 @@ class UpdateTaxAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Tax::$rules;
-        
+
         return $rules;
     }
 }

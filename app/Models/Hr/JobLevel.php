@@ -5,6 +5,7 @@ namespace App\Models\Hr;
 use App\Models\Base as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @SWG\Definition(
@@ -123,5 +124,15 @@ class JobLevel extends Model
     public function jobTitles()
     {
         return $this->hasMany(\App\Models\Hr\JobTitle::class, 'job_level_id');
+    }
+
+    /**
+     * Get the parent that owns the JobLevel
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(JobLevel::class, 'parent_id');
     }
 }

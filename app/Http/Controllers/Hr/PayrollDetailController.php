@@ -57,10 +57,10 @@ class PayrollDetailController extends AppBaseController
         $input = $request->all();
 
         $payrollDetail = $this->getRepositoryObj()->create($input);
-        if($payrollDetail instanceof Exception){
+        if ($payrollDetail instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $payrollDetail->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/payrollDetails.singular')]));
 
         return redirect(route('hr.payrollDetails.index'));
@@ -102,7 +102,7 @@ class PayrollDetailController extends AppBaseController
 
             return redirect(route('hr.payrollDetails.index'));
         }
-        
+
         return view('hr.payroll_details.edit')->with('payrollDetail', $payrollDetail)->with($this->getOptionItems());
     }
 
@@ -125,7 +125,7 @@ class PayrollDetailController extends AppBaseController
         }
 
         $payrollDetail = $this->getRepositoryObj()->update($request->all(), $id);
-        if($payrollDetail instanceof Exception){
+        if ($payrollDetail instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $payrollDetail->getMessage()]);
         }
 
@@ -152,8 +152,8 @@ class PayrollDetailController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -163,18 +163,19 @@ class PayrollDetailController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model PayrollDetail from storage.         
+     * Provide options item based on relationship model PayrollDetail from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $payroll = new PayrollRepository();
         $salaryComponent = new SalaryComponentRepository();
         return [
             'payrollItems' => ['' => __('crud.option.payroll_placeholder')] + $payroll->pluck(),
-            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()            
+            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()
         ];
     }
 }

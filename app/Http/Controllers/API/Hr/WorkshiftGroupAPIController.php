@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\API\Base;
+namespace App\Http\Controllers\API\Hr;
 
-use App\Http\Requests\API\Base\CreateCustomersAPIRequest;
-use App\Http\Requests\API\Base\UpdateCustomersAPIRequest;
-use App\Models\Base\Customers;
-use App\Repositories\Base\CustomersRepository;
+use App\Http\Requests\API\Hr\CreateWorkshiftGroupAPIRequest;
+use App\Http\Requests\API\Hr\UpdateWorkshiftGroupAPIRequest;
+use App\Models\Hr\WorkshiftGroup;
+use App\Repositories\Hr\WorkshiftGroupRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Base\CustomersResource;
+use App\Http\Resources\Hr\WorkshiftGroupResource;
 use Response;
 
 /**
- * Class CustomersController
- * @package App\Http\Controllers\API\Base
+ * Class WorkshiftGroupController
+ * @package App\Http\Controllers\API\Hr
  */
 
-class CustomersAPIController extends AppBaseController
+class WorkshiftGroupAPIController extends AppBaseController
 {
-    /** @var  CustomersRepository */
-    private $customersRepository;
+    /** @var  WorkshiftGroupRepository */
+    private $workshiftGroupRepository;
 
-    public function __construct(CustomersRepository $customersRepo)
+    public function __construct(WorkshiftGroupRepository $workshiftGroupRepo)
     {
-        $this->customersRepository = $customersRepo;
+        $this->workshiftGroupRepository = $workshiftGroupRepo;
     }
 
     /**
@@ -31,10 +31,10 @@ class CustomersAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/customers",
-     *      summary="Get a listing of the Customers.",
-     *      tags={"Customers"},
-     *      description="Get all Customers",
+     *      path="/workshiftGroups",
+     *      summary="Get a listing of the WorkshiftGroups.",
+     *      tags={"WorkshiftGroup"},
+     *      description="Get all WorkshiftGroups",
      *      produces={"application/json"},
      *      @SWG\Response(
      *          response=200,
@@ -48,7 +48,7 @@ class CustomersAPIController extends AppBaseController
      *              @SWG\Property(
      *                  property="data",
      *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/Customers")
+     *                  @SWG\Items(ref="#/definitions/WorkshiftGroup")
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -60,31 +60,31 @@ class CustomersAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $customers = $this->customersRepository->all(
+        $workshiftGroups = $this->workshiftGroupRepository->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
         );
 
-        return $this->sendResponse(CustomersResource::collection($customers), 'Customers retrieved successfully');
+        return $this->sendResponse(WorkshiftGroupResource::collection($workshiftGroups), 'Workshift Groups retrieved successfully');
     }
 
     /**
-     * @param CreateCustomersAPIRequest $request
+     * @param CreateWorkshiftGroupAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
-     *      path="/customers",
-     *      summary="Store a newly created Customers in storage",
-     *      tags={"Customers"},
-     *      description="Store Customers",
+     *      path="/workshiftGroups",
+     *      summary="Store a newly created WorkshiftGroup in storage",
+     *      tags={"WorkshiftGroup"},
+     *      description="Store WorkshiftGroup",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="Customers that should be stored",
+     *          description="WorkshiftGroup that should be stored",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Customers")
+     *          @SWG\Schema(ref="#/definitions/WorkshiftGroup")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -97,7 +97,7 @@ class CustomersAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/Customers"
+     *                  ref="#/definitions/WorkshiftGroup"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -107,13 +107,13 @@ class CustomersAPIController extends AppBaseController
      *      )
      * )
      */
-    public function store(CreateCustomersAPIRequest $request)
+    public function store(CreateWorkshiftGroupAPIRequest $request)
     {
         $input = $request->all();
 
-        $customers = $this->customersRepository->create($input);
+        $workshiftGroup = $this->workshiftGroupRepository->create($input);
 
-        return $this->sendResponse(new CustomersResource($customers), 'Customers saved successfully');
+        return $this->sendResponse(new WorkshiftGroupResource($workshiftGroup), 'Workshift Group saved successfully');
     }
 
     /**
@@ -121,14 +121,14 @@ class CustomersAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/customers/{id}",
-     *      summary="Display the specified Customers",
-     *      tags={"Customers"},
-     *      description="Get Customers",
+     *      path="/workshiftGroups/{id}",
+     *      summary="Display the specified WorkshiftGroup",
+     *      tags={"WorkshiftGroup"},
+     *      description="Get WorkshiftGroup",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of Customers",
+     *          description="id of WorkshiftGroup",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -144,7 +144,7 @@ class CustomersAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/Customers"
+     *                  ref="#/definitions/WorkshiftGroup"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -156,30 +156,30 @@ class CustomersAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var Customers $customers */
-        $customers = $this->customersRepository->find($id);
+        /** @var WorkshiftGroup $workshiftGroup */
+        $workshiftGroup = $this->workshiftGroupRepository->find($id);
 
-        if (empty($customers)) {
-            return $this->sendError('Customers not found');
+        if (empty($workshiftGroup)) {
+            return $this->sendError('Workshift Group not found');
         }
 
-        return $this->sendResponse(new CustomersResource($customers), 'Customers retrieved successfully');
+        return $this->sendResponse(new WorkshiftGroupResource($workshiftGroup), 'Workshift Group retrieved successfully');
     }
 
     /**
      * @param int $id
-     * @param UpdateCustomersAPIRequest $request
+     * @param UpdateWorkshiftGroupAPIRequest $request
      * @return Response
      *
      * @SWG\Put(
-     *      path="/customers/{id}",
-     *      summary="Update the specified Customers in storage",
-     *      tags={"Customers"},
-     *      description="Update Customers",
+     *      path="/workshiftGroups/{id}",
+     *      summary="Update the specified WorkshiftGroup in storage",
+     *      tags={"WorkshiftGroup"},
+     *      description="Update WorkshiftGroup",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of Customers",
+     *          description="id of WorkshiftGroup",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -187,9 +187,9 @@ class CustomersAPIController extends AppBaseController
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="Customers that should be updated",
+     *          description="WorkshiftGroup that should be updated",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Customers")
+     *          @SWG\Schema(ref="#/definitions/WorkshiftGroup")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -202,7 +202,7 @@ class CustomersAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/Customers"
+     *                  ref="#/definitions/WorkshiftGroup"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -212,20 +212,20 @@ class CustomersAPIController extends AppBaseController
      *      )
      * )
      */
-    public function update($id, UpdateCustomersAPIRequest $request)
+    public function update($id, UpdateWorkshiftGroupAPIRequest $request)
     {
         $input = $request->all();
 
-        /** @var Customers $customers */
-        $customers = $this->customersRepository->find($id);
+        /** @var WorkshiftGroup $workshiftGroup */
+        $workshiftGroup = $this->workshiftGroupRepository->find($id);
 
-        if (empty($customers)) {
-            return $this->sendError('Customers not found');
+        if (empty($workshiftGroup)) {
+            return $this->sendError('Workshift Group not found');
         }
 
-        $customers = $this->customersRepository->update($input, $id);
+        $workshiftGroup = $this->workshiftGroupRepository->update($input, $id);
 
-        return $this->sendResponse(new CustomersResource($customers), 'Customers updated successfully');
+        return $this->sendResponse(new WorkshiftGroupResource($workshiftGroup), 'WorkshiftGroup updated successfully');
     }
 
     /**
@@ -233,14 +233,14 @@ class CustomersAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Delete(
-     *      path="/customers/{id}",
-     *      summary="Remove the specified Customers from storage",
-     *      tags={"Customers"},
-     *      description="Delete Customers",
+     *      path="/workshiftGroups/{id}",
+     *      summary="Remove the specified WorkshiftGroup from storage",
+     *      tags={"WorkshiftGroup"},
+     *      description="Delete WorkshiftGroup",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of Customers",
+     *          description="id of WorkshiftGroup",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -268,15 +268,15 @@ class CustomersAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var Customers $customers */
-        $customers = $this->customersRepository->find($id);
+        /** @var WorkshiftGroup $workshiftGroup */
+        $workshiftGroup = $this->workshiftGroupRepository->find($id);
 
-        if (empty($customers)) {
-            return $this->sendError('Customers not found');
+        if (empty($workshiftGroup)) {
+            return $this->sendError('Workshift Group not found');
         }
 
-        $customers->delete();
+        $workshiftGroup->delete();
 
-        return $this->sendSuccess('Customers deleted successfully');
+        return $this->sendSuccess('Workshift Group deleted successfully');
     }
 }

@@ -10,7 +10,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('address', __('models/companies.fields.address').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('address', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
+    {!! Form::textarea('address', null, ['class' => 'form-control','maxlength' => 255, 'rows' => 4, 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -18,7 +18,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('code', __('models/companies.fields.code').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('code', null, ['class' => 'form-control','maxlength' => 7,'maxlength' => 7, 'required' => 'required']) !!}
+    {!! Form::text('code', null, ['class' => 'form-control inputmask', 'data-optionmask' => json_encode(config('local.textmask.upper')),'maxlength' => 7, 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -42,7 +42,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('email', __('models/companies.fields.email').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::email('email', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
+    {!! Form::email('email', null, ['class' => 'form-control inputmask', 'data-optionmask' => json_encode(config('local.textmask.email')),'maxlength' => 255, 'required' => 'required']) !!}
 </div>
 </div>
 

@@ -16,16 +16,13 @@ class CreateShiftmentGroupsTable extends Migration
         Schema::create('shiftment_groups', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code', 7);
-            $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('shiftment_id');
+            $table->unsignedBigInteger('company_id');            
             $table->string('name');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
-            $table->timestamps();
-            $table->unique(['company_id', 'shiftment_id'], 'shiftments_idx');
-            $table->foreign('company_id', 'shiftment_groups_fk1')->references('id')->on('companies');
-            $table->foreign('shiftment_id', 'shiftment_groups_fk2')->references('id')->on('shiftments');
+            $table->timestamps();            
+            $table->foreign('company_id', 'shiftment_groups_fk1')->references('id')->on('companies');            
         });
     }
 

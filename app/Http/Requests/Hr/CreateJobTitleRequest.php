@@ -8,7 +8,6 @@ use App\Models\Hr\JobTitle;
 
 class CreateJobTitleRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateJobTitleRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new JobTitle)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new JobTitle())->fillable;
         return parent::all($keys);
     }
 }

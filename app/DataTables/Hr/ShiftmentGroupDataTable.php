@@ -4,6 +4,8 @@ namespace App\DataTables\Hr;
 
 use App\Models\Hr\ShiftmentGroup;
 use App\DataTables\BaseDataTable as DataTable;
+use App\Models\Base\Company;
+use App\Repositories\Base\CompanyRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -13,7 +15,7 @@ class ShiftmentGroupDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'company_id' => \App\DataTables\FilterClass\InKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -46,7 +48,7 @@ class ShiftmentGroupDataTable extends DataTable
      */
     public function query(ShiftmentGroup $model)
     {
-        return $model->newQuery();
+        return $model->with(['company'])->newQuery();
     }
 
     /**
@@ -113,11 +115,12 @@ class ShiftmentGroupDataTable extends DataTable
      * @return array
      */
     protected function getColumns()
-    {
+    {   
+        $companyRepository = new CompanyRepository();
+        $companyItem = array_merge([['text' => 'Pilih '.__('models/companies.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($companyRepository->pluck()));
         return [
             'code' => new Column(['title' => __('models/shiftmentGroups.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
-            'company_id' => new Column(['title' => __('models/shiftmentGroups.fields.company_id'),'name' => 'company_id', 'data' => 'company_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'shiftment_id' => new Column(['title' => __('models/shiftmentGroups.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'company_id' => new Column(['title' => __('models/shiftmentGroups.fields.company_id'),'name' => 'company_id', 'data' => 'company.name', 'defaultContent' => '', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $companyItem, 'multiple' => 'multiple', 'width' => '200px']),
             'name' => new Column(['title' => __('models/shiftmentGroups.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }

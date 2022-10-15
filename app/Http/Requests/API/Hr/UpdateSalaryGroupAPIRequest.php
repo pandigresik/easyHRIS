@@ -25,7 +25,7 @@ class UpdateSalaryGroupAPIRequest extends APIRequest
     public function rules()
     {
         $rules = SalaryGroup::$rules;
-        
+
         return $rules;
     }
 }

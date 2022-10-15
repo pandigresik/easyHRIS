@@ -56,10 +56,10 @@ class CityController extends AppBaseController
         $input = $request->all();
 
         $city = $this->getRepositoryObj()->create($input);
-        if($city instanceof Exception){
+        if ($city instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $city->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/cities.singular')]));
 
         return redirect(route('base.cities.index'));
@@ -101,7 +101,7 @@ class CityController extends AppBaseController
 
             return redirect(route('base.cities.index'));
         }
-        
+
         return view('base.cities.edit')->with('city', $city)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class CityController extends AppBaseController
         }
 
         $city = $this->getRepositoryObj()->update($request->all(), $id);
-        if($city instanceof Exception){
+        if ($city instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $city->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class CityController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,17 @@ class CityController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model City from storage.         
+     * Provide options item based on relationship model City from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $region = new RegionRepository();
         return [
-            'regionItems' => ['' => __('crud.option.region_placeholder')] + $region->pluck()            
+            'regionItems' => ['' => __('crud.option.region_placeholder')] + $region->pluck()
         ];
     }
 }

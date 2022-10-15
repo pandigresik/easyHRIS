@@ -8,7 +8,6 @@ use App\Models\Hr\AttendanceSummary;
 
 class CreateAttendanceSummaryRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateAttendanceSummaryRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new AttendanceSummary)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new AttendanceSummary())->fillable;
         return parent::all($keys);
     }
 }

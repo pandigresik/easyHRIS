@@ -56,10 +56,10 @@ class RegionController extends AppBaseController
         $input = $request->all();
 
         $region = $this->getRepositoryObj()->create($input);
-        if($region instanceof Exception){
+        if ($region instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $region->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/regions.singular')]));
 
         return redirect(route('base.regions.index'));
@@ -101,7 +101,7 @@ class RegionController extends AppBaseController
 
             return redirect(route('base.regions.index'));
         }
-        
+
         return view('base.regions.edit')->with('region', $region)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class RegionController extends AppBaseController
         }
 
         $region = $this->getRepositoryObj()->update($request->all(), $id);
-        if($region instanceof Exception){
+        if ($region instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $region->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class RegionController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class RegionController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Region from storage.         
+     * Provide options item based on relationship model Region from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

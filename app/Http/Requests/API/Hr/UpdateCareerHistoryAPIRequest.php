@@ -25,7 +25,7 @@ class UpdateCareerHistoryAPIRequest extends APIRequest
     public function rules()
     {
         $rules = CareerHistory::$rules;
-        
+
         return $rules;
     }
 }

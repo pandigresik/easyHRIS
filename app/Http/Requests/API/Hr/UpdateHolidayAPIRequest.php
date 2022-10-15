@@ -25,7 +25,7 @@ class UpdateHolidayAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Holiday::$rules;
-        
+
         return $rules;
     }
 }

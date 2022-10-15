@@ -26,7 +26,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('description', __('models/contracts.fields.description').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('description', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
+    {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 4, 'maxlength' => 255, 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -55,10 +55,10 @@
 </div>
 
 <!-- Tags Field -->
-<div class="form-group col-sm-12 col-lg-12">
+<div class="form-group row mb-3">
     {!! Form::label('tags', __('models/contracts.fields.tags').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::textarea('tags', null, ['class' => 'form-control', 'required' => 'required']) !!}
+    {!! Form::textarea('tags', null, ['class' => 'form-control', 'rows' => 4]) !!}
 </div>
 </div>
 

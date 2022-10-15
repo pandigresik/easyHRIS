@@ -25,7 +25,7 @@ class UpdateAttendanceLogfingerAPIRequest extends APIRequest
     public function rules()
     {
         $rules = AttendanceLogfinger::$rules;
-        
+
         return $rules;
     }
 }

@@ -8,7 +8,6 @@ use App\Models\Hr\CareerHistory;
 
 class CreateCareerHistoryRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateCareerHistoryRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new CareerHistory)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new CareerHistory())->fillable;
         return parent::all($keys);
     }
 }

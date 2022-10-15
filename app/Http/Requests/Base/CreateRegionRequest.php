@@ -8,7 +8,6 @@ use App\Models\Base\Region;
 
 class CreateRegionRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateRegionRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Region)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Region())->fillable;
         return parent::all($keys);
     }
 }

@@ -323,7 +323,12 @@ class Main {
 
       if(!_option.autoApply){
          $(this).on('apply.daterangepicker', function(ev, picker) {
+            if(_option.singleDatePicker){
+              $(this).val(picker.startDate.format(_option.locale.format));
+            }else{
               $(this).val(picker.startDate.format(_option.locale.format) + ' - ' + picker.endDate.format(_option.locale.format));
+            }
+              
          });
 
          $(this).on('cancel.daterangepicker', function(ev, picker) {

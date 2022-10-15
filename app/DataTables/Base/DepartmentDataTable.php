@@ -13,7 +13,7 @@ class DepartmentDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'parent.name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -46,7 +46,7 @@ class DepartmentDataTable extends DataTable
      */
     public function query(Department $model)
     {
-        return $model->newQuery();
+        return $model->with(['parent'])->newQuery();
     }
 
     /**
@@ -115,9 +115,9 @@ class DepartmentDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'parent_id' => new Column(['title' => __('models/departments.fields.parent_id'),'name' => 'parent_id', 'data' => 'parent_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'code' => new Column(['title' => __('models/departments.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
-            'name' => new Column(['title' => __('models/departments.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text'])
+            'name' => new Column(['title' => __('models/departments.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
+            'parent.name' => new Column(['title' => __('models/departments.fields.parent_id'),'name' => 'parent.name', 'data' => 'parent.name', 'defaultContent' => '-','searchable' => true, 'elmsearch' => 'text']),            
+            'code' => new Column(['title' => __('models/departments.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),            
         ];
     }
 

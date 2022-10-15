@@ -56,10 +56,10 @@ class EducationalInstituteController extends AppBaseController
         $input = $request->all();
 
         $educationalInstitute = $this->getRepositoryObj()->create($input);
-        if($educationalInstitute instanceof Exception){
+        if ($educationalInstitute instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $educationalInstitute->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/educationalInstitutes.singular')]));
 
         return redirect(route('hr.educationalInstitutes.index'));
@@ -101,7 +101,7 @@ class EducationalInstituteController extends AppBaseController
 
             return redirect(route('hr.educationalInstitutes.index'));
         }
-        
+
         return view('hr.educational_institutes.edit')->with('educationalInstitute', $educationalInstitute)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class EducationalInstituteController extends AppBaseController
         }
 
         $educationalInstitute = $this->getRepositoryObj()->update($request->all(), $id);
-        if($educationalInstitute instanceof Exception){
+        if ($educationalInstitute instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $educationalInstitute->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class EducationalInstituteController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class EducationalInstituteController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model EducationalInstitute from storage.         
+     * Provide options item based on relationship model EducationalInstitute from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

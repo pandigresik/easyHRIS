@@ -97,16 +97,18 @@ class Shiftment extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
-    public function shiftmentGroups()
-    {
-        return $this->hasMany(\App\Models\Hr\ShiftmentGroup::class, 'shiftment_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
     public function workshifts()
     {
         return $this->hasMany(\App\Models\Hr\Workshift::class, 'shiftment_id');
+    }
+
+    /**
+     * Get all of the schedules for the Shiftment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function schedules()
+    {
+        return $this->hasMany(ShiftmentSchedule::class, 'shiftment_id');
     }
 }

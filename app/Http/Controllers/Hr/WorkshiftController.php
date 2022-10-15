@@ -57,10 +57,10 @@ class WorkshiftController extends AppBaseController
         $input = $request->all();
 
         $workshift = $this->getRepositoryObj()->create($input);
-        if($workshift instanceof Exception){
+        if ($workshift instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $workshift->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/workshifts.singular')]));
 
         return redirect(route('hr.workshifts.index'));
@@ -102,7 +102,7 @@ class WorkshiftController extends AppBaseController
 
             return redirect(route('hr.workshifts.index'));
         }
-        
+
         return view('hr.workshifts.edit')->with('workshift', $workshift)->with($this->getOptionItems());
     }
 
@@ -125,7 +125,7 @@ class WorkshiftController extends AppBaseController
         }
 
         $workshift = $this->getRepositoryObj()->update($request->all(), $id);
-        if($workshift instanceof Exception){
+        if ($workshift instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $workshift->getMessage()]);
         }
 
@@ -152,8 +152,8 @@ class WorkshiftController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -163,18 +163,19 @@ class WorkshiftController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Workshift from storage.         
+     * Provide options item based on relationship model Workshift from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $shiftment = new ShiftmentRepository();
         $employee = new EmployeeRepository();
         return [
             'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()            
+            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()
         ];
     }
 }

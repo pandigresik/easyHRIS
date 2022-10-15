@@ -1,5 +1,8 @@
 {!! Form::open(['route' => ['hr.shiftmentGroups.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group'>
+    <a href="{{ route('hr.shiftmentGroups.details.index', $id) }}" class='btn btn-ghost-info' title="detail shift group">
+        <i class="fa fa-align-justify"></i>
+     </a>
     <a href="{{ route('hr.shiftmentGroups.show', $id) }}" class='btn btn-ghost-success'>
        <i class="fa fa-eye"></i>
     </a>

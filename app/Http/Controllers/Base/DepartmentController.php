@@ -56,10 +56,10 @@ class DepartmentController extends AppBaseController
         $input = $request->all();
 
         $department = $this->getRepositoryObj()->create($input);
-        if($department instanceof Exception){
+        if ($department instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $department->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/departments.singular')]));
 
         return redirect(route('base.departments.index'));
@@ -101,7 +101,7 @@ class DepartmentController extends AppBaseController
 
             return redirect(route('base.departments.index'));
         }
-        
+
         return view('base.departments.edit')->with('department', $department)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class DepartmentController extends AppBaseController
         }
 
         $department = $this->getRepositoryObj()->update($request->all(), $id);
-        if($department instanceof Exception){
+        if ($department instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $department->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class DepartmentController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,17 @@ class DepartmentController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Department from storage.         
+     * Provide options item based on relationship model Department from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $parentItems = (new DepartmentRepository())->pluck();
         return [
-            'parentItems' => ['' => 'Pilih '] + $parentItems                        
+            'parentItems' => ['' => 'Pilih '] + $parentItems
         ];
     }
 }

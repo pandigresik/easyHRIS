@@ -8,7 +8,6 @@ use App\Models\Hr\Contract;
 
 class CreateContractRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateContractRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Contract)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Contract())->fillable;
         return parent::all($keys);
     }
 }

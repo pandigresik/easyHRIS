@@ -25,7 +25,7 @@ class UpdateLeafAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Leaf::$rules;
-        
+
         return $rules;
     }
 }

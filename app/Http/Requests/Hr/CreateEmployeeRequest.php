@@ -8,7 +8,6 @@ use App\Models\Hr\Employee;
 
 class CreateEmployeeRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateEmployeeRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Employee)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Employee())->fillable;
         return parent::all($keys);
     }
 }

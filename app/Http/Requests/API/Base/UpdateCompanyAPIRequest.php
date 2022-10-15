@@ -25,7 +25,7 @@ class UpdateCompanyAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Company::$rules;
-        
+
         return $rules;
     }
 }

@@ -8,7 +8,7 @@ use App\Models\Accounting\Tax;
 
 class UpdateTaxRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,7 @@ class UpdateTaxRequest extends FormRequest
     public function rules()
     {
         $rules = Tax::$rules;
-        
+
         $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
         return $rules;
     }
@@ -41,8 +41,9 @@ class UpdateTaxRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Tax)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Tax())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         return parent::all($keys);
     }

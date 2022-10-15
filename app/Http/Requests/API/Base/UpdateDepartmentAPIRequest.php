@@ -25,7 +25,7 @@ class UpdateDepartmentAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Department::$rules;
-        
+
         return $rules;
     }
 }

@@ -56,10 +56,10 @@ class CompanyController extends AppBaseController
         $input = $request->all();
 
         $company = $this->getRepositoryObj()->create($input);
-        if($company instanceof Exception){
+        if ($company instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $company->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/companies.singular')]));
 
         return redirect(route('base.companies.index'));
@@ -101,7 +101,7 @@ class CompanyController extends AppBaseController
 
             return redirect(route('base.companies.index'));
         }
-        
+
         return view('base.companies.edit')->with('company', $company)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class CompanyController extends AppBaseController
         }
 
         $company = $this->getRepositoryObj()->update($request->all(), $id);
-        if($company instanceof Exception){
+        if ($company instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $company->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class CompanyController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,17 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Company from storage.         
+     * Provide options item based on relationship model Company from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $parentItems = (new CompanyRepository())->pluck();
         return [
-            'parentItems' => ['' => 'Pilih '] + $parentItems                        
+            'parentItems' => ['' => 'Pilih '] + $parentItems
         ];
     }
 }

@@ -8,7 +8,6 @@ use App\Models\Base\City;
 
 class CreateCityRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateCityRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new City)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new City())->fillable;
         return parent::all($keys);
     }
 }

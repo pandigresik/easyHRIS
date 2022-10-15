@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a81363e1034e53d686c7d3267f2495d",
+    "content-hash": "942d0dfb39dbcefed3e3d8e9f32e6be8",
     "packages": [
+        {
+            "name": "acaronlex/laravel-calendar",
+            "version": "1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acaronlex/laravel-calendar.git",
+                "reference": "03490c4990187b1191e2d6686a881502b8cb7439"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acaronlex/laravel-calendar/zipball/03490c4990187b1191e2d6686a881502b8cb7439",
+                "reference": "03490c4990187b1191e2d6686a881502b8cb7439",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~7.0|~8.0",
+                "php": ">=7.2.5"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Acaronlex\\LaravelCalendar\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "Calendar": "Acaronlex\\LaravelCalendar\\Facades\\Calendar"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Acaronlex\\LaravelCalendar\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "acaronlex",
+                    "email": "acaronlex@outlook.com"
+                }
+            ],
+            "description": "Laravel helper for FullCalendar.io",
+            "support": {
+                "issues": "https://github.com/acaronlex/laravel-calendar/issues",
+                "source": "https://github.com/acaronlex/laravel-calendar/tree/1.6"
+            },
+            "time": "2021-11-14T19:32:18+00:00"
+        },
         {
             "name": "alfa6661/laravel-autonumber",
             "version": "dev-master",
@@ -2665,6 +2716,50 @@
                 "source": "https://github.com/laracasts/flash/tree/3.2.1"
             },
             "time": "2022-01-31T16:01:37+00:00"
+        },
+        {
+            "name": "laradevsbd/zkteco-sdk",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laradevsbd/zkteco-sdk-laravel.git",
+                "reference": "0f03093e726d483dd7febba6268ca64e3dd3fac8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laradevsbd/zkteco-sdk-laravel/zipball/0f03093e726d483dd7febba6268ca64e3dd3fac8",
+                "reference": "0f03093e726d483dd7febba6268ca64e3dd3fac8",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laradevsbd\\Zkteco\\ZktecoServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laradevsbd\\Zkteco\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nur Karim",
+                    "email": "nurkarim772@gmail.com"
+                }
+            ],
+            "description": "ZKLibrary is PHP Library for ZK Time & Attendance Devices",
+            "support": {
+                "issues": "https://github.com/laradevsbd/zkteco-sdk-laravel/issues",
+                "source": "https://github.com/laradevsbd/zkteco-sdk-laravel/tree/v1.0.0"
+            },
+            "time": "2021-08-25T07:28:36+00:00"
         },
         {
             "name": "laravel/framework",

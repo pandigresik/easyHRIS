@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Jenssegers\Date\Date;
 use Spatie\Menu\Laravel\Html;
 use Spatie\Menu\Laravel\Link;
@@ -122,5 +123,38 @@ if (!function_exists('generateMenu')) {
                                     </a>')->addParentClass('nav-item'));
             }
         });
+    }
+}
+
+if (!function_exists('listWorkDay')) {
+    function listWorkDay()
+    {
+        $result = [
+            Carbon::SUNDAY => 'Minggu',
+            Carbon::MONDAY => 'Senin',
+            Carbon::TUESDAY => 'Selasa',
+            Carbon::WEDNESDAY => 'Rabu',
+            Carbon::THURSDAY => 'Kamis',
+            Carbon::FRIDAY => 'Jumat',
+            Carbon::SATURDAY => 'Sabtu',
+        ];        
+
+        return $result;
+    }
+}
+
+if (!function_exists('generatePeriodFromString')) {
+    function generatePeriodFromString($value, $separator = ' - ')
+    {
+        $result = ['startDate' => null, 'endDate' => null];
+        try {
+            $tmp = explode($separator, $value);
+            $result['startDate'] = createLocalFormatDate($tmp[0]);
+            $result['endDate'] = createLocalFormatDate($tmp[1]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        
+        return $result;
     }
 }

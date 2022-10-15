@@ -25,7 +25,7 @@ class UpdateSalaryBenefitHistoryAPIRequest extends APIRequest
     public function rules()
     {
         $rules = SalaryBenefitHistory::$rules;
-        
+
         return $rules;
     }
 }

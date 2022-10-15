@@ -56,10 +56,10 @@ class EducationTitleController extends AppBaseController
         $input = $request->all();
 
         $educationTitle = $this->getRepositoryObj()->create($input);
-        if($educationTitle instanceof Exception){
+        if ($educationTitle instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $educationTitle->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/educationTitles.singular')]));
 
         return redirect(route('hr.educationTitles.index'));
@@ -101,7 +101,7 @@ class EducationTitleController extends AppBaseController
 
             return redirect(route('hr.educationTitles.index'));
         }
-        
+
         return view('hr.education_titles.edit')->with('educationTitle', $educationTitle)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class EducationTitleController extends AppBaseController
         }
 
         $educationTitle = $this->getRepositoryObj()->update($request->all(), $id);
-        if($educationTitle instanceof Exception){
+        if ($educationTitle instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $educationTitle->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class EducationTitleController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class EducationTitleController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model EducationTitle from storage.         
+     * Provide options item based on relationship model EducationTitle from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

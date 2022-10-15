@@ -13,7 +13,7 @@ class CityDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'region.name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -46,7 +46,7 @@ class CityDataTable extends DataTable
      */
     public function query(City $model)
     {
-        return $model->newQuery();
+        return $model->with(['region'])->newQuery();
     }
 
     /**
@@ -115,7 +115,7 @@ class CityDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'region_id' => new Column(['title' => __('models/cities.fields.region_id'),'name' => 'region_id', 'data' => 'region_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'region.name' => new Column(['title' => __('models/cities.fields.region_id'),'name' => 'region.name', 'data' => 'region.name', 'searchable' => true, 'elmsearch' => 'text']),
             'code' => new Column(['title' => __('models/cities.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/cities.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text'])
         ];

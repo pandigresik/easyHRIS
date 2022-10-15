@@ -56,10 +56,10 @@ class PayrollPeriodController extends AppBaseController
         $input = $request->all();
 
         $payrollPeriod = $this->getRepositoryObj()->create($input);
-        if($payrollPeriod instanceof Exception){
+        if ($payrollPeriod instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $payrollPeriod->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/payrollPeriods.singular')]));
 
         return redirect(route('hr.payrollPeriods.index'));
@@ -101,7 +101,7 @@ class PayrollPeriodController extends AppBaseController
 
             return redirect(route('hr.payrollPeriods.index'));
         }
-        
+
         return view('hr.payroll_periods.edit')->with('payrollPeriod', $payrollPeriod)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class PayrollPeriodController extends AppBaseController
         }
 
         $payrollPeriod = $this->getRepositoryObj()->update($request->all(), $id);
-        if($payrollPeriod instanceof Exception){
+        if ($payrollPeriod instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $payrollPeriod->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class PayrollPeriodController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,17 @@ class PayrollPeriodController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model PayrollPeriod from storage.         
+     * Provide options item based on relationship model PayrollPeriod from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $company = new CompanyRepository();
         return [
-            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck()            
+            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck()
         ];
     }
 }

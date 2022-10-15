@@ -64,6 +64,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('fingerprintDevices', Hr\FingerprintDeviceController::class, ["as" => 'hr']);
         Route::resource('leaves', Hr\LeafController::class, ["as" => 'hr']);
         Route::resource('overtimes', Hr\OvertimeController::class, ["as" => 'hr']);
+
+        Route::resource('payrollPeriods', Hr\PayrollPeriodController::class, ["as" => 'hr']);
+        Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr']);
+        Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr']);
+        Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr']);
+
         Route::resource('salaryAllowances', Hr\SalaryAllowanceController::class, ["as" => 'hr']);
         Route::resource('salaryBenefitHistories', Hr\SalaryBenefitHistoryController::class, ["as" => 'hr']);
         Route::resource('salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr']);
@@ -72,9 +78,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('salaryGroups', Hr\SalaryGroupController::class, ["as" => 'hr']);
         Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr']);
         Route::resource('shiftments', Hr\ShiftmentController::class, ["as" => 'hr']);
+        Route::resource('shiftmentGroups.details', Hr\ShiftmentGroupDetailController::class, ["as" => 'hr']);
+        Route::resource('shiftmentSchedules', Hr\ShiftmentScheduleController::class, ["as" => 'hr']);
         Route::resource('skillGroups', Hr\SkillGroupController::class, ["as" => 'hr']);
         Route::resource('skills', Hr\SkillController::class, ["as" => 'hr']);
+        
         Route::resource('workshifts', Hr\WorkshiftController::class, ["as" => 'hr']);
+        Route::resource('workshiftGroups', Hr\WorkshiftGroupController::class, ["as" => 'hr']);
+        Route::get('workshiftGroups.generate', [App\Http\Controllers\Hr\WorkshiftGroupController::class, 'generate'])->name('hr.workshiftGroups.generate');
     });
 
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
@@ -96,18 +107,4 @@ Route::group(['prefix' => 'artisan'], function () {
     Route::get('clear_cache', function(){
         Artisan::call('cache:clear');
     });
-});
-
-Route::group(['prefix' => 'hr'], function () {
-    Route::resource('payrollPeriods', Hr\PayrollPeriodController::class, ["as" => 'hr']);
-});
-
-
-Route::group(['prefix' => 'hr'], function () {
-    Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr']);
-});
-
-
-Route::group(['prefix' => 'hr'], function () {
-    Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr']);
 });

@@ -50,6 +50,11 @@ Route::group(['prefix' => 'hr'], function () {
     Route::resource('fingerprint_devices', Hr\FingerprintDeviceAPIController::class);
     Route::resource('leaves', Hr\LeafAPIController::class);
     Route::resource('overtimes', Hr\OvertimeAPIController::class);
+
+    Route::resource('payroll_periods', Hr\PayrollPeriodAPIController::class);
+    Route::resource('payrolls', Hr\PayrollAPIController::class);
+    Route::resource('payroll_details', Hr\PayrollDetailAPIController::class);
+
     Route::resource('salary_allowances', Hr\SalaryAllowanceAPIController::class);
     Route::resource('salary_benefit_histories', Hr\SalaryBenefitHistoryAPIController::class);
     Route::resource('salary_benefits', Hr\SalaryBenefitAPIController::class);
@@ -57,23 +62,18 @@ Route::group(['prefix' => 'hr'], function () {
     Route::resource('salary_group_details', Hr\SalaryGroupDetailAPIController::class);
     Route::resource('salary_groups', Hr\SalaryGroupAPIController::class);
     Route::resource('shiftment_groups', Hr\ShiftmentGroupAPIController::class);
-    Route::resource('shiftments', Hr\ShiftmentAPIController::class);
+    Route::resource('shiftments', Hr\ShiftmentAPIController::class);    
+    Route::resource('shiftment_group_details', Hr\ShiftmentGroupDetailAPIController::class);
+    Route::resource('shiftment_schedules', Hr\ShiftmentScheduleAPIController::class);
+
     Route::resource('skill_groups', Hr\SkillGroupAPIController::class);
-    Route::resource('skills', Hr\SkillAPIController::class);
+    Route::resource('skills', Hr\SkillAPIController::class);        
+
     Route::resource('workshifts', Hr\WorkshiftAPIController::class);
+    Route::resource('workshift_groups', Hr\WorkshiftGroupAPIController::class);
 });
 
 
 Route::group(['prefix' => 'hr'], function () {
-    Route::resource('payroll_periods', App\Http\Controllers\API\Hr\Hr\PayrollPeriodAPIController::class);
-});
-
-
-Route::group(['prefix' => 'hr'], function () {
-    Route::resource('payrolls', App\Http\Controllers\API\Hr\Hr\PayrollAPIController::class);
-});
-
-
-Route::group(['prefix' => 'hr'], function () {
-    Route::resource('payroll_details', App\Http\Controllers\API\Hr\Hr\PayrollDetailAPIController::class);
+    
 });

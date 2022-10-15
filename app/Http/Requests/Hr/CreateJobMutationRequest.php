@@ -8,7 +8,6 @@ use App\Models\Hr\JobMutation;
 
 class CreateJobMutationRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateJobMutationRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new JobMutation)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new JobMutation())->fillable;
         return parent::all($keys);
     }
 }

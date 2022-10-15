@@ -57,10 +57,10 @@ class SalaryGroupDetailController extends AppBaseController
         $input = $request->all();
 
         $salaryGroupDetail = $this->getRepositoryObj()->create($input);
-        if($salaryGroupDetail instanceof Exception){
+        if ($salaryGroupDetail instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryGroupDetail->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/salaryGroupDetails.singular')]));
 
         return redirect(route('hr.salaryGroupDetails.index'));
@@ -102,7 +102,7 @@ class SalaryGroupDetailController extends AppBaseController
 
             return redirect(route('hr.salaryGroupDetails.index'));
         }
-        
+
         return view('hr.salary_group_details.edit')->with('salaryGroupDetail', $salaryGroupDetail)->with($this->getOptionItems());
     }
 
@@ -125,7 +125,7 @@ class SalaryGroupDetailController extends AppBaseController
         }
 
         $salaryGroupDetail = $this->getRepositoryObj()->update($request->all(), $id);
-        if($salaryGroupDetail instanceof Exception){
+        if ($salaryGroupDetail instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryGroupDetail->getMessage()]);
         }
 
@@ -152,8 +152,8 @@ class SalaryGroupDetailController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -163,18 +163,19 @@ class SalaryGroupDetailController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model SalaryGroupDetail from storage.         
+     * Provide options item based on relationship model SalaryGroupDetail from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $salaryGroup = new SalaryGroupRepository();
         $salaryComponent = new SalaryComponentRepository();
         return [
             'salaryGroupItems' => ['' => __('crud.option.salaryGroup_placeholder')] + $salaryGroup->pluck(),
-            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()            
+            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()
         ];
     }
 }

@@ -25,7 +25,7 @@ class UpdateEmployeeAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Employee::$rules;
-        
+
         return $rules;
     }
 }

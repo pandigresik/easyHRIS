@@ -56,10 +56,10 @@ class SkillGroupController extends AppBaseController
         $input = $request->all();
 
         $skillGroup = $this->getRepositoryObj()->create($input);
-        if($skillGroup instanceof Exception){
+        if ($skillGroup instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $skillGroup->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/skillGroups.singular')]));
 
         return redirect(route('hr.skillGroups.index'));
@@ -101,7 +101,7 @@ class SkillGroupController extends AppBaseController
 
             return redirect(route('hr.skillGroups.index'));
         }
-        
+
         return view('hr.skill_groups.edit')->with('skillGroup', $skillGroup)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class SkillGroupController extends AppBaseController
         }
 
         $skillGroup = $this->getRepositoryObj()->update($request->all(), $id);
-        if($skillGroup instanceof Exception){
+        if ($skillGroup instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $skillGroup->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class SkillGroupController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class SkillGroupController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model SkillGroup from storage.         
+     * Provide options item based on relationship model SkillGroup from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

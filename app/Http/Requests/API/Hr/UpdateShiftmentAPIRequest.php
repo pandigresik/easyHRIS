@@ -25,7 +25,7 @@ class UpdateShiftmentAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Shiftment::$rules;
-        
+
         return $rules;
     }
 }

@@ -23,8 +23,8 @@ class SalaryGroupsTableSeeder extends Seeder
             array (
                 'code' => 'P2WJC',
                 'name' => 'Gaji karyawan kontrak',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-29 09:10:24',
                 'updated_at' => '2020-02-29 09:10:24',
@@ -33,8 +33,8 @@ class SalaryGroupsTableSeeder extends Seeder
             array (
                 'code' => 'P1WJC',
                 'name' => 'Gaji staff',
-                'created_by' => NULL,
-                'updated_by' => NULL,
+                'created_by' => 1,
+                'updated_by' => 1,
                 'deleted_at' => NULL,
                 'created_at' => '2020-02-29 09:10:07',
                 'updated_at' => '2020-02-29 09:10:07',

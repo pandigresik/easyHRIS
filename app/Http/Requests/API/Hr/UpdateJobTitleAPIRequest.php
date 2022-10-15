@@ -25,7 +25,7 @@ class UpdateJobTitleAPIRequest extends APIRequest
     public function rules()
     {
         $rules = JobTitle::$rules;
-        
+
         return $rules;
     }
 }

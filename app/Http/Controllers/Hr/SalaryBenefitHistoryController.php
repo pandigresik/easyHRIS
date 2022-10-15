@@ -58,10 +58,10 @@ class SalaryBenefitHistoryController extends AppBaseController
         $input = $request->all();
 
         $salaryBenefitHistory = $this->getRepositoryObj()->create($input);
-        if($salaryBenefitHistory instanceof Exception){
+        if ($salaryBenefitHistory instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryBenefitHistory->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/salaryBenefitHistories.singular')]));
 
         return redirect(route('hr.salaryBenefitHistories.index'));
@@ -103,7 +103,7 @@ class SalaryBenefitHistoryController extends AppBaseController
 
             return redirect(route('hr.salaryBenefitHistories.index'));
         }
-        
+
         return view('hr.salary_benefit_histories.edit')->with('salaryBenefitHistory', $salaryBenefitHistory)->with($this->getOptionItems());
     }
 
@@ -126,7 +126,7 @@ class SalaryBenefitHistoryController extends AppBaseController
         }
 
         $salaryBenefitHistory = $this->getRepositoryObj()->update($request->all(), $id);
-        if($salaryBenefitHistory instanceof Exception){
+        if ($salaryBenefitHistory instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryBenefitHistory->getMessage()]);
         }
 
@@ -153,8 +153,8 @@ class SalaryBenefitHistoryController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -164,20 +164,21 @@ class SalaryBenefitHistoryController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model SalaryBenefitHistory from storage.         
+     * Provide options item based on relationship model SalaryBenefitHistory from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $contract = new ContractRepository();
         $employee = new EmployeeRepository();
         $salaryComponent = new SalaryComponentRepository();
         return [
             'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->pluck(),
             'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()            
+            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()
         ];
     }
 }

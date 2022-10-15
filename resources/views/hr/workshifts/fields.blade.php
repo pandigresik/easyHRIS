@@ -18,7 +18,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('description', __('models/workshifts.fields.description').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('description', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
+    {!! Form::textarea('description', null, ['class' => 'form-control','rows' => 4,'maxlength' => 255, 'required' => 'required']) !!}
 </div>
 </div>
 

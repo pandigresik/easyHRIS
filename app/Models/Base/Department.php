@@ -4,6 +4,7 @@ namespace App\Models\Base;
 
 use App\Models\Base as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -37,12 +38,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Department extends Model
 {
     use HasFactory;
-        use SoftDeletes;
+    use SoftDeletes;
 
     public $table = 'departments';
-    
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
+
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
 
 
     protected $dates = ['deleted_at'];
@@ -124,5 +125,15 @@ class Department extends Model
     public function jobPlacements()
     {
         return $this->hasMany(\App\Models\Base\JobPlacement::class, 'department_id');
+    }
+
+    /**
+     * Get the parent associated with the Department
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'parent_id');
     }
 }

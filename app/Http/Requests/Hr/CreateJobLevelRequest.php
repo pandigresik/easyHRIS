@@ -8,7 +8,6 @@ use App\Models\Hr\JobLevel;
 
 class CreateJobLevelRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateJobLevelRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new JobLevel)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new JobLevel())->fillable;
         return parent::all($keys);
     }
 }

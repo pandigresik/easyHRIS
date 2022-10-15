@@ -8,7 +8,6 @@ use App\Models\Hr\FingerprintDevice;
 
 class CreateFingerprintDeviceRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateFingerprintDeviceRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new FingerprintDevice)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new FingerprintDevice())->fillable;
         return parent::all($keys);
     }
 }

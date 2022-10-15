@@ -8,7 +8,6 @@ use App\Models\Base\Setting;
 
 class CreateSettingRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateSettingRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Setting)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Setting())->fillable;
         return parent::all($keys);
     }
 }

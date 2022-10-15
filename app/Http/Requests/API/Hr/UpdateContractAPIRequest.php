@@ -25,7 +25,7 @@ class UpdateContractAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Contract::$rules;
-        
+
         return $rules;
     }
 }

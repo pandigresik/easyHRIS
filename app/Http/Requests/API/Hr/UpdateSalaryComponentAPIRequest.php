@@ -25,7 +25,7 @@ class UpdateSalaryComponentAPIRequest extends APIRequest
     public function rules()
     {
         $rules = SalaryComponent::$rules;
-        
+
         return $rules;
     }
 }

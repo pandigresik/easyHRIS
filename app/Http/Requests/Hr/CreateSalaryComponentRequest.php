@@ -8,7 +8,6 @@ use App\Models\Hr\SalaryComponent;
 
 class CreateSalaryComponentRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateSalaryComponentRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new SalaryComponent)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new SalaryComponent())->fillable;
         return parent::all($keys);
     }
 }

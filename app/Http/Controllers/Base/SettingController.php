@@ -56,10 +56,10 @@ class SettingController extends AppBaseController
         $input = $request->all();
 
         $setting = $this->getRepositoryObj()->create($input);
-        if($setting instanceof Exception){
+        if ($setting instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $setting->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/settings.singular')]));
 
         return redirect(route('base.settings.index'));
@@ -101,7 +101,7 @@ class SettingController extends AppBaseController
 
             return redirect(route('base.settings.index'));
         }
-        
+
         return view('base.settings.edit')->with('setting', $setting)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class SettingController extends AppBaseController
         }
 
         $setting = $this->getRepositoryObj()->update($request->all(), $id);
-        if($setting instanceof Exception){
+        if ($setting instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $setting->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class SettingController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class SettingController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Setting from storage.         
+     * Provide options item based on relationship model Setting from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

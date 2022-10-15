@@ -8,7 +8,7 @@ use App\Models\Base\Region;
 
 class UpdateRegionRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,7 @@ class UpdateRegionRequest extends FormRequest
     public function rules()
     {
         $rules = Region::$rules;
-        
+
         $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
         return $rules;
     }
@@ -41,8 +41,9 @@ class UpdateRegionRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Region)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Region())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         return parent::all($keys);
     }

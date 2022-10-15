@@ -25,7 +25,7 @@ class UpdateAbsentReasonAPIRequest extends APIRequest
     public function rules()
     {
         $rules = AbsentReason::$rules;
-        
+
         return $rules;
     }
 }

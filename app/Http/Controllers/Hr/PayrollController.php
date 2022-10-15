@@ -57,10 +57,10 @@ class PayrollController extends AppBaseController
         $input = $request->all();
 
         $payroll = $this->getRepositoryObj()->create($input);
-        if($payroll instanceof Exception){
+        if ($payroll instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $payroll->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/payrolls.singular')]));
 
         return redirect(route('hr.payrolls.index'));
@@ -102,7 +102,7 @@ class PayrollController extends AppBaseController
 
             return redirect(route('hr.payrolls.index'));
         }
-        
+
         return view('hr.payrolls.edit')->with('payroll', $payroll)->with($this->getOptionItems());
     }
 
@@ -125,7 +125,7 @@ class PayrollController extends AppBaseController
         }
 
         $payroll = $this->getRepositoryObj()->update($request->all(), $id);
-        if($payroll instanceof Exception){
+        if ($payroll instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $payroll->getMessage()]);
         }
 
@@ -152,8 +152,8 @@ class PayrollController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -163,18 +163,19 @@ class PayrollController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Payroll from storage.         
+     * Provide options item based on relationship model Payroll from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $employee = new EmployeeRepository();
         $payrollPeriod = new PayrollPeriodRepository();
         return [
             'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'payrollPeriodItems' => ['' => __('crud.option.payrollPeriod_placeholder')] + $payrollPeriod->pluck()            
+            'payrollPeriodItems' => ['' => __('crud.option.payrollPeriod_placeholder')] + $payrollPeriod->pluck()
         ];
     }
 }

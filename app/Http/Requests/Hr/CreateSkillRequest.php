@@ -8,7 +8,6 @@ use App\Models\Hr\Skill;
 
 class CreateSkillRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateSkillRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Skill)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Skill())->fillable;
         return parent::all($keys);
     }
 }

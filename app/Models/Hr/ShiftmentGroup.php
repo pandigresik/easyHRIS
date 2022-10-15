@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @SWG\Definition(
  *      definition="ShiftmentGroup",
- *      required={""},
+ *      required={"code", "company_id", "name"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -17,14 +17,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          format="int32"
  *      ),
  *      @SWG\Property(
- *          property="type",
- *          description="type",
- *          type="string"
- *      ),
- *      @SWG\Property(
  *          property="code",
  *          description="code",
  *          type="string"
+ *      ),
+ *      @SWG\Property(
+ *          property="company_id",
+ *          description="company_id",
+ *          type="integer",
+ *          format="int32"
  *      ),
  *      @SWG\Property(
  *          property="name",
@@ -51,7 +52,6 @@ class ShiftmentGroup extends Model
     public $fillable = [
         'code',
         'company_id',
-        'shiftment_id',
         'name'
     ];
 
@@ -64,7 +64,6 @@ class ShiftmentGroup extends Model
         'id' => 'integer',
         'code' => 'string',
         'company_id' => 'integer',
-        'shiftment_id' => 'integer',
         'name' => 'string'
     ];
 
@@ -74,10 +73,9 @@ class ShiftmentGroup extends Model
      * @var array
      */
     public static $rules = [
-        'code' => 'nullable|string|max:7',
-        'company_id' => 'nullable',
-        'shiftment_id' => 'nullable',
-        'name' => 'nullable|string|max:255'
+        'code' => 'required|string|max:7',
+        'company_id' => 'required',
+        'name' => 'required|string|max:255'
     ];
 
     /**
@@ -85,15 +83,7 @@ class ShiftmentGroup extends Model
      **/
     public function company()
     {
-        return $this->belongsTo(\App\Models\Hr\Company::class, 'company_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
-    public function shiftment()
-    {
-        return $this->belongsTo(\App\Models\Hr\Shiftment::class, 'shiftment_id');
+        return $this->belongsTo(\App\Models\Base\Company::class, 'company_id');
     }
 
     /**
@@ -102,5 +92,13 @@ class ShiftmentGroup extends Model
     public function employeeShiftments()
     {
         return $this->hasMany(\App\Models\Hr\EmployeeShiftment::class, 'shiftment_group_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function shiftmentGroupDetails()
+    {
+        return $this->hasMany(\App\Models\Hr\ShiftmentGroupDetail::class, 'shiftment_group_id');
     }
 }

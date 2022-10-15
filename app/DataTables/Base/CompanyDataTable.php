@@ -13,7 +13,7 @@ class CompanyDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'parent.name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -46,7 +46,7 @@ class CompanyDataTable extends DataTable
      */
     public function query(Company $model)
     {
-        return $model->newQuery();
+        return $model->with(['parent'])->newQuery();
     }
 
     /**
@@ -115,11 +115,11 @@ class CompanyDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'parent_id' => new Column(['title' => __('models/companies.fields.parent_id'),'name' => 'parent_id', 'data' => 'parent_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'address' => new Column(['title' => __('models/companies.fields.address'),'name' => 'address', 'data' => 'address', 'searchable' => true, 'elmsearch' => 'text']),
-            'code' => new Column(['title' => __('models/companies.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/companies.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
-            'birth_day' => new Column(['title' => __('models/companies.fields.birth_day'),'name' => 'birth_day', 'data' => 'birth_day', 'searchable' => true, 'elmsearch' => 'text']),
+            'parent_id' => new Column(['title' => __('models/companies.fields.parent_id'),'name' => 'parent.name', 'data' => 'parent.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
+            'address' => new Column(['title' => __('models/companies.fields.address'),'name' => 'address', 'data' => 'address', 'searchable' => true, 'elmsearch' => 'text']),
+            'code' => new Column(['title' => __('models/companies.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),            
+            'birth_day' => new Column(['title' => __('models/companies.fields.birth_day'),'name' => 'birth_day', 'data' => 'birth_day', 'searchable' => false, 'elmsearch' => 'text']),
             'email' => new Column(['title' => __('models/companies.fields.email'),'name' => 'email', 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
             'tax_number' => new Column(['title' => __('models/companies.fields.tax_number'),'name' => 'tax_number', 'data' => 'tax_number', 'searchable' => true, 'elmsearch' => 'text'])
         ];

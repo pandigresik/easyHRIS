@@ -25,7 +25,7 @@ class UpdateCityAPIRequest extends APIRequest
     public function rules()
     {
         $rules = City::$rules;
-        
+
         return $rules;
     }
 }

@@ -8,7 +8,6 @@ use App\Models\Hr\Holiday;
 
 class CreateHolidayRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateHolidayRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Holiday)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Holiday())->fillable;
         return parent::all($keys);
     }
 }

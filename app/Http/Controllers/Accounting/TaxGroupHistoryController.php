@@ -56,10 +56,10 @@ class TaxGroupHistoryController extends AppBaseController
         $input = $request->all();
 
         $taxGroupHistory = $this->getRepositoryObj()->create($input);
-        if($taxGroupHistory instanceof Exception){
+        if ($taxGroupHistory instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $taxGroupHistory->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/taxGroupHistories.singular')]));
 
         return redirect(route('accounting.taxGroupHistories.index'));
@@ -101,7 +101,7 @@ class TaxGroupHistoryController extends AppBaseController
 
             return redirect(route('accounting.taxGroupHistories.index'));
         }
-        
+
         return view('accounting.tax_group_histories.edit')->with('taxGroupHistory', $taxGroupHistory)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class TaxGroupHistoryController extends AppBaseController
         }
 
         $taxGroupHistory = $this->getRepositoryObj()->update($request->all(), $id);
-        if($taxGroupHistory instanceof Exception){
+        if ($taxGroupHistory instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $taxGroupHistory->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class TaxGroupHistoryController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,17 @@ class TaxGroupHistoryController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model TaxGroupHistory from storage.         
+     * Provide options item based on relationship model TaxGroupHistory from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $employee = new EmployeeRepository();
         return [
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()            
+            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()
         ];
     }
 }

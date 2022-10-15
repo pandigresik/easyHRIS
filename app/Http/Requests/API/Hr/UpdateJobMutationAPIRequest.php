@@ -25,7 +25,7 @@ class UpdateJobMutationAPIRequest extends APIRequest
     public function rules()
     {
         $rules = JobMutation::$rules;
-        
+
         return $rules;
     }
 }

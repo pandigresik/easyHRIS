@@ -8,7 +8,6 @@ use App\Models\Base\Company;
 
 class CreateCompanyRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateCompanyRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Company)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Company())->fillable;
         return parent::all($keys);
     }
 }

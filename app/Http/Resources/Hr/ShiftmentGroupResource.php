@@ -18,7 +18,6 @@ class ShiftmentGroupResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'company_id' => $this->company_id,
-            'shiftment_id' => $this->shiftment_id,
             'name' => $this->name
         ];
     }

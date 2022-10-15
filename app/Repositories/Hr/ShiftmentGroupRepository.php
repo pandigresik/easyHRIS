@@ -8,7 +8,7 @@ use App\Repositories\BaseRepository;
 /**
  * Class ShiftmentGroupRepository
  * @package App\Repositories\Hr
- * @version October 4, 2022, 10:38 am WIB
+ * @version October 13, 2022, 9:59 am WIB
 */
 
 class ShiftmentGroupRepository extends BaseRepository
@@ -19,7 +19,6 @@ class ShiftmentGroupRepository extends BaseRepository
     protected $fieldSearchable = [
         'code',
         'company_id',
-        'shiftment_id',
         'name'
     ];
 

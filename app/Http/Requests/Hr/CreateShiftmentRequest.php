@@ -8,7 +8,6 @@ use App\Models\Hr\Shiftment;
 
 class CreateShiftmentRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateShiftmentRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Shiftment)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Shiftment())->fillable;
         return parent::all($keys);
     }
 }

@@ -8,7 +8,6 @@ use App\Models\Accounting\TaxGroupHistory;
 
 class CreateTaxGroupHistoryRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateTaxGroupHistoryRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new TaxGroupHistory)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new TaxGroupHistory())->fillable;
         return parent::all($keys);
     }
 }

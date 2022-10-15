@@ -8,7 +8,6 @@ use App\Models\Hr\SalaryBenefitHistory;
 
 class CreateSalaryBenefitHistoryRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateSalaryBenefitHistoryRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new SalaryBenefitHistory)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new SalaryBenefitHistory())->fillable;
         return parent::all($keys);
     }
 }

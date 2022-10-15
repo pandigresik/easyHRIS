@@ -8,7 +8,6 @@ use App\Models\Hr\EducationalInstitute;
 
 class CreateEducationalInstituteRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateEducationalInstituteRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new EducationalInstitute)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new EducationalInstitute())->fillable;
         return parent::all($keys);
     }
 }

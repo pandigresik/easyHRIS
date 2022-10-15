@@ -61,10 +61,10 @@ class CareerHistoryController extends AppBaseController
         $input = $request->all();
 
         $careerHistory = $this->getRepositoryObj()->create($input);
-        if($careerHistory instanceof Exception){
+        if ($careerHistory instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $careerHistory->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/careerHistories.singular')]));
 
         return redirect(route('hr.careerHistories.index'));
@@ -106,7 +106,7 @@ class CareerHistoryController extends AppBaseController
 
             return redirect(route('hr.careerHistories.index'));
         }
-        
+
         return view('hr.career_histories.edit')->with('careerHistory', $careerHistory)->with($this->getOptionItems());
     }
 
@@ -129,7 +129,7 @@ class CareerHistoryController extends AppBaseController
         }
 
         $careerHistory = $this->getRepositoryObj()->update($request->all(), $id);
-        if($careerHistory instanceof Exception){
+        if ($careerHistory instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $careerHistory->getMessage()]);
         }
 
@@ -156,8 +156,8 @@ class CareerHistoryController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -167,13 +167,14 @@ class CareerHistoryController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model CareerHistory from storage.         
+     * Provide options item based on relationship model CareerHistory from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $employee = new EmployeeRepository();
         $contract = new ContractRepository();
         $employee = new EmployeeRepository();
@@ -188,7 +189,7 @@ class CareerHistoryController extends AppBaseController
             'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
             'departmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck(),
             'jobLevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
-            'jobTitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck()            
+            'jobTitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck()
         ];
     }
 }

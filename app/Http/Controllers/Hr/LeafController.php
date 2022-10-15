@@ -57,10 +57,10 @@ class LeafController extends AppBaseController
         $input = $request->all();
 
         $leaf = $this->getRepositoryObj()->create($input);
-        if($leaf instanceof Exception){
+        if ($leaf instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $leaf->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/leaves.singular')]));
 
         return redirect(route('hr.leaves.index'));
@@ -102,7 +102,7 @@ class LeafController extends AppBaseController
 
             return redirect(route('hr.leaves.index'));
         }
-        
+
         return view('hr.leaves.edit')->with('leaf', $leaf)->with($this->getOptionItems());
     }
 
@@ -125,7 +125,7 @@ class LeafController extends AppBaseController
         }
 
         $leaf = $this->getRepositoryObj()->update($request->all(), $id);
-        if($leaf instanceof Exception){
+        if ($leaf instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $leaf->getMessage()]);
         }
 
@@ -152,8 +152,8 @@ class LeafController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -163,18 +163,19 @@ class LeafController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Leaf from storage.         
+     * Provide options item based on relationship model Leaf from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $absentReason = new AbsentReasonRepository();
         $employee = new EmployeeRepository();
         return [
             'absentReasonItems' => ['' => __('crud.option.absentReason_placeholder')] + $absentReason->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()            
+            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()
         ];
     }
 }

@@ -26,7 +26,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('joblevel_id', __('models/jobPlacements.fields.joblevel_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('joblevel_id', $joblevelItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+    {!! Form::select('joblevel_id', $jobLevelItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -34,7 +34,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('jobtitle_id', __('models/jobPlacements.fields.jobtitle_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('jobtitle_id', $jobtitleItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+    {!! Form::select('jobtitle_id', $jobTitleItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>
 

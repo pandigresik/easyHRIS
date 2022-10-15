@@ -25,7 +25,7 @@ class UpdateSkillGroupAPIRequest extends APIRequest
     public function rules()
     {
         $rules = SkillGroup::$rules;
-        
+
         return $rules;
     }
 }

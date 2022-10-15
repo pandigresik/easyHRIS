@@ -25,7 +25,7 @@ class UpdateSalaryAllowanceAPIRequest extends APIRequest
     public function rules()
     {
         $rules = SalaryAllowance::$rules;
-        
+
         return $rules;
     }
 }

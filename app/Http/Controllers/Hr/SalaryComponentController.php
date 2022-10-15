@@ -56,10 +56,10 @@ class SalaryComponentController extends AppBaseController
         $input = $request->all();
 
         $salaryComponent = $this->getRepositoryObj()->create($input);
-        if($salaryComponent instanceof Exception){
+        if ($salaryComponent instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryComponent->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/salaryComponents.singular')]));
 
         return redirect(route('hr.salaryComponents.index'));
@@ -101,7 +101,7 @@ class SalaryComponentController extends AppBaseController
 
             return redirect(route('hr.salaryComponents.index'));
         }
-        
+
         return view('hr.salary_components.edit')->with('salaryComponent', $salaryComponent)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class SalaryComponentController extends AppBaseController
         }
 
         $salaryComponent = $this->getRepositoryObj()->update($request->all(), $id);
-        if($salaryComponent instanceof Exception){
+        if ($salaryComponent instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryComponent->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class SalaryComponentController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class SalaryComponentController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model SalaryComponent from storage.         
+     * Provide options item based on relationship model SalaryComponent from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Exports\Template\Accounting;
+namespace App\Exports\Template\Hr;
 
-use App\Models\Accounting\IfrsCategories;
+use App\Models\Hr\Employee;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class IfrsCategoryExport implements FromCollection, WithHeadings, ShouldAutoSize, WithMapping
+class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, WithMapping
 {
     use Exportable;
     private $isTemplate = false;
@@ -25,10 +25,10 @@ class IfrsCategoryExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function collection()
     {
         if ($this->isTemplate) {
-            return IfrsCategories::limit(1)->get();
+            return Employee::limit(1)->get();
         }
 
-        return IfrsCategories::all();
+        return Employee::all();
     }
 
     /**
@@ -49,6 +49,6 @@ class IfrsCategoryExport implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function headings(): array
     {
-        return (new IfrsCategories())->getFillable();
+        return (new Employee())->getFillable();
     }
 }

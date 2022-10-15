@@ -56,10 +56,10 @@ class HolidayController extends AppBaseController
         $input = $request->all();
 
         $holiday = $this->getRepositoryObj()->create($input);
-        if($holiday instanceof Exception){
+        if ($holiday instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $holiday->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/holidays.singular')]));
 
         return redirect(route('hr.holidays.index'));
@@ -101,7 +101,7 @@ class HolidayController extends AppBaseController
 
             return redirect(route('hr.holidays.index'));
         }
-        
+
         return view('hr.holidays.edit')->with('holiday', $holiday)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class HolidayController extends AppBaseController
         }
 
         $holiday = $this->getRepositoryObj()->update($request->all(), $id);
-        if($holiday instanceof Exception){
+        if ($holiday instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $holiday->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class HolidayController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,16 @@ class HolidayController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Holiday from storage.         
+     * Provide options item based on relationship model Holiday from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
+
         ];
     }
 }

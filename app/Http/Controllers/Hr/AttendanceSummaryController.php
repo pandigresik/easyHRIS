@@ -56,10 +56,10 @@ class AttendanceSummaryController extends AppBaseController
         $input = $request->all();
 
         $attendanceSummary = $this->getRepositoryObj()->create($input);
-        if($attendanceSummary instanceof Exception){
+        if ($attendanceSummary instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $attendanceSummary->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/attendanceSummaries.singular')]));
 
         return redirect(route('hr.attendanceSummaries.index'));
@@ -101,7 +101,7 @@ class AttendanceSummaryController extends AppBaseController
 
             return redirect(route('hr.attendanceSummaries.index'));
         }
-        
+
         return view('hr.attendance_summaries.edit')->with('attendanceSummary', $attendanceSummary)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class AttendanceSummaryController extends AppBaseController
         }
 
         $attendanceSummary = $this->getRepositoryObj()->update($request->all(), $id);
-        if($attendanceSummary instanceof Exception){
+        if ($attendanceSummary instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $attendanceSummary->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class AttendanceSummaryController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,17 @@ class AttendanceSummaryController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model AttendanceSummary from storage.         
+     * Provide options item based on relationship model AttendanceSummary from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $employee = new EmployeeRepository();
         return [
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()            
+            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()
         ];
     }
 }

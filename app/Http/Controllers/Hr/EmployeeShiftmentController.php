@@ -57,10 +57,10 @@ class EmployeeShiftmentController extends AppBaseController
         $input = $request->all();
 
         $employeeShiftment = $this->getRepositoryObj()->create($input);
-        if($employeeShiftment instanceof Exception){
+        if ($employeeShiftment instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $employeeShiftment->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/employeeShiftments.singular')]));
 
         return redirect(route('hr.employeeShiftments.index'));
@@ -102,7 +102,7 @@ class EmployeeShiftmentController extends AppBaseController
 
             return redirect(route('hr.employeeShiftments.index'));
         }
-        
+
         return view('hr.employee_shiftments.edit')->with('employeeShiftment', $employeeShiftment)->with($this->getOptionItems());
     }
 
@@ -125,7 +125,7 @@ class EmployeeShiftmentController extends AppBaseController
         }
 
         $employeeShiftment = $this->getRepositoryObj()->update($request->all(), $id);
-        if($employeeShiftment instanceof Exception){
+        if ($employeeShiftment instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $employeeShiftment->getMessage()]);
         }
 
@@ -152,8 +152,8 @@ class EmployeeShiftmentController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -163,18 +163,19 @@ class EmployeeShiftmentController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model EmployeeShiftment from storage.         
+     * Provide options item based on relationship model EmployeeShiftment from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $employee = new EmployeeRepository();
         $shiftmentGroup = new ShiftmentGroupRepository();
         return [
             'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck()            
+            'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck()
         ];
     }
 }

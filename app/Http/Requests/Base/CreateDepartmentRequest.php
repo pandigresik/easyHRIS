@@ -8,7 +8,6 @@ use App\Models\Base\Department;
 
 class CreateDepartmentRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateDepartmentRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Department)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Department())->fillable;
         return parent::all($keys);
     }
 }

@@ -8,7 +8,6 @@ use App\Models\Hr\PayrollDetail;
 
 class CreatePayrollDetailRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreatePayrollDetailRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new PayrollDetail)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new PayrollDetail())->fillable;
         return parent::all($keys);
     }
 }

@@ -46,7 +46,7 @@ class JobLevelDataTable extends DataTable
      */
     public function query(JobLevel $model)
     {
-        return $model->newQuery();
+        return $model->with(['parent'])->newQuery();
     }
 
     /**
@@ -115,7 +115,7 @@ class JobLevelDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'parent_id' => new Column(['title' => __('models/jobLevels.fields.parent_id'),'name' => 'parent_id', 'data' => 'parent_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'parent_id' => new Column(['title' => __('models/jobLevels.fields.parent_id'),'name' => 'parent_id', 'data' => 'parent.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
             'code' => new Column(['title' => __('models/jobLevels.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/jobLevels.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text'])
         ];

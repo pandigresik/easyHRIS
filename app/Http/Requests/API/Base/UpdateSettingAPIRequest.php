@@ -25,7 +25,7 @@ class UpdateSettingAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Setting::$rules;
-        
+
         return $rules;
     }
 }

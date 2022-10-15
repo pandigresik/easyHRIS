@@ -8,7 +8,6 @@ use App\Models\Hr\SalaryAllowance;
 
 class CreateSalaryAllowanceRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateSalaryAllowanceRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new SalaryAllowance)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new SalaryAllowance())->fillable;
         return parent::all($keys);
     }
 }

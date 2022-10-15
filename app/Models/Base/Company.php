@@ -4,6 +4,7 @@ namespace App\Models\Base;
 
 use App\Models\Base as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -152,5 +153,19 @@ class Company extends Model
     public function shiftmentGroups()
     {
         return $this->hasMany(\App\Models\Base\ShiftmentGroup::class, 'company_id');
+    }
+
+    public function getBirthDayAttribute($value){
+        return localFormatDate($value);
+    }
+
+    /**
+     * Get the parent that owns the Company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'parent_id');
     }
 }

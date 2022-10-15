@@ -56,10 +56,10 @@ class SkillController extends AppBaseController
         $input = $request->all();
 
         $skill = $this->getRepositoryObj()->create($input);
-        if($skill instanceof Exception){
+        if ($skill instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $skill->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/skills.singular')]));
 
         return redirect(route('hr.skills.index'));
@@ -101,7 +101,7 @@ class SkillController extends AppBaseController
 
             return redirect(route('hr.skills.index'));
         }
-        
+
         return view('hr.skills.edit')->with('skill', $skill)->with($this->getOptionItems());
     }
 
@@ -124,7 +124,7 @@ class SkillController extends AppBaseController
         }
 
         $skill = $this->getRepositoryObj()->update($request->all(), $id);
-        if($skill instanceof Exception){
+        if ($skill instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $skill->getMessage()]);
         }
 
@@ -151,8 +151,8 @@ class SkillController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,16 +162,17 @@ class SkillController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Skill from storage.         
+     * Provide options item based on relationship model Skill from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $skillGroup = new SkillGroupRepository();
         return [
-            'skillGroupItems' => ['' => __('crud.option.skillGroup_placeholder')] + $skillGroup->pluck()            
+            'skillGroupItems' => ['' => __('crud.option.skillGroup_placeholder')] + $skillGroup->pluck()
         ];
     }
 }

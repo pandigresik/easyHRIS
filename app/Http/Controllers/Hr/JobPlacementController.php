@@ -9,8 +9,8 @@ use App\Http\Requests\Hr\UpdateJobPlacementRequest;
 use App\Repositories\Hr\JobPlacementRepository;
 use App\Repositories\Hr\EmployeeRepository;
 use App\Repositories\Hr\ContractRepository;
-use App\Repositories\Hr\CompanyRepository;
-use App\Repositories\Hr\DepartmentRepository;
+use App\Repositories\Base\CompanyRepository;
+use App\Repositories\Base\DepartmentRepository;
 use App\Repositories\Hr\JobLevelRepository;
 use App\Repositories\Hr\JobTitleRepository;
 use Flash;
@@ -61,10 +61,10 @@ class JobPlacementController extends AppBaseController
         $input = $request->all();
 
         $jobPlacement = $this->getRepositoryObj()->create($input);
-        if($jobPlacement instanceof Exception){
+        if ($jobPlacement instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $jobPlacement->getMessage()]);
         }
-        
+
         Flash::success(__('messages.saved', ['model' => __('models/jobPlacements.singular')]));
 
         return redirect(route('hr.jobPlacements.index'));
@@ -106,7 +106,7 @@ class JobPlacementController extends AppBaseController
 
             return redirect(route('hr.jobPlacements.index'));
         }
-        
+
         return view('hr.job_placements.edit')->with('jobPlacement', $jobPlacement)->with($this->getOptionItems());
     }
 
@@ -129,7 +129,7 @@ class JobPlacementController extends AppBaseController
         }
 
         $jobPlacement = $this->getRepositoryObj()->update($request->all(), $id);
-        if($jobPlacement instanceof Exception){
+        if ($jobPlacement instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $jobPlacement->getMessage()]);
         }
 
@@ -156,8 +156,8 @@ class JobPlacementController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-        
-        if($delete instanceof Exception){
+
+        if ($delete instanceof Exception) {
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -167,16 +167,17 @@ class JobPlacementController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model JobPlacement from storage.         
+     * Provide options item based on relationship model JobPlacement from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $employee = new EmployeeRepository();
         $contract = new ContractRepository();
-        $employee = new EmployeeRepository();
+        $supervisor = new EmployeeRepository();
         $company = new CompanyRepository();
         $department = new DepartmentRepository();
         $jobLevel = new JobLevelRepository();
@@ -184,11 +185,11 @@ class JobPlacementController extends AppBaseController
         return [
             'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
             'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
+            'supervisorItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
             'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
             'departmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck(),
             'jobLevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
-            'jobTitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck()            
+            'jobTitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck()
         ];
     }
 }

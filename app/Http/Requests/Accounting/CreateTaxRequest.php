@@ -8,7 +8,6 @@ use App\Models\Accounting\Tax;
 
 class CreateTaxRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,8 +36,9 @@ class CreateTaxRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null){
-        $keys = (new Tax)->fillable;
+    public function all($keys = null)
+    {
+        $keys = (new Tax())->fillable;
         return parent::all($keys);
     }
 }

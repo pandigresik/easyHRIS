@@ -25,7 +25,7 @@ class UpdateEducationTitleAPIRequest extends APIRequest
     public function rules()
     {
         $rules = EducationTitle::$rules;
-        
+
         return $rules;
     }
 }
