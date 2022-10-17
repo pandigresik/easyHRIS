@@ -9,10 +9,11 @@
     <script>
         const columnSearch = {!! json_encode($dataTable->getOptions()['columns']) !!}
         const newTr = $('#dataTableBuilder thead>tr').clone();
-        let localOption = {'localOption' : {!! json_encode(config('local')) !!} }
+        let localOption = {}
          
         _.forEach(columnSearch, (element, i, array) => {
             let _th = newTr.find('th').eq(i)
+            localOption = {'localOption' : {!! json_encode(config('local')) !!} }
             if(!element.searchable){
                 if(i === array.length -1){
                     _th.html('<div class="row"><div class="form-group col-sm-12"><button class="btn btn-primary search-btn"><i class="cil cil-search"></i></button></div></div>')

@@ -27,7 +27,11 @@ class CreateWorkshiftGroupRequest extends FormRequest
      */
     public function rules()
     {
-        return WorkshiftGroup::$rules;
+        $rules = WorkshiftGroup::$rules;
+        $rules['work_date_shiftment'] = 'required';
+        unset($rules['shiftment_id']);
+        unset($rules['work_date']);
+        return $rules;
     }
 
     /**
@@ -39,6 +43,7 @@ class CreateWorkshiftGroupRequest extends FormRequest
     */
     public function all($keys = null){
         $keys = (new WorkshiftGroup)->fillable;
+        $keys = array_merge($keys, ['work_date_shiftment']);
         return parent::all($keys);
     }
 }

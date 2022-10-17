@@ -57,7 +57,7 @@ class WorkshiftGroupController extends AppBaseController
     {
         $input = $request->all();
 
-        $workshiftGroup = $this->getRepositoryObj()->create($input);
+        $workshiftGroup = $this->getRepositoryObj()->generateSchedule($input);
         if($workshiftGroup instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $workshiftGroup->getMessage()]);
         }
@@ -197,11 +197,29 @@ class WorkshiftGroupController extends AppBaseController
         $workshift = $this->getRepositoryObj()->generateWorkshift($data);
         $events = [];
         $dataInsert = [];
+        $eventTimeFormat = [ // like '14:30:00'
+            'hour' => '2-digit',
+            'minute' =>'2-digit',
+            // 'second' => '2-digit',
+            'hour12' => false
+        ];
         foreach($workshift['schedule'] as $date => $event){
             $events[] = [
-                'title' => $this->generateTitleSchedule($event),                
+                'title' => $event->code.' ( '.$event->name.' )',
+                'allDay' => true,
                 'start' => $date,                
-                'end' => $date,
+                'color' => $event->start_hour == $event->end_hour ? 'red' : 'green'
+            ];
+            $events[] = [
+                'title' => 'Masuk',
+                'allDay' => false,
+                'start' => $date.' '.$event->start_hour,                
+                'color' => $event->start_hour == $event->end_hour ? 'red' : 'green'
+            ];
+            $events[] = [
+                'title' => 'Pulang',
+                'allDay' => false,
+                'start' => $date.' '.$event->end_hour,
                 'color' => $event->start_hour == $event->end_hour ? 'red' : 'green'
             ];
             $dataInsert[] = [
@@ -209,10 +227,6 @@ class WorkshiftGroupController extends AppBaseController
                 'shiftment_id' => $event->id
             ];
         }
-        return view('hr.workshift_groups.calendar', compact('events', 'initialDate', 'dataInsert'));
-    }
-
-    private function generateTitleSchedule($shiftment){
-        return $shiftment->code.' ('.$shiftment->start_hour.' sd '.$shiftment->end_hour.')';
+        return view('hr.workshift_groups.calendar', compact('events', 'eventTimeFormat', 'initialDate', 'dataInsert'));
     }
 }

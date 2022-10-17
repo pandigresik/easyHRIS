@@ -22,8 +22,7 @@ class WorkshiftGroupRepository extends BaseRepository
      * @var array
      */
     private $shiftmentMovement = Carbon::MONDAY;
-    private $shiftmentOff = 2; // index shift libur
-    private $dayOff = Carbon::SUNDAY;
+    private $shiftmentOff = 2; // index shift libur    
     protected $fieldSearchable = [
         'shiftment_group_id',
         'shiftment_id',
@@ -113,5 +112,24 @@ class WorkshiftGroupRepository extends BaseRepository
             }
         }
         return $result;
+    }
+
+    public function generateSchedule($input)
+    {
+        try {
+            $workshiftDate = json_decode($input['work_date_shiftment'], 1);
+            $upsertData = [];
+            $userId = \Auth::id();
+            foreach($workshiftDate as $item){                
+                $item['shiftment_group_id'] = $input['shiftment_group_id'];
+                $item['created_by'] = $userId;
+                $upsertData[] = $item;
+            }
+            $result = WorkshiftGroup::upsert($upsertData, ['shiftment_group_id', 'shiftment_id', 'work_date']);            
+            $this->model->newInstance()->flushCache();
+            return $result;
+        } catch (\Exception $e) {
+            return $e;
+        }        
     }
 }

@@ -5,6 +5,8 @@ namespace App\DataTables\Hr;
 use App\Models\Hr\WorkshiftGroup;
 use App\DataTables\BaseDataTable as DataTable;
 use Yajra\DataTables\EloquentDataTable;
+use App\Repositories\Hr\ShiftmentGroupRepository;
+use App\Repositories\Hr\ShiftmentRepository;
 use Yajra\DataTables\Html\Column;
 
 class WorkshiftGroupDataTable extends DataTable
@@ -13,7 +15,9 @@ class WorkshiftGroupDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'shiftment_group_id' => \App\DataTables\FilterClass\InKeyword::class,
+        'shiftment_id' => \App\DataTables\FilterClass\InKeyword::class,
+        'work_date' => \App\DataTables\FilterClass\BetweenKeyword::class
     ];
     
     private $mapColumnSearch = [
@@ -35,6 +39,9 @@ class WorkshiftGroupDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
+        $dataTable->editColumn('work_date', function($item){
+            return localFormatDate($item->work_date);
+        });
         return $dataTable->addColumn('action', 'hr.workshift_groups.datatables_actions');
     }
 
@@ -46,7 +53,7 @@ class WorkshiftGroupDataTable extends DataTable
      */
     public function query(WorkshiftGroup $model)
     {
-        return $model->newQuery();
+        return $model->with(['shiftmentGroup','shiftment'])->newQuery();
     }
 
     /**
@@ -114,10 +121,15 @@ class WorkshiftGroupDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $shiftmentRepository = new ShiftmentRepository();
+        $shiftmentGroupRepository = new ShiftmentGroupRepository();
+        $shiftmentItem = convertArrayPairValueWithKey($shiftmentRepository->pluck());
+        $shiftmentGroupItem =  convertArrayPairValueWithKey($shiftmentGroupRepository->pluck());
+        
         return [
-            'shiftment_group_id' => new Column(['title' => __('models/workshiftGroups.fields.shiftment_group_id'),'name' => 'shiftment_group_id', 'data' => 'shiftment_group_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'shiftment_id' => new Column(['title' => __('models/workshiftGroups.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'work_date' => new Column(['title' => __('models/workshiftGroups.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'text'])
+            'shiftment_group_id' => new Column(['title' => __('models/workshiftGroups.fields.shiftment_group_id'),'name' => 'shiftment_group_id', 'data' => 'shiftment_group.name', 'searchable' => true, 'listItem' => $shiftmentGroupItem, 'multiple' => 'multiple',  'elmsearch' => 'dropdown']),
+            'shiftment_id' => new Column(['title' => __('models/workshiftGroups.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'listItem' => $shiftmentItem, 'multiple' => 'multiple' ,'elmsearch' => 'dropdown']),
+            'work_date' => new Column(['title' => __('models/workshiftGroups.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'daterange'])
         ];
     }
 
