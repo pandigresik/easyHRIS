@@ -36,9 +36,10 @@ class SelectAjaxController extends AppBaseController
     {
         $lookupColumn = $this->repository->getLookupColumnSelect();
         $q = $this->request->get('q');
+        $filter = $this->request->get('filter');
         $currentPage = $this->request->get('page') ?? 1;
         $limit = $this->request->get('limit') ?? 10;
-        $data = $this->repository->paginate($limit, $currentPage, [$lookupColumn['id'].' as id', $lookupColumn['text'].' as text'], ['keyword' => $q, 'column' => [$lookupColumn['text']]]);
+        $data = $this->repository->setFilter($filter)->paginate($limit, $currentPage, [$lookupColumn['id'].' as id', $lookupColumn['text'].' as text'], ['keyword' => $q, 'column' => [$lookupColumn['text']]]);
 
         return new JsonResponse($data);
     }

@@ -37,7 +37,7 @@ class Employee extends Model
 {
     use HasFactory;
         use SoftDeletes;
-
+    
     public $table = 'employees';
     
     const CREATED_AT = 'created_at';

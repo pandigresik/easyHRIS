@@ -368,8 +368,7 @@ class Main {
       if (_isAjax) {
         const _ini = $(this)
         const _url = _ini.data('url')
-        const _repository = _ini.data('repository')
-        const _filter = _ini.data('filter')
+        const _repository = _ini.data('repository')        
         if (_url === undefined) {
           console.log('url select2 ' + $(this).attr('name') + ' belum diset')
         } else {
@@ -383,7 +382,7 @@ class Main {
                 q: $.trim(params.term), // search term
                 page: params.page,
                 repository: _repository,
-                filter: _filter
+                filter: _ini.data('filter')
               }
             },
             processResults: function(data) {

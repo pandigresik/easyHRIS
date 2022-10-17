@@ -28,6 +28,7 @@ abstract class BaseRepository
      */
     protected $lookupColumnSelect = ['id' => 'id', 'text' => 'name'];
 
+    protected $filter = [];
     /**
      * @throws \Exception
      */
@@ -83,6 +84,10 @@ abstract class BaseRepository
         $query = $this->allQuery();
         if (!empty($search)) {
             $query->search($search['keyword'], $search['column']);
+        }
+
+        if($this->getFilter()){
+            $query->where($this->getFilter());
         }
 
         return $query->simplePaginate($perPage, $columns, 'page', $currentPage);
@@ -284,6 +289,26 @@ abstract class BaseRepository
                 $this->model->with($relation);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of filter
+     */ 
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
+     * Set the value of filter
+     *
+     * @return  self
+     */ 
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
 
         return $this;
     }

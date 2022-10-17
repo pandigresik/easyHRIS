@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\WorkshiftDataTable;
-use App\Http\Requests\Hr;
 use App\Http\Requests\Hr\CreateWorkshiftRequest;
 use App\Http\Requests\Hr\UpdateWorkshiftRequest;
 use App\Repositories\Hr\WorkshiftRepository;
-use App\Repositories\Hr\ShiftmentRepository;
-use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Hr\ShiftmentGroupRepository;
 use Response;
 use Exception;
 
@@ -171,11 +169,9 @@ class WorkshiftController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $shiftment = new ShiftmentRepository();
-        $employee = new EmployeeRepository();
+        $shiftmentGroup = new ShiftmentGroupRepository();
         return [
-            'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()
+            'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck(),
         ];
     }
 }
