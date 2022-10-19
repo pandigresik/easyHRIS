@@ -49,6 +49,32 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
 
     public function headings(): array
     {
-        return (new Employee())->getFillable();
+        return [
+            'contract_id',
+            'company_id',
+            'department_id',
+            'joblevel_id',
+            'jobtitle_id',
+            'supervisor_id',
+            'region_of_birth_id',
+            'city_of_birth_id',
+            'address',
+            'join_date',
+            'employee_status',
+            'code',
+            'full_name',
+            'gender',
+            'date_of_birth',
+            'identity_number',
+            'identity_type',
+            'marital_status',
+            'email',
+            'leave_balance',        
+            'have_overtime_benefit',
+            'overtime',
+            'salary',
+            'salary_group_id',
+            'shiftment_group_id'
+        ];
     }
 }

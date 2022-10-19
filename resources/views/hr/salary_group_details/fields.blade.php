@@ -15,9 +15,9 @@
 </div>
 
 <!-- Component Value Field -->
-<div class="form-group col-sm-12 col-lg-12">
+<div class="form-group row mb-3">
     {!! Form::label('component_value', __('models/salaryGroupDetails.fields.component_value').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::textarea('component_value', null, ['class' => 'form-control', 'required' => 'required']) !!}
+    {!! Form::text('component_value', null, ['class' => 'form-control inputmask', 'required' => 'required', 'data-optionmask' => json_encode(config('local.number.integer'))]) !!}
 </div>
 </div>

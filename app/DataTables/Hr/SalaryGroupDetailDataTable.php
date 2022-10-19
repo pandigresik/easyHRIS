@@ -46,7 +46,7 @@ class SalaryGroupDetailDataTable extends DataTable
      */
     public function query(SalaryGroupDetail $model)
     {
-        return $model->newQuery();
+        return $model->with(['salaryGroup', 'component'])->newQuery();
     }
 
     /**
@@ -115,8 +115,8 @@ class SalaryGroupDetailDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'component_id' => new Column(['title' => __('models/salaryGroupDetails.fields.component_id'),'name' => 'component_id', 'data' => 'component_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'salary_group_id' => new Column(['title' => __('models/salaryGroupDetails.fields.salary_group_id'),'name' => 'salary_group_id', 'data' => 'salary_group_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'component_id' => new Column(['title' => __('models/salaryGroupDetails.fields.component_id'),'name' => 'component_id', 'data' => 'component.name', 'searchable' => true, 'elmsearch' => 'text']),
+            'salary_group_id' => new Column(['title' => __('models/salaryGroupDetails.fields.salary_group_id'),'name' => 'salary_group_id', 'data' => 'salary_group.name', 'searchable' => true, 'elmsearch' => 'text']),
             'component_value' => new Column(['title' => __('models/salaryGroupDetails.fields.component_value'),'name' => 'component_value', 'data' => 'component_value', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }

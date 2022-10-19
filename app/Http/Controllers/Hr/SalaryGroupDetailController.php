@@ -175,7 +175,7 @@ class SalaryGroupDetailController extends AppBaseController
         $salaryComponent = new SalaryComponentRepository();
         return [
             'salaryGroupItems' => ['' => __('crud.option.salaryGroup_placeholder')] + $salaryGroup->pluck(),
-            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()
+            'componentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()
         ];
     }
 }

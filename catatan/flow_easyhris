@@ -28,3 +28,6 @@ Todo:
     - Proses generate jadwal per pegawai
     - Proses absensi, untuk perhitungan hari kerja dan keterlambatan serta overtime jika ada
     - Proses perhitungan gaji berdasarkan data absensi
+
+Ketika import employee set juga component salary untuk pegawai tersebut
+

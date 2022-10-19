@@ -51,8 +51,7 @@ class SalaryBenefit extends Model
     public $fillable = [
         'employee_id',
         'component_id',
-        'benefit_value',
-        'benefit_key'
+        'benefit_value'
     ];
 
     /**
@@ -64,8 +63,7 @@ class SalaryBenefit extends Model
         'id' => 'integer',
         'employee_id' => 'integer',
         'component_id' => 'integer',
-        'benefit_value' => 'string',
-        'benefit_key' => 'string'
+        'benefit_value' => 'decimal:2'
     ];
 
     /**
@@ -76,8 +74,7 @@ class SalaryBenefit extends Model
     public static $rules = [
         'employee_id' => 'nullable',
         'component_id' => 'nullable',
-        'benefit_value' => 'nullable|string',
-        'benefit_key' => 'nullable|string|max:255'
+        'benefit_value' => 'nullable|decimal'
     ];
 
     /**

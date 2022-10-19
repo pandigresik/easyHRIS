@@ -4,6 +4,7 @@ namespace App\DataTables\Hr;
 
 use App\Models\Hr\Employee;
 use App\DataTables\BaseDataTable as DataTable;
+use App\Repositories\Base\DepartmentRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -13,7 +14,7 @@ class EmployeeDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'department_id' => \App\DataTables\FilterClass\InKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -46,7 +47,7 @@ class EmployeeDataTable extends DataTable
      */
     public function query(Employee $model)
     {
-        return $model->newQuery();
+        return $model->with(['department', 'joblevel'])->newQuery();
     }
 
     /**
@@ -114,10 +115,12 @@ class EmployeeDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $departmentRepository = new DepartmentRepository();
+        $departmentItem = array_merge([['text' => 'Pilih '.__('models/department.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($departmentRepository->pluck()));
         return [
-            'contract_id' => new Column(['title' => __('models/employees.fields.contract_id'),'name' => 'contract_id', 'data' => 'contract_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'company_id' => new Column(['title' => __('models/employees.fields.company_id'),'name' => 'company_id', 'data' => 'company_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'department_id' => new Column(['title' => __('models/employees.fields.department_id'),'name' => 'department_id', 'data' => 'department_id', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'contract_id' => new Column(['title' => __('models/employees.fields.contract_id'),'name' => 'contract_id', 'data' => 'contract_id', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'company_id' => new Column(['title' => __('models/employees.fields.company_id'),'name' => 'company_id', 'data' => 'company_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'department_id' => new Column(['title' => __('models/employees.fields.department_id'),'name' => 'department_id', 'data' => 'department.name', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $departmentItem, 'multiple' => 'multiple', 'width' => '200px']),
             // 'joblevel_id' => new Column(['title' => __('models/employees.fields.joblevel_id'),'name' => 'joblevel_id', 'data' => 'joblevel_id', 'searchable' => true, 'elmsearch' => 'text']),
             // 'jobtitle_id' => new Column(['title' => __('models/employees.fields.jobtitle_id'),'name' => 'jobtitle_id', 'data' => 'jobtitle_id', 'searchable' => true, 'elmsearch' => 'text']),
             // 'supervisor_id' => new Column(['title' => __('models/employees.fields.supervisor_id'),'name' => 'supervisor_id', 'data' => 'supervisor_id', 'searchable' => true, 'elmsearch' => 'text']),
@@ -128,10 +131,10 @@ class EmployeeDataTable extends DataTable
             'employee_status' => new Column(['title' => __('models/employees.fields.employee_status'),'name' => 'employee_status', 'data' => 'employee_status', 'searchable' => true, 'elmsearch' => 'text']),
             'code' => new Column(['title' => __('models/employees.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
             'full_name' => new Column(['title' => __('models/employees.fields.full_name'),'name' => 'full_name', 'data' => 'full_name', 'searchable' => true, 'elmsearch' => 'text']),
-            'gender' => new Column(['title' => __('models/employees.fields.gender'),'name' => 'gender', 'data' => 'gender', 'searchable' => true, 'elmsearch' => 'text']),
-            'date_of_birth' => new Column(['title' => __('models/employees.fields.date_of_birth'),'name' => 'date_of_birth', 'data' => 'date_of_birth', 'searchable' => true, 'elmsearch' => 'text']),
-            'identity_number' => new Column(['title' => __('models/employees.fields.identity_number'),'name' => 'identity_number', 'data' => 'identity_number', 'searchable' => true, 'elmsearch' => 'text']),
-            'identity_type' => new Column(['title' => __('models/employees.fields.identity_type'),'name' => 'identity_type', 'data' => 'identity_type', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'gender' => new Column(['title' => __('models/employees.fields.gender'),'name' => 'gender', 'data' => 'gender', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'date_of_birth' => new Column(['title' => __('models/employees.fields.date_of_birth'),'name' => 'date_of_birth', 'data' => 'date_of_birth', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'identity_number' => new Column(['title' => __('models/employees.fields.identity_number'),'name' => 'identity_number', 'data' => 'identity_number', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'identity_type' => new Column(['title' => __('models/employees.fields.identity_type'),'name' => 'identity_type', 'data' => 'identity_type', 'searchable' => true, 'elmsearch' => 'text']),
             'marital_status' => new Column(['title' => __('models/employees.fields.marital_status'),'name' => 'marital_status', 'data' => 'marital_status', 'searchable' => true, 'elmsearch' => 'text']),
             'email' => new Column(['title' => __('models/employees.fields.email'),'name' => 'email', 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
             'leave_balance' => new Column(['title' => __('models/employees.fields.leave_balance'),'name' => 'leave_balance', 'data' => 'leave_balance', 'searchable' => true, 'elmsearch' => 'text']),

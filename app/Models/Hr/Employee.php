@@ -173,7 +173,7 @@ class Employee extends Model
      **/
     public function company()
     {
-        return $this->belongsTo(\App\Models\Hr\Company::class, 'company_id');
+        return $this->belongsTo(\App\Models\Base\Company::class, 'company_id');
     }
 
     /**
@@ -181,7 +181,7 @@ class Employee extends Model
      **/
     public function department()
     {
-        return $this->belongsTo(\App\Models\Hr\Department::class, 'department_id');
+        return $this->belongsTo(\App\Models\Base\Department::class, 'department_id');
     }
 
     /**
@@ -374,5 +374,13 @@ class Employee extends Model
     public function workshifts()
     {
         return $this->hasMany(\App\Models\Hr\Workshift::class, 'employee_id');
+    }
+
+    public function getJoinDateAttribute($value){
+        return localFormatDate($value);
+    }
+
+    public function getDateOfBirthAttribute($value){
+        return localFormatDate($value);
     }
 }

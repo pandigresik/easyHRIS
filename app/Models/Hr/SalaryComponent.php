@@ -127,4 +127,8 @@ class SalaryComponent extends Model
     {
         return $this->hasMany(\App\Models\Hr\SalaryGroupDetail::class, 'component_id');
     }
+
+    public function getStateAttribute($value){
+        return $value == 'p' ? 'Plus' : 'Minus';
+    }
 }

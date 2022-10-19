@@ -63,7 +63,7 @@ class SalaryGroupDetail extends Model
         'id' => 'integer',
         'component_id' => 'integer',
         'salary_group_id' => 'integer',
-        'component_value' => 'string'
+        'component_value' => 'decimal:2'
     ];
 
     /**
@@ -72,9 +72,9 @@ class SalaryGroupDetail extends Model
      * @var array
      */
     public static $rules = [
-        'component_id' => 'nullable',
-        'salary_group_id' => 'nullable',
-        'component_value' => 'nullable|string'
+        'component_id' => 'required',
+        'salary_group_id' => 'required',
+        'component_value' => 'required|numeric'
     ];
 
     /**
