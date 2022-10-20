@@ -34,8 +34,9 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     }
     public function collection(Collection $rows)
     {      
-    //   SalaryBenefit::whereNull('deleted_at')->forceDelete();
-    //   Employee::whereNull('deleted_at')->forceDelete();
+       //SalaryBenefit::whereNull('deleted_at')->forceDelete();
+       //Employee::whereNull('deleted_at')->forceDelete();
+       
       foreach($rows as $row){
         $overtime = $row['overtime'];
         $salary = $row['salary'];

@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('skills', Hr\SkillController::class, ["as" => 'hr']);
         
         Route::resource('workshifts', Hr\WorkshiftController::class, ["as" => 'hr']);
+        Route::get('workshifts.generate', [App\Http\Controllers\Hr\WorkshiftController::class, 'generate'])->name('hr.workshifts.generate');
         Route::resource('workshiftGroups', Hr\WorkshiftGroupController::class, ["as" => 'hr']);
         Route::get('workshiftGroups.generate', [App\Http\Controllers\Hr\WorkshiftGroupController::class, 'generate'])->name('hr.workshiftGroups.generate');
     });

@@ -256,6 +256,11 @@ class Employee extends Model
         return $this->hasMany(\App\Models\Hr\EmployeeShiftment::class, 'employee_id');
     }
 
+    public function shiftmentGroup()
+    {
+        return $this->belongsTo(\App\Models\Hr\ShiftmentGroup::class, 'shiftment_group_id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/

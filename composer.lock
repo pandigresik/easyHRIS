@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "942d0dfb39dbcefed3e3d8e9f32e6be8",
+    "content-hash": "ff1d4c6b30c85625bf2003ffadf403d9",
     "packages": [
         {
             "name": "acaronlex/laravel-calendar",
@@ -2595,6 +2595,72 @@
                 "source": "https://github.com/KnpLabs/snappy/tree/v1.4.1"
             },
             "time": "2022-01-07T13:03:38+00:00"
+        },
+        {
+            "name": "korridor/laravel-has-many-sync",
+            "version": "1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/korridor/laravel-has-many-sync.git",
+                "reference": "48c0662eb231ca9ffb73c6931c4635be6f2c38e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/korridor/laravel-has-many-sync/zipball/48c0662eb231ca9ffb73c6931c4635be6f2c38e5",
+                "reference": "48c0662eb231ca9ffb73c6931c4635be6f2c38e5",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^5.8|6.*|7.*|8.*|9.*",
+                "illuminate/support": "^5.8|6.*|7.*|8.*|9.*",
+                "php": "^7.1|^8"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16|^3",
+                "orchestra/testbench": "^3.8|^4.0|^5.0|^6.0|^7",
+                "phpunit/phpunit": "^7.0|^8.0|^9.0",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Alfa6661\\EloquentHasManySync\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Alfa6661\\EloquentHasManySync\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "korridor",
+                    "email": "26689068+korridor@users.noreply.github.com"
+                },
+                {
+                    "name": "Alfa Adhitya",
+                    "email": "alfa2159@gmail.com"
+                }
+            ],
+            "description": "Laravel has many sync",
+            "homepage": "https://github.com/korridor/laravel-has-many-sync",
+            "keywords": [
+                "eloquent",
+                "has-many",
+                "laravel",
+                "relations",
+                "sync"
+            ],
+            "support": {
+                "source": "https://github.com/korridor/laravel-has-many-sync/tree/1.2.2"
+            },
+            "time": "2022-02-09T12:01:23+00:00"
         },
         {
             "name": "kronthto/laravel-oauth2-login",

@@ -54,7 +54,9 @@ class WorkshiftGroup extends Model
     public $fillable = [
         'shiftment_group_id',
         'shiftment_id',
-        'work_date'
+        'work_date',
+        'start_hour',
+        'end_hour',
     ];
 
     /**
@@ -66,7 +68,9 @@ class WorkshiftGroup extends Model
         'id' => 'integer',
         'shiftment_group_id' => 'integer',
         'shiftment_id' => 'integer',
-        'work_date' => 'date'
+        'work_date' => 'date',
+        'start_hour' => 'datetime',
+        'end_hour' => 'datetime',
     ];
 
     /**

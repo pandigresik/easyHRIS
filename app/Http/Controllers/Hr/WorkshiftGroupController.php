@@ -11,6 +11,7 @@ use App\Repositories\Hr\ShiftmentGroupRepository;
 use App\Repositories\Hr\ShiftmentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Carbon\Carbon;
 use Response;
 use Exception;
 use Illuminate\Http\Request;
@@ -200,31 +201,33 @@ class WorkshiftGroupController extends AppBaseController
         $eventTimeFormat = [ // like '14:30:00'
             'hour' => '2-digit',
             'minute' =>'2-digit',
-            // 'second' => '2-digit',
+            'second' => '2-digit',
             'hour12' => false
         ];
         foreach($workshift['schedule'] as $date => $event){
             $events[] = [
-                'title' => $event->code.' ( '.$event->name.' )',
+                'title' => $event['code'].' ('.$event['start_hour'].'-'.$event['end_hour'].')',
                 'allDay' => true,
-                'start' => $date,                
-                'color' => $event->start_hour == $event->end_hour ? 'red' : 'green'
+                'start' => $date,
+                'color' => $event['start_hour'] == $event['end_hour'] ? 'red' : 'green'
             ];
-            $events[] = [
-                'title' => 'Masuk',
-                'allDay' => false,
-                'start' => $date.' '.$event->start_hour,                
-                'color' => $event->start_hour == $event->end_hour ? 'red' : 'green'
-            ];
-            $events[] = [
-                'title' => 'Pulang',
-                'allDay' => false,
-                'start' => $date.' '.$event->end_hour,
-                'color' => $event->start_hour == $event->end_hour ? 'red' : 'green'
-            ];
+            // $events[] = [
+            //     'title' => 'Masuk',
+            //     'allDay' => false,
+            //     'start' => $date.' '.$event['start_hour'],                
+            //     'color' => $event['start_hour'] == $event['end_hour'] ? 'red' : 'green'
+            // ];
+            // $events[] = [
+            //     'title' => 'Pulang',
+            //     'allDay' => false,
+            //     'start' => $date.' '.$event['end_hour'],                
+            //     'color' => $event['start_hour'] == $event['end_hour'] ? 'red' : 'green'
+            // ];
             $dataInsert[] = [
                 'work_date' => $date,
-                'shiftment_id' => $event->id
+                'shiftment_id' => $event['id'],
+                'start_hour' => $date.' '.$event['start_hour'],
+                'end_hour' => $event['start_hour'] > $event['end_hour'] ? Carbon::parse($date)->addDay()->format('Y-m-d').' '.$event['start_hour'] : $date.' '.$event['end_hour'],
             ];
         }
         return view('hr.workshift_groups.calendar', compact('events', 'eventTimeFormat', 'initialDate', 'dataInsert'));

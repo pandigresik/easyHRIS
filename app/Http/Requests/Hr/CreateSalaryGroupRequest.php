@@ -39,6 +39,7 @@ class CreateSalaryGroupRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new SalaryGroup())->fillable;
+        $keys = array_merge($keys, ['components']);
         return parent::all($keys);
     }
 }

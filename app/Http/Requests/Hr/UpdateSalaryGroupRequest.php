@@ -45,6 +45,7 @@ class UpdateSalaryGroupRequest extends FormRequest
     {
         $keys = (new SalaryGroup())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+        $keys = array_merge($keys, ['components']);
         return parent::all($keys);
     }
 }

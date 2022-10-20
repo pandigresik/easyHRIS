@@ -47,7 +47,7 @@ class EmployeeDataTable extends DataTable
      */
     public function query(Employee $model)
     {
-        return $model->with(['department', 'joblevel'])->newQuery();
+        return $model->with(['department', 'joblevel', 'shiftmentGroup'])->newQuery();
     }
 
     /**
@@ -120,7 +120,7 @@ class EmployeeDataTable extends DataTable
         return [
             // 'contract_id' => new Column(['title' => __('models/employees.fields.contract_id'),'name' => 'contract_id', 'data' => 'contract_id', 'searchable' => true, 'elmsearch' => 'text']),
             // 'company_id' => new Column(['title' => __('models/employees.fields.company_id'),'name' => 'company_id', 'data' => 'company_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'department_id' => new Column(['title' => __('models/employees.fields.department_id'),'name' => 'department_id', 'data' => 'department.name', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $departmentItem, 'multiple' => 'multiple', 'width' => '200px']),
+            'department_id' => new Column(['title' => __('models/employees.fields.department_id'),'name' => 'department_id', 'data' => 'department.name','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $departmentItem, 'multiple' => 'multiple', 'width' => '200px']),
             // 'joblevel_id' => new Column(['title' => __('models/employees.fields.joblevel_id'),'name' => 'joblevel_id', 'data' => 'joblevel_id', 'searchable' => true, 'elmsearch' => 'text']),
             // 'jobtitle_id' => new Column(['title' => __('models/employees.fields.jobtitle_id'),'name' => 'jobtitle_id', 'data' => 'jobtitle_id', 'searchable' => true, 'elmsearch' => 'text']),
             // 'supervisor_id' => new Column(['title' => __('models/employees.fields.supervisor_id'),'name' => 'supervisor_id', 'data' => 'supervisor_id', 'searchable' => true, 'elmsearch' => 'text']),
@@ -145,7 +145,7 @@ class EmployeeDataTable extends DataTable
             // 'profile_image' => new Column(['title' => __('models/employees.fields.profile_image'),'name' => 'profile_image', 'data' => 'profile_image', 'searchable' => true, 'elmsearch' => 'text']),
             // 'profile_size' => new Column(['title' => __('models/employees.fields.profile_size'),'name' => 'profile_size', 'data' => 'profile_size', 'searchable' => true, 'elmsearch' => 'text']),
             // 'salary_group_id' => new Column(['title' => __('models/employees.fields.salary_group_id'),'name' => 'salary_group_id', 'data' => 'salary_group_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'shiftment_group_id' => new Column(['title' => __('models/employees.fields.shiftment_group_id'),'name' => 'shiftment_group_id', 'data' => 'shiftment_group_id', 'searchable' => true, 'elmsearch' => 'text'])
+            'shiftment_group_id' => new Column(['title' => __('models/employees.fields.shiftment_group_id'),'name' => 'shiftment_group_id', 'data' => 'shiftment_group.name','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

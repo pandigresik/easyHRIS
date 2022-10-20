@@ -10,6 +10,7 @@ use App\Repositories\Hr\SalaryGroupRepository;
 
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Hr\SalaryComponentRepository;
 use Response;
 use Exception;
 
@@ -169,9 +170,10 @@ class SalaryGroupController extends AppBaseController
      * @return Response
      */
     private function getOptionItems()
-    {
+    {   
+        $salaryComponent = (new SalaryComponentRepository())->all()->groupBy('state');
         return [
-
+            'components' => $salaryComponent
         ];
     }
 }

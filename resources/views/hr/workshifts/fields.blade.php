@@ -29,7 +29,7 @@
 <!-- Generate button -->
 <div class="form-group row mb-3">
     <div class="col-md-9 offset-3">
-        {!! Form::button(__('crud.generate'), ['class' => 'btn btn-danger', 'data-target' => '#list_workshift', 'data-url' => route('hr.workshiftGroups.generate'), 'data-json' => '{}', 'data-ref' => 'input[name=work_date],select[name="shiftment_group_id"]' ,'onclick' => 'main.loadDetailPage(this,\'get\', function(){ main.initCalendar($(\'form\'));main.showLoading(false) })', 'type' => 'button']) !!}
+        {!! Form::button(__('crud.generate'), ['class' => 'btn btn-danger', 'data-target' => '#list_workshift', 'data-url' => route('hr.workshifts.generate'), 'data-json' => '{}', 'data-ref' => 'input[name=work_date],select[name="shiftment_group_id"]' ,'onclick' => 'main.loadDetailPage(this,\'get\', function(){ main.initCalendar($(\'form\'));main.showLoading(false) })', 'type' => 'button']) !!}
     </div>
     <div class="row" id="list_workshift">
 

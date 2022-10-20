@@ -13,3 +13,5 @@
     {!! Form::text('name', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
 </div>
 </div>
+
+@include('hr.salary_groups.component_fields')

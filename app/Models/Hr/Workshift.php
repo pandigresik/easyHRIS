@@ -52,7 +52,9 @@ class Workshift extends Model
         'employee_id',
         'shiftment_id',
         'description',
-        'work_date'
+        'work_date',
+        'start_hour',
+        'end_hour',
     ];
 
     /**
@@ -65,7 +67,9 @@ class Workshift extends Model
         'employee_id' => 'integer',
         'shiftment_id' => 'integer',
         'description' => 'string',
-        'work_date' => 'date'
+        'work_date' => 'date',
+        'start_hour' => 'datetime',
+        'end_hour' => 'datetime',
     ];
 
     /**

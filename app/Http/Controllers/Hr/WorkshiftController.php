@@ -11,6 +11,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\Hr\ShiftmentGroupRepository;
 use Response;
 use Exception;
+use Illuminate\Http\Request;
 
 class WorkshiftController extends AppBaseController
 {
@@ -173,5 +174,45 @@ class WorkshiftController extends AppBaseController
         return [
             'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck(),
         ];
+    }
+
+    /**
+     * Generate schedule workshift
+     *
+     * @return Response
+     */
+    public function generate(Request $request)
+    {
+        $period = generatePeriodFromString($request->get('work_date'));
+        $shiftmentGroup = $request->get('shiftment_group_id');
+        $data = [
+            'startDate' => $period['startDate'],
+            'endDate' => $period['endDate'],
+            'shiftmentGroup' => $shiftmentGroup
+        ];
+        $initialDate = $period['startDate'];
+        $workshift = $this->getRepositoryObj()->generateWorkshift($data);
+        $events = [];
+        $dataInsert = [];
+        $eventTimeFormat = [ // like '14:30:00'
+            'hour' => '2-digit',
+            'minute' =>'2-digit',
+            'second' => '2-digit',
+            'hour12' => false
+        ];
+        if(!empty($workshift['schedule'])){
+            foreach($workshift['schedule'] as $date => $event){                
+                $events[] = [
+                    'title' => $event['code'].' ('.$event['start_hour'].'-'.$event['end_hour'].')',
+                    'allDay' => true,
+                    'start' => $date,
+                    'color' => $event['start_hour'] == $event['end_hour'] ? 'red' : 'green'
+                ];            
+            }
+            return view('hr.workshifts.calendar', compact('events', 'eventTimeFormat', 'initialDate', 'dataInsert'));
+        }else{
+            return '<div class="row col-12"><div class="text-center text-danger">Jadwal shift grup belum digenerate</div></div>';
+        }
+        
     }
 }

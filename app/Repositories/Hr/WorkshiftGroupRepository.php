@@ -95,20 +95,26 @@ class WorkshiftGroupRepository extends BaseRepository
         $currentShiftment = $firstShiftment ?? $this->getNextShiftment($shiftmentGroupDetails, $firstShiftment);
         /** cari hari libur di range tanggal tersebut */
         $holiday = Holiday::whereBetween('holiday_date',[$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])->get()->pluck('holiday_date','holiday_date');
-        
+        $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
         foreach($period as $date){
             if($date->dayOfWeek == $this->shiftmentMovement){
                 $currentShiftment = $this->getNextShiftment($shiftmentGroupDetails, $currentShiftment);
-            }                        
-            $result[$date->format('Y-m-d')] = $shifment[$currentShiftment];
-            $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
+                $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
+            }
+            
+            $selectedShiftment = ['id' => $shifment[$currentShiftment]->id, 'code' => $shifment[$currentShiftment]->code, 'name' => $shifment[$currentShiftment]->name];
+            $selectedShiftment['start_hour'] = $currentScheduleShiftment[$date->dayOfWeek]->start_hour;
+            $selectedShiftment['end_hour'] = $currentScheduleShiftment[$date->dayOfWeek]->end_hour;
+            
+            $result[$date->format('Y-m-d')] = $selectedShiftment;
+            
             /* jika jam awal = jam akhir maka hari libur */
             if($currentScheduleShiftment[$date->dayOfWeek]->start_hour == $currentScheduleShiftment[$date->dayOfWeek]->end_hour){
-                $result[$date->format('Y-m-d')] = $shifment[$this->shiftmentOff];
+                $result[$date->format('Y-m-d')] = $shifment[$this->shiftmentOff]->toArray();
             }
 
             if(isset($holiday[$date->format('Y-m-d')])){
-                $result[$date->format('Y-m-d')] = $shifment[$this->shiftmentOff];
+                $result[$date->format('Y-m-d')] = $shifment[$this->shiftmentOff]->toArray();
             }
         }
         return $result;
