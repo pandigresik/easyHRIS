@@ -81,7 +81,7 @@ class Workshift extends Model
         'employee_id' => 'nullable',
         'shiftment_id' => 'nullable',
         'description' => 'nullable|string|max:255',
-        'work_date' => 'required'
+        // 'work_date' => 'required'
     ];
 
     /**

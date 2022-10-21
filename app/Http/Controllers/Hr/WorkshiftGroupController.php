@@ -227,7 +227,7 @@ class WorkshiftGroupController extends AppBaseController
                 'work_date' => $date,
                 'shiftment_id' => $event['id'],
                 'start_hour' => $date.' '.$event['start_hour'],
-                'end_hour' => $event['start_hour'] > $event['end_hour'] ? Carbon::parse($date)->addDay()->format('Y-m-d').' '.$event['start_hour'] : $date.' '.$event['end_hour'],
+                'end_hour' => $event['start_hour'] > $event['end_hour'] ? Carbon::parse($date)->addDay()->format('Y-m-d').' '.$event['end_hour'] : $date.' '.$event['end_hour'],
             ];
         }
         return view('hr.workshift_groups.calendar', compact('events', 'eventTimeFormat', 'initialDate', 'dataInsert'));

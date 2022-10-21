@@ -55,7 +55,7 @@ class WorkshiftController extends AppBaseController
     {
         $input = $request->all();
 
-        $workshift = $this->getRepositoryObj()->create($input);
+        $workshift = $this->getRepositoryObj()->generateSchedule($input);
         if ($workshift instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $workshift->getMessage()]);
         }
@@ -182,8 +182,8 @@ class WorkshiftController extends AppBaseController
      * @return Response
      */
     public function generate(Request $request)
-    {
-        $period = generatePeriodFromString($request->get('work_date'));
+    {        
+        $period = generatePeriodFromString($request->get('work_date_period'));
         $shiftmentGroup = $request->get('shiftment_group_id');
         $data = [
             'startDate' => $period['startDate'],

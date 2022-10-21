@@ -4,6 +4,7 @@ namespace App\DataTables\Hr;
 
 use App\Models\Hr\Workshift;
 use App\DataTables\BaseDataTable as DataTable;
+use App\Repositories\Hr\ShiftmentRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -12,8 +13,9 @@ class WorkshiftDataTable extends DataTable
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
-    private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+    private $columnFilterOperator = [        
+        'shiftment_id' => \App\DataTables\FilterClass\InKeyword::class,
+        'work_date' => \App\DataTables\FilterClass\BetweenKeyword::class    
     ];
     
     private $mapColumnSearch = [
@@ -35,7 +37,15 @@ class WorkshiftDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'hr.workshifts.datatables_actions');
+        $dataTable->editColumn('work_date', function($item){
+            return localFormatDate($item->work_date);
+        })->editColumn('start_hour', function($item){
+            return localFormatDateTime($item->start_hour);
+        })->editColumn('end_hour', function($item){
+            return localFormatDateTime($item->end_hour);
+        });
+        // $dataTable->addColumn('action', 'hr.workshifts.datatables_actions');
+        return $dataTable;
     }
 
     /**
@@ -46,7 +56,7 @@ class WorkshiftDataTable extends DataTable
      */
     public function query(Workshift $model)
     {
-        return $model->newQuery();
+        return $model->with(['shiftment','employee'])->newQuery();
     }
 
     /**
@@ -114,11 +124,16 @@ class WorkshiftDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $shiftmentRepository = new ShiftmentRepository();        
+        $shiftmentItem = convertArrayPairValueWithKey($shiftmentRepository->pluck());
         return [
-            'employee_id' => new Column(['title' => __('models/workshifts.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee_id' => new Column(['title' => __('models/workshifts.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/workshifts.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'description' => new Column(['title' => __('models/workshifts.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
-            'work_date' => new Column(['title' => __('models/workshifts.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'description' => new Column(['title' => __('models/workshifts.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
+            'shiftment_id' => new Column(['title' => __('models/workshifts.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'listItem' => $shiftmentItem, 'multiple' => 'multiple' ,'elmsearch' => 'dropdown']),
+            'work_date' => new Column(['title' => __('models/workshifts.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'start_hour' => new Column(['title' => __('models/workshifts.fields.start_hour'),'name' => 'start_hour', 'data' => 'start_hour', 'searchable' => false]),
+            'end_hour' => new Column(['title' => __('models/workshifts.fields.end_hour'),'name' => 'end_hour', 'data' => 'end_hour', 'searchable' => false]),
         ];
     }
 

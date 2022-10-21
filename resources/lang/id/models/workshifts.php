@@ -10,5 +10,7 @@ return array (
     'shiftment_id' => 'Shiftment Id',
     'description' => 'Description',
     'work_date' => 'Work Date',
+    'start_hour' => 'Start Hour',
+    'end_hour' => 'End Hour',
   ),
 );

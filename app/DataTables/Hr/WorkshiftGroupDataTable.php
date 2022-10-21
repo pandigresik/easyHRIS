@@ -41,6 +41,10 @@ class WorkshiftGroupDataTable extends DataTable
         }
         $dataTable->editColumn('work_date', function($item){
             return localFormatDate($item->work_date);
+        })->editColumn('start_hour', function($item){
+            return localFormatDateTime($item->start_hour);
+        })->editColumn('end_hour', function($item){
+            return localFormatDateTime($item->end_hour);
         });
         return $dataTable->addColumn('action', 'hr.workshift_groups.datatables_actions');
     }
@@ -129,7 +133,9 @@ class WorkshiftGroupDataTable extends DataTable
         return [
             'shiftment_group_id' => new Column(['title' => __('models/workshiftGroups.fields.shiftment_group_id'),'name' => 'shiftment_group_id', 'data' => 'shiftment_group.name', 'searchable' => true, 'listItem' => $shiftmentGroupItem, 'multiple' => 'multiple',  'elmsearch' => 'dropdown']),
             'shiftment_id' => new Column(['title' => __('models/workshiftGroups.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'listItem' => $shiftmentItem, 'multiple' => 'multiple' ,'elmsearch' => 'dropdown']),
-            'work_date' => new Column(['title' => __('models/workshiftGroups.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'daterange'])
+            'work_date' => new Column(['title' => __('models/workshiftGroups.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'start_hour' => new Column(['title' => __('models/workshiftGroups.fields.start_hour'),'name' => 'start_hour', 'data' => 'start_hour', 'searchable' => false]),
+            'end_hour' => new Column(['title' => __('models/workshiftGroups.fields.end_hour'),'name' => 'end_hour', 'data' => 'end_hour', 'searchable' => false]),
         ];
     }
 

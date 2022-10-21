@@ -39,4 +39,5 @@ class EmployeeShiftmentRepository extends BaseRepository
     {
         return EmployeeShiftment::class;
     }
+
 }

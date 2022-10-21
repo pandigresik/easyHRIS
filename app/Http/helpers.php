@@ -158,3 +158,20 @@ if (!function_exists('generatePeriodFromString')) {
         return $result;
     }
 }
+
+if (!function_exists('generatePeriod')) {
+    function generatePeriod($value, $separator = '__')
+    {
+        $result = ['startDate' => null, 'endDate' => null];
+        try {
+            $tmp = explode($separator, $value);
+            $result['startDate'] = $tmp[0];
+            $result['endDate'] = $tmp[1];
+        } catch (\Throwable $th) {
+            \Log::error('file app\Http\helpers.php function generatePeriod');
+            throw $th;
+        }
+        
+        return $result;
+    }
+}

@@ -65,4 +65,19 @@ class EmployeeShiftmentGroupRepository extends BaseRepository
     {
         return Employee::class;
     }
+
+    
+    public function paginate($perPage, $currentPage = 1, $columns = ['*'], $search = [])
+    {
+        $query = $this->allQuery();
+        if (!empty($search)) {
+            $query->search($search['keyword'], $search['column']);
+        }
+        $columns[] = 'code';
+        $dataPaging = $query->simplePaginate($perPage, $columns, 'page', $currentPage);
+        $dataPaging->getCollection()->map(function($item){            
+            return $item['text'] = $item['text'].' ( '.$item['code'].' )';
+        })->toArray();
+        return $dataPaging;
+    }
 }

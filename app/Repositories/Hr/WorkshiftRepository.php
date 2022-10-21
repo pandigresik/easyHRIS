@@ -42,6 +42,54 @@ class WorkshiftRepository extends BaseRepository
         return Workshift::class;
     }
 
+    public function generateSchedule($input)
+    {
+        try {
+            $this->deletePreviousData($input);
+            $result = $this->massInsert($input);
+            $this->model->newInstance()->flushCache();
+            return $result;
+        } catch (\Exception $e) {
+            return $e;
+        }        
+    }
+
+    private function deletePreviousData($input){
+        $employeeId = $input['employee_id'];
+        $shiftmentGroup = $input['shiftment_group_id'];
+        $workDate = $input['work_date_period'];
+        $period = generatePeriod($workDate);
+        $startDate = $period['startDate'];
+        $endDate = $period['endDate'];
+        if($employeeId){
+            $this->model->whereIn('employee_id', $employeeId)->whereBetween('work_date',[$startDate, $endDate])->forceDelete();
+        }else{
+            $this->model->whereIn('employee_id', function($q) use($shiftmentGroup){
+                $q->select('id')->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);
+            })->whereBetween('work_date',[$startDate, $endDate])->forceDelete();
+        }        
+    }
+
+    private function massInsert($input){
+        $employeeId = $input['employee_id'];
+        $shiftmentGroup = $input['shiftment_group_id'];
+        $workDate = $input['work_date_period'];
+        $period = generatePeriod($workDate);
+        $startDate = $period['startDate'];
+        $endDate = $period['endDate'];
+        $filterEmployee = '';
+        if($employeeId){
+            $filterEmployee = ' and e.id in ('.implode(',',$employeeId).')';
+        }
+        $sqlMassInsert = <<<SQL
+        insert into workshifts (employee_id , shiftment_id , work_date , start_hour , end_hour , created_by , created_at , updated_at)
+        select e.id as employee_id, wg.shiftment_id , wg.work_date , wg.start_hour , wg.end_hour, 1, now(), now() from workshift_groups wg
+        join employees e on e.shiftment_group_id = wg.shiftment_group_id {$filterEmployee}
+        where wg.shiftment_group_id = {$shiftmentGroup} and wg.work_date between '{$startDate}' and '{$endDate}'
+SQL;
+        return $this->model->fromQuery($sqlMassInsert);
+    }
+
     /** parameter 
      * 'startDate' => $period['startDate'],
      * 'endDate' => $period['endDate'],
@@ -57,14 +105,14 @@ class WorkshiftRepository extends BaseRepository
 
     private function getScheduleGroup($startDate, $endDate, $shiftmentGroup){
         $result = [];
-        $workshiftGroup = WorkshiftGroup::with(['shiftment'])->whereBetween('work_date',[$startDate, $endDate])->where(['shiftment_group_id' => $shiftmentGroup])->get();
+        $workshiftGroup = WorkshiftGroup::with(['shiftment'])->whereBetween('work_date',[$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])->where(['shiftment_group_id' => $shiftmentGroup])->get();
         if(!$workshiftGroup->isEmpty()){
             $result = $workshiftGroup->mapWithKeys(function($item){
-                $item->shiftment->start_hour = $item->start_hour;
-                $item->shiftment->end_hour = $item->end_hour;
+                $item->shiftment->start_hour = $item->start_hour->format('H:i:s');
+                $item->shiftment->end_hour = $item->end_hour->format('H:i:s');
                 return [$item->work_date->format('Y-m-d') => $item->shiftment->toArray()];
             });   
-        }
+        }        
         
         return $result;
     }
