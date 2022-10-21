@@ -20,8 +20,10 @@ class CreateAttendancesTable extends Migration
             $table->unsignedBigInteger('reason_id')->nullable();
             $table->date('attendance_date');
             $table->string('description')->nullable();
-            $table->time('check_in')->nullable();
-            $table->time('check_out')->nullable();
+            $table->datetime('check_in_schedule')->nullable();
+            $table->datetime('check_out_schedule')->nullable();
+            $table->datetime('check_in')->nullable();
+            $table->datetime('check_out')->nullable();
             $table->integer('early_in');
             $table->integer('early_out');
             $table->integer('late_in');

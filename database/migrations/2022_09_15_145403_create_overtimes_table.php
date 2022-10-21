@@ -21,8 +21,10 @@ class CreateOvertimesTable extends Migration
             $table->date('overtime_date');
             $table->time('start_hour');
             $table->time('end_hour');
+            $table->time('start_hour_real')->nullable();
+            $table->time('end_hour_real')->nullable();
             $table->unsignedFloat('raw_value');
-            $table->unsignedFloat('calculated_value');
+            $table->unsignedFloat('calculated_value')->nullable();
             $table->tinyInteger('holiday');
             $table->tinyInteger('overday');
             $table->string('description')->nullable();
