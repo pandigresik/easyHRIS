@@ -13,6 +13,7 @@ use App\Repositories\BaseRepository;
 
 class FingerprintDeviceRepository extends BaseRepository
 {
+    protected $lookupColumnSelect = ['id' => 'id', 'text' => 'display_name'];
     /**
      * @var array
      */

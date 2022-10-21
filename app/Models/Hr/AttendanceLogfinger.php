@@ -42,11 +42,12 @@ class AttendanceLogfinger extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const CREATED_BY = NULL;
+    const UPDATED_BY = NULL;
+    
+    protected $showColumnOption = 'display_name';
 
     protected $dates = ['deleted_at'];
-
-
 
     public $fillable = [
         'employee_id',
@@ -74,7 +75,7 @@ class AttendanceLogfinger extends Model
      * @var array
      */
     public static $rules = [
-        'employee_id' => 'nullable',
+        'employee_id' => 'required',
         'type_absen' => 'nullable|string|max:1',
         'fingertime' => 'required',
         'fingerprint_device_id' => 'nullable'
@@ -94,5 +95,9 @@ class AttendanceLogfinger extends Model
     public function fingerprintDevice()
     {
         return $this->belongsTo(\App\Models\Hr\FingerprintDevice::class, 'fingerprint_device_id');
+    }
+
+    public function getFingertimeAttribute($value){
+        return localFormatDateTime($value);
     }
 }

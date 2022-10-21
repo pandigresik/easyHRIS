@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, WithMapping
+class AttendanceLogfingerExport implements FromCollection, WithHeadings, ShouldAutoSize, WithMapping
 {
     use Exportable;
     private $isTemplate = false;
@@ -49,6 +49,9 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
 
     public function headings(): array
     {
-        return (new Employee())->getFillable();
+        // return (new Employee())->getFillable();
+        return [
+            'Departemen','Nama','No.ID','Tgl/Waktu','Lokasi ID','No.PIN','Kode Verifikasi','No.Kartu'
+        ];
     }
 }

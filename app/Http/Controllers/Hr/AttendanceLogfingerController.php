@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\AttendanceLogfingerDataTable;
-use App\Http\Requests\Hr;
 use App\Http\Requests\Hr\CreateAttendanceLogfingerRequest;
 use App\Http\Requests\Hr\UpdateAttendanceLogfingerRequest;
 use App\Repositories\Hr\AttendanceLogfingerRepository;
-use App\Repositories\Hr\EmployeeRepository;
 use App\Repositories\Hr\FingerprintDeviceRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\Employee;
 use Response;
 use Exception;
 
@@ -18,7 +17,7 @@ class AttendanceLogfingerController extends AppBaseController
 {
     /** @var  AttendanceLogfingerRepository */
     protected $repository;
-
+    const ABSEN_TYPE = ['I' => 'In', 'O' => 'Out'];
     public function __construct()
     {
         $this->repository = AttendanceLogfingerRepository::class;
@@ -95,15 +94,17 @@ class AttendanceLogfingerController extends AppBaseController
      */
     public function edit($id)
     {
-        $attendanceLogfinger = $this->getRepositoryObj()->find($id);
+        $attendanceLogfinger = $this->getRepositoryObj()->with(['employee'])->find($id);
 
         if (empty($attendanceLogfinger)) {
             Flash::error(__('messages.not_found', ['model' => __('models/attendanceLogfingers.singular')]));
 
             return redirect(route('hr.attendanceLogfingers.index'));
         }
-
-        return view('hr.attendance_logfingers.edit')->with('attendanceLogfinger', $attendanceLogfinger)->with($this->getOptionItems());
+        $optionItems = $this->getOptionItems();
+         
+        $optionItems['employeeItems'] = [$attendanceLogfinger->employee_id => $attendanceLogfinger->employee->full_name .'('.$attendanceLogfinger->employee->code.')'];
+        return view('hr.attendance_logfingers.edit')->with('attendanceLogfinger', $attendanceLogfinger)->with($optionItems);
     }
 
     /**
@@ -170,11 +171,11 @@ class AttendanceLogfingerController extends AppBaseController
      * @return Response
      */
     private function getOptionItems()
-    {
-        $employee = new EmployeeRepository();
+    {        
         $fingerprintDevice = new FingerprintDeviceRepository();
         return [
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
+            'employeeItems' => [],
+            'absentTypeItems' => self::ABSEN_TYPE,
             'fingerprintDeviceItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $fingerprintDevice->pluck()
         ];
     }

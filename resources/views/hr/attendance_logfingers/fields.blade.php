@@ -2,7 +2,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('employee_id', __('models/attendanceLogfingers.fields.employee_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('employee_id', $employeeItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+    {!! Form::select('employee_id', $employeeItems, null, array_merge(['class' => 'form-control select2','data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository' ], config('local.select2.ajax')) ) !!}    
 </div>
 </div>
 
@@ -10,7 +10,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('type_absen', __('models/attendanceLogfingers.fields.type_absen').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('type_absen', null, ['class' => 'form-control','maxlength' => 1,'maxlength' => 1, 'required' => 'required']) !!}
+    {!! Form::select('type_absen', $absentTypeItems, null, ['class' => 'form-control', 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -18,7 +18,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('fingertime', __('models/attendanceLogfingers.fields.fingertime').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('fingertime', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'fingertime']) !!}
+    {!! Form::text('fingertime', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( config('local.datetime') ),'id'=>'fingertime']) !!}
 </div>
 </div>
 

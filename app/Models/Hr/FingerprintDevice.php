@@ -4,7 +4,7 @@ namespace App\Models\Hr;
 
 use App\Models\Base as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -36,16 +36,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class FingerprintDevice extends Model
 {
     use HasFactory;
-        use SoftDeletes;
+    // use SoftDeletes;
 
     public $table = 'fingerprint_devices';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const CREATED_BY = NULL;
+    const UPDATED_BY = NULL;
 
     protected $dates = ['deleted_at'];
-
+    protected $showColumnOption = 'display_name';
 
 
     public $fillable = [

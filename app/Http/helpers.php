@@ -26,6 +26,13 @@ if (!function_exists('createLocalFormatDate')) {
     }
 }
 
+if (!function_exists('createLocalFormatDateTime')) {
+    function createLocalFormatDateTime($value)
+    {
+        return Date::createFromFormat(config('local.datetime_format'), $value);
+    }
+}
+
 if (!function_exists('localNumberFormat')) {
     function localNumberFormat($value, $digitDecimal = null)
     {

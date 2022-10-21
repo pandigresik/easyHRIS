@@ -3,6 +3,7 @@
 namespace App\Imports\Hr;
 
 use App\Models\Hr\AttendanceLogfinger;
+use App\Models\Hr\Employee;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
@@ -12,10 +13,35 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class AttendanceLogfingerImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading
 {
     use Importable;
-
+    private $mapColumn = [
+         'employee_id' => 'noid',
+         'fingertime' => 'tglwaktu',
+         'fingerprint_device_id' => 'lokasi_id'
+    ];
+    private $mapEmployee;
+    function __construct()
+    {
+        $this->mapEmployee = Employee::select(['code','id'])->get()->pluck('id','code')->toArray();
+    }
     public function model(array $row)
     {
-        return new AttendanceLogfinger($row);
+        \Log::error($row);
+        if(isset($this->mapEmployee[$row[$this->mapColumn['employee_id']]])){
+            $raw = [
+                'employee_id' => $this->mapEmployee[$row[$this->mapColumn['employee_id']]],
+                'fingertime' => $this->createObjDdate($row[$this->mapColumn['fingertime']]),
+                'fingerprint_device_id' => $row[$this->mapColumn['fingerprint_device_id']],
+            ];
+            return new AttendanceLogfinger($raw);
+        }        
+    }
+
+    private function createObjDdate($value){
+        return createLocalFormatDateTime($this->transformTimeFormat($value));
+    }
+
+    private function transformTimeFormat($value){
+        return str_replace('.',':', $value);
     }
 
     public function batchSize(): int

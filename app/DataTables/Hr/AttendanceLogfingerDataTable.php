@@ -4,6 +4,7 @@ namespace App\DataTables\Hr;
 
 use App\Models\Hr\AttendanceLogfinger;
 use App\DataTables\BaseDataTable as DataTable;
+use App\Repositories\Hr\FingerprintDeviceRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -13,7 +14,8 @@ class AttendanceLogfingerDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'fingertime' => \App\DataTables\FilterClass\BetweenKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -46,7 +48,7 @@ class AttendanceLogfingerDataTable extends DataTable
      */
     public function query(AttendanceLogfinger $model)
     {
-        return $model->newQuery();
+        return $model->selectRaw($model->getTable().'.*')->with(['employee','fingerprintDevice'])->newQuery();
     }
 
     /**
@@ -113,12 +115,14 @@ class AttendanceLogfingerDataTable extends DataTable
      * @return array
      */
     protected function getColumns()
-    {
+    {        
+        $fingerprintDeviceRepository = new FingerprintDeviceRepository();
+        $fingerprintDeviceItems = convertArrayPairValueWithKey($fingerprintDeviceRepository->pluck());
         return [
-            'employee_id' => new Column(['title' => __('models/attendanceLogfingers.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee_id' => new Column(['title' => __('models/attendanceLogfingers.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'type_absen' => new Column(['title' => __('models/attendanceLogfingers.fields.type_absen'),'name' => 'type_absen', 'data' => 'type_absen', 'searchable' => true, 'elmsearch' => 'text']),
-            'fingertime' => new Column(['title' => __('models/attendanceLogfingers.fields.fingertime'),'name' => 'fingertime', 'data' => 'fingertime', 'searchable' => true, 'elmsearch' => 'text']),
-            'fingerprint_device_id' => new Column(['title' => __('models/attendanceLogfingers.fields.fingerprint_device_id'),'name' => 'fingerprint_device_id', 'data' => 'fingerprint_device_id', 'searchable' => true, 'elmsearch' => 'text'])
+            'fingertime' => new Column(['title' => __('models/attendanceLogfingers.fields.fingertime'),'name' => 'fingertime', 'data' => 'fingertime', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'fingerprint_device_id' => new Column(['title' => __('models/attendanceLogfingers.fields.fingerprint_device_id'),'name' => 'fingerprint_device_id', 'data' => 'fingerprint_device.display_name', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $fingerprintDeviceItems, 'multiple' => 'multiple'])
         ];
     }
 

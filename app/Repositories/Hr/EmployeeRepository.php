@@ -12,7 +12,7 @@ use App\Repositories\BaseRepository;
 */
 
 class EmployeeRepository extends BaseRepository
-{    
+{        
     /**
      * @var array
      */

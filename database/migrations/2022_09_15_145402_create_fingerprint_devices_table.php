@@ -14,7 +14,7 @@ class CreateFingerprintDevicesTable extends Migration
     public function up()
     {
         Schema::create('fingerprint_devices', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->bigIncrements('id');
             $table->string('serial_number', 50)->unique('fingerprint_devices_serial_number_IDX');
             $table->string('ip', 30);
             $table->string('display_name', 30);
