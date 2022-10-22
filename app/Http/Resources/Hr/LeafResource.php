@@ -18,8 +18,12 @@ class LeafResource extends JsonResource
             'id' => $this->id,
             'employee_id' => $this->employee_id,
             'reason_id' => $this->reason_id,
-            'leave_date' => $this->leave_date,
+            'leave_start' => $this->leave_start,
+            'leave_end' => $this->leave_end,
             'amount' => $this->amount,
+            'status' => $this->status,
+            'step_approval' => $this->step_approval,
+            'amount_approval' => $this->amount_approval,
             'description' => $this->description
         ];
     }

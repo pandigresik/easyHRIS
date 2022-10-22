@@ -1,8 +1,5 @@
 {!! Form::open(['route' => ['hr.leaves.destroy', $id], 'method' => 'delete']) !!}
-<div class='btn-group'>
-    <a href="{{ route('hr.leaves.show', $id) }}" class='btn btn-ghost-success'>
-       <i class="fa fa-eye"></i>
-    </a>
+<div class='btn-group'>    
     <a href="{{ route('hr.leaves.edit', $id) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @SWG\Definition(
  *      definition="Leaf",
- *      required={"leave_date", "amount"},
+ *      required={"leave_start", "leave_end", "amount", "status", "step_approval", "amount_approval"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -17,18 +17,53 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          format="int32"
  *      ),
  *      @SWG\Property(
- *          property="type",
- *          description="type",
+ *          property="employee_id",
+ *          description="employee_id",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="reason_id",
+ *          description="reason_id",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="leave_start",
+ *          description="leave_start",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *      @SWG\Property(
+ *          property="leave_end",
+ *          description="leave_end",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *      @SWG\Property(
+ *          property="amount",
+ *          description="amount",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="status",
+ *          description="status",
  *          type="string"
  *      ),
  *      @SWG\Property(
- *          property="code",
- *          description="code",
- *          type="string"
+ *          property="step_approval",
+ *          description="step of approval",
+ *          type="boolean"
  *      ),
  *      @SWG\Property(
- *          property="name",
- *          description="name",
+ *          property="amount_approval",
+ *          description="amount of approval",
+ *          type="boolean"
+ *      ),
+ *      @SWG\Property(
+ *          property="description",
+ *          description="description",
  *          type="string"
  *      )
  * )
@@ -51,8 +86,12 @@ class Leaf extends Model
     public $fillable = [
         'employee_id',
         'reason_id',
-        'leave_date',
+        'leave_start',
+        'leave_end',
         'amount',
+        'status',
+        'step_approval',
+        'amount_approval',
         'description'
     ];
 
@@ -65,8 +104,12 @@ class Leaf extends Model
         'id' => 'integer',
         'employee_id' => 'integer',
         'reason_id' => 'integer',
-        'leave_date' => 'date',
+        'leave_start' => 'datetime',
+        'leave_end' => 'datetime',
         'amount' => 'integer',
+        'status' => 'string',
+        'step_approval' => 'integer',
+        'amount_approval' => 'integer',
         'description' => 'string'
     ];
 
@@ -78,8 +121,12 @@ class Leaf extends Model
     public static $rules = [
         'employee_id' => 'nullable',
         'reason_id' => 'nullable',
-        'leave_date' => 'required',
-        'amount' => 'required',
+        'leave_start' => 'required',
+        'leave_end' => 'required',
+        // 'amount' => 'required',
+        // 'status' => 'required|string|max:2',
+        // 'step_approval' => 'required|boolean',
+        // 'amount_approval' => 'required|boolean',
         'description' => 'nullable|string|max:255'
     ];
 
@@ -98,4 +145,12 @@ class Leaf extends Model
     {
         return $this->belongsTo(\App\Models\Hr\Employee::class, 'employee_id');
     }
+
+    // public function getLeaveStartAttribute($value){
+    //     return localFormatDateTime($value);
+    // }
+
+    // public function getLeaveEndAttribute($value){
+    //     return localFormatDateTime($value);
+    // }
 }

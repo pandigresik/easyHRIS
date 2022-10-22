@@ -15,14 +15,14 @@ class CreateLeavesTable extends Migration
     {
         Schema::create('leaves', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('employee_id')->nullable();
-            $table->unsignedBigInteger('reason_id')->nullable();
-            $table->date('leave_start_date');
-            $table->date('leave_end_date');
+            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('reason_id');
+            $table->datetime('leave_start');
+            $table->datetime('leave_end');
             $table->smallInteger('amount');
-            $table->string('status', 2);
-            $table->tinyInteger('step_approval')->comment('step of approval');
-            $table->tinyInteger('amount_approval')->comment('amount of approval');
+            $table->string('status', 2)->nullable()->default('N');
+            $table->tinyInteger('step_approval')->nullable()->default(1)->comment('step of approval');
+            $table->tinyInteger('amount_approval')->nullable()->default(1)->comment('amount of approval');
             $table->string('description')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();

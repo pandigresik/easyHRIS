@@ -4,6 +4,7 @@ namespace App\DataTables\Hr;
 
 use App\Models\Hr\Leaf;
 use App\DataTables\BaseDataTable as DataTable;
+use App\Repositories\Hr\AbsentReasonRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -13,7 +14,9 @@ class LeafDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'leave_start' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'leave_end' => \App\DataTables\FilterClass\BetweenKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -35,6 +38,11 @@ class LeafDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
+        $dataTable->editColumn('leave_start', function($item){
+            return localFormatDateTime($item->leave_start);
+        })->editColumn('leave_end', function($item){
+            return localFormatDateTime($item->leave_end);
+        });
         return $dataTable->addColumn('action', 'hr.leaves.datatables_actions');
     }
 
@@ -46,7 +54,7 @@ class LeafDataTable extends DataTable
      */
     public function query(Leaf $model)
     {
-        return $model->newQuery();
+        return $model->selectRaw($model->getTable().'.*')->with(['employee', 'reason'])->newQuery();
     }
 
     /**
@@ -114,12 +122,19 @@ class LeafDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $reasonRepository = new AbsentReasonRepository();        
+        $reasonItems = convertArrayPairValueWithKey($reasonRepository->pluck());
+        
         return [
-            'employee_id' => new Column(['title' => __('models/leaves.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'reason_id' => new Column(['title' => __('models/leaves.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'leave_date' => new Column(['title' => __('models/leaves.fields.leave_date'),'name' => 'leave_date', 'data' => 'leave_date', 'searchable' => true, 'elmsearch' => 'text']),
-            'amount' => new Column(['title' => __('models/leaves.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => true, 'elmsearch' => 'text']),
-            'description' => new Column(['title' => __('models/leaves.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text'])
+            'employee.full_name' => new Column(['title' => __('models/leaves.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'reason_id' => new Column(['title' => __('models/leaves.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason.name', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $reasonItems, 'multiple' => 'multiple']),
+            'leave_start' => new Column(['title' => __('models/leaves.fields.leave_start'),'name' => 'leave_start', 'data' => 'leave_start', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'leave_end' => new Column(['title' => __('models/leaves.fields.leave_end'),'name' => 'leave_end', 'data' => 'leave_end', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'amount' => new Column(['title' => __('models/leaves.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'status' => new Column(['title' => __('models/leaves.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'step_approval' => new Column(['title' => __('models/leaves.fields.step_approval'),'name' => 'step_approval', 'data' => 'step_approval', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'amount_approval' => new Column(['title' => __('models/leaves.fields.amount_approval'),'name' => 'amount_approval', 'data' => 'amount_approval', 'searchable' => false, 'elmsearch' => 'text']),
+            'description' => new Column(['title' => __('models/leaves.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
     }
 

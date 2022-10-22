@@ -14,11 +14,19 @@
     </div>
 </div>
 
-<!-- Leave Date Field -->
+<!-- Leave Start Field -->
 <div class="form-group row mb-3">
-    {!! Form::label('leave_date', __('models/leaves.fields.leave_date').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('leave_start', __('models/leaves.fields.leave_start').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        <p>{{ $leaf->leave_date }}</p>
+        <p>{{ $leaf->leave_start }}</p>
+    </div>
+</div>
+
+<!-- Leave End Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('leave_end', __('models/leaves.fields.leave_end').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        <p>{{ $leaf->leave_end }}</p>
     </div>
 </div>
 
@@ -27,6 +35,30 @@
     {!! Form::label('amount', __('models/leaves.fields.amount').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
         <p>{{ $leaf->amount }}</p>
+    </div>
+</div>
+
+<!-- Status Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('status', __('models/leaves.fields.status').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        <p>{{ $leaf->status }}</p>
+    </div>
+</div>
+
+<!-- Step Approval Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('step_approval', __('models/leaves.fields.step_approval').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        <p>{{ $leaf->step_approval }}</p>
+    </div>
+</div>
+
+<!-- Amount Approval Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('amount_approval', __('models/leaves.fields.amount_approval').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        <p>{{ $leaf->amount_approval }}</p>
     </div>
 </div>
 

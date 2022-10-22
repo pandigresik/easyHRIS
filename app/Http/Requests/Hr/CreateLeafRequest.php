@@ -8,6 +8,7 @@ use App\Models\Hr\Leaf;
 
 class CreateLeafRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,9 +37,8 @@ class CreateLeafRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null)
-    {
-        $keys = (new Leaf())->fillable;
+    public function all($keys = null){
+        $keys = (new Leaf)->fillable;
         return parent::all($keys);
     }
 }

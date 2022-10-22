@@ -95,15 +95,17 @@ class OvertimeController extends AppBaseController
      */
     public function edit($id)
     {
-        $overtime = $this->getRepositoryObj()->find($id);
+        $overtime = $this->getRepositoryObj()->with(['employee'])->find($id);
 
         if (empty($overtime)) {
             Flash::error(__('messages.not_found', ['model' => __('models/overtimes.singular')]));
 
             return redirect(route('hr.overtimes.index'));
         }
-        
-        return view('hr.overtimes.edit')->with('overtime', $overtime)->with($this->getOptionItems());
+        $optionItems = $this->getOptionItems();
+         
+        $optionItems['employeeItems'] = [$overtime->employee_id => $overtime->employee->full_name .'('.$overtime->employee->code.')']; 
+        return view('hr.overtimes.edit')->with('overtime', $overtime)->with($optionItems);
     }
 
     /**
