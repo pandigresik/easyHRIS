@@ -57,10 +57,10 @@ class OvertimeController extends AppBaseController
         $input = $request->all();
 
         $overtime = $this->getRepositoryObj()->create($input);
-        if ($overtime instanceof Exception) {
+        if($overtime instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $overtime->getMessage()]);
         }
-
+        
         Flash::success(__('messages.saved', ['model' => __('models/overtimes.singular')]));
 
         return redirect(route('hr.overtimes.index'));
@@ -102,7 +102,7 @@ class OvertimeController extends AppBaseController
 
             return redirect(route('hr.overtimes.index'));
         }
-
+        
         return view('hr.overtimes.edit')->with('overtime', $overtime)->with($this->getOptionItems());
     }
 
@@ -125,7 +125,7 @@ class OvertimeController extends AppBaseController
         }
 
         $overtime = $this->getRepositoryObj()->update($request->all(), $id);
-        if ($overtime instanceof Exception) {
+        if($overtime instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $overtime->getMessage()]);
         }
 
@@ -152,8 +152,8 @@ class OvertimeController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-
-        if ($delete instanceof Exception) {
+        
+        if($delete instanceof Exception){
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -163,21 +163,18 @@ class OvertimeController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Overtime from storage.
+     * Provide options item based on relationship model Overtime from storage.         
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems()
-    {
+    private function getOptionItems(){        
         $shiftment = new ShiftmentRepository();
-        $employee = new EmployeeRepository();
-        $employee = new EmployeeRepository();
+        
         return [
             'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()
+            'employeeItems' => []           
         ];
     }
 }

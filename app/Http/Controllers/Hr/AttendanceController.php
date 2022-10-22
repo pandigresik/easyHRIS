@@ -58,10 +58,10 @@ class AttendanceController extends AppBaseController
         $input = $request->all();
 
         $attendance = $this->getRepositoryObj()->create($input);
-        if ($attendance instanceof Exception) {
+        if($attendance instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $attendance->getMessage()]);
         }
-
+        
         Flash::success(__('messages.saved', ['model' => __('models/attendances.singular')]));
 
         return redirect(route('hr.attendances.index'));
@@ -103,7 +103,7 @@ class AttendanceController extends AppBaseController
 
             return redirect(route('hr.attendances.index'));
         }
-
+        
         return view('hr.attendances.edit')->with('attendance', $attendance)->with($this->getOptionItems());
     }
 
@@ -126,7 +126,7 @@ class AttendanceController extends AppBaseController
         }
 
         $attendance = $this->getRepositoryObj()->update($request->all(), $id);
-        if ($attendance instanceof Exception) {
+        if($attendance instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $attendance->getMessage()]);
         }
 
@@ -153,8 +153,8 @@ class AttendanceController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-
-        if ($delete instanceof Exception) {
+        
+        if($delete instanceof Exception){
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -164,21 +164,20 @@ class AttendanceController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Attendance from storage.
+     * Provide options item based on relationship model Attendance from storage.         
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems()
-    {
+    private function getOptionItems(){        
         $shiftment = new ShiftmentRepository();
         $absentReason = new AbsentReasonRepository();
         $employee = new EmployeeRepository();
         return [
             'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck(),
             'absentReasonItems' => ['' => __('crud.option.absentReason_placeholder')] + $absentReason->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()
+            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()            
         ];
     }
 }

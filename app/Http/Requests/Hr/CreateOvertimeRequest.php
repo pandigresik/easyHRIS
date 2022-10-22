@@ -8,6 +8,7 @@ use App\Models\Hr\Overtime;
 
 class CreateOvertimeRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,9 +37,8 @@ class CreateOvertimeRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null)
-    {
-        $keys = (new Overtime())->fillable;
+    public function all($keys = null){
+        $keys = (new Overtime)->fillable;
         return parent::all($keys);
     }
 }

@@ -25,7 +25,7 @@ class UpdateOvertimeAPIRequest extends APIRequest
     public function rules()
     {
         $rules = Overtime::$rules;
-
+        
         return $rules;
     }
 }

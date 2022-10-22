@@ -46,6 +46,22 @@
     </div>
 </div>
 
+<!-- Start Hour Real Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('start_hour_real', __('models/overtimes.fields.start_hour_real').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        <p>{{ $overtime->start_hour_real }}</p>
+    </div>
+</div>
+
+<!-- End Hour Real Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('end_hour_real', __('models/overtimes.fields.end_hour_real').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        <p>{{ $overtime->end_hour_real }}</p>
+    </div>
+</div>
+
 <!-- Raw Value Field -->
 <div class="form-group row mb-3">
     {!! Form::label('raw_value', __('models/overtimes.fields.raw_value').':', ['class' => 'col-md-3 col-form-label']) !!}

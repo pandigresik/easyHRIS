@@ -120,6 +120,8 @@ class AttendanceDataTable extends DataTable
             'reason_id' => new Column(['title' => __('models/attendances.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason_id', 'searchable' => true, 'elmsearch' => 'text']),
             'attendance_date' => new Column(['title' => __('models/attendances.fields.attendance_date'),'name' => 'attendance_date', 'data' => 'attendance_date', 'searchable' => true, 'elmsearch' => 'text']),
             'description' => new Column(['title' => __('models/attendances.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
+            'check_in_schedule' => new Column(['title' => __('models/attendances.fields.check_in_schedule'),'name' => 'check_in_schedule', 'data' => 'check_in_schedule', 'searchable' => true, 'elmsearch' => 'text']),
+            'check_out_schedule' => new Column(['title' => __('models/attendances.fields.check_out_schedule'),'name' => 'check_out_schedule', 'data' => 'check_out_schedule', 'searchable' => true, 'elmsearch' => 'text']),
             'check_in' => new Column(['title' => __('models/attendances.fields.check_in'),'name' => 'check_in', 'data' => 'check_in', 'searchable' => true, 'elmsearch' => 'text']),
             'check_out' => new Column(['title' => __('models/attendances.fields.check_out'),'name' => 'check_out', 'data' => 'check_out', 'searchable' => true, 'elmsearch' => 'text']),
             'early_in' => new Column(['title' => __('models/attendances.fields.early_in'),'name' => 'early_in', 'data' => 'early_in', 'searchable' => true, 'elmsearch' => 'text']),

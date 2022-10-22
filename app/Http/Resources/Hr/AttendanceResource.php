@@ -21,6 +21,8 @@ class AttendanceResource extends JsonResource
             'reason_id' => $this->reason_id,
             'attendance_date' => $this->attendance_date,
             'description' => $this->description,
+            'check_in_schedule' => $this->check_in_schedule,
+            'check_out_schedule' => $this->check_out_schedule,
             'check_in' => $this->check_in,
             'check_out' => $this->check_out,
             'early_in' => $this->early_in,

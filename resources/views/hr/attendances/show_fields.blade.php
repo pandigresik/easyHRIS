@@ -38,6 +38,22 @@
     </div>
 </div>
 
+<!-- Check In Schedule Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('check_in_schedule', __('models/attendances.fields.check_in_schedule').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        <p>{{ $attendance->check_in_schedule }}</p>
+    </div>
+</div>
+
+<!-- Check Out Schedule Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('check_out_schedule', __('models/attendances.fields.check_out_schedule').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        <p>{{ $attendance->check_out_schedule }}</p>
+    </div>
+</div>
+
 <!-- Check In Field -->
 <div class="form-group row mb-3">
     {!! Form::label('check_in', __('models/attendances.fields.check_in').':', ['class' => 'col-md-3 col-form-label']) !!}

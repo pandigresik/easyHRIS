@@ -22,6 +22,8 @@ class OvertimeResource extends JsonResource
             'overtime_date' => $this->overtime_date,
             'start_hour' => $this->start_hour,
             'end_hour' => $this->end_hour,
+            'start_hour_real' => $this->start_hour_real,
+            'end_hour_real' => $this->end_hour_real,
             'raw_value' => $this->raw_value,
             'calculated_value' => $this->calculated_value,
             'holiday' => $this->holiday,

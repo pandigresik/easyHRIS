@@ -28,6 +28,8 @@ class OvertimeFactory extends Factory
         'overtime_date' => $this->faker->date('Y-m-d'),
         'start_hour' => $this->faker->date('H:i:s'),
         'end_hour' => $this->faker->date('H:i:s'),
+        'start_hour_real' => $this->faker->date('H:i:s'),
+        'end_hour_real' => $this->faker->date('H:i:s'),
         'raw_value' => $this->faker->numberBetween(0, 999),
         'calculated_value' => $this->faker->numberBetween(0, 999),
         'holiday' => $this->faker->boolean,

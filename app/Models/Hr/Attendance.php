@@ -17,19 +17,86 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          format="int32"
  *      ),
  *      @SWG\Property(
- *          property="type",
- *          description="type",
+ *          property="employee_id",
+ *          description="employee_id",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="shiftment_id",
+ *          description="shiftment_id",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="reason_id",
+ *          description="reason_id",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="attendance_date",
+ *          description="attendance_date",
+ *          type="string",
+ *          format="date"
+ *      ),
+ *      @SWG\Property(
+ *          property="description",
+ *          description="description",
  *          type="string"
  *      ),
  *      @SWG\Property(
- *          property="code",
- *          description="code",
- *          type="string"
+ *          property="check_in_schedule",
+ *          description="check_in_schedule",
+ *          type="string",
+ *          format="date-time"
  *      ),
  *      @SWG\Property(
- *          property="name",
- *          description="name",
- *          type="string"
+ *          property="check_out_schedule",
+ *          description="check_out_schedule",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *      @SWG\Property(
+ *          property="check_in",
+ *          description="check_in",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *      @SWG\Property(
+ *          property="check_out",
+ *          description="check_out",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *      @SWG\Property(
+ *          property="early_in",
+ *          description="early_in",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="early_out",
+ *          description="early_out",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="late_in",
+ *          description="late_in",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="late_out",
+ *          description="late_out",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="absent",
+ *          description="absent",
+ *          type="boolean"
  *      )
  * )
  */
@@ -54,6 +121,8 @@ class Attendance extends Model
         'reason_id',
         'attendance_date',
         'description',
+        'check_in_schedule',
+        'check_out_schedule',
         'check_in',
         'check_out',
         'early_in',
@@ -75,6 +144,10 @@ class Attendance extends Model
         'reason_id' => 'integer',
         'attendance_date' => 'date',
         'description' => 'string',
+        'check_in_schedule' => 'datetime',
+        'check_out_schedule' => 'datetime',
+        'check_in' => 'datetime',
+        'check_out' => 'datetime',
         'early_in' => 'integer',
         'early_out' => 'integer',
         'late_in' => 'integer',
@@ -93,6 +166,8 @@ class Attendance extends Model
         'reason_id' => 'nullable',
         'attendance_date' => 'required',
         'description' => 'nullable|string|max:255',
+        'check_in_schedule' => 'nullable',
+        'check_out_schedule' => 'nullable',
         'check_in' => 'nullable',
         'check_out' => 'nullable',
         'early_in' => 'required|integer',

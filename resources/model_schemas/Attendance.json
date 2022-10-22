@@ -72,9 +72,33 @@
         "inView": true
     },
     {
+        "name": "check_in_schedule",
+        "dbType": "datetime:nullable",
+        "htmlType": "date",
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "check_out_schedule",
+        "dbType": "datetime:nullable",
+        "htmlType": "date",
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
         "name": "check_in",
-        "dbType": "time:nullable",
-        "htmlType": "text",
+        "dbType": "datetime:nullable",
+        "htmlType": "date",
         "validations": "nullable|nullable",
         "searchable": true,
         "fillable": true,
@@ -85,8 +109,8 @@
     },
     {
         "name": "check_out",
-        "dbType": "time:nullable",
-        "htmlType": "text",
+        "dbType": "datetime:nullable",
+        "htmlType": "date",
         "validations": "nullable|nullable",
         "searchable": true,
         "fillable": true,

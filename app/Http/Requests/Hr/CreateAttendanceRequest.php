@@ -8,6 +8,7 @@ use App\Models\Hr\Attendance;
 
 class CreateAttendanceRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,9 +37,8 @@ class CreateAttendanceRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null)
-    {
-        $keys = (new Attendance())->fillable;
+    public function all($keys = null){
+        $keys = (new Attendance)->fillable;
         return parent::all($keys);
     }
 }

@@ -9,7 +9,7 @@ return [
     'textmask' => [
         'nopol' => ['mask' => 'a{1,2}9{1,4}a{1,3}'],
         'phone' => ['mask' => '9{3,4}-9{4,8}'],
-        'time' => ['mask' => '9{2}:9{2}'],
+        'time' => ['mask' => '(09|19|20|21|22|23):(09|19|29|39|49|59)'],
         'mobile' => ['mask' => '62999-9999-9999'],
         'email' => ['alias' => 'email'],
         'upper' => ['casing' => 'upper'],
