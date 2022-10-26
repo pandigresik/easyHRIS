@@ -186,30 +186,30 @@
 </div>
 
 
-<!-- Risk Ratio Field -->
+<!-- Risk Ratio Field
 <div class="form-group row mb-3">
     {!! Form::label('risk_ratio', __('models/employees.fields.risk_ratio').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('risk_ratio', null, ['class' => 'form-control','maxlength' => 3,'maxlength' => 3, 'required' => 'required']) !!}
+    {--!! Form::text('risk_ratio', null, ['class' => 'form-control','maxlength' => 3,'maxlength' => 3, 'required' => 'required']) !!}
 </div>
 </div>
-
-<!-- Profile Image Field -->
+-->
+<!-- Profile Image Field
 <div class="form-group row mb-3">
     {!! Form::label('profile_image', __('models/employees.fields.profile_image').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('profile_image', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
+    {--!! Form::text('profile_image', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
 </div>
 </div>
-
-<!-- Profile Size Field -->
+-->
+<!-- Profile Size Field 
 <div class="form-group row mb-3">
     {!! Form::label('profile_size', __('models/employees.fields.profile_size').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::number('profile_size', null, ['class' => 'form-control', 'required' => 'required']) !!}
+    {--!! Form::number('profile_size', null, ['class' => 'form-control', 'required' => 'required']) !!}
 </div>
 </div>
-
+-->
 <!-- Salary Group Id Field -->
 <div class="form-group row mb-3">
     {!! Form::label('salary_group_id', __('models/employees.fields.salary_group_id').':', ['class' => 'col-md-3 col-form-label']) !!}

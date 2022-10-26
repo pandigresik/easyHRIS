@@ -12,6 +12,7 @@ use App\Repositories\Hr\AbsentReasonRepository;
 use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Hr\ShiftmentGroupRepository;
 use Response;
 use Exception;
 
@@ -171,13 +172,9 @@ class AttendanceController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $shiftment = new ShiftmentRepository();
-        $absentReason = new AbsentReasonRepository();
-        $employee = new EmployeeRepository();
+        $shiftmentGroup = new ShiftmentGroupRepository();
         return [
-            'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck(),
-            'absentReasonItems' => ['' => __('crud.option.absentReason_placeholder')] + $absentReason->pluck(),
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()            
+            'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck(),
         ];
     }
 }

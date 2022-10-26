@@ -74,7 +74,7 @@ class SalaryBenefit extends Model
     public static $rules = [
         'employee_id' => 'nullable',
         'component_id' => 'nullable',
-        'benefit_value' => 'nullable|decimal'
+        'benefit_value' => 'nullable|numeric'
     ];
 
     /**
@@ -91,5 +91,9 @@ class SalaryBenefit extends Model
     public function component()
     {
         return $this->belongsTo(\App\Models\Hr\SalaryComponent::class, 'component_id');
+    }
+
+    public function getBenefitValueAttribute($value){
+        return localNumberFormat($value, 0);
     }
 }

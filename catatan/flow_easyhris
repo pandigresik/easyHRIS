@@ -26,6 +26,9 @@ Todo:
     - Entry data master
     - Proses generate jadwal group
     - Proses generate jadwal per pegawai
+    - Proses pengajuan overtime / lenbur
+    - Proses pengajuan ijin, cuti dll
+    - Proses pindah shift pegawai    
     - Proses absensi, untuk perhitungan hari kerja dan keterlambatan serta overtime jika ada
     - Proses perhitungan gaji berdasarkan data absensi
 

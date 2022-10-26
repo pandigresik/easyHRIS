@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('educationalInstitutes', Hr\EducationalInstituteController::class, ["as" => 'hr']);
         Route::resource('contracts', Hr\ContractController::class, ["as" => 'hr']);
         Route::resource('employees', Hr\EmployeeController::class, ["as" => 'hr']);
+        Route::resource('employees.salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr']);
         Route::resource('holidays', Hr\HolidayController::class, ["as" => 'hr']);
         Route::resource('jobLevels', Hr\JobLevelController::class, ["as" => 'hr']);
         Route::resource('jobMutations', Hr\JobMutationController::class, ["as" => 'hr']);
@@ -72,7 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('salaryAllowances', Hr\SalaryAllowanceController::class, ["as" => 'hr']);
         Route::resource('salaryBenefitHistories', Hr\SalaryBenefitHistoryController::class, ["as" => 'hr']);
-        Route::resource('salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr']);
+        // Route::resource('salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr']);
         Route::resource('salaryComponents', Hr\SalaryComponentController::class, ["as" => 'hr']);
         Route::resource('salaryGroupDetails', Hr\SalaryGroupDetailController::class, ["as" => 'hr']);
         Route::resource('salaryGroups', Hr\SalaryGroupController::class, ["as" => 'hr']);

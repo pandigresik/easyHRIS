@@ -8,14 +8,13 @@ use App\Traits\ShowColumnOptionTrait;
 use DigitalCloud\Blameable\Traits\Blameable;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Base extends Model
 {
     use Cachable;
     use SearchModelTrait;
     use ShowColumnOptionTrait;
-    use LogsActivity;
+    
     use Blameable, BlameableCustomTrait{
         BlameableCustomTrait::bootBlameable insteadof Blameable;
     }

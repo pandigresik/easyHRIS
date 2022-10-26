@@ -1,115 +1,50 @@
+<!-- Shiftment Group Id Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('shiftment_group_id', __('models/workshiftGroups.fields.shiftment_group_id').':', ['class' =>
+    'col-md-2 col-form-label']) !!}
+    <div class="col-md-10">
+        {!! Form::select('shiftment_group_id', $shiftmentGroupItems, null, ['class' => 'form-control select2', 'required' => 'required', 'onchange' => 'updateFilterEmployee(this)']) !!}
+    </div>
+</div>
+
 <!-- Employee Id Field -->
 <div class="form-group row mb-3">
-    {!! Form::label('employee_id', __('models/attendances.fields.employee_id').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::select('employee_id', $employeeItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
-</div>
+    {!! Form::label('employee_id', __('models/workshifts.fields.employee_id').':', ['class' => 'col-md-2
+    col-form-label']) !!}
+    <div class="col-md-10">
+        {!! Form::select('employee_id[]', [], null, array_merge(['class' => 'form-control select2', 'id' => 'employee_id', 'data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple' ], config('local.select2.ajax')) ) !!}
+    </div>
 </div>
 
-<!-- Shiftment Id Field -->
+
+<!-- Work Date Field -->
 <div class="form-group row mb-3">
-    {!! Form::label('shiftment_id', __('models/attendances.fields.shiftment_id').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::select('shiftment_id', $shiftmentItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
-</div>
+    {!! Form::label('work_date', __('models/workshifts.fields.work_date').':', ['class' => 'col-md-2 col-form-label'])
+    !!}
+    <div class="col-md-10">
+        {!! Form::text('work_date_period', null, ['class' => 'form-control datetime', 'required' => 'required'
+        ,'data-optiondate' => json_encode(config('local.daterange')),'id'=>'work_date']) !!}
+    </div>
 </div>
 
-<!-- Reason Id Field -->
+<!-- Generate button -->
 <div class="form-group row mb-3">
-    {!! Form::label('reason_id', __('models/attendances.fields.reason_id').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::select('reason_id', $reasonItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
-</div>
+    <div class="col-md-10 offset-2">
+        {!! Form::button(__('crud.generate'), ['class' => 'btn btn-danger', 'data-target' => '#list_attendance', 'data-url' => route('hr.workshifts.generate'), 'data-json' => '{}', 'data-ref' => 'input[name=work_date_period],select[name="shiftment_group_id"]' ,'onclick' => 'main.loadDetailPage(this,\'get\', function(){ main.initCalendar($(\'form\'));main.showLoading(false) })', 'type' => 'button']) !!}
+    </div>
+    <div class="row" id="list_attendance">
+
+    </div>
 </div>
 
-<!-- Attendance Date Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('attendance_date', __('models/attendances.fields.attendance_date').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('attendance_date', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'attendance_date']) !!}
-</div>
-</div>
 
-<!-- Description Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('description', __('models/attendances.fields.description').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('description', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
-</div>
-</div>
+@push('scripts')
+<script>
+    function updateFilterEmployee(elm){
+        if(!_.isEmpty($(elm).val())){
+            $('#employee_id').data('filter', {shiftment_group_id : $(elm).val()});
+        }        
+    }
 
-<!-- Check In Schedule Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('check_in_schedule', __('models/attendances.fields.check_in_schedule').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('check_in_schedule', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'check_in_schedule']) !!}
-</div>
-</div>
-
-<!-- Check Out Schedule Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('check_out_schedule', __('models/attendances.fields.check_out_schedule').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('check_out_schedule', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'check_out_schedule']) !!}
-</div>
-</div>
-
-<!-- Check In Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('check_in', __('models/attendances.fields.check_in').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('check_in', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'check_in']) !!}
-</div>
-</div>
-
-<!-- Check Out Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('check_out', __('models/attendances.fields.check_out').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('check_out', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'check_out']) !!}
-</div>
-</div>
-
-<!-- Early In Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('early_in', __('models/attendances.fields.early_in').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::number('early_in', null, ['class' => 'form-control', 'required' => 'required']) !!}
-</div>
-</div>
-
-<!-- Early Out Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('early_out', __('models/attendances.fields.early_out').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::number('early_out', null, ['class' => 'form-control', 'required' => 'required']) !!}
-</div>
-</div>
-
-<!-- Late In Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('late_in', __('models/attendances.fields.late_in').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::number('late_in', null, ['class' => 'form-control', 'required' => 'required']) !!}
-</div>
-</div>
-
-<!-- Late Out Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('late_out', __('models/attendances.fields.late_out').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::number('late_out', null, ['class' => 'form-control', 'required' => 'required']) !!}
-</div>
-</div>
-
-<!-- Absent Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('absent', __('models/attendances.fields.absent').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    <label class="checkbox-inline">
-        {!! Form::hidden('absent', 0) !!}
-        {!! Form::checkbox('absent', '1', null) !!}
-    </label>
-</div>
-</div>
-
+</script>
+@endpush

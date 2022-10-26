@@ -16,6 +16,7 @@ use App\Repositories\Hr\JobLevelRepository;
 use App\Repositories\Hr\JobTitleRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Hr\SalaryGroupRepository;
 use App\Repositories\Hr\ShiftmentGroupRepository;
 use Response;
 use Exception;
@@ -186,6 +187,7 @@ class EmployeeController extends AppBaseController
         $jobTitle = new JobTitleRepository();
         $employee = new EmployeeRepository();
         $shiftmentGroup = new ShiftmentGroupRepository();
+        $salaryGroup = new SalaryGroupRepository();
         return [
             'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->pluck(),
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
@@ -197,7 +199,7 @@ class EmployeeController extends AppBaseController
             'joblevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
             'jobtitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck(),
             'supervisorItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'salaryGroupItems' => [],
+            'salaryGroupItems' => ['' => __('crud.option.salary_group_placeholder')] + $salaryGroup->pluck(),
             'shiftmentGroupItems' => ['' => __('crud.option.shiftment_group_placeholder')] + $shiftmentGroup->pluck(),
         ];
     }

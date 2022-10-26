@@ -35,7 +35,6 @@
         "laravel/ui": "^2.0",
         "laravelcollective/html": "^6.1",
         "rap2hpoutre/fast-excel": "^3.2",
-        "spatie/laravel-activitylog": "^3.16",
         "spatie/laravel-menu": "^3.6",
         "spatie/laravel-mix-preload": "^1.2",
         "spatie/laravel-permission": "^5.3",

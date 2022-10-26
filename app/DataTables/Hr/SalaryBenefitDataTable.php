@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 
 class SalaryBenefitDataTable extends DataTable
 {
+    private $employee;
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
@@ -46,7 +47,10 @@ class SalaryBenefitDataTable extends DataTable
      */
     public function query(SalaryBenefit $model)
     {
-        return $model->newQuery();
+        if(!empty($this->getEmployee())){
+            return $model->where(['employee_id' => $this->getEmployee()])->with(['component'])->newQuery();
+        }
+        return $model->with(['component'])->newQuery();
     }
 
     /**
@@ -115,10 +119,9 @@ class SalaryBenefitDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'employee_id' => new Column(['title' => __('models/salaryBenefits.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'component_id' => new Column(['title' => __('models/salaryBenefits.fields.component_id'),'name' => 'component_id', 'data' => 'component_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'benefit_value' => new Column(['title' => __('models/salaryBenefits.fields.benefit_value'),'name' => 'benefit_value', 'data' => 'benefit_value', 'searchable' => true, 'elmsearch' => 'text']),
-            'benefit_key' => new Column(['title' => __('models/salaryBenefits.fields.benefit_key'),'name' => 'benefit_key', 'data' => 'benefit_key', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'employee_id' => new Column(['title' => __('models/salaryBenefits.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'component_id' => new Column(['title' => __('models/salaryBenefits.fields.component_id'),'name' => 'component_id', 'data' => 'component.name', 'searchable' => true, 'elmsearch' => 'text']),
+            'benefit_value' => new Column(['title' => __('models/salaryBenefits.fields.benefit_value'),'name' => 'benefit_value', 'data' => 'benefit_value', 'searchable' => true, 'elmsearch' => 'text']),            
         ];
     }
 
@@ -130,5 +133,25 @@ class SalaryBenefitDataTable extends DataTable
     protected function filename()
     {
         return 'salary_benefits_datatable_' . time();
+    }
+
+    /**
+     * Get the value of employee
+     */ 
+    public function getEmployee()
+    {
+        return $this->employee;
+    }
+
+    /**
+     * Set the value of employee
+     *
+     * @return  self
+     */ 
+    public function setEmployee($employee)
+    {
+        $this->employee = $employee;
+
+        return $this;
     }
 }

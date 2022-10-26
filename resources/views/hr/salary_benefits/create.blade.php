@@ -4,7 +4,7 @@
     @push('breadcrumb')
     <ol class="breadcrumb  my-0 ms-2">
       <li class="breadcrumb-item">
-         <a href="{!! route('hr.salaryBenefits.index') !!}">@lang('models/salaryBenefits.singular')</a>
+         <a href="{!! route('hr.employees.salaryBenefits.index', $employee) !!}">@lang('models/salaryBenefits.singular')</a>
       </li>
       <li class="breadcrumb-item active">@lang('crud.add_new')</li>
     </ol>
@@ -14,7 +14,7 @@
                 @include('common.errors')
                 <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['route' => 'hr.salaryBenefits.store']) !!}
+                        {!! Form::open(['route' => ['hr.employees.salaryBenefits.store', $employee]]) !!}
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
@@ -29,7 +29,7 @@
                                 <!-- Submit Field -->
                                 <div class="form-group col-sm-12 mt-2">
                                     {!! Form::submit(__('crud.save'), ['class' => 'btn btn-primary']) !!}
-                                    <a href="{{ route('hr.salaryBenefits.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
+                                    <a href="{{ route('hr.employees.salaryBenefits.index', $employee) }}" class="btn btn-default">@lang('crud.cancel')</a>
                                 </div>
                             </div>
                         </div>

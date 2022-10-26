@@ -1,9 +1,9 @@
-{!! Form::open(['route' => ['hr.salaryBenefits.destroy', $id], 'method' => 'delete']) !!}
+{!! Form::open(['route' => ['hr.employees.salaryBenefits.destroy', [$employee_id,$id]], 'method' => 'delete']) !!}
 <div class='btn-group'>
-    <a href="{{ route('hr.salaryBenefits.show', $id) }}" class='btn btn-ghost-success'>
+    <a href="{{ route('hr.employees.salaryBenefits.show', [$employee_id, $id]) }}" class='btn btn-ghost-success'>
        <i class="fa fa-eye"></i>
     </a>
-    <a href="{{ route('hr.salaryBenefits.edit', $id) }}" class='btn btn-ghost-info'>
+    <a href="{{ route('hr.employees.salaryBenefits.edit', [$employee_id, $id]) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>
     {!! Form::button('<i class="fa fa-trash"></i>', [

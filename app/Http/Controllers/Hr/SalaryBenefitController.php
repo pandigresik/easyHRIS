@@ -11,6 +11,8 @@ use App\Repositories\Hr\EmployeeRepository;
 use App\Repositories\Hr\SalaryComponentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\Employee;
+use App\Models\Hr\SalaryComponent;
 use Response;
 use Exception;
 
@@ -30,9 +32,11 @@ class SalaryBenefitController extends AppBaseController
      * @param SalaryBenefitDataTable $salaryBenefitDataTable
      * @return Response
      */
-    public function index(SalaryBenefitDataTable $salaryBenefitDataTable)
+    public function index(int $employee, SalaryBenefitDataTable $salaryBenefitDataTable)
     {
-        return $salaryBenefitDataTable->render('hr.salary_benefits.index');
+        $employeeObj = Employee::find($employee);
+        $employeeName = $employeeObj->full_name . ' ( '.$employeeObj->code.' )';
+        return $salaryBenefitDataTable->setEmployee($employee)->render('hr.salary_benefits.index', ['employee' => $employee, 'employeeName' => $employeeName]);
     }
 
     /**
@@ -40,9 +44,9 @@ class SalaryBenefitController extends AppBaseController
      *
      * @return Response
      */
-    public function create()
+    public function create(int $employee)
     {
-        return view('hr.salary_benefits.create')->with($this->getOptionItems());
+        return view('hr.salary_benefits.create')->with($this->getOptionItems($employee))->with(['employee' => $employee]);
     }
 
     /**
@@ -52,10 +56,10 @@ class SalaryBenefitController extends AppBaseController
      *
      * @return Response
      */
-    public function store(CreateSalaryBenefitRequest $request)
+    public function store(int $employee, CreateSalaryBenefitRequest $request)
     {
         $input = $request->all();
-
+        $input['employee_id'] = $employee;
         $salaryBenefit = $this->getRepositoryObj()->create($input);
         if ($salaryBenefit instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryBenefit->getMessage()]);
@@ -63,7 +67,7 @@ class SalaryBenefitController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/salaryBenefits.singular')]));
 
-        return redirect(route('hr.salaryBenefits.index'));
+        return redirect(route('hr.employees.salaryBenefits.index', $employee));
     }
 
     /**
@@ -73,17 +77,17 @@ class SalaryBenefitController extends AppBaseController
      *
      * @return Response
      */
-    public function show($id)
+    public function show(int $employee, $id)
     {
         $salaryBenefit = $this->getRepositoryObj()->find($id);
 
         if (empty($salaryBenefit)) {
             Flash::error(__('models/salaryBenefits.singular').' '.__('messages.not_found'));
 
-            return redirect(route('hr.salaryBenefits.index'));
+            return redirect(route('hr.employees.salaryBenefits.index', $employee));
         }
 
-        return view('hr.salary_benefits.show')->with('salaryBenefit', $salaryBenefit);
+        return view('hr.salary_benefits.show')->with('salaryBenefit', $salaryBenefit)->with(['employee' => $employee]);
     }
 
     /**
@@ -93,17 +97,19 @@ class SalaryBenefitController extends AppBaseController
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit(int $employee, $id)
     {
         $salaryBenefit = $this->getRepositoryObj()->find($id);
 
         if (empty($salaryBenefit)) {
             Flash::error(__('messages.not_found', ['model' => __('models/salaryBenefits.singular')]));
 
-            return redirect(route('hr.salaryBenefits.index'));
+            return redirect(route('hr.employees.salaryBenefits.index', $employee));
         }
+        $optionItems = $this->getOptionItems($employee);
+        $optionItems['componentItems'] = $optionItems['componentItems'] + SalaryComponent::find($salaryBenefit->component_id)->pluck('name', 'id')->toArray();
 
-        return view('hr.salary_benefits.edit')->with('salaryBenefit', $salaryBenefit)->with($this->getOptionItems());
+        return view('hr.salary_benefits.edit')->with('salaryBenefit', $salaryBenefit)->with($optionItems)->with(['employee' => $employee]);
     }
 
     /**
@@ -114,24 +120,25 @@ class SalaryBenefitController extends AppBaseController
      *
      * @return Response
      */
-    public function update($id, UpdateSalaryBenefitRequest $request)
+    public function update(int $employee, $id, UpdateSalaryBenefitRequest $request)
     {
         $salaryBenefit = $this->getRepositoryObj()->find($id);
 
         if (empty($salaryBenefit)) {
             Flash::error(__('messages.not_found', ['model' => __('models/salaryBenefits.singular')]));
 
-            return redirect(route('hr.salaryBenefits.index'));
+            return redirect(route('hr.employees.salaryBenefits.index', $employee));
         }
-
-        $salaryBenefit = $this->getRepositoryObj()->update($request->all(), $id);
+        $input = $request->all();
+        $input['employee_id'] = $employee;
+        $salaryBenefit = $this->getRepositoryObj()->update($input, $id);
         if ($salaryBenefit instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $salaryBenefit->getMessage()]);
         }
 
         Flash::success(__('messages.updated', ['model' => __('models/salaryBenefits.singular')]));
 
-        return redirect(route('hr.salaryBenefits.index'));
+        return redirect(route('hr.employees.salaryBenefits.index', $employee));
     }
 
     /**
@@ -141,14 +148,14 @@ class SalaryBenefitController extends AppBaseController
      *
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(int $employee, $id)
     {
         $salaryBenefit = $this->getRepositoryObj()->find($id);
 
         if (empty($salaryBenefit)) {
             Flash::error(__('messages.not_found', ['model' => __('models/salaryBenefits.singular')]));
 
-            return redirect(route('hr.salaryBenefits.index'));
+            return redirect(route('hr.employees.salaryBenefits.index', $employee));
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
@@ -159,7 +166,7 @@ class SalaryBenefitController extends AppBaseController
 
         Flash::success(__('messages.deleted', ['model' => __('models/salaryBenefits.singular')]));
 
-        return redirect(route('hr.salaryBenefits.index'));
+        return redirect(route('hr.employees.salaryBenefits.index' , $employee));
     }
 
     /**
@@ -169,13 +176,13 @@ class SalaryBenefitController extends AppBaseController
      *
      * @return Response
      */
-    private function getOptionItems()
-    {
-        $employee = new EmployeeRepository();
-        $salaryComponent = new SalaryComponentRepository();
-        return [
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
-            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()
+    private function getOptionItems(int $employee)
+    {        
+        $salaryComponent = SalaryComponent::whereNotIn('id',function($q) use ($employee) {
+            return $q->select('component_id')->from('salary_benefits')->where('employee_id', $employee);
+        })->get()->pluck('name', 'id');
+        return [            
+            'componentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->toArray()
         ];
     }
 }
