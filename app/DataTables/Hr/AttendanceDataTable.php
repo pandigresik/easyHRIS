@@ -13,7 +13,7 @@ class AttendanceDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'state' => \App\DataTables\FilterClass\InKeyword::class
     ];
     
     private $mapColumnSearch = [
@@ -114,21 +114,23 @@ class AttendanceDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $stateItem = convertArrayPairValueWithKey(Attendance::STATE);
         return [
             'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/attendances.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment_id', 'searchable' => true, 'elmsearch' => 'text']),
             'reason_id' => new Column(['title' => __('models/attendances.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason_id', 'searchable' => true, 'elmsearch' => 'text']),
             'attendance_date' => new Column(['title' => __('models/attendances.fields.attendance_date'),'name' => 'attendance_date', 'data' => 'attendance_date', 'searchable' => true, 'elmsearch' => 'text']),
             'description' => new Column(['title' => __('models/attendances.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
-            'check_in_schedule' => new Column(['title' => __('models/attendances.fields.check_in_schedule'),'name' => 'check_in_schedule', 'data' => 'check_in_schedule', 'searchable' => true, 'elmsearch' => 'text']),
-            'check_out_schedule' => new Column(['title' => __('models/attendances.fields.check_out_schedule'),'name' => 'check_out_schedule', 'data' => 'check_out_schedule', 'searchable' => true, 'elmsearch' => 'text']),
+            //'check_in_schedule' => new Column(['title' => __('models/attendances.fields.check_in_schedule'),'name' => 'check_in_schedule', 'data' => 'check_in_schedule', 'searchable' => true, 'elmsearch' => 'text']),
+            //'check_out_schedule' => new Column(['title' => __('models/attendances.fields.check_out_schedule'),'name' => 'check_out_schedule', 'data' => 'check_out_schedule', 'searchable' => true, 'elmsearch' => 'text']),
             'check_in' => new Column(['title' => __('models/attendances.fields.check_in'),'name' => 'check_in', 'data' => 'check_in', 'searchable' => true, 'elmsearch' => 'text']),
             'check_out' => new Column(['title' => __('models/attendances.fields.check_out'),'name' => 'check_out', 'data' => 'check_out', 'searchable' => true, 'elmsearch' => 'text']),
             'early_in' => new Column(['title' => __('models/attendances.fields.early_in'),'name' => 'early_in', 'data' => 'early_in', 'searchable' => true, 'elmsearch' => 'text']),
             'early_out' => new Column(['title' => __('models/attendances.fields.early_out'),'name' => 'early_out', 'data' => 'early_out', 'searchable' => true, 'elmsearch' => 'text']),
             'late_in' => new Column(['title' => __('models/attendances.fields.late_in'),'name' => 'late_in', 'data' => 'late_in', 'searchable' => true, 'elmsearch' => 'text']),
             'late_out' => new Column(['title' => __('models/attendances.fields.late_out'),'name' => 'late_out', 'data' => 'late_out', 'searchable' => true, 'elmsearch' => 'text']),
-            'absent' => new Column(['title' => __('models/attendances.fields.absent'),'name' => 'absent', 'data' => 'absent', 'searchable' => true, 'elmsearch' => 'text'])
+            'absent' => new Column(['title' => __('models/attendances.fields.absent'),'name' => 'absent', 'data' => 'absent', 'searchable' => true, 'elmsearch' => 'text']),
+            'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple'])
         ];
     }
 

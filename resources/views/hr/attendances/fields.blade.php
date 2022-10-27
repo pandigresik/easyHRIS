@@ -27,17 +27,6 @@
     </div>
 </div>
 
-<!-- Generate button -->
-<div class="form-group row mb-3">
-    <div class="col-md-10 offset-2">
-        {!! Form::button(__('crud.generate'), ['class' => 'btn btn-danger', 'data-target' => '#list_attendance', 'data-url' => route('hr.workshifts.generate'), 'data-json' => '{}', 'data-ref' => 'input[name=work_date_period],select[name="shiftment_group_id"]' ,'onclick' => 'main.loadDetailPage(this,\'get\', function(){ main.initCalendar($(\'form\'));main.showLoading(false) })', 'type' => 'button']) !!}
-    </div>
-    <div class="row" id="list_attendance">
-
-    </div>
-</div>
-
-
 @push('scripts')
 <script>
     function updateFilterEmployee(elm){

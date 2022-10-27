@@ -99,4 +99,16 @@ class Workshift extends Model
     {
         return $this->belongsTo(\App\Models\Hr\Employee::class, 'employee_id');
     }
+
+    public function getWorkDateAttribute($value){
+        return localFormatDate($value);
+    }
+
+    public function getStartHourAttribute($value){
+        return localFormatDateTime($value);
+    }
+
+    public function getEndHourAttribute($value){
+        return localFormatDateTime($value);
+    }
 }

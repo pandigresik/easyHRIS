@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('attendanceLogfingers', Hr\AttendanceLogfingerController::class, ["as" => 'hr']);
         Route::resource('attendanceSummaries', Hr\AttendanceSummaryController::class, ["as" => 'hr']);
         Route::resource('attendances', Hr\AttendanceController::class, ["as" => 'hr']);
+        
         Route::resource('careerHistories', Hr\CareerHistoryController::class, ["as" => 'hr']);
         Route::resource('employeeShiftments', Hr\EmployeeShiftmentController::class, ["as" => 'hr']);
         Route::resource('fingerprintDevices', Hr\FingerprintDeviceController::class, ["as" => 'hr']);

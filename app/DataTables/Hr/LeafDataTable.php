@@ -38,11 +38,11 @@ class LeafDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        $dataTable->editColumn('leave_start', function($item){
-            return localFormatDateTime($item->leave_start);
-        })->editColumn('leave_end', function($item){
-            return localFormatDateTime($item->leave_end);
-        });
+        // $dataTable->editColumn('leave_start', function($item){
+        //     return localFormatDateTime($item->leave_start);
+        // })->editColumn('leave_end', function($item){
+        //     return localFormatDateTime($item->leave_end);
+        // });
         return $dataTable->addColumn('action', 'hr.leaves.datatables_actions');
     }
 

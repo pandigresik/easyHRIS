@@ -3,6 +3,7 @@
 namespace App\Models\Hr;
 
 use App\Models\Base as Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -99,5 +100,9 @@ class AttendanceLogfinger extends Model
 
     public function getFingertimeAttribute($value){
         return localFormatDateTime($value);
+    }
+
+    public function getFingerDateAttribute($value){
+        return Carbon::parse($this->attributes['fingertime'])->format('Y-m-d');
     }
 }

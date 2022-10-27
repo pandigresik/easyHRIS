@@ -27,7 +27,10 @@ class CreateAttendanceRequest extends FormRequest
      */
     public function rules()
     {
-        return Attendance::$rules;
+        return [            
+            'shiftment_group_id' => 'required',            
+            'work_date_period' => 'required'            
+        ];
     }
 
     /**
@@ -39,6 +42,7 @@ class CreateAttendanceRequest extends FormRequest
     */
     public function all($keys = null){
         $keys = (new Attendance)->fillable;
+        $keys = array_merge($keys, ['shiftment_group_id', 'work_date_period', 'employee_id']);
         return parent::all($keys);
     }
 }

@@ -20,5 +20,6 @@ return array (
     'late_in' => 'Late In',
     'late_out' => 'Late Out',
     'absent' => 'Absent',
+    'state' => 'Status'
   ),
 );

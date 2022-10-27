@@ -182,3 +182,10 @@ if (!function_exists('generatePeriod')) {
         return $result;
     }
 }
+
+if (!function_exists('diffMinute')) {
+    function diffMinute($start, $end)
+    {
+        return Carbon::parse($start)->diffInMinutes($end);
+    }
+}

@@ -75,6 +75,8 @@ class Leaf extends Model
 
     public $table = 'leaves';
     
+    const INITIAL_STATE = 'A';
+    const APPROVE_STATE = 'A';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
@@ -146,11 +148,19 @@ class Leaf extends Model
         return $this->belongsTo(\App\Models\Hr\Employee::class, 'employee_id');
     }
 
-    // public function getLeaveStartAttribute($value){
-    //     return localFormatDateTime($value);
-    // }
+    public function details(){
+        return $this->hasMany(\App\Models\Hr\LeaveDetails::class, 'leave_id');
+    }
 
-    // public function getLeaveEndAttribute($value){
-    //     return localFormatDateTime($value);
-    // }
+    public function getLeaveStartAttribute($value){
+        return localFormatDateTime($value);
+    }
+
+    public function getLeaveEndAttribute($value){
+        return localFormatDateTime($value);
+    }
+
+    public function scopeApprove($query){
+        return $query->whereStatus(self::APPROVE_STATE);
+    }
 }

@@ -109,7 +109,10 @@ class Attendance extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const STATE = [
+        'OK' => 'OK',
+        'I' => 'Invalid'
+    ];
 
     protected $dates = ['deleted_at'];
 
@@ -129,7 +132,8 @@ class Attendance extends Model
         'early_out',
         'late_in',
         'late_out',
-        'absent'
+        'absent',
+        'state'
     ];
 
     /**
@@ -152,7 +156,8 @@ class Attendance extends Model
         'early_out' => 'integer',
         'late_in' => 'integer',
         'late_out' => 'integer',
-        'absent' => 'boolean'
+        'absent' => 'boolean',
+        'state' => 'string'
     ];
 
     /**

@@ -176,5 +176,5 @@ class AttendanceController extends AppBaseController
         return [
             'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck(),
         ];
-    }
+    }    
 }

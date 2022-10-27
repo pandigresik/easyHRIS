@@ -37,13 +37,13 @@ class WorkshiftDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        $dataTable->editColumn('work_date', function($item){
-            return localFormatDate($item->work_date);
-        })->editColumn('start_hour', function($item){
-            return localFormatDateTime($item->start_hour);
-        })->editColumn('end_hour', function($item){
-            return localFormatDateTime($item->end_hour);
-        });
+        // $dataTable->editColumn('work_date', function($item){
+        //     return localFormatDate($item->work_date);
+        // })->editColumn('start_hour', function($item){
+        //     return localFormatDateTime($item->start_hour);
+        // })->editColumn('end_hour', function($item){
+        //     return localFormatDateTime($item->end_hour);
+        // });
         // $dataTable->addColumn('action', 'hr.workshifts.datatables_actions');
         return $dataTable;
     }
