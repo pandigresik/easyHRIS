@@ -14,7 +14,7 @@ class AddAttendanceState extends Migration
     public function up()
     {
         Schema::table('attendances', function(Blueprint $table) {
-            $table->string('state',2)->nullable()->default('OK')->comment('status absensi');
+            $table->string('state',10)->nullable()->default('OK')->comment('status absensi');
         });
     }
 

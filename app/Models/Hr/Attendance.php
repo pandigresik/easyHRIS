@@ -111,7 +111,7 @@ class Attendance extends Model
     const UPDATED_AT = 'updated_at';
     const STATE = [
         'OK' => 'OK',
-        'I' => 'Invalid'
+        'INVALID' => 'Invalid'
     ];
 
     protected $dates = ['deleted_at'];
@@ -204,5 +204,17 @@ class Attendance extends Model
     public function employee()
     {
         return $this->belongsTo(\App\Models\Hr\Employee::class, 'employee_id');
+    }
+
+    public function getAttendanceDateAttribute($value){
+        return localFormatDate($value);
+    }
+
+    public function getCheckInAttribute($value){
+        return localFormatDateTime($value);
+    }
+
+    public function getCheckOutAttribute($value){
+        return localFormatDateTime($value);
     }
 }

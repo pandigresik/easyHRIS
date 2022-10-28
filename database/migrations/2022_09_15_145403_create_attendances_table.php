@@ -36,6 +36,7 @@ class CreateAttendancesTable extends Migration
             $table->foreign('shiftment_id', 'FK_9C6B8FD4180FBE1')->references('id')->on('shiftments');
             $table->foreign('reason_id', 'FK_9C6B8FD459BB1592')->references('id')->on('absent_reasons');
             $table->foreign('employee_id', 'FK_9C6B8FD48C03F15C')->references('id')->on('employees');
+            $table->unique(['employee_id', 'attendance_date'],'uq_attendances_1');
         });
     }
 

@@ -388,4 +388,8 @@ class Employee extends Model
     public function getDateOfBirthAttribute($value){
         return localFormatDate($value);
     }
+
+    public function getCodeNameAttribute($value){
+        return $this->attributes['full_name'].' ('.$this->attributes['code'].')';
+    }
 }

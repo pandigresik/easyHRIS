@@ -41,7 +41,8 @@ class Setting extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const CREATED_BY = NULL;
+    const UPDATED_BY = NULL;
 
     protected $dates = ['deleted_at'];
 
