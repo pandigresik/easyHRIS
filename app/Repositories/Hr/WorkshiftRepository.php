@@ -108,9 +108,9 @@ SQL;
         $workshiftGroup = WorkshiftGroup::with(['shiftment'])->whereBetween('work_date',[$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])->where(['shiftment_group_id' => $shiftmentGroup])->get();
         if(!$workshiftGroup->isEmpty()){
             $result = $workshiftGroup->mapWithKeys(function($item){
-                $item->shiftment->start_hour = $item->start_hour->format('H:i:s');
-                $item->shiftment->end_hour = $item->end_hour->format('H:i:s');
-                return [$item->work_date->format('Y-m-d') => $item->shiftment->toArray()];
+                $item->shiftment->start_hour = substr($item->getRawOriginal('start_hour'), -8);
+                $item->shiftment->end_hour = substr($item->getRawOriginal('end_hour'), -8);
+                return [$item->getRawOriginal('work_date') => $item->shiftment->toArray()];
             });   
         }        
         

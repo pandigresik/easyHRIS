@@ -14,7 +14,9 @@ class AttendanceDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        'state' => \App\DataTables\FilterClass\InKeyword::class
+        'state' => \App\DataTables\FilterClass\InKeyword::class,
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'employee.code' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -36,11 +38,11 @@ class AttendanceDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        $dataTable->editColumn('employee_id', function($item){
-            $employee = $item->employee;
+        // $dataTable->editColumn('employee_id', function($item){
+        //     $employee = $item->employee;
             
-            return $employee->full_name.' ('.$employee->code.')';
-        });
+        //     return $employee->full_name.' ('.$employee->code.')';
+        // });
         return $dataTable->addColumn('action', 'hr.attendances.datatables_actions');
     }
 
@@ -122,7 +124,8 @@ class AttendanceDataTable extends DataTable
     {
         $stateItem = convertArrayPairValueWithKey(Attendance::STATE + AbsentReason::pluck('code')->toArray());
         return [
-            'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/attendances.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'elmsearch' => 'text']),
             'reason_id' => new Column(['title' => __('models/attendances.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
             'attendance_date' => new Column(['title' => __('models/attendances.fields.attendance_date'),'name' => 'attendance_date', 'data' => 'attendance_date', 'searchable' => true, 'elmsearch' => 'daterange']),

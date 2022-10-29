@@ -6,8 +6,9 @@ return array (
   'fields' => 
   array (
     'id' => 'Id',
-    'employee_id' => 'Employee Id',
-    'shiftment_id' => 'Shiftment Id',
+    'employee_id' => 'Karyawan',
+    'employee_code' => 'NIP',
+    'shiftment_id' => 'Shift',
     'reason_id' => 'Reason Id',
     'attendance_date' => 'Attendance Date',
     'description' => 'Description',

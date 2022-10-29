@@ -8,13 +8,15 @@ use Spatie\Menu\Laravel\Link;
 if (!function_exists('localFormatDate')) {
     function localFormatDate($value)
     {
+        if(is_null($value)) return NULL;
         return Date::parse($value)->format(config('local.date_format'));
     }
 }
 
-if (!function_exists('localFormatDateTime')) {
+if (!function_exists('localFormatDateTime')) {    
     function localFormatDateTime($value)
     {
+        if(is_null($value)) return NULL;
         return Date::parse($value)->format(config('local.datetime_format'));
     }
 }

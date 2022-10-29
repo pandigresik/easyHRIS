@@ -163,6 +163,7 @@ class AttendanceRepository extends BaseRepository
             $overtimeCurrentDate = $overtimeDate[$date] ?? [];
             if(!$fingerLogData->isEmpty()){
                 $fingerClassification = $this->getFingerTimeDate($schedule, $fingerLogData, $overtimeCurrentDate);
+                
                 $tmp['check_in'] = $fingerClassification['check_in'];
                 $tmp['check_out'] = $fingerClassification['check_out'];
                 
@@ -177,13 +178,15 @@ class AttendanceRepository extends BaseRepository
                 }
 
                 if(!is_null($tmp['check_out']) && !is_null($tmp['check_in'])){
-                    if($tmp['late_in'] > 0){
-                        $tmp['state'] = 'LATEIN';
-                    } else if($tmp['early_out'] > 0){
-                        $tmp['state'] = 'EARLYOUT';
-                    }else{
-                        $tmp['state'] = 'OK';
-                    }
+                    if($tmp['state'] == 'INVALID'){
+                        if($tmp['late_in'] > 0){
+                            $tmp['state'] = 'LATEIN';
+                        } else if($tmp['early_out'] > 0){
+                            $tmp['state'] = 'EARLYOUT';
+                        }else{
+                            $tmp['state'] = 'OK';
+                        }    
+                    }                    
                 }
                 $tmp['absent'] = 0;
             }
@@ -204,12 +207,14 @@ class AttendanceRepository extends BaseRepository
                     $overtimeCurrentDate->start_hour_real = substr($tmp['check_in'], -8);
                     $overtimeCurrentDate->end_hour_real = $overtimeCurrentDate->end_hour;
                 }
-
+                $overtimeCurrentDate->syncOriginal();
                 $startRealOvertime = $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('start_hour_real');
                 $endRealOvertime = $overtimeCurrentDate->getRawOriginal('overday') ? Carbon::parse($overtimeCurrentDate->getRawOriginal('overtime_date'))->addDay()->format('Y-m-d').' '.$overtimeCurrentDate->getRawOriginal('end_hour_real') : $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('end_hour_real');
                 $maxHourOvertime = Carbon::parse($startOvertime)->diffInMinutes($endOvertime);
-                $overtimeCurrentDate->raw_value = Carbon::parse($startRealOvertime)->diffInMinutes($endRealOvertime);
-                $overtimeCurrentDate->calculated_value = $overtimeCurrentDate->getRawOriginal('raw_value') > $maxHourOvertime ? $maxHourOvertime :  $overtimeCurrentDate->getRawOriginal('raw_value');
+                $rawValue = Carbon::parse($startRealOvertime)->diffInMinutes($endRealOvertime);
+                $overtimeCurrentDate->raw_value = $rawValue;
+                $overtimeCurrentDate->calculated_value = $rawValue > $maxHourOvertime ? $maxHourOvertime :  $rawValue;
+                
                 $overtimeResult[] = $overtimeCurrentDate;
             }
         }
@@ -241,7 +246,7 @@ class AttendanceRepository extends BaseRepository
     }
 
     private function listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId){
-        return Overtime::select(['overtime_date', 'employee_id','start_hour', 'end_hour', 'overday'])->whereBetween('overtime_date',[$startDate,$endDate])->whereIn('employee_id',function($q) use ($shiftmentGroup, $employeeId){
+        return Overtime::select(['overtime_date', 'id', 'employee_id','start_hour', 'end_hour', 'overday'])->whereBetween('overtime_date',[$startDate,$endDate])->whereIn('employee_id',function($q) use ($shiftmentGroup, $employeeId){
             if(!empty($employeeId)){
                 return $q->select(['id'])->from('employees')->whereIn('id', $employeeId);
             }
@@ -285,6 +290,7 @@ class AttendanceRepository extends BaseRepository
         
         $result = ['check_in' => null, 'check_out' => null];
         foreach($fingerLog as $time){            
+            
             if(is_null($result['check_in'])){
                 if($time->getRawOriginal('fingertime') >= $minCheckin){
                     if($time->getRawOriginal('fingertime') < $maxCheckout){
@@ -293,10 +299,13 @@ class AttendanceRepository extends BaseRepository
                 }
             }
             // jika ada finger baru yang valid maka akan direplace datanya            
-            if($time->getRawOriginal('fingertime') <= $maxCheckout && $time->getRawOriginal('fingertime') > $minCheckin ){
-                $result['check_out'] = $time->getRawOriginal('fingertime');
-            }    
+            if($time->getRawOriginal('fingertime') <= $maxCheckout) {
+                if ($time->getRawOriginal('fingertime') > $minCheckin ){
+                    $result['check_out'] = $time->getRawOriginal('fingertime');
+                }
+            }
         }
+        
         /** jika nilai checkin dan checkout < 30 menit, maka hapus salah satu */        
         return $this->clearDataAttendance($result, $startHour, $endHour);
     }
