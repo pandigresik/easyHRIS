@@ -101,9 +101,15 @@ class AttendanceRepository extends BaseRepository
             $log = $attandanceLogs[$employee] ?? collect([]);
             $overtime = $overtimes[$employee] ?? collect([]); 
             $leave = $leaves[$employee] ?? collect([]);
-            $attendanceResult = $this->processEmployeeAttendance($log, $workshift, $overtime, $leave);
-            if(!empty($attendanceResult)){
-                Attendance::upsert($attendanceResult, ['employee_id', 'attendance_date']);
+            $processResult = $this->processEmployeeAttendance($log, $workshift, $overtime, $leave);
+            if(!empty($processResult['attendance'])){
+                Attendance::upsert($processResult['attendance'], ['employee_id', 'attendance_date']);
+            }
+
+            if(!empty($processResult['overtime'])){
+                foreach($processResult['overtime'] as $overtime){
+                    $overtime->save();
+                }
             }
         }        
     }
@@ -115,6 +121,7 @@ class AttendanceRepository extends BaseRepository
         $overtimeDate = $overtime->keyBy(function($item){ return $item->getRawOriginal('overtime_date');});
         $leaveDate = $leave->keyBy(function($item){ return $item->getRawOriginal('leave_date');});
         $attendanceResult = [];
+        $overtimeResult = [];
         foreach($workshiftDate as $date => $schedule){
             /** ambil juga data hari berikutnya untuk case shift 2,3 dan lembur */
             $prevDate = Carbon::parse($date)->subDay()->format('Y-m-d');
@@ -130,7 +137,7 @@ class AttendanceRepository extends BaseRepository
 
             if(isset($logDate[$nextDate])){
                 $fingerLogData = $fingerLogData->merge($logDate[$nextDate]);                
-            }
+            }            
             $tmp = [
                 'employee_id' => $schedule->employee_id,
                 'shiftment_id' => $schedule->shiftment_id,
@@ -153,9 +160,9 @@ class AttendanceRepository extends BaseRepository
             if(!empty($tmp['reason_id'])){
                 $tmp['state'] = $this->getReason($tmp['reason_id']); 
             }
-            
+            $overtimeCurrentDate = $overtimeDate[$date] ?? [];
             if(!$fingerLogData->isEmpty()){
-                $fingerClassification = $this->getFingerTimeDate($schedule, $fingerLogData, $overtimeDate[$date] ?? []);
+                $fingerClassification = $this->getFingerTimeDate($schedule, $fingerLogData, $overtimeCurrentDate);
                 $tmp['check_in'] = $fingerClassification['check_in'];
                 $tmp['check_out'] = $fingerClassification['check_out'];
                 
@@ -180,13 +187,38 @@ class AttendanceRepository extends BaseRepository
                 }
                 $tmp['absent'] = 0;
             }
-                                    
-            $attendanceResult[] = $tmp;            
+                      
+            $attendanceResult[] = $tmp;
+            if(!empty($overtimeCurrentDate)){
+                $startOvertime = $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('start_hour');
+                $endOvertime = $overtimeCurrentDate->getRawOriginal('overday') ? Carbon::parse($overtimeCurrentDate->getRawOriginal('overtime_date'))->addDay()->format('Y-m-d').' '.$overtimeCurrentDate->getRawOriginal('end_hour') : $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('end_hour');
+                // lembur diakhir
+                if(!empty($tmp['check_out'])){                    
+                    if($endOvertime > $tmp['check_out_schedule'])
+                    $overtimeCurrentDate->end_hour_real = substr($tmp['check_out'], -8);
+                    $overtimeCurrentDate->start_hour_real = $overtimeCurrentDate->start_hour;
+                }
+                // lembur awal
+                if(!empty($tmp['check_in'])){                    
+                    if($startOvertime < $tmp['check_in_schedule'])
+                    $overtimeCurrentDate->start_hour_real = substr($tmp['check_in'], -8);
+                    $overtimeCurrentDate->end_hour_real = $overtimeCurrentDate->end_hour;
+                }
+
+                $startRealOvertime = $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('start_hour_real');
+                $endRealOvertime = $overtimeCurrentDate->getRawOriginal('overday') ? Carbon::parse($overtimeCurrentDate->getRawOriginal('overtime_date'))->addDay()->format('Y-m-d').' '.$overtimeCurrentDate->getRawOriginal('end_hour_real') : $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('end_hour_real');
+                $maxHourOvertime = Carbon::parse($startOvertime)->diffInMinutes($endOvertime);
+                $overtimeCurrentDate->raw_value = Carbon::parse($startRealOvertime)->diffInMinutes($endRealOvertime);
+                $overtimeCurrentDate->calculated_value = $overtimeCurrentDate->getRawOriginal('raw_value') > $maxHourOvertime ? $maxHourOvertime :  $overtimeCurrentDate->getRawOriginal('raw_value');
+                $overtimeResult[] = $overtimeCurrentDate;
+            }
         }
         
-        return $attendanceResult;
+        return ['attendance' => $attendanceResult, 'overtime' => $overtimeResult];
     }
-    // untuk data attendance tambahhkan h+1 untuk endDate, karena bisa jadi overday misal ketika shift 3
+    // untuk data attendance tambahhkan h+1 untuk endDate, karena bisa jadi overday misal ketika shift 3 
+    // dan h-1 untuk startDate karena bisa jadi jam masuknya 00:00:00 maka bisa jadi datang 30 menit sebelumnya 
+    // sehingga masih masuk tanggal sebelumnya
     private function listAttendanceLog($startDate, $endDate, $shiftmentGroup, $employeeId){
         $endDate = Carbon::parse($endDate)->addDay()->format('Y-m-d');
         $startDate = Carbon::parse($startDate)->subDay()->format('Y-m-d');
