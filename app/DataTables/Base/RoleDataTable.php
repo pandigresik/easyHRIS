@@ -43,7 +43,7 @@ class RoleDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->responsive()
-            ->initComplete('function( settings, json ){ $(this).closest(\'div\').addClass(\'table-responsive\')}')
+            // ->initComplete('function( settings, json ){ $(this).closest(\'div\').addClass(\'table-responsive\')}')
             ->addAction(['width' => '120px', 'printable' => false])
             ->parameters([
                 'dom' => '<"row" <"col-md-6"B><"col-md-6 text-end"l>>rtip',

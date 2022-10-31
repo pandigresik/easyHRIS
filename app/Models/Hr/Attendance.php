@@ -111,7 +111,9 @@ class Attendance extends Model
     const UPDATED_AT = 'updated_at';
     const STATE = [
         'OK' => 'OK',
-        'INVALID' => 'Invalid'
+        'INVALID' => 'INVALID',
+        'EARLYOUT' => 'EARLYOUT',
+        'LATEIN' => 'LATEIN'
     ];
 
     protected $dates = ['deleted_at'];

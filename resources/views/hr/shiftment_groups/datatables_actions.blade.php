@@ -3,9 +3,7 @@
     <a href="{{ route('hr.shiftmentGroups.details.index', $id) }}" class='btn btn-ghost-info' title="detail shift group">
         <i class="fa fa-align-justify"></i>
      </a>
-    <a href="{{ route('hr.shiftmentGroups.show', $id) }}" class='btn btn-ghost-success'>
-       <i class="fa fa-eye"></i>
-    </a>
+    
     <a href="{{ route('hr.shiftmentGroups.edit', $id) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>

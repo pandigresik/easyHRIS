@@ -1,8 +1,6 @@
 {!! Form::open(['route' => ['hr.salaryGroupDetails.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group'>
-    <a href="{{ route('hr.salaryGroupDetails.show', $id) }}" class='btn btn-ghost-success'>
-       <i class="fa fa-eye"></i>
-    </a>
+    
     <a href="{{ route('hr.salaryGroupDetails.edit', $id) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>

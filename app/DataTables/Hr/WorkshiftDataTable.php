@@ -15,7 +15,9 @@ class WorkshiftDataTable extends DataTable
     */
     private $columnFilterOperator = [        
         'shiftment_id' => \App\DataTables\FilterClass\InKeyword::class,
-        'work_date' => \App\DataTables\FilterClass\BetweenKeyword::class    
+        'work_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'employee.code' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -127,7 +129,8 @@ class WorkshiftDataTable extends DataTable
         $shiftmentRepository = new ShiftmentRepository();        
         $shiftmentItem = convertArrayPairValueWithKey($shiftmentRepository->pluck());
         return [
-            'employee_id' => new Column(['title' => __('models/workshifts.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/workshifts.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment_id', 'searchable' => true, 'elmsearch' => 'text']),
             // 'description' => new Column(['title' => __('models/workshifts.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/workshifts.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'listItem' => $shiftmentItem, 'multiple' => 'multiple' ,'elmsearch' => 'dropdown']),

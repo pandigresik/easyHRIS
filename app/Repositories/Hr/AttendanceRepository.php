@@ -43,6 +43,7 @@ class AttendanceRepository extends BaseRepository
     /** in minutes */
     private $maxCheckout;
     private $minCheckin;
+    private $lateinTolerance;
 
     private $reason;
     /**
@@ -68,6 +69,7 @@ class AttendanceRepository extends BaseRepository
         $setting = Setting::where(['type' => 'attendance'])->get()->keyBy('name');
         $this->setMaxCheckout(intval($setting['max_checkout']->value));
         $this->setMinCheckin(intval($setting['min_checkin']->value));
+        $this->setLateinTolerance(intval($setting['latein_tolerance']->value));        
     }
 
     private function setReasonAttendance(){
@@ -92,11 +94,11 @@ class AttendanceRepository extends BaseRepository
         } 
     }
 
-    private function processAttendance($startDate, $endDate, $shiftmentGroup, $employeeId){        
+    private function processAttendance($startDate, $endDate, $shiftmentGroup, $employeeId){                
         $attandanceLogs = $this->listAttendanceLog($startDate, $endDate, $shiftmentGroup, $employeeId);
-        $workshifts = $this->listWorkshift($startDate, $endDate, $shiftmentGroup, $employeeId);
-        $overtimes = $this->listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId);
-        $leaves = $this->listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId);
+        $workshifts = $this->listWorkshift($startDate, $endDate, $shiftmentGroup, $employeeId);        
+        $overtimes = $this->listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId);        
+        $leaves = $this->listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId);        
         foreach($workshifts as $employee => $workshift){
             $log = $attandanceLogs[$employee] ?? collect([]);
             $overtime = $overtimes[$employee] ?? collect([]); 
@@ -111,7 +113,7 @@ class AttendanceRepository extends BaseRepository
                     $overtime->save();
                 }
             }
-        }        
+        }
     }
 
     private function processEmployeeAttendance($log, $workshift, $overtime, $leave){
@@ -177,9 +179,10 @@ class AttendanceRepository extends BaseRepository
                     $tmp['late_out'] = $fingerClassification['check_out'] > $tmp['check_out_schedule'] ? diffMinute($fingerClassification['check_out'], $tmp['check_out_schedule']): 0;
                 }
 
-                if(!is_null($tmp['check_out']) && !is_null($tmp['check_in'])){
+                if(!is_null($tmp['check_out']) && !is_null($tmp['check_in'])){                    
                     if($tmp['state'] == 'INVALID'){
-                        if($tmp['late_in'] > 0){
+                        $lateinTolerance = $this->getLateinTolerance();
+                        if($tmp['late_in'] > (0 + $lateinTolerance) ){
                             $tmp['state'] = 'LATEIN';
                         } else if($tmp['early_out'] > 0){
                             $tmp['state'] = 'EARLYOUT';
@@ -227,31 +230,40 @@ class AttendanceRepository extends BaseRepository
     private function listAttendanceLog($startDate, $endDate, $shiftmentGroup, $employeeId){
         $endDate = Carbon::parse($endDate)->addDay()->format('Y-m-d');
         $startDate = Carbon::parse($startDate)->subDay()->format('Y-m-d');
-        return AttendanceLogfinger::select(['employee_id', 'fingertime'])->whereBetween('fingertime',[$startDate.' 00:00:00',$endDate.' 23:59:59'])->whereIn('employee_id', function($q) use ($shiftmentGroup, $employeeId){
-            if(!empty($employeeId)){
-                return $q->select(['id'])->from('employees')->whereIn('id', $employeeId);
-            }
-            return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);
-        })->orderBy('fingertime')
-        ->get()->groupBy('employee_id');
+        $att = AttendanceLogfinger::select(['employee_id', 'fingertime'])->whereBetween('fingertime',[$startDate.' 00:00:00',$endDate.' 23:59:59'])->orderBy('fingertime');
+        if(!empty($employeeId)){    
+            $att->whereIn('employee_id', $employeeId);         
+        }else{
+            $att->whereIn('employee_id', function($q) use ($shiftmentGroup){
+                return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);         
+            });
+        }
+        
+        return $att->get()->groupBy('employee_id');
     }
 
     private function listWorkshift($startDate, $endDate, $shiftmentGroup, $employeeId){
-        return Workshift::select(['shiftment_id','employee_id', 'work_date', 'start_hour', 'end_hour'])->whereBetween('work_date',[$startDate,$endDate])->whereIn('employee_id',function($q) use ($shiftmentGroup, $employeeId){
-            if(!empty($employeeId)){
-                return $q->select(['id'])->from('employees')->whereIn('id', $employeeId);
-            }
-            return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);
-        })->orderBy('work_date')->get()->groupBy('employee_id');
+        $att = Workshift::select(['shiftment_id','employee_id', 'work_date', 'start_hour', 'end_hour'])->whereBetween('work_date',[$startDate,$endDate])->orderBy('work_date');
+        if(!empty($employeeId)){    
+            $att->whereIn('employee_id', $employeeId);         
+        }else{
+            $att->whereIn('employee_id', function($q) use ($shiftmentGroup){
+                return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);         
+            });
+        }
+        return $att->get()->groupBy('employee_id');
     }
 
     private function listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId){
-        return Overtime::select(['overtime_date', 'id', 'employee_id','start_hour', 'end_hour', 'overday'])->whereBetween('overtime_date',[$startDate,$endDate])->whereIn('employee_id',function($q) use ($shiftmentGroup, $employeeId){
-            if(!empty($employeeId)){
-                return $q->select(['id'])->from('employees')->whereIn('id', $employeeId);
-            }
-            return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);
-        })->get()->groupBy('employee_id');
+        $att = Overtime::select(['overtime_date', 'id', 'employee_id','start_hour', 'end_hour', 'overday'])->whereBetween('overtime_date',[$startDate,$endDate]);
+        if(!empty($employeeId)){    
+            $att->whereIn('employee_id', $employeeId);         
+        }else{
+            $att->whereIn('employee_id', function($q) use ($shiftmentGroup){
+                return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);         
+            });
+        }
+        return $att->get()->groupBy('employee_id');
     }
 
     private function listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId){
@@ -384,6 +396,26 @@ class AttendanceRepository extends BaseRepository
     public function setReason($reason)
     {
         $this->reason = $reason;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of lateinTolerance
+     */ 
+    public function getLateinTolerance()
+    {
+        return $this->lateinTolerance;
+    }
+
+    /**
+     * Set the value of lateinTolerance
+     *
+     * @return  self
+     */ 
+    public function setLateinTolerance($lateinTolerance)
+    {
+        $this->lateinTolerance = $lateinTolerance;
 
         return $this;
     }

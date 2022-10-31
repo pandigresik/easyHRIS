@@ -70,10 +70,6 @@ Route::group(['prefix' => 'hr'], function () {
     Route::resource('skills', Hr\SkillAPIController::class);        
 
     Route::resource('workshifts', Hr\WorkshiftAPIController::class);
+    Route::resource('request_workshifts', Hr\RequestWorkshiftAPIController::class);
     Route::resource('workshift_groups', Hr\WorkshiftGroupAPIController::class);
-});
-
-
-Route::group(['prefix' => 'hr'], function () {
-    
 });

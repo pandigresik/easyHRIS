@@ -4,7 +4,7 @@
      @push('breadcrumb')
         <ol class="breadcrumb  my-0 ms-2">
             <li class="breadcrumb-item">
-                <a href="{{ route('base.customers.index') }}">@lang('models/customers.singular')</a>
+                <a href="{{ route('hr.requestWorkshifts.index') }}">@lang('models/requestWorkshifts.singular')</a>
             </li>
             <li class="breadcrumb-item active">@lang('crud.detail')</li>
         </ol>
@@ -17,10 +17,10 @@
                          <div class="card">
                              <div class="card-header">
                                  <strong>@lang('crud.detail')</strong>
-                                  <a href="{{ route('base.customers.index') }}" class="btn btn-ghost-light">Back</a>
+                                  <a href="{{ route('hr.requestWorkshifts.index') }}" class="btn btn-ghost-light">Back</a>
                              </div>
                              <div class="card-body">
-                                 @include('base.customers.show_fields')
+                                 @include('hr.request_workshifts.show_fields')
                              </div>
                          </div>
                      </div>
