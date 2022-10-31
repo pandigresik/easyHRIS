@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\JobTitleDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateJobTitleRequest;
 use App\Http\Requests\Hr\UpdateJobTitleRequest;
 use App\Repositories\Hr\JobTitleRepository;

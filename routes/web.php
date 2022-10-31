@@ -68,6 +68,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('overtimes', Hr\OvertimeController::class, ["as" => 'hr']);
 
         Route::resource('payrollPeriods', Hr\PayrollPeriodController::class, ["as" => 'hr']);
+        Route::resource('payrollMonthlyPeriods', Hr\PayrollMonthlyPeriodController::class, ["as" => 'hr']);
+        Route::resource('payrollBiweeklyPeriods', Hr\PayrollBiweeklyPeriodController::class, ["as" => 'hr']);
         Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr']);
         Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr']);
         Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr']);
@@ -112,4 +114,3 @@ Route::group(['prefix' => 'artisan'], function () {
         Artisan::call('cache:clear');
     });
 });
-

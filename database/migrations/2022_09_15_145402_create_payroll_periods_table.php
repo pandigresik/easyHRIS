@@ -24,7 +24,6 @@ class CreatePayrollPeriodsTable extends Migration
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
-            $table->index(['month', 'year'], 'payroll_periods_idx');
             $table->foreign('company_id', 'FK_F1908C15979B1AD6')->references('id')->on('companies');
         });
     }

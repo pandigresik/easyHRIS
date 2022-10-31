@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\SalaryComponentDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateSalaryComponentRequest;
 use App\Http\Requests\Hr\UpdateSalaryComponentRequest;
 use App\Repositories\Hr\SalaryComponentRepository;

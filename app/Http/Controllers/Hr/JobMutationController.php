@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\JobMutationDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateJobMutationRequest;
 use App\Http\Requests\Hr\UpdateJobMutationRequest;
 use App\Repositories\Hr\JobMutationRepository;

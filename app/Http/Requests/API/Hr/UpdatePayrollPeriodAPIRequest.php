@@ -25,7 +25,7 @@ class UpdatePayrollPeriodAPIRequest extends APIRequest
     public function rules()
     {
         $rules = PayrollPeriod::$rules;
-
+        
         return $rules;
     }
 }

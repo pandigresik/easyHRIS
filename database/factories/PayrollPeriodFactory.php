@@ -23,8 +23,11 @@ class PayrollPeriodFactory extends Factory
     {
         return [
             'company_id' => $this->faker->word,
+        'name' => $this->faker->text($this->faker->numberBetween(5, 255)),
         'year' => $this->faker->word,
         'month' => $this->faker->word,
+        'start_period' => $this->faker->date('Y-m-d'),
+        'end_period' => $this->faker->date('Y-m-d'),
         'closed' => $this->faker->boolean
         ];
     }

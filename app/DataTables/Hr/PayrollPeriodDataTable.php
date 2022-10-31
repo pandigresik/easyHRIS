@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 
 class PayrollPeriodDataTable extends DataTable
 {
+    protected $typePeriod;
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
@@ -46,6 +47,9 @@ class PayrollPeriodDataTable extends DataTable
      */
     public function query(PayrollPeriod $model)
     {
+        if($this->getTypePeriod()){
+            return $model->where(['type_period' => $this->getTypePeriod()])->newQuery();    
+        }
         return $model->newQuery();
     }
 
@@ -116,8 +120,11 @@ class PayrollPeriodDataTable extends DataTable
     {
         return [
             'company_id' => new Column(['title' => __('models/payrollPeriods.fields.company_id'),'name' => 'company_id', 'data' => 'company_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'name' => new Column(['title' => __('models/payrollPeriods.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
             'year' => new Column(['title' => __('models/payrollPeriods.fields.year'),'name' => 'year', 'data' => 'year', 'searchable' => true, 'elmsearch' => 'text']),
             'month' => new Column(['title' => __('models/payrollPeriods.fields.month'),'name' => 'month', 'data' => 'month', 'searchable' => true, 'elmsearch' => 'text']),
+            'start_period' => new Column(['title' => __('models/payrollPeriods.fields.start_period'),'name' => 'start_period', 'data' => 'start_period', 'searchable' => true, 'elmsearch' => 'text']),
+            'end_period' => new Column(['title' => __('models/payrollPeriods.fields.end_period'),'name' => 'end_period', 'data' => 'end_period', 'searchable' => true, 'elmsearch' => 'text']),
             'closed' => new Column(['title' => __('models/payrollPeriods.fields.closed'),'name' => 'closed', 'data' => 'closed', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
@@ -130,5 +137,25 @@ class PayrollPeriodDataTable extends DataTable
     protected function filename()
     {
         return 'payroll_periods_datatable_' . time();
+    }
+
+    /**
+     * Get the value of typePeriod
+     */ 
+    public function getTypePeriod()
+    {
+        return $this->typePeriod;
+    }
+
+    /**
+     * Set the value of typePeriod
+     *
+     * @return  self
+     */ 
+    public function setTypePeriod($typePeriod)
+    {
+        $this->typePeriod = $typePeriod;
+
+        return $this;
     }
 }

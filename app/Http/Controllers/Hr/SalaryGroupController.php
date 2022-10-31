@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\SalaryGroupDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateSalaryGroupRequest;
 use App\Http\Requests\Hr\UpdateSalaryGroupRequest;
 use App\Repositories\Hr\SalaryGroupRepository;

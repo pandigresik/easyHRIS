@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\PayrollPeriodDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreatePayrollPeriodRequest;
 use App\Http\Requests\Hr\UpdatePayrollPeriodRequest;
 use App\Repositories\Hr\PayrollPeriodRepository;
-use App\Repositories\Hr\CompanyRepository;
+use App\Repositories\Base\CompanyRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use Response;
@@ -17,6 +17,7 @@ class PayrollPeriodController extends AppBaseController
 {
     /** @var  PayrollPeriodRepository */
     protected $repository;
+    protected $type;
 
     public function __construct()
     {
@@ -31,6 +32,9 @@ class PayrollPeriodController extends AppBaseController
      */
     public function index(PayrollPeriodDataTable $payrollPeriodDataTable)
     {
+        if(!empty($this->type)){
+            return $payrollPeriodDataTable->setTypePeriod($this->type)->render('hr.payroll_periods.index');    
+        }
         return $payrollPeriodDataTable->render('hr.payroll_periods.index');
     }
 
@@ -56,10 +60,10 @@ class PayrollPeriodController extends AppBaseController
         $input = $request->all();
 
         $payrollPeriod = $this->getRepositoryObj()->create($input);
-        if ($payrollPeriod instanceof Exception) {
+        if($payrollPeriod instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $payrollPeriod->getMessage()]);
         }
-
+        
         Flash::success(__('messages.saved', ['model' => __('models/payrollPeriods.singular')]));
 
         return redirect(route('hr.payrollPeriods.index'));
@@ -101,7 +105,7 @@ class PayrollPeriodController extends AppBaseController
 
             return redirect(route('hr.payrollPeriods.index'));
         }
-
+        
         return view('hr.payroll_periods.edit')->with('payrollPeriod', $payrollPeriod)->with($this->getOptionItems());
     }
 
@@ -124,7 +128,7 @@ class PayrollPeriodController extends AppBaseController
         }
 
         $payrollPeriod = $this->getRepositoryObj()->update($request->all(), $id);
-        if ($payrollPeriod instanceof Exception) {
+        if($payrollPeriod instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $payrollPeriod->getMessage()]);
         }
 
@@ -151,8 +155,8 @@ class PayrollPeriodController extends AppBaseController
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
-
-        if ($delete instanceof Exception) {
+        
+        if($delete instanceof Exception){
             return redirect()->back()->withErrors(['error', $delete->getMessage()]);
         }
 
@@ -162,17 +166,16 @@ class PayrollPeriodController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model PayrollPeriod from storage.
+     * Provide options item based on relationship model PayrollPeriod from storage.         
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems()
-    {
+    private function getOptionItems(){        
         $company = new CompanyRepository();
         return [
-            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck()
+            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck()            
         ];
     }
 }

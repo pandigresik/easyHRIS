@@ -8,6 +8,7 @@ use App\Models\Hr\PayrollPeriod;
 
 class CreatePayrollPeriodRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,9 +37,8 @@ class CreatePayrollPeriodRequest extends FormRequest
      *
      * @return array
     */
-    public function all($keys = null)
-    {
-        $keys = (new PayrollPeriod())->fillable;
+    public function all($keys = null){
+        $keys = (new PayrollPeriod)->fillable;
         return parent::all($keys);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\SkillGroupDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateSkillGroupRequest;
 use App\Http\Requests\Hr\UpdateSkillGroupRequest;
 use App\Repositories\Hr\SkillGroupRepository;

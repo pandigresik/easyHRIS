@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\EmployeeDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateEmployeeRequest;
 use App\Http\Requests\Hr\UpdateEmployeeRequest;
 use App\Repositories\Hr\EmployeeRepository;

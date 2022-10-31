@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\JobLevelDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateJobLevelRequest;
 use App\Http\Requests\Hr\UpdateJobLevelRequest;
 use App\Repositories\Hr\JobLevelRepository;

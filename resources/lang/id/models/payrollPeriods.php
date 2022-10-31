@@ -7,8 +7,11 @@ return array (
   array (
     'id' => 'Id',
     'company_id' => 'Company Id',
+    'name' => 'Name',
     'year' => 'Year',
     'month' => 'Month',
+    'start_period' => 'Start Period',
+    'end_period' => 'End Period',
     'closed' => 'Closed',
   ),
 );

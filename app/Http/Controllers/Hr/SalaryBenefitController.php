@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\SalaryBenefitDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateSalaryBenefitRequest;
 use App\Http\Requests\Hr\UpdateSalaryBenefitRequest;
 use App\Repositories\Hr\SalaryBenefitRepository;

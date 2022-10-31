@@ -24,6 +24,18 @@
         "inView": true
     },
     {
+        "name": "name",
+        "dbType": "string,255",
+        "htmlType": "text",
+        "validations": "required|string|max:255|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
         "name": "year",
         "dbType": "smallInteger,false",
         "htmlType": null,
@@ -39,6 +51,30 @@
         "name": "month",
         "dbType": "smallInteger,false",
         "htmlType": null,
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "start_period",
+        "dbType": "date",
+        "htmlType": "date",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "end_period",
+        "dbType": "date",
+        "htmlType": "date",
         "validations": "required",
         "searchable": true,
         "fillable": true,

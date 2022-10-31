@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\SkillDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateSkillRequest;
 use App\Http\Requests\Hr\UpdateSkillRequest;
 use App\Repositories\Hr\SkillRepository;

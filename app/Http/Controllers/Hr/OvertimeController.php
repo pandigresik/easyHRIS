@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\OvertimeDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateOvertimeRequest;
 use App\Http\Requests\Hr\UpdateOvertimeRequest;
 use App\Repositories\Hr\OvertimeRepository;

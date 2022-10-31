@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\FingerprintDeviceDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateFingerprintDeviceRequest;
 use App\Http\Requests\Hr\UpdateFingerprintDeviceRequest;
 use App\Repositories\Hr\FingerprintDeviceRepository;

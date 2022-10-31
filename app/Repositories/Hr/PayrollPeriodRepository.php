@@ -8,7 +8,7 @@ use App\Repositories\BaseRepository;
 /**
  * Class PayrollPeriodRepository
  * @package App\Repositories\Hr
- * @version October 4, 2022, 11:17 am WIB
+ * @version October 31, 2022, 3:14 pm WIB
 */
 
 class PayrollPeriodRepository extends BaseRepository
@@ -18,8 +18,11 @@ class PayrollPeriodRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'company_id',
+        'name',
         'year',
         'month',
+        'start_period',
+        'end_period',
         'closed'
     ];
 

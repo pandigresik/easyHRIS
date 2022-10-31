@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\EducationTitleDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateEducationTitleRequest;
 use App\Http\Requests\Hr\UpdateEducationTitleRequest;
 use App\Repositories\Hr\EducationTitleRepository;

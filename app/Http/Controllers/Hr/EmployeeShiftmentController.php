@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\EmployeeShiftmentDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateEmployeeShiftmentRequest;
 use App\Http\Requests\Hr\UpdateEmployeeShiftmentRequest;
 use App\Repositories\Hr\EmployeeShiftmentRepository;

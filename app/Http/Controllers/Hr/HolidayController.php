@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\HolidayDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateHolidayRequest;
 use App\Http\Requests\Hr\UpdateHolidayRequest;
 use App\Repositories\Hr\HolidayRepository;

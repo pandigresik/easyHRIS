@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @SWG\Definition(
  *      definition="PayrollPeriod",
- *      required={"year", "month", "closed"},
+ *      required={"name", "year", "month", "start_period", "end_period", "closed"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -23,6 +23,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          format="int32"
  *      ),
  *      @SWG\Property(
+ *          property="name",
+ *          description="name",
+ *          type="string"
+ *      ),
+ *      @SWG\Property(
  *          property="year",
  *          description="year",
  *          type="integer",
@@ -33,6 +38,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          description="month",
  *          type="integer",
  *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="start_period",
+ *          description="start_period",
+ *          type="string",
+ *          format="date"
+ *      ),
+ *      @SWG\Property(
+ *          property="end_period",
+ *          description="end_period",
+ *          type="string",
+ *          format="date"
  *      ),
  *      @SWG\Property(
  *          property="closed",
@@ -53,13 +70,16 @@ class PayrollPeriod extends Model
 
 
     protected $dates = ['deleted_at'];
-    protected $showColumnOption = 'month';
+
 
 
     public $fillable = [
         'company_id',
+        'name',
         'year',
         'month',
+        'start_period',
+        'end_period',
         'closed'
     ];
 
@@ -71,8 +91,11 @@ class PayrollPeriod extends Model
     protected $casts = [
         'id' => 'integer',
         'company_id' => 'integer',
+        'name' => 'string',
         'year' => 'integer',
         'month' => 'integer',
+        'start_period' => 'date',
+        'end_period' => 'date',
         'closed' => 'boolean'
     ];
 
@@ -83,8 +106,11 @@ class PayrollPeriod extends Model
      */
     public static $rules = [
         'company_id' => 'nullable',
+        'name' => 'required|string|max:255',
         'year' => 'required',
         'month' => 'required',
+        'start_period' => 'required',
+        'end_period' => 'required',
         'closed' => 'required|boolean'
     ];
 

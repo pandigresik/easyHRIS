@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\LeafDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateLeafRequest;
 use App\Http\Requests\Hr\UpdateLeafRequest;
 use App\Repositories\Hr\LeafRepository;

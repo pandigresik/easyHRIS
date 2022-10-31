@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\CareerHistoryDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateCareerHistoryRequest;
 use App\Http\Requests\Hr\UpdateCareerHistoryRequest;
 use App\Repositories\Hr\CareerHistoryRepository;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\ShiftmentGroupDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateShiftmentGroupRequest;
 use App\Http\Requests\Hr\UpdateShiftmentGroupRequest;
 use App\Repositories\Hr\ShiftmentGroupRepository;

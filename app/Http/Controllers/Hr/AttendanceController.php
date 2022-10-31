@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\AttendanceDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateAttendanceRequest;
 use App\Http\Requests\Hr\UpdateAttendanceRequest;
 use App\Repositories\Hr\AttendanceRepository;

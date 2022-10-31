@@ -23,14 +23,22 @@ Questions:
     - Faktor2 yang mempengaruhi gaji    
 
 Todo:
-    - Entry data master
-    - Proses generate jadwal group
-    - Proses generate jadwal per pegawai
-    - Proses pengajuan overtime / lenbur
-    - Proses pengajuan ijin, cuti dll
-    - Proses pindah shift pegawai    
-    - Proses absensi, untuk perhitungan hari kerja dan keterlambatan serta overtime jika ada
+    - Entry data master (done)
+    - Proses generate jadwal group (done)
+    - Proses generate jadwal per pegawai (done)
+    - Proses pengajuan overtime / lenbur (done)
+    - Proses pengajuan ijin, cuti dll (done)
+    - Proses pindah shift pegawai (done)   
+    - Proses absensi harian, keterlambatan serta overtime (done)
+    - Perhitungan premi bulanan 
     - Proses perhitungan gaji berdasarkan data absensi
 
 Ketika import employee set juga component salary untuk pegawai tersebut
 
+Catatan: 
+Khusus untuk harian, jika ada tanggal merah maka tanggal merah tetap dibayar dengan syarat sudah bekerja > 3 bulan
+Misalkan pada tgl 8 Okt 2022 adalah hari libur, maka pada periode 1 sd 10 dihitung 8 hari kerja ( aktualnya hanya 7 hari kerja, 10 hari - 2 hari minggu - 1 hari libur)
+Besaran Tunjangan & UM Lembur Minggu adalah 25000, diberikan dengan ketentuan sbb:
+- < 5 jam mendapatkan 0%
+- 5 sd 6 jam mendapatkan 50%
+- >= 7 jam mendapatkan 100%

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\AbsentReasonDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateAbsentReasonRequest;
 use App\Http\Requests\Hr\UpdateAbsentReasonRequest;
 use App\Repositories\Hr\AbsentReasonRepository;

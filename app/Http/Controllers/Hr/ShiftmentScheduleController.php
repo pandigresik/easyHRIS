@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\ShiftmentScheduleDataTable;
-use App\Http\Requests\Hr;
+
 use App\Http\Requests\Hr\CreateShiftmentScheduleRequest;
 use App\Http\Requests\Hr\UpdateShiftmentScheduleRequest;
 use App\Repositories\Hr\ShiftmentScheduleRepository;

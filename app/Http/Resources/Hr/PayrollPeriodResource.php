@@ -17,8 +17,11 @@ class PayrollPeriodResource extends JsonResource
         return [
             'id' => $this->id,
             'company_id' => $this->company_id,
+            'name' => $this->name,
             'year' => $this->year,
             'month' => $this->month,
+            'start_period' => $this->start_period,
+            'end_period' => $this->end_period,
             'closed' => $this->closed
         ];
     }
