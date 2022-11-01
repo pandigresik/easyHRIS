@@ -10,5 +10,5 @@ class PayrollWeeklyPeriodController extends PayrollPeriodController
     /** @var  PayrollPeriodRepository */
     protected $repository;
     protected $type = 'weekly';    
-
+    
 }

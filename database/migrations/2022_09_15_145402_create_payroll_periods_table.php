@@ -19,7 +19,7 @@ class CreatePayrollPeriodsTable extends Migration
             $table->string('name');
             $table->smallInteger('year');
             $table->smallInteger('month');
-            $table->tinyInteger('closed');
+            $table->tinyInteger('closed')->nullable()->default(0);
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

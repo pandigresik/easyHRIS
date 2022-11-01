@@ -137,4 +137,32 @@ class PayrollPeriod extends Model
     {
         return $this->hasMany(\App\Models\Hr\Tax::class, 'period_id');
     }
+
+    public function getStartPeriodAttribute($value){
+        return localFormatDate($value);
+    }
+
+    public function getEndPeriodAttribute($value){
+        return localFormatDate($value);
+    }
+
+    public function getRangePeriodAttribute($value){
+        return $this->start_period.' - '.$this->end_period;
+    }
+
+    public function scopeWeekly($query){
+        return $query->where(['type_period' => 'weekly']);
+    }
+
+    public function scopeBiweekly($query){
+        return $query->where(['type_period' => 'biweekly']);
+    }
+
+    public function scopeMonthly($query){
+        return $query->where(['type_period' => 'monthly']);
+    }
+
+    public function scopeClosed($query){
+        return $query->where(['closed' => 1]);
+    }
 }

@@ -27,7 +27,10 @@ class CreatePayrollPeriodRequest extends FormRequest
      */
     public function rules()
     {
-        return PayrollPeriod::$rules;
+        return [
+            'company_id' => 'required',            
+            'range_period' => 'required',
+        ];
     }
 
     /**
@@ -38,7 +41,7 @@ class CreatePayrollPeriodRequest extends FormRequest
      * @return array
     */
     public function all($keys = null){
-        $keys = (new PayrollPeriod)->fillable;
+        $keys = ['range_period', 'company_id'];        
         return parent::all($keys);
     }
 }

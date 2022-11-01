@@ -17,7 +17,7 @@ class CreateSalaryBenefitsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->unsignedBigInteger('component_id')->nullable();
-            $table->decimal('benefit_value', 15, 2,true)->nullable();            
+            $table->decimal('benefit_value', 15, 2,true)->nullable();                  
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

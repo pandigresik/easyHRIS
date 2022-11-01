@@ -6,9 +6,8 @@
                 <use xlink:href="vendor/coreui/icons/svg/free.svg#cil-menu"></use>
             </svg>
         </button><a class="header-brand d-md-none" href="#">
-            <svg width="118" height="46" alt="CoreUI Logo">
-                <use xlink:href="vendor/coreui/icons/svg/brand.svg#cib-coreui"></use>
-            </svg></a>
+        <div class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
+            <img src="vendor/coreui/icons/svg/brand.svg"> </div></a>
               
         <ul class="header-nav ms-3">
             <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button"

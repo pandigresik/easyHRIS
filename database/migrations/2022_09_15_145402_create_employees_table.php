@@ -40,13 +40,14 @@ class CreateEmployeesTable extends Migration
             $table->tinyInteger('have_overtime_benefit');
             $table->string('risk_ratio', 3)->nullable();
             $table->string('profile_image')->nullable();
-            $table->integer('profile_size')->nullable();
+            $table->integer('profile_size')->nullable();            
+            $table->unsignedBigInteger('salary_group_id')->nullable();
+            $table->unsignedBigInteger('shiftment_group_id')->nullable();
+            $table->enum('payroll_period', ['weekly','biweekly','monthly','daily'])->nullable()->default('monthly');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('salary_group_id')->nullable();
-            $table->unsignedBigInteger('shiftment_group_id')->nullable();
             $table->index(['code', 'full_name'], 'employees_idx');
             $table->foreign('supervisor_id', 'FK_BA82C30019E9AC5F')->references('id')->on('employees');
             $table->foreign('contract_id', 'FK_BA82C3002576E0FD')->references('id')->on('contracts');

@@ -1,10 +1,9 @@
 <div class="sidebar sidebar-dark sidebar-fixed hide" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
-        <svg class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
-            <use xlink:href="vendor/coreui/icons/svg/brand.svg#cib-coreui-c"></use>
-        </svg>
-        <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
-            <use xlink:href="vendor/coreui/icons/svg/brand.svg#cib-coreui"></use>
+        <div class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
+            <img src="vendor/coreui/icons/svg/brand.svg"> </div>
+        <div class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
+            <img src="vendor/coreui/icons/svg/brand.svg"> </div></use>
         </svg>
     </div>
     

@@ -9,6 +9,6 @@ class PayrollBiweeklyPeriodController extends PayrollPeriodController
 {
     /** @var  PayrollPeriodRepository */
     protected $repository;
-    protected $type = 'biweekly';    
-
+    protected $type = 'biweekly';
+    
 }

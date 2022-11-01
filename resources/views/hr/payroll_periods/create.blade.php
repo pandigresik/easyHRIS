@@ -22,7 +22,7 @@
                             </div>
                             <div class="card-body">                                
 
-                                   @include('hr.payroll_periods.fields')
+                                   @include('hr.payroll_periods.generate_fields')
                                 
                             </div>
                             <div class="card-footer">

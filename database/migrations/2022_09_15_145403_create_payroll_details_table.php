@@ -17,7 +17,9 @@ class CreatePayrollDetailsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('payroll_id');
             $table->unsignedBigInteger('component_id');
-            $table->unsignedDecimal('benefit_value', 15)->nullable();            
+            $table->unsignedDecimal('benefit_value', 15)->nullable();
+            $table->tinyInteger('sign_value')->nullable();     
+            $table->string('description', 255)->nullable();             
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

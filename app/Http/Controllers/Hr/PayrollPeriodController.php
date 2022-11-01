@@ -10,6 +10,8 @@ use App\Repositories\Hr\PayrollPeriodRepository;
 use App\Repositories\Base\CompanyRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\PayrollPeriod;
+use Carbon\Carbon;
 use Response;
 use Exception;
 
@@ -21,7 +23,7 @@ class PayrollPeriodController extends AppBaseController
 
     public function __construct()
     {
-        $this->repository = PayrollPeriodRepository::class;
+        $this->repository = PayrollPeriodRepository::class;        
     }
 
     /**
@@ -45,7 +47,10 @@ class PayrollPeriodController extends AppBaseController
      */
     public function create()
     {
-        return view('hr.payroll_periods.create')->with($this->getOptionItems());
+        $nextPeriod = $this->getNextPeriodPayroll();
+        $paramDate = ['minDate' => is_null($nextPeriod) ? $nextPeriod : localFormatDate($nextPeriod)];
+        $paramDate['endDate'] = localFormatDate($this->getEndNextPeriodPayroll($nextPeriod));
+        return view('hr.payroll_periods.create')->with($this->getOptionItems())->with($paramDate);
     }
 
     /**
@@ -58,8 +63,8 @@ class PayrollPeriodController extends AppBaseController
     public function store(CreatePayrollPeriodRequest $request)
     {
         $input = $request->all();
-
-        $payrollPeriod = $this->getRepositoryObj()->create($input);
+        \Log::error('$this->type '.$this->type);
+        $payrollPeriod = $this->getRepositoryObj()->setPayrollPeriod($this->type)->create($input);
         if($payrollPeriod instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $payrollPeriod->getMessage()]);
         }
@@ -172,10 +177,39 @@ class PayrollPeriodController extends AppBaseController
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems(){
         $company = new CompanyRepository();
         return [
             'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck()            
         ];
+    }
+
+    protected function getNextPeriodPayroll(){
+        $result = NULL;
+        $lastPeriod = PayrollPeriod::where(['type_period' => $this->type])->closed()->orderBy('end_period', 'desc')->first();
+        if($lastPeriod){
+            $result = Carbon::parse($lastPeriod->getRawOriginal('end_period'))->addDay()->format('Y-m-d');
+        }
+        
+        return $result;
+    }
+
+    protected function getEndNextPeriodPayroll($startPeriod){
+        $endPeriod = NULL;
+        if(is_null($startPeriod)) return Carbon::now()->format('Y-m-d');
+        $tmpPeriod = Carbon::parse($startPeriod);
+        switch($this->type){
+            case 'weekly':
+                $tmpPeriod->addDays(6);
+                break;
+            case 'biweekly':
+                $tmpPeriod->addDays(13);
+                break;
+            case 'monthly':
+                $tmpPeriod->endOfMonth();
+                break;
+        }
+        $endPeriod = $tmpPeriod->format('Y-m-d');
+        return $endPeriod;
     }
 }

@@ -60,7 +60,8 @@ class PayrollDetail extends Model
         'payroll_id',
         'component_id',
         'benefit_value',
-        'benefit_key'
+        'sign_value',
+        'description'
     ];
 
     /**
@@ -72,8 +73,7 @@ class PayrollDetail extends Model
         'id' => 'integer',
         'payroll_id' => 'integer',
         'component_id' => 'integer',
-        'benefit_value' => 'string',
-        'benefit_key' => 'string'
+        'benefit_value' => 'string'        
     ];
 
     /**
@@ -84,8 +84,7 @@ class PayrollDetail extends Model
     public static $rules = [
         'payroll_id' => 'nullable',
         'component_id' => 'nullable',
-        'benefit_value' => 'nullable|string',
-        'benefit_key' => 'nullable|string|max:255'
+        'benefit_value' => 'nullable|string'
     ];
 
     /**

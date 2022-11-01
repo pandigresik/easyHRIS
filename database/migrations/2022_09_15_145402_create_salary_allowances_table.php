@@ -19,7 +19,7 @@ class CreateSalaryAllowancesTable extends Migration
             $table->unsignedBigInteger('component_id')->nullable();
             $table->smallInteger('year');
             $table->smallInteger('month');
-            $table->decimal('benefit_value', 15, 2,true)->nullable();            
+            $table->decimal('benefit_value', 15, 2,true)->nullable();     
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

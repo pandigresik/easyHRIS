@@ -7,7 +7,7 @@ return array (
   array (
     'id' => 'Id',
     'contract_id' => 'Contract Id',
-    'company_id' => 'Company Id',
+    'company_id' => 'Company',
     'department_id' => 'Department Id',
     'joblevel_id' => 'Joblevel Id',
     'jobtitle_id' => 'Jobtitle Id',

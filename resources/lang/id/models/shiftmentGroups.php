@@ -7,7 +7,7 @@ return array (
   array (
     'id' => 'Id',
     'code' => 'Code',
-    'company_id' => 'Company Id',
+    'company_id' => 'Company',
     'name' => 'Name',
   ),
 );
