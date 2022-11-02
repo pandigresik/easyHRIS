@@ -112,7 +112,8 @@ class PayrollDetailDataTable extends DataTable
     {
         return [            
             'component_id' => new Column(['title' => __('models/payrollDetails.fields.component_id'),'name' => 'component_id', 'data' => 'component.name', 'searchable' => false, 'elmsearch' => 'text']),
-            'benefit_value' => new Column(['title' => __('models/payrollDetails.fields.benefit_value'),'name' => 'benefit_value', 'data' => 'benefit_value', 'searchable' => false, 'class' => 'text-end','elmsearch' => 'text']),            
+            'benefit_value' => new Column(['title' => __('models/payrollDetails.fields.benefit_value'),'name' => 'benefit_value', 'data' => 'benefit_value', 'searchable' => false, 'class' => 'text-end','elmsearch' => 'text']), 
+            'description' => new Column(['title' => __('models/payrollDetails.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false]),            
         ];
     }
 

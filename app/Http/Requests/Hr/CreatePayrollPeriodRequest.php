@@ -41,7 +41,7 @@ class CreatePayrollPeriodRequest extends FormRequest
      * @return array
     */
     public function all($keys = null){
-        $keys = ['range_period', 'company_id'];        
+        $keys = ['range_period', 'company_id', 'employee_id', 'bpjs_fee'];        
         return parent::all($keys);
     }
 }

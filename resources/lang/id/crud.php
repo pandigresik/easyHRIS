@@ -15,6 +15,7 @@ return [
 
     'save' => 'Simpan',
     'generate' => 'Generate',
+    'calculate' => 'Hitung',
     'edit' => 'Edit',
     'sync' => 'Sinkron',
     'detail' => 'Detail',

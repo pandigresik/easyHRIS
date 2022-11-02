@@ -10,6 +10,6 @@
 <div class="form-group row mb-3">
     {!! Form::label('range_period', __('models/payrollPeriods.fields.range_period').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('range_period', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( array_merge(['minDate' => $minDate, 'endDate' => $endDate ],config('local.daterange')) ),'id'=>'range_period']) !!}
+    {!! Form::text('range_period', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( array_merge(['startDate' => $startDate, 'endDate' => $endDate ],config('local.daterange')) ),'id'=>'range_period']) !!}
 </div>
 </div>

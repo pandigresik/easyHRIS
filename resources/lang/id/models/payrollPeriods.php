@@ -7,6 +7,8 @@ return array (
   array (
     'id' => 'Id',
     'company_id' => 'Company',
+    'employee_id' => 'Employee',
+    'bpjs_fee' => 'Potongan BPJS',
     'name' => 'Name',
     'year' => 'Year',
     'month' => 'Month',

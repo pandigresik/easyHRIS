@@ -32,4 +32,5 @@ return [
     'thousand_separator' => '.',
     'decimal_separator' => ',',
     'digit_decimal' => 2,    
+    'bpjs_fee' => [6, 10, 21, 28]
 ];

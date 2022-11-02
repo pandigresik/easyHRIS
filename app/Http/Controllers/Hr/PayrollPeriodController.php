@@ -49,7 +49,7 @@ class PayrollPeriodController extends AppBaseController
     public function create()
     {
         $nextPeriod = $this->getNextPeriodPayroll();
-        $paramDate = ['minDate' => is_null($nextPeriod) ? $nextPeriod : localFormatDate($nextPeriod)];
+        $paramDate = ['startDate' => is_null($nextPeriod) ? $nextPeriod : localFormatDate($nextPeriod)];
         $paramDate['endDate'] = localFormatDate($this->getEndNextPeriodPayroll($nextPeriod));
         return view($this->viewPath.'.create')->with($this->getOptionItems())->with($paramDate);
     }
@@ -177,17 +177,17 @@ class PayrollPeriodController extends AppBaseController
      *
      * @return Response
      */
-    private function getOptionItems(){
+    protected function getOptionItems(){
         $company = new CompanyRepository();
         return [
-            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
+            'companyItems' => $company->pluck(),
             'routePath' => $this->routePath         
         ];
     }
 
     protected function getNextPeriodPayroll(){
         $result = NULL;
-        $lastPeriod = PayrollPeriod::where(['type_period' => $this->type])->closed()->orderBy('end_period', 'desc')->first();
+        $lastPeriod = PayrollPeriod::where(['type_period' => $this->type])->orderBy('end_period', 'desc')->first();
         if($lastPeriod){
             $result = Carbon::parse($lastPeriod->getRawOriginal('end_period'))->addDay()->format('Y-m-d');
         }

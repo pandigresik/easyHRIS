@@ -112,7 +112,7 @@ class PayrollDataTable extends DataTable
             'employee_id' => new Column(['title' => __('models/payrolls.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'employee_code' => new Column(['title' => __('models/payrolls.fields.employee_code'),'name' => 'employee_code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
             // 'payroll_period_id' => new Column(['title' => __('models/payrolls.fields.payroll_period_id'),'name' => 'payroll_period_id', 'data' => 'payroll_period_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'take_home_pay' => new Column(['title' => __('models/payrolls.fields.take_home_pay'),'name' => 'take_home_pay', 'data' => 'take_home_pay', 'searchable' => true, 'elmsearch' => 'text']),            
+            'take_home_pay' => new Column(['title' => __('models/payrolls.fields.take_home_pay'),'name' => 'take_home_pay', 'data' => 'take_home_pay', 'class' => 'text-end','searchable' => true, 'elmsearch' => 'text']),            
         ];
     }
 

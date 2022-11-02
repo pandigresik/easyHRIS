@@ -5,6 +5,7 @@ namespace App\Repositories\Hr;
 use App\Models\Hr\Employee;
 use App\Models\Hr\Holiday;
 use App\Models\Hr\Payroll;
+use App\Models\Hr\PayrollDetail;
 use App\Models\Hr\PayrollPeriod;
 use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
@@ -19,6 +20,7 @@ use Carbon\Carbon;
 class PayrollPeriodRepository extends BaseRepository
 {
     protected $payrollPeriod;
+    protected $bpjsFee;
     /**
      * @var array
      */
@@ -64,8 +66,11 @@ class PayrollPeriodRepository extends BaseRepository
         
         try {
             $periods = $this->splitPeriod($input['range_period']);
+            $employeeId = $input['employee_id'] ?? [];
+            $bpjsFee = $input['bpjs_fee'] ?? [];
+            $this->setBpjsFee($bpjsFee);
             foreach($periods as $period){
-                $this->calculatePayroll($input['company_id'], $period, $this->getPayrollPeriod());
+                $this->calculatePayroll($input['company_id'], $period, $this->getPayrollPeriod(), $employeeId);
             }
             $this->model->getConnection()->commit();            
             return $this->model;
@@ -75,7 +80,7 @@ class PayrollPeriodRepository extends BaseRepository
         }        
     }
 
-    private function calculatePayroll($companyId, $period, $payrollPeriod){
+    private function calculatePayroll($companyId, $period, $payrollPeriod, $employeeId = []){
         // create payrollPeriod if not exists
         $startDateObj = Carbon::parse($period['start_period']);
         $period['company_id'] = $companyId;
@@ -86,14 +91,22 @@ class PayrollPeriodRepository extends BaseRepository
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
                 
         // get list employee
-        $employees = Employee::select(['id', 'code'])->with(['salaryBenefits' => function($q){
+        $employeeOjb = Employee::select(['id', 'code'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
-        }])->where(['payroll_period' => $payrollPeriod])->get();        
+        }])->where(['payroll_period' => $payrollPeriod]);
+
+        if(!empty($employeeId)){
+            $employeeOjb->whereIn('id', $employeeId);
+        }
+
+        $employees = $employeeOjb->get();
         $workDayEmployee = Workshift::selectRaw('employee_id, count(*) as workday')
-                ->whereIn('employee_id', $employees->pluck('id')->whereBetween('work_date', [$period['start_period'], $period['end_period']])->toArray())
+                ->whereIn('employee_id', $employees->pluck('id')->toArray())
+                ->whereBetween('work_date', [$period['start_period'], $period['end_period']])
                 ->groupBy('employee_id')
                 ->get()
-                ->pluck('workday', 'id')->toArray();
+                ->pluck('workday', 'employee_id')->toArray();
+        
         $holidayNotSunday = $this->getHoliday($period['start_period'], $period['end_period']);
         foreach($employees as $employee){
             $workDayCount = $workDayEmployee[$employee->id] ?? 0;
@@ -105,7 +118,7 @@ class PayrollPeriodRepository extends BaseRepository
     }
 
     private function calculateEmployeePayroll($workDayCount, $employee, $periodPayroll){          
-        $detail = [];
+        $details = [];
         $takeHomePay = 0;
         foreach($employee->salaryBenefits as $benefit){
             if($benefit->component->fixed){
@@ -121,16 +134,31 @@ class PayrollPeriodRepository extends BaseRepository
                     'sign_value' => $benefit->component->getRawOriginal('state') == 'p' ? 1 : -1, 
                 ];
             }
+            /** jika tidak ada dalam list potongan bpjs yang dipilih maka set 0 */
+            if(in_array($periodPayroll->getRawOriginal('type_period'), ['weekly', 'biweekly'])){
+                $listBpjsFee = config('local.bpjs_fee');
+                if(in_array($tmp['component_id'], $listBpjsFee)){
+                    if(!in_array($tmp['component_id'], $this->getBpjsFee())){                        
+                        $tmp['benefit_value'] = 0;
+                    }
+                }
+            }
+
             $takeHomePay += ($tmp['sign_value'] * $tmp['benefit_value']);
-            $detail[] = $tmp;            
+            $details[] = $tmp;            
         }
         $payroll = Payroll::firstOrNew([
             'payroll_period_id' => $periodPayroll->id,
-            'employee_id' => $employee->id            
+            'employee_id' => $employee->id
         ]);
         $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
         $payroll->save();
-        $payroll->payrollDetails()->sync($detail);
+        foreach($details as $detail){
+            $d = PayrollDetail::firstOrNew(['component_id' => $detail['component_id'], 'payroll_id' => $payroll->id]);
+            $d->fill($detail);
+            $d->save();
+        }
+        // $payroll->payrollDetails()->sync($detail);
     }
 
     private function calculateComponent($workDayCount, $employeeId, $value, $code){
@@ -183,6 +211,26 @@ class PayrollPeriodRepository extends BaseRepository
     public function setPayrollPeriod($payrollPeriod)
     {
         $this->payrollPeriod = $payrollPeriod;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of bpjsFee
+     */ 
+    public function getBpjsFee()
+    {
+        return $this->bpjsFee;
+    }
+
+    /**
+     * Set the value of bpjsFee
+     *
+     * @return  self
+     */ 
+    public function setBpjsFee($bpjsFee)
+    {
+        $this->bpjsFee = $bpjsFee;
 
         return $this;
     }
