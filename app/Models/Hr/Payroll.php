@@ -109,7 +109,7 @@ class Payroll extends Model
      **/
     public function companyCosts()
     {
-        return $this->hasMany(\App\Models\Hr\CompanyCost::class, 'payroll_id');
+        return $this->hasMany(\App\Models\Base\CompanyCost::class, 'payroll_id');
     }
 
     /**
@@ -118,5 +118,9 @@ class Payroll extends Model
     public function payrollDetails()
     {
         return $this->hasMany(\App\Models\Hr\PayrollDetail::class, 'payroll_id');
+    }
+
+    public function getTakeHomePayAttribute($value){
+        return localNumberFormat($value);
     }
 }

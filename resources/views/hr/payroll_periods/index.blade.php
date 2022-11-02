@@ -15,7 +15,7 @@
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
                              @lang('models/payrollPeriods.plural')
-                             <a class="pull-right" href="{{ route('hr.payrollPeriods.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             <a class="pull-right" href="{{ route($routePath.'.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
                          </div>
                          <div class="card-body">                             
                              @include('hr.payroll_periods.table')                             

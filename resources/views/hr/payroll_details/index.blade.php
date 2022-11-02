@@ -14,8 +14,7 @@
                      <div class="card">
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
-                             @lang('models/payrollDetails.plural')
-                             <a class="pull-right" href="{{ route('hr.payrollDetails.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             {{ $title }}                             
                          </div>
                          <div class="card-body">                             
                              @include('hr.payroll_details.table')                             

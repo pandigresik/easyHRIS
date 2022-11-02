@@ -10,6 +10,7 @@ use Yajra\DataTables\Html\Column;
 class PayrollPeriodDataTable extends DataTable
 {
     protected $typePeriod;
+    protected $routePath;
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
@@ -36,7 +37,9 @@ class PayrollPeriodDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'hr.payroll_periods.datatables_actions');
+        return $dataTable->addColumn('action', function($item){
+            return view('hr.payroll_periods.datatables_actions', array_merge($item->toArray(), ['routePath' => $this->getRoutePath()]));
+        });
     }
 
     /**
@@ -48,9 +51,9 @@ class PayrollPeriodDataTable extends DataTable
     public function query(PayrollPeriod $model)
     {
         if($this->getTypePeriod()){
-            return $model->where(['type_period' => $this->getTypePeriod()])->newQuery();    
+            return $model->select([$model->getTable().'.*'])->with(['company'])->where(['type_period' => $this->getTypePeriod()])->newQuery();    
         }
-        return $model->newQuery();
+        return $model->with(['company'])->newQuery();
     }
 
     /**
@@ -119,7 +122,7 @@ class PayrollPeriodDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'company_id' => new Column(['title' => __('models/payrollPeriods.fields.company_id'),'name' => 'company_id', 'data' => 'company_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'company_id' => new Column(['title' => __('models/payrollPeriods.fields.company_id'),'name' => 'company_id', 'data' => 'company.name', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/payrollPeriods.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
             'year' => new Column(['title' => __('models/payrollPeriods.fields.year'),'name' => 'year', 'data' => 'year', 'searchable' => true, 'elmsearch' => 'text']),
             'month' => new Column(['title' => __('models/payrollPeriods.fields.month'),'name' => 'month', 'data' => 'month', 'searchable' => true, 'elmsearch' => 'text']),
@@ -155,6 +158,26 @@ class PayrollPeriodDataTable extends DataTable
     public function setTypePeriod($typePeriod)
     {
         $this->typePeriod = $typePeriod;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of routePath
+     */ 
+    public function getRoutePath()
+    {
+        return $this->routePath;
+    }
+
+    /**
+     * Set the value of routePath
+     *
+     * @return  self
+     */ 
+    public function setRoutePath($routePath)
+    {
+        $this->routePath = $routePath;
 
         return $this;
     }

@@ -128,7 +128,7 @@ class JobMutation extends Model
      **/
     public function oldCompany()
     {
-        return $this->belongsTo(\App\Models\Hr\Company::class, 'old_company_id');
+        return $this->belongsTo(\App\Models\Base\Company::class, 'old_company_id');
     }
 
     /**
@@ -152,7 +152,7 @@ class JobMutation extends Model
      **/
     public function newCompany()
     {
-        return $this->belongsTo(\App\Models\Hr\Company::class, 'new_company_id');
+        return $this->belongsTo(\App\Models\Base\Company::class, 'new_company_id');
     }
 
     /**

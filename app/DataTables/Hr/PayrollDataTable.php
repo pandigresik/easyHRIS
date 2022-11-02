@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 
 class PayrollDataTable extends DataTable
 {
+    private $payrollPeriod;
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
@@ -46,7 +47,10 @@ class PayrollDataTable extends DataTable
      */
     public function query(Payroll $model)
     {
-        return $model->newQuery();
+        if($this->getPayrollPeriod()){
+            return $model->where(['payroll_period_id' => $this->getPayrollPeriod()])->with('employee')->newQuery();    
+        }
+        return $model->with('employee')->newQuery();
     }
 
     /**
@@ -56,22 +60,12 @@ class PayrollDataTable extends DataTable
      */
     public function html()
     {
-        $buttons = [
-                    [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    ],
+        $buttons = [                    
                     [
                        'extend' => 'export',
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
+                    ],                    
                     [
                        'extend' => 'print',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -115,10 +109,10 @@ class PayrollDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'employee_id' => new Column(['title' => __('models/payrolls.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'payroll_period_id' => new Column(['title' => __('models/payrolls.fields.payroll_period_id'),'name' => 'payroll_period_id', 'data' => 'payroll_period_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'take_home_pay' => new Column(['title' => __('models/payrolls.fields.take_home_pay'),'name' => 'take_home_pay', 'data' => 'take_home_pay', 'searchable' => true, 'elmsearch' => 'text']),
-            'take_home_pay_key' => new Column(['title' => __('models/payrolls.fields.take_home_pay_key'),'name' => 'take_home_pay_key', 'data' => 'take_home_pay_key', 'searchable' => true, 'elmsearch' => 'text'])
+            'employee_id' => new Column(['title' => __('models/payrolls.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee_code' => new Column(['title' => __('models/payrolls.fields.employee_code'),'name' => 'employee_code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'payroll_period_id' => new Column(['title' => __('models/payrolls.fields.payroll_period_id'),'name' => 'payroll_period_id', 'data' => 'payroll_period_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'take_home_pay' => new Column(['title' => __('models/payrolls.fields.take_home_pay'),'name' => 'take_home_pay', 'data' => 'take_home_pay', 'searchable' => true, 'elmsearch' => 'text']),            
         ];
     }
 
@@ -130,5 +124,25 @@ class PayrollDataTable extends DataTable
     protected function filename()
     {
         return 'payrolls_datatable_' . time();
+    }
+
+    /**
+     * Get the value of payrollPeriod
+     */ 
+    public function getPayrollPeriod()
+    {
+        return $this->payrollPeriod;
+    }
+
+    /**
+     * Set the value of payrollPeriod
+     *
+     * @return  self
+     */ 
+    public function setPayrollPeriod($payrollPeriod)
+    {
+        $this->payrollPeriod = $payrollPeriod;
+
+        return $this;
     }
 }

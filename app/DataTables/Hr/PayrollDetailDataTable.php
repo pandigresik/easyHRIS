@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 
 class PayrollDetailDataTable extends DataTable
 {
+    private $payrollId;
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
@@ -46,7 +47,10 @@ class PayrollDetailDataTable extends DataTable
      */
     public function query(PayrollDetail $model)
     {
-        return $model->newQuery();
+        if($this->getPayrollId()){
+            return $model->with(['component'])->where(['payroll_id' => $this->getPayrollId()])->newQuery();
+        }
+        return $model->with(['component'])->newQuery();
     }
 
     /**
@@ -56,22 +60,12 @@ class PayrollDetailDataTable extends DataTable
      */
     public function html()
     {
-        $buttons = [
-                    [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    ],
+        $buttons = [                    
                     [
                        'extend' => 'export',
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
+                    ],                    
                     [
                        'extend' => 'print',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -101,6 +95,8 @@ class PayrollDetailDataTable extends DataTable
                  'language' => [
                    'url' => url('vendor/datatables/i18n/en-gb.json'),
                  ],
+                 'pageLength' => 25,
+                 'lengthMenu' => [ 25, 50, 75, 100 ],
                  'responsive' => true,
                  'fixedHeader' => true,
                  'orderCellsTop' => true     
@@ -114,11 +110,9 @@ class PayrollDetailDataTable extends DataTable
      */
     protected function getColumns()
     {
-        return [
-            'payroll_id' => new Column(['title' => __('models/payrollDetails.fields.payroll_id'),'name' => 'payroll_id', 'data' => 'payroll_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'component_id' => new Column(['title' => __('models/payrollDetails.fields.component_id'),'name' => 'component_id', 'data' => 'component_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'benefit_value' => new Column(['title' => __('models/payrollDetails.fields.benefit_value'),'name' => 'benefit_value', 'data' => 'benefit_value', 'searchable' => true, 'elmsearch' => 'text']),
-            'benefit_key' => new Column(['title' => __('models/payrollDetails.fields.benefit_key'),'name' => 'benefit_key', 'data' => 'benefit_key', 'searchable' => true, 'elmsearch' => 'text'])
+        return [            
+            'component_id' => new Column(['title' => __('models/payrollDetails.fields.component_id'),'name' => 'component_id', 'data' => 'component.name', 'searchable' => false, 'elmsearch' => 'text']),
+            'benefit_value' => new Column(['title' => __('models/payrollDetails.fields.benefit_value'),'name' => 'benefit_value', 'data' => 'benefit_value', 'searchable' => false, 'class' => 'text-end','elmsearch' => 'text']),            
         ];
     }
 
@@ -130,5 +124,25 @@ class PayrollDetailDataTable extends DataTable
     protected function filename()
     {
         return 'payroll_details_datatable_' . time();
+    }
+
+    /**
+     * Get the value of payrollId
+     */ 
+    public function getPayrollId()
+    {
+        return $this->payrollId;
+    }
+
+    /**
+     * Set the value of payrollId
+     *
+     * @return  self
+     */ 
+    public function setPayrollId($payrollId)
+    {
+        $this->payrollId = $payrollId;
+
+        return $this;
     }
 }

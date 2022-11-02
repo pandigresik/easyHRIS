@@ -4,7 +4,7 @@
      @push('breadcrumb')
         <ol class="breadcrumb  my-0 ms-2">
             <li class="breadcrumb-item">
-                <a href="{{ route('hr.payrollPeriods.index') }}">@lang('models/payrollPeriods.singular')</a>
+                <a href="{{ route($routePath.'.index') }}">@lang('models/payrollPeriods.singular')</a>
             </li>
             <li class="breadcrumb-item active">@lang('crud.detail')</li>
         </ol>
@@ -17,7 +17,7 @@
                          <div class="card">
                              <div class="card-header">
                                  <strong>@lang('crud.detail')</strong>
-                                  <a href="{{ route('hr.payrollPeriods.index') }}" class="btn btn-ghost-light">Back</a>
+                                  <a href="{{ route($routePath.'.index') }}" class="btn btn-ghost-light">Back</a>
                              </div>
                              <div class="card-body">
                                  @include('hr.payroll_periods.show_fields')

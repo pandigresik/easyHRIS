@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Hr\Payroll;
 use App\Models\Hr\PayrollDetail;
 use App\Repositories\BaseRepository;
 
@@ -39,5 +40,26 @@ class PayrollDetailRepository extends BaseRepository
     public function model()
     {
         return PayrollDetail::class;
+    }
+
+    public function update($input, $id)
+    {
+        $this->model->getConnection()->beginTransaction();
+        try{
+            $query = $this->model->newQuery();
+            $model = $query->findOrFail($id);            
+            $model->fill($input);
+            $model->save();
+            $payroll = Payroll::find($model->payroll_id);
+            $summary = PayrollDetail::selectRaw('sum(sign_value * benefit_value) as total')->where(['payroll_id' => $model->payroll_id])->first();
+            $payroll->take_home_pay = $summary->getRawOriginal('total');
+            $payroll->save(); 
+            // update nilai take_home_pay payroll 
+            $this->model->getConnection()->commit();
+            return $model;
+        } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }
     }
 }

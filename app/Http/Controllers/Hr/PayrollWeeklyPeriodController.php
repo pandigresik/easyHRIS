@@ -10,5 +10,6 @@ class PayrollWeeklyPeriodController extends PayrollPeriodController
     /** @var  PayrollPeriodRepository */
     protected $repository;
     protected $type = 'weekly';    
+    protected $routePath = 'hr.payrollWeeklyPeriods';
     
 }

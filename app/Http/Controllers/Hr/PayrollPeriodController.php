@@ -20,7 +20,8 @@ class PayrollPeriodController extends AppBaseController
     /** @var  PayrollPeriodRepository */
     protected $repository;
     protected $type;
-
+    protected $viewPath = 'hr.payroll_periods';
+    protected $routePath = 'hr.payrollPeriods';
     public function __construct()
     {
         $this->repository = PayrollPeriodRepository::class;        
@@ -35,9 +36,9 @@ class PayrollPeriodController extends AppBaseController
     public function index(PayrollPeriodDataTable $payrollPeriodDataTable)
     {
         if(!empty($this->type)){
-            return $payrollPeriodDataTable->setTypePeriod($this->type)->render('hr.payroll_periods.index');    
+            return $payrollPeriodDataTable->setRoutePath($this->routePath)->setTypePeriod($this->type)->render($this->viewPath.'.index', ['routePath' => $this->routePath]);    
         }
-        return $payrollPeriodDataTable->render('hr.payroll_periods.index');
+        return $payrollPeriodDataTable->render($this->viewPath.'.index', ['routePath' => $this->routePath]);
     }
 
     /**
@@ -50,7 +51,7 @@ class PayrollPeriodController extends AppBaseController
         $nextPeriod = $this->getNextPeriodPayroll();
         $paramDate = ['minDate' => is_null($nextPeriod) ? $nextPeriod : localFormatDate($nextPeriod)];
         $paramDate['endDate'] = localFormatDate($this->getEndNextPeriodPayroll($nextPeriod));
-        return view('hr.payroll_periods.create')->with($this->getOptionItems())->with($paramDate);
+        return view($this->viewPath.'.create')->with($this->getOptionItems())->with($paramDate);
     }
 
     /**
@@ -62,8 +63,7 @@ class PayrollPeriodController extends AppBaseController
      */
     public function store(CreatePayrollPeriodRequest $request)
     {
-        $input = $request->all();
-        \Log::error('$this->type '.$this->type);
+        $input = $request->all();        
         $payrollPeriod = $this->getRepositoryObj()->setPayrollPeriod($this->type)->create($input);
         if($payrollPeriod instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $payrollPeriod->getMessage()]);
@@ -71,7 +71,7 @@ class PayrollPeriodController extends AppBaseController
         
         Flash::success(__('messages.saved', ['model' => __('models/payrollPeriods.singular')]));
 
-        return redirect(route('hr.payrollPeriods.index'));
+        return redirect(route($this->routePath.'.index'));
     }
 
     /**
@@ -88,10 +88,10 @@ class PayrollPeriodController extends AppBaseController
         if (empty($payrollPeriod)) {
             Flash::error(__('models/payrollPeriods.singular').' '.__('messages.not_found'));
 
-            return redirect(route('hr.payrollPeriods.index'));
+            return redirect(route($this->routePath.'.index'));
         }
 
-        return view('hr.payroll_periods.show')->with('payrollPeriod', $payrollPeriod);
+        return view($this->viewPath.'.show')->with('payrollPeriod', $payrollPeriod);
     }
 
     /**
@@ -108,10 +108,10 @@ class PayrollPeriodController extends AppBaseController
         if (empty($payrollPeriod)) {
             Flash::error(__('messages.not_found', ['model' => __('models/payrollPeriods.singular')]));
 
-            return redirect(route('hr.payrollPeriods.index'));
+            return redirect(route($this->routePath.'.index'));
         }
         
-        return view('hr.payroll_periods.edit')->with('payrollPeriod', $payrollPeriod)->with($this->getOptionItems());
+        return view($this->viewPath.'.edit')->with('payrollPeriod', $payrollPeriod)->with($this->getOptionItems());
     }
 
     /**
@@ -129,7 +129,7 @@ class PayrollPeriodController extends AppBaseController
         if (empty($payrollPeriod)) {
             Flash::error(__('messages.not_found', ['model' => __('models/payrollPeriods.singular')]));
 
-            return redirect(route('hr.payrollPeriods.index'));
+            return redirect(route($this->routePath.'.index'));
         }
 
         $payrollPeriod = $this->getRepositoryObj()->update($request->all(), $id);
@@ -139,7 +139,7 @@ class PayrollPeriodController extends AppBaseController
 
         Flash::success(__('messages.updated', ['model' => __('models/payrollPeriods.singular')]));
 
-        return redirect(route('hr.payrollPeriods.index'));
+        return redirect(route($this->routePath.'.index'));
     }
 
     /**
@@ -156,7 +156,7 @@ class PayrollPeriodController extends AppBaseController
         if (empty($payrollPeriod)) {
             Flash::error(__('messages.not_found', ['model' => __('models/payrollPeriods.singular')]));
 
-            return redirect(route('hr.payrollPeriods.index'));
+            return redirect(route($this->routePath.'.index'));
         }
 
         $delete = $this->getRepositoryObj()->delete($id);
@@ -167,7 +167,7 @@ class PayrollPeriodController extends AppBaseController
 
         Flash::success(__('messages.deleted', ['model' => __('models/payrollPeriods.singular')]));
 
-        return redirect(route('hr.payrollPeriods.index'));
+        return redirect(route($this->routePath.'.index'));
     }
 
     /**
@@ -180,7 +180,8 @@ class PayrollPeriodController extends AppBaseController
     private function getOptionItems(){
         $company = new CompanyRepository();
         return [
-            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck()            
+            'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
+            'routePath' => $this->routePath         
         ];
     }
 

@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('payrollMonthlyPeriods', Hr\PayrollMonthlyPeriodController::class, ["as" => 'hr']);
         Route::resource('payrollBiweeklyPeriods', Hr\PayrollBiweeklyPeriodController::class, ["as" => 'hr']);
         Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr']);
-        Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr']);
+        Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr'])->only(['index', 'show', 'update', 'edit']);
         Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr']);
 
         Route::resource('salaryAllowances', Hr\SalaryAllowanceController::class, ["as" => 'hr']);

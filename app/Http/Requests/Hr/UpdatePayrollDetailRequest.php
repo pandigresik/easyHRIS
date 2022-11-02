@@ -43,8 +43,7 @@ class UpdatePayrollDetailRequest extends FormRequest
     */
     public function all($keys = null)
     {
-        $keys = (new PayrollDetail())->fillable;
-        $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+        $keys = ['benefit_value', 'description'];
         return parent::all($keys);
     }
 }

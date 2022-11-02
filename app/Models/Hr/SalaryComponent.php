@@ -85,7 +85,7 @@ class SalaryComponent extends Model
      **/
     public function companyCosts()
     {
-        return $this->hasMany(\App\Models\Hr\CompanyCost::class, 'component_id');
+        return $this->hasMany(\App\Models\Base\CompanyCost::class, 'component_id');
     }
 
     /**

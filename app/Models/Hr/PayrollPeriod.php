@@ -80,6 +80,7 @@ class PayrollPeriod extends Model
         'month',
         'start_period',
         'end_period',
+        'type_period',
         'closed'
     ];
 
@@ -119,7 +120,7 @@ class PayrollPeriod extends Model
      **/
     public function company()
     {
-        return $this->belongsTo(\App\Models\Hr\Company::class, 'company_id');
+        return $this->belongsTo(\App\Models\Base\Company::class, 'company_id');
     }
 
     /**

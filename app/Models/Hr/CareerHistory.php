@@ -121,7 +121,7 @@ class CareerHistory extends Model
      **/
     public function company()
     {
-        return $this->belongsTo(\App\Models\Hr\Company::class, 'company_id');
+        return $this->belongsTo(\App\Models\Base\Company::class, 'company_id');
     }
 
     /**

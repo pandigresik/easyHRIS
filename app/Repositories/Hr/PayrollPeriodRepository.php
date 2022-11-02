@@ -3,8 +3,10 @@
 namespace App\Repositories\Hr;
 
 use App\Models\Hr\Employee;
+use App\Models\Hr\Holiday;
 use App\Models\Hr\Payroll;
 use App\Models\Hr\PayrollPeriod;
+use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 
@@ -81,21 +83,28 @@ class PayrollPeriodRepository extends BaseRepository
         $period['year'] = $startDateObj->format('Y');
         $period['month'] = $startDateObj->format('m'); 
         $period['name'] = 'Periode gaji '. localFormatDate($period['start_period']).' sd '.localFormatDate($period['end_period']);
-        $periodPayroll = PayrollPeriod::firstOrNew($period);
-        $periodPayroll->save();
-        $workDayCount = 8;
+        $periodPayroll = PayrollPeriod::firstOrCreate($period);
+                
         // get list employee
         $employees = Employee::select(['id', 'code'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
-        }])->where(['payroll_period' => $payrollPeriod])->get();
-        \Log::error($employees);
-        foreach($employees as $employee){            
+        }])->where(['payroll_period' => $payrollPeriod])->get();        
+        $workDayEmployee = Workshift::selectRaw('employee_id, count(*) as workday')
+                ->whereIn('employee_id', $employees->pluck('id')->whereBetween('work_date', [$period['start_period'], $period['end_period']])->toArray())
+                ->groupBy('employee_id')
+                ->get()
+                ->pluck('workday', 'id')->toArray();
+        $holidayNotSunday = $this->getHoliday($period['start_period'], $period['end_period']);
+        foreach($employees as $employee){
+            $workDayCount = $workDayEmployee[$employee->id] ?? 0;
+            if(in_array($this->getPayrollPeriod(), ['weekly', 'biweekly'])){
+                $workDayCount += $holidayNotSunday;
+            }
             $this->calculateEmployeePayroll($workDayCount, $employee, $periodPayroll);
         }
     }
 
-    private function calculateEmployeePayroll($workDayCount, $employee, $periodPayroll){ 
-        \Log::error('employee '. $employee->full_name);       
+    private function calculateEmployeePayroll($workDayCount, $employee, $periodPayroll){          
         $detail = [];
         $takeHomePay = 0;
         foreach($employee->salaryBenefits as $benefit){
@@ -103,25 +112,25 @@ class PayrollPeriodRepository extends BaseRepository
                 $tmp = [
                     'benefit_value' => $benefit->getRawOriginal('benefit_value'),
                     'component_id' => $benefit->component_id,
-                    'sign_value' => $benefit->component->state == 'p' ? 1 : -1, 
+                    'sign_value' => $benefit->component->getRawOriginal('state') == 'p' ? 1 : -1, 
                 ];
             }else{
                 $tmp = [
                     'benefit_value' => $this->calculateComponent($workDayCount, $employee->id, $benefit->getRawOriginal('benefit_value'), $benefit->component->code),
                     'component_id' => $benefit->component_id,
-                    'sign_value' => $benefit->component->state == 'p' ? 1 : -1, 
+                    'sign_value' => $benefit->component->getRawOriginal('state') == 'p' ? 1 : -1, 
                 ];
             }
-            $takeHomePay += $tmp['sign_value'] * $tmp['benefit_value'];
+            $takeHomePay += ($tmp['sign_value'] * $tmp['benefit_value']);
             $detail[] = $tmp;            
         }
-        $payroll = Payroll::create([
+        $payroll = Payroll::firstOrNew([
             'payroll_period_id' => $periodPayroll->id,
-            'employee_id' => $employee->id,
-            'take_home_pay' => $takeHomePay
+            'employee_id' => $employee->id            
         ]);
-        \Log::error($payroll);
-        $payroll->payrollDetails()->saveMany($detail);
+        $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
+        $payroll->save();
+        $payroll->payrollDetails()->sync($detail);
     }
 
     private function calculateComponent($workDayCount, $employeeId, $value, $code){
@@ -143,6 +152,19 @@ class PayrollPeriodRepository extends BaseRepository
             $resultPeriod[] = ['start_period' => $startDate, 'end_period' => $endDate];
         }
         return $resultPeriod;
+    }
+
+    private function getHoliday($startDate, $endDate){
+        $result = 0;
+        $holiday = Holiday::select(['holiday_date'])->whereBetween('holiday_date', [$startDate, $endDate])->get();
+        if(!$holiday->isEmpty()){
+            foreach($holiday as $day){
+                if(Carbon::parse($day->getRawOriginal('holiday_date'))->dayOfWeek !== Carbon::SUNDAY ){
+                    $result += 1;
+                }
+            }
+        }
+        return $result;
     }
 
     /**

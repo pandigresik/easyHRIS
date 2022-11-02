@@ -4,7 +4,7 @@
     @push('breadcrumb')
         <ol class="breadcrumb  my-0 ms-2">
           <li class="breadcrumb-item">
-             <a href="{!! route('hr.payrollPeriods.index') !!}">@lang('models/payrollPeriods.singular')</a>
+             <a href="{!! route($routePath.'.index') !!}">@lang('models/payrollPeriods.singular')</a>
           </li>
           <li class="breadcrumb-item active">@lang('crud.edit')</li>
         </ol>
@@ -14,7 +14,7 @@
              @include('common.errors')
              <div class="row">
                  <div class="col-lg-12">
-                    {!! Form::model($payrollPeriod, ['route' => ['hr.payrollPeriods.update', $payrollPeriod->id], 'method' => 'patch']) !!}  
+                    {!! Form::model($payrollPeriod, ['route' => [$routePath.'.update', $payrollPeriod->id], 'method' => 'patch']) !!}  
                       <div class="card">                          
                           <div class="card-header">
                               <i class="fa fa-edit fa-lg"></i>
@@ -30,7 +30,7 @@
                           <!-- Submit Field -->
                             <div class="form-group col-sm-12">
                                 {!! Form::submit(__('crud.save'), ['class' => 'btn btn-primary']) !!}
-                                <a href="{{ route('hr.payrollPeriods.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
+                                <a href="{{ route($routePath.'.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
                             </div>
                           </div>                            
                       </div>                    

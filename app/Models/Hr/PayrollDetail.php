@@ -102,4 +102,8 @@ class PayrollDetail extends Model
     {
         return $this->belongsTo(\App\Models\Hr\SalaryComponent::class, 'component_id');
     }
+
+    public function getBenefitValueAttribute($value){
+        return localNumberFormat($value);
+    }
 }

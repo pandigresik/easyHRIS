@@ -10,5 +10,6 @@ class PayrollMonthlyPeriodController extends PayrollPeriodController
     /** @var  PayrollPeriodRepository */
     protected $repository;
     protected $type = 'monthly';    
+    protected $routePath = 'hr.payrollMonthlyPeriods';
 
 }

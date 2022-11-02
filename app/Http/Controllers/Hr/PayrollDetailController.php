@@ -11,6 +11,7 @@ use App\Repositories\Hr\PayrollRepository;
 use App\Repositories\Hr\SalaryComponentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\Payroll;
 use Response;
 use Exception;
 
@@ -32,7 +33,8 @@ class PayrollDetailController extends AppBaseController
      */
     public function index(PayrollDetailDataTable $payrollDetailDataTable)
     {
-        return $payrollDetailDataTable->render('hr.payroll_details.index');
+        $payroll = Payroll::with(['employee', 'payrollPeriod'])->find(request()->get('payroll_id'));
+        return $payrollDetailDataTable->setPayrollId($payroll->id)->render('hr.payroll_details.index', ['title' => $payroll->employee->full_name. ' '. $payroll->payrollPeriod->name. ' ('.$payroll->take_home_pay.')' ]);
     }
 
     /**
@@ -131,7 +133,7 @@ class PayrollDetailController extends AppBaseController
 
         Flash::success(__('messages.updated', ['model' => __('models/payrollDetails.singular')]));
 
-        return redirect(route('hr.payrollDetails.index'));
+        return redirect(route('hr.payrollDetails.index').'?payroll_id='.$payrollDetail->payroll_id);
     }
 
     /**
@@ -170,12 +172,9 @@ class PayrollDetailController extends AppBaseController
      * @return Response
      */
     private function getOptionItems()
-    {
-        $payroll = new PayrollRepository();
-        $salaryComponent = new SalaryComponentRepository();
+    {        
         return [
-            'payrollItems' => ['' => __('crud.option.payroll_placeholder')] + $payroll->pluck(),
-            'salaryComponentItems' => ['' => __('crud.option.salaryComponent_placeholder')] + $salaryComponent->pluck()
+           
         ];
     }
 }

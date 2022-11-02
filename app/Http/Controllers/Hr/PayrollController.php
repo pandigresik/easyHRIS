@@ -11,6 +11,7 @@ use App\Repositories\Hr\EmployeeRepository;
 use App\Repositories\Hr\PayrollPeriodRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\PayrollPeriod;
 use Response;
 use Exception;
 
@@ -32,7 +33,9 @@ class PayrollController extends AppBaseController
      */
     public function index(PayrollDataTable $payrollDataTable)
     {
-        return $payrollDataTable->render('hr.payrolls.index');
+        $payrollPeriod = PayrollPeriod::find(request()->get('payroll_period'));
+        
+        return $payrollDataTable->setPayrollPeriod($payrollPeriod->id)->render('hr.payrolls.index', ['title' => $payrollPeriod->name]);
     }
 
     /**
