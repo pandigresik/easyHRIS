@@ -13,6 +13,16 @@ if (!function_exists('localFormatDate')) {
     }
 }
 
+if (!function_exists('localFormatMonth')) {
+    function localFormatMonth($value)
+    {
+        $months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $index = intval($value) - 1;
+        return $months[$index] ?? 'not defined';
+    }
+}
+
+
 if (!function_exists('localFormatDateTime')) {    
     function localFormatDateTime($value)
     {
@@ -177,7 +187,7 @@ if (!function_exists('generatePeriod')) {
             $result['startDate'] = $tmp[0];
             $result['endDate'] = $tmp[1];
         } catch (\Throwable $th) {
-            \Log::error('file app\Http\helpers.php function generatePeriod');
+            \Log::error('function generatePeriod');
             throw $th;
         }
         

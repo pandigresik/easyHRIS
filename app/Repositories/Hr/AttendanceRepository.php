@@ -161,6 +161,9 @@ class AttendanceRepository extends BaseRepository
 
             if(!empty($tmp['reason_id'])){
                 $tmp['state'] = $this->getReason($tmp['reason_id']); 
+                if(in_array($tmp['state'], config('local.reason_code_not_absent'))){
+                    $tmp['absent'] = 0;
+                }
             }
             $overtimeCurrentDate = $overtimeDate[$date] ?? [];
             if(!$fingerLogData->isEmpty()){

@@ -86,7 +86,8 @@ mix.webpackConfig({
         '!index.php',
         '!.htaccess',
         '!vendor/**/**',
-        '!css/styles.css'
+        '!css/styles.css',
+        '!assets'
       ]
     }),
     new HtmlWebpackPlugin({

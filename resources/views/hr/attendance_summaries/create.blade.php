@@ -22,7 +22,7 @@
                             </div>
                             <div class="card-body">                                
 
-                                   @include('hr.attendance_summaries.fields')
+                                   @include('hr.attendance_summaries.generate_fields')
                                 
                             </div>
                             <div class="card-footer">

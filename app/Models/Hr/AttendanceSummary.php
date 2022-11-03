@@ -56,7 +56,9 @@ class AttendanceSummary extends Model
         'total_in',
         'total_loyality',
         'total_absent',
-        'total_overtime'
+        'total_overtime',
+        'total_off',
+        'total_leave'
     ];
 
     /**
@@ -98,5 +100,9 @@ class AttendanceSummary extends Model
     public function employee()
     {
         return $this->belongsTo(\App\Models\Hr\Employee::class, 'employee_id');
+    }
+
+    public function getMonthAttribute($value){
+        return localFormatMonth($value);
     }
 }

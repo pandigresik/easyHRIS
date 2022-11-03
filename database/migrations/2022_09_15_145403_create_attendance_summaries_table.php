@@ -23,12 +23,17 @@ class CreateAttendanceSummariesTable extends Migration
             $table->integer('total_loyality');
             $table->integer('total_absent');
             $table->decimal('total_overtime', 5,2);
+            $table->tinyInteger('total_off', false, true)->nullable()->default(0);
+            $table->tinyInteger('total_leave', false, true)->nullable()->default(0);
+            $table->smallInteger('total_late_in', false, true)->nullable()->default(0);
+            $table->smallInteger('total_early_out', false, true)->nullable()->default(0);
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
             $table->index(['month', 'year'], 'attendance_summaries_idx');
             $table->foreign('employee_id', 'FK_13FC96F08C03F15C')->references('id')->on('employees');
+            $table->unique(['employee_id','year','month'], 'uq_attendance_summaries_1');
         });
     }
 

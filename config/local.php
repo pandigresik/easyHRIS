@@ -32,5 +32,10 @@ return [
     'thousand_separator' => '.',
     'decimal_separator' => ',',
     'digit_decimal' => 2,    
-    'bpjs_fee' => [6, 10, 21, 28]
+    'bpjs_fee' => [6, 10, 21, 28],
+    'reason_code_not_absent' => ['OFF', 'LK', 'DL'],
+    // id untuk shiftment yang libur
+    'shiftment_off' => [2],
+    // untuk perhitungan premi
+    'leave_code' => ['PC', 'DT']
 ];

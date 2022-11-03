@@ -33,8 +33,10 @@ window.$.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
     error: function (x, status, error) {
-            bootbox.alert("An error occurred: " + status + "nError: " + error+ " status code "+x.status);            
-        }
+      if(x.status != 0){
+        bootbox.alert("An error occurred: " + status + "nError: " + error+ " status code "+x.status);            
+      }            
+    }
 });
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

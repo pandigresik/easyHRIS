@@ -115,6 +115,7 @@ class PayrollPeriodRepository extends BaseRepository
             }
             $this->calculateEmployeePayroll($workDayCount, $employee, $periodPayroll);
         }
+        (new PayrollDetail())->flushCache();
     }
 
     private function calculateEmployeePayroll($workDayCount, $employee, $periodPayroll){          
@@ -153,10 +154,11 @@ class PayrollPeriodRepository extends BaseRepository
         ]);
         $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
         $payroll->save();
+        $userId = \Auth::id();
         foreach($details as $detail){
-            $d = PayrollDetail::firstOrNew(['component_id' => $detail['component_id'], 'payroll_id' => $payroll->id]);
-            $d->fill($detail);
-            $d->save();
+            $detail['payroll_id'] = $payroll->id;
+            $detail['created_by'] = $userId;
+            PayrollDetail::upsert($detail, ['payroll_id', 'component_id']);            
         }
         // $payroll->payrollDetails()->sync($detail);
     }

@@ -26,6 +26,7 @@ class CreatePayrollDetailsTable extends Migration
             $table->timestamps();
             $table->foreign('payroll_id', 'FK_E4A11F3DDBA340EA')->references('id')->on('payrolls');
             $table->foreign('component_id', 'FK_E4A11F3DE2ABAFFF')->references('id')->on('salary_components');
+            $table->unique(['payroll_id', 'component_id'], 'uq_payroll_details_1');
         });
     }
 

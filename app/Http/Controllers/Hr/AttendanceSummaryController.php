@@ -10,6 +10,8 @@ use App\Repositories\Hr\AttendanceSummaryRepository;
 use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Base\CompanyRepository;
+use Carbon\Carbon;
 use Response;
 use Exception;
 
@@ -41,7 +43,13 @@ class AttendanceSummaryController extends AppBaseController
      */
     public function create()
     {
-        return view('hr.attendance_summaries.create')->with($this->getOptionItems());
+        $startDate = localFormatDate( Carbon::now()->startOfMonth()->format('Y-m-d'));
+        $endDate = localFormatDate(Carbon::now()->endOfMonth()->format('Y-m-d'));
+        $rangeDatepicker = [
+            'Bulan Ini' => [$startDate, $endDate],
+            'Bulan Lalu' => [localFormatDate(Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d')), localFormatDate(Carbon::now()->subMonth()->endOfMonth()->format('Y-m-d'))],
+        ];
+        return view('hr.attendance_summaries.create')->with($this->getOptionItems())->with(['range' => $rangeDatepicker, 'startDate' => $startDate,'endDate' => $endDate]);
     }
 
     /**
@@ -170,9 +178,9 @@ class AttendanceSummaryController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $employee = new EmployeeRepository();
+        $company = new CompanyRepository();
         return [
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()
-        ];
+            'companyItems' => $company->pluck(),
+        ];        
     }
 }

@@ -17,7 +17,7 @@ class AddStartEndPeriodPayroll extends Migration
             $table->date('start_period')->after('month');
             $table->date('end_period')->after('start_period');
             $table->enum('type_period', ['weekly','biweekly','monthly']);
-            $table->index(['year','month','start_period','end_period','type_period'],'payroll_period_idx');
+            $table->unique(['company_id','year','month','start_period','end_period','type_period'],'uq_payroll_periods_1');
         });
     }
 
@@ -32,7 +32,7 @@ class AddStartEndPeriodPayroll extends Migration
             $table->dropColumn('start_period');
             $table->dropColumn('end_period');
             $table->dropColumn('type_period');
-            $table->dropIndex('payroll_period_idx');
+            $table->dropUnique('uq_payroll_periods_1');
         });
     }
 }

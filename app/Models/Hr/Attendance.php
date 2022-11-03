@@ -219,4 +219,8 @@ class Attendance extends Model
     public function getCheckOutAttribute($value){
         return localFormatDateTime($value);
     }
+
+    public function scopeInvalid($query){
+        return $query->where(['state' => 'INVALID']);
+    }
 }

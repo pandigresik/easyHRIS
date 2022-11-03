@@ -13,7 +13,7 @@ class AttendanceSummaryDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -35,6 +35,7 @@ class AttendanceSummaryDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
+        
         return $dataTable->addColumn('action', 'hr.attendance_summaries.datatables_actions');
     }
 
@@ -46,7 +47,7 @@ class AttendanceSummaryDataTable extends DataTable
      */
     public function query(AttendanceSummary $model)
     {
-        return $model->newQuery();
+        return $model->with(['employee'])->newQuery();
     }
 
     /**
@@ -60,17 +61,12 @@ class AttendanceSummaryDataTable extends DataTable
                     [
                        'extend' => 'create',
                        'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
+                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.generate').''
                     ],
                     [
                        'extend' => 'export',
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
                     ],
                     [
                        'extend' => 'print',
@@ -115,14 +111,14 @@ class AttendanceSummaryDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'employee_id' => new Column(['title' => __('models/attendanceSummaries.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.full_name' => new Column(['title' => __('models/attendanceSummaries.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'year' => new Column(['title' => __('models/attendanceSummaries.fields.year'),'name' => 'year', 'data' => 'year', 'searchable' => true, 'elmsearch' => 'text']),
             'month' => new Column(['title' => __('models/attendanceSummaries.fields.month'),'name' => 'month', 'data' => 'month', 'searchable' => true, 'elmsearch' => 'text']),
-            'total_workday' => new Column(['title' => __('models/attendanceSummaries.fields.total_workday'),'name' => 'total_workday', 'data' => 'total_workday', 'searchable' => true, 'elmsearch' => 'text']),
-            'total_in' => new Column(['title' => __('models/attendanceSummaries.fields.total_in'),'name' => 'total_in', 'data' => 'total_in', 'searchable' => true, 'elmsearch' => 'text']),
-            'total_loyality' => new Column(['title' => __('models/attendanceSummaries.fields.total_loyality'),'name' => 'total_loyality', 'data' => 'total_loyality', 'searchable' => true, 'elmsearch' => 'text']),
-            'total_absent' => new Column(['title' => __('models/attendanceSummaries.fields.total_absent'),'name' => 'total_absent', 'data' => 'total_absent', 'searchable' => true, 'elmsearch' => 'text']),
-            'total_overtime' => new Column(['title' => __('models/attendanceSummaries.fields.total_overtime'),'name' => 'total_overtime', 'data' => 'total_overtime', 'searchable' => true, 'elmsearch' => 'text'])
+            'total_workday' => new Column(['title' => __('models/attendanceSummaries.fields.total_workday'),'name' => 'total_workday', 'data' => 'total_workday', 'searchable' => false, 'elmsearch' => 'text']),
+            'total_in' => new Column(['title' => __('models/attendanceSummaries.fields.total_in'),'name' => 'total_in', 'data' => 'total_in', 'searchable' => false, 'elmsearch' => 'text']),
+            'total_leave' => new Column(['title' => __('models/attendanceSummaries.fields.total_leave'),'name' => 'total_leave', 'data' => 'total_leave', 'searchable' => false, 'elmsearch' => 'text']),
+            'total_absent' => new Column(['title' => __('models/attendanceSummaries.fields.total_absent'),'name' => 'total_absent', 'data' => 'total_absent', 'searchable' => false, 'elmsearch' => 'text']),
+            'total_off' => new Column(['title' => __('models/attendanceSummaries.fields.total_off'),'name' => 'total_off', 'data' => 'total_off', 'searchable' => false, 'elmsearch' => 'text'])
         ];
     }
 

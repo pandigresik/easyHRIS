@@ -26,7 +26,9 @@ class CreateAttendanceSummaryRequest extends FormRequest
      */
     public function rules()
     {
-        return AttendanceSummary::$rules;
+        return [
+           'range_period' => 'required'
+        ];
     }
 
     /**
@@ -38,7 +40,7 @@ class CreateAttendanceSummaryRequest extends FormRequest
     */
     public function all($keys = null)
     {
-        $keys = (new AttendanceSummary())->fillable;
+        $keys = ['company_id', 'employee_id', 'range_period'];
         return parent::all($keys);
     }
 }
