@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Push Protocol · Nufaza Docs</title><meta name="viewport" content="width=device-width"><meta name="generator" content="Docusaurus"><meta name="description" content="# Intro"><meta name="docsearch:language" content="en"><meta property="og:title" content="Push Protocol · Nufaza Docs"><meta property="og:type" content="website"><meta property="og:url" content="https://docs.nufaza.com/"><meta property="og:description" content="# Intro"><meta property="og:image" content="https://docs.nufaza.com/img/docusaurus.png"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://docs.nufaza.com/img/docusaurus.png"><link rel="shortcut icon" href="https://docs.nufaza.com/img/favicon.png"><link rel="stylesheet" href="./Push Protocol · Nufaza Docs_files/atom-one-dark.min.css"><link rel="alternate" type="application/atom+xml" href="https://docs.nufaza.com/blog/atom.xml" title="Nufaza Docs Blog ATOM Feed"><link rel="alternate" type="application/rss+xml" href="https://docs.nufaza.com/blog/feed.xml" title="Nufaza Docs Blog RSS Feed"><link rel="stylesheet" href="./Push Protocol · Nufaza Docs_files/code-block-buttons.css"><script type="text/javascript" src="./Push Protocol · Nufaza Docs_files/buttons.js.download"></script><script type="text/javascript" src="./Push Protocol · Nufaza Docs_files/clipboard.min.js.download"></script><script type="text/javascript" src="./Push Protocol · Nufaza Docs_files/code-block-buttons.js.download"></script><script src="./Push Protocol · Nufaza Docs_files/scrollSpy.js.download"></script><link rel="stylesheet" href="./Push Protocol · Nufaza Docs_files/prism.css"><link rel="stylesheet" href="./Push Protocol · Nufaza Docs_files/main.css"><script src="./Push Protocol · Nufaza Docs_files/codetabs.js.download"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="https://docs.nufaza.com/"><img class="logo" src="./Push Protocol · Nufaza Docs_files/nufaza_logo.svg" alt="Nufaza Docs"><h2 class="headerTitleWithLogo">Nufaza Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="https://docs.nufaza.com/" target="_self">Docs</a></li><li class=""><a href="https://docs.nufaza.com/docs/docs/docusaurus/contribute" target="_self">Contribute</a></li><li class=""><a href="https://docs.nufaza.com/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>ZKTeco Attendance</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Devices</h3><ul class=""><li class="navListItem"><a class="navItem" href="https://docs.nufaza.com/docs/devices/intro">Intro</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">ZKTeco Attendance</h3><ul class=""><li class="navListItem"><a class="navItem" href="https://docs.nufaza.com/docs/devices/zkteco_attendance/intro">Intro</a></li><li class="navListItem navListItemActive"><a class="navItem" href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol">Push Protocol</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Push Protocol</h1></header><article><div><span><h1><a class="anchor" aria-hidden="true" id="intro"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#intro" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Intro</h1>
+<p>Perangkat ZKTeco yang support ADMS/WDMS/Web Service menggunakan protocol yang namanya Push Protocol. Berikut cara kerjanya.</p>
+<h1><a class="anchor" aria-hidden="true" id="mesin"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#mesin" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Mesin</h1>
+<p>Mesin yang dapat dikoneksikan harus mempunyai fitur koneksi jaringan baik melalui ethernet ataupun wireless. Mesin pun harus punya fitur kirim data ke web atau cloud. Cara koneksi dengan masuk menu COMM setting.</p>
+<h1><a class="anchor" aria-hidden="true" id="fungsi-utama"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#fungsi-utama" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Fungsi Utama</h1>
+<p>Ada 6 fungsi utama push protocol (sudut pandang dari sisi client):</p>
+<ol>
+<li>Initializing Information Exchange (Inisialisasi Pertukaran Informasi antara client dan server)</li>
+<li>Uploading Update Information (Mengirim Informasi Terkini)</li>
+<li>Uploading Data (Mengirim Data)</li>
+<li>Downloading Command (Mengambil Perintah dari Pusat)</li>
+<li>Command Reply (Membalas Perintah dari Pusat)</li>
+<li>Remote Attendance (Laporan Kehadiran Jarak Jauh/tidak di tempat)</li>
+</ol>
+<h1><a class="anchor" aria-hidden="true" id="proses-komunikasi"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#proses-komunikasi" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Proses Komunikasi</h1>
+<p>Fungsi-fungsi no 2-6 di atas hanya bisa lanjut kalau proses nomor 1 sukses dulu.</p>
+<p>Contoh proses:</p>
+<ol>
+<li><p>Handshake. Client dapat info konfig dari server.</p>
+<pre><code class="hljs">CLIENT        ------------&gt;        <span class="hljs-built_in"> SERVER
+</span><span class="hljs-builtin-name">GET</span> /iclock/cdata?<span class="hljs-attribute">SN</span>=OID7054297041500253&amp;options=all&amp;pushver=2.2.14&amp;language=73
+<span class="hljs-built_in">
+CLIENT </span>       &lt;------------        <span class="hljs-built_in"> SERVER
+</span><span class="hljs-builtin-name">GET</span> OPTION <span class="hljs-keyword">FROM</span>: 354313
+<span class="hljs-attribute">Stamp</span>=82983982
+<span class="hljs-attribute">OpStamp</span>=9238883
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Device ambil perintah yang diminta dari server. Dalam hal ini mengubah pin atas nama Wawan</p>
+<pre><code class="hljs">CLIENT        ------------&gt;        <span class="hljs-built_in"> SERVER
+</span><span class="hljs-builtin-name">GET</span> /iclock/getrequest?<span class="hljs-attribute">SN</span>=OID7054297041500253
+<span class="hljs-built_in">
+CLIENT </span>       &lt;------------        <span class="hljs-built_in"> SERVER
+</span>C:122:<span class="hljs-builtin-name">INFO</span>
+C:123:DATA<span class="hljs-built_in"> USER </span><span class="hljs-attribute">PIN</span>=852 <span class="hljs-attribute">Name</span>=Wawan
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Device mengirimkan jawaban ke server setelah melaksanakan komando</p>
+<pre><code class="hljs">CLIENT        ------------&gt;        <span class="hljs-built_in"> SERVER
+</span>POST /iclock/devicemd?<span class="hljs-attribute">SN</span>=OID7054297041500253
+<span class="hljs-built_in">
+CLIENT </span>       &lt;------------        <span class="hljs-built_in"> SERVER
+</span>OK
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Device mengirimkan data ke server jika misal ada data tambahan atau ada data kehadiran baru masuk</p>
+<pre><code class="hljs">CLIENT        ------------&gt;        <span class="hljs-built_in"> SERVER
+</span>POST /iclock/cdata?<span class="hljs-attribute">SN</span>=OID7054297041500253&amp;Stamp=26
+<span class="hljs-built_in">
+CLIENT </span>       &lt;------------        <span class="hljs-built_in"> SERVER
+</span>OK xx
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan: Server memberi info balik ke client. xx menunjukkan berapa jumlah baris data yg diterima server pada command terakhir.</p></li>
+</ol>
+<h1><a class="anchor" aria-hidden="true" id="penjelasan-fungsi-fungsi-utama"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#penjelasan-fungsi-fungsi-utama" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Penjelasan Fungsi-Fungsi Utama</h1>
+<h2><a class="anchor" aria-hidden="true" id="inisialisasi-pertukaran-informasi-antara-client-dan-server"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#inisialisasi-pertukaran-informasi-antara-client-dan-server" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Inisialisasi Pertukaran Informasi antara Client dan Server</h2>
+<p>Contoh data dari client:</p>
+<pre><code class="hljs"><span class="hljs-builtin-name">GET</span> /iclock/cdata?<span class="hljs-attribute">SN</span>=0316144680030&amp;options=all&amp;pushver=2.2.14&amp;language=83&amp;pushcommkey=429594af1641269779559e8554b5d126 HTTP/1.1
+Host: 58.250.50.81:8011
+User-Agent:<span class="hljs-built_in"> Clock </span>Proxy/1.09
+Connection: close
+Accept: */*
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Contoh jawaban dari server:</p>
+<pre><code class="hljs">HITP/1.1 200 OK
+<span class="hljs-section">Server:nginx/1.6.0</span>
+<span class="hljs-section">Date: Fri, 03 Jul 2015 06:53:01 GMT</span>
+<span class="hljs-section">Content-Type: text/plain</span>
+<span class="hljs-section">Content-Length: 190</span>
+<span class="hljs-section">Connection: close</span>
+Pragmar no-cache
+<span class="hljs-section">Cache-Control: no-store</span>
+
+GET OPTION FROM: 0316144680030
+ATTLOGStamp=None
+OPERLOGStamp=9999
+ATTPHOTOStamp=None
+ErrorDelay=30
+Delay=10
+TransTimes=00:00;14: 05
+Transinterval=1
+TransFlag=TransData AttLog OpLog AttPhoto EnrollUser ChgUser EnrollFP ChgFP UserPic
+TimeZone=8
+Realtime=1
+Encrypt=None
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li><p>Date header digunakan untuk sinkronisasi waktu client</p></li>
+<li><p>Baris <code>GET OPTION FROM: {{ serialNumber }}</code>, diikuti konfigurasi dipisahkan \n\r</p></li>
+<li><p>Baris <code>{{ logType }}Stamp</code> alternatif konfignya:
+ATTLOG      Attendance record
+OPERLOG     Operation log
+ATTPHOTO    Attendance photo
+Ketika client upload suatu data, tanda timestampnya diupload sebagai fungsi cut-off. Server harus simpan ini. Saat alat reboot, client meminta inisialisasi pertukaran data kembali. Nah server harus mengembalikan stamp terakir dari client agar pengiriman data berikutnya hanya yang baru yg dikirim (nggak semua diupload dari awal).</p></li>
+<li><p>Konfigurasi <code>ErrorDelay</code>: berapa detik interval mengirim ulang data jika terjadi error.</p></li>
+<li><p>Konfigurasi <code>TransTimes</code>: Waktu kapan client mengecek dan mengirimkan kembali data secara periodik, dalam format 24 jam (hour:minute).</p></li>
+<li><p>Konfigurasi <code>TransInterval</code>: Interval untuk client mengecek dan mengirim data baru (dalam menit). Jika 0, tidak ada data dikirim</p></li>
+<li><p>Konfigurasi <code>TransFlag</code>: Identifikasi data yang diminta dari client. Ada dua format,</p>
+<ol>
+<li><p>Format pertama yang pertama pakai bit, contoh:</p>
+<pre><code class="hljs"><span class="hljs-attr">TransFlag</span> = <span class="hljs-number">1111000000</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Yang artinya:</p>
+<table>
+<thead>
+<tr><th>Digit ke</th><th>Data yang diminta</th><th>Nilai</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Attendance record</td><td>Ya</td></tr>
+<tr><td>2</td><td>Operation log</td><td>Ya</td></tr>
+<tr><td>3</td><td>Attendance photo</td><td>Ya</td></tr>
+<tr><td>4</td><td>Enrolling a new user</td><td>Ya</td></tr>
+<tr><td>5</td><td>Changing user information</td><td>Tidak</td></tr>
+<tr><td>6</td><td>Enrolling a new fingerprint</td><td>Tidak</td></tr>
+<tr><td>7</td><td>Changing a fingerprint</td><td>Tidak</td></tr>
+<tr><td>8</td><td>Fingesprint image</td><td>Tidak</td></tr>
+<tr><td>9</td><td>New enrolled face</td><td>Tidak</td></tr>
+<tr><td>10</td><td>User picture</td><td>Tidak</td></tr>
+</tbody>
+</table>
+</li>
+<li><p>Format kedua yang pertama pakai string, contoh:</p>
+<pre><code class="hljs">TransFlag = TransData AttLog<span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>OpLog<span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>AtPhoto...<span class="hljs-tag">&lt;<span class="hljs-name">dst</span>&gt;</span>..
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Di mana data yang diminta dicantumkan dengan string dipisahkan dengan tab:</p>
+<table>
+<thead>
+<tr><th>String</th><th>Deskripsi Data Diminta</th></tr>
+</thead>
+<tbody>
+<tr><td>AttLog</td><td>Attendance log</td></tr>
+<tr><td>OpLog</td><td>Operation log</td></tr>
+<tr><td>AttPhoto</td><td>Attendance photo</td></tr>
+<tr><td>EnrollUser</td><td>Enrolling a new user</td></tr>
+<tr><td>ChgUser</td><td>Changing user information</td></tr>
+<tr><td>EnrollfP</td><td>Enrolling a new fingerprint</td></tr>
+<tr><td>ChgFP</td><td>Changing a fingerprint</td></tr>
+<tr><td>FPImag</td><td>Fingerprint image</td></tr>
+<tr><td>FACE</td><td>New enrolled face</td></tr>
+<tr><td>UserPic</td><td>Userpicture</td></tr>
+</tbody>
+</table>
+</li>
+</ol></li>
+<li><p>Konfigurasi <code>Timezone</code>: sesuaikan agar client record jamnya tepat. Gunakan 7 untuk WIB, 8 WITA, 9 WIT.</p></li>
+<li><p>Konfigurasi <code>ServerVer</code>: set <strong>2.2.14</strong>.</p></li>
+<li><p>Konfigurasi <code>Realtime</code>: set 1 jika ingin mendapatkan realtime update dari mesin.</p></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="mengirim-rekap-informasi-terkini"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#mengirim-rekap-informasi-terkini" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Mengirim Rekap Informasi Terkini</h2>
+<p>Contoh data dari client:</p>
+<pre><code class="hljs">GET /iclock/getrequest?SN=<span class="hljs-number">03161446800308</span>&amp;INFO=Ver%<span class="hljs-number">202.0</span><span class="hljs-number">.12</span><span class="hljs-number">-20150625</span>,<span class="hljs-number">0</span>,<span class="hljs-number">09</span>,<span class="hljs-number">192.168</span><span class="hljs-number">.16</span><span class="hljs-number">.2</span><span class="hljs-number">7</span>,<span class="hljs-number">107.150</span><span class="hljs-number">.111</span> HTTP/<span class="hljs-number">1.1</span>
+Host: <span class="hljs-number">58.250</span><span class="hljs-number">.50</span><span class="hljs-number">.81</span>:<span class="hljs-number">8011</span>
+User-Agent: iClock Proxy/<span class="hljs-number">1.09</span>
+Connection: close
+Accept: *<span class="hljs-comment">/*
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Contoh jawaban dari server:</p>
+<pre><code class="hljs"><span class="hljs-string">HTTP/1.1</span> <span class="hljs-number">200</span> <span class="hljs-string">0K</span>
+<span class="hljs-string">Server:nginx/1.6.0</span>
+<span class="hljs-attr">Date:</span> <span class="hljs-string">Tue,</span> <span class="hljs-number">30</span> <span class="hljs-string">Jun</span> <span class="hljs-number">2015</span> <span class="hljs-number">01</span><span class="hljs-string">:24</span> <span class="hljs-number">26</span> <span class="hljs-string">GMT</span>
+<span class="hljs-attr">Content-Type:</span> <span class="hljs-string">text/plain</span>
+<span class="hljs-attr">Content-Length:</span> <span class="hljs-number">2</span>
+<span class="hljs-attr">Connection:</span> <span class="hljs-string">close</span>
+<span class="hljs-attr">Pragma:</span> <span class="hljs-literal">no</span><span class="hljs-string">-cache</span>
+<span class="hljs-string">Cache-Control:no-store</span>
+
+<span class="hljs-string">OK</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>URL ini terdiri dari 2 parameter, yaitu SN dan INFO. SN merupakan serial number mesin, sedangkan parameter INFO terdiri dari beberapa nilai dipisahkan koma yaitu:</p>
+<table>
+<thead>
+<tr><th>Nilai ke</th><th>Deskripsi</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Firmware version number</td></tr>
+<tr><td>2</td><td>Number of enrolled users</td></tr>
+<tr><td>3</td><td>Number of enrolled fingerprints</td></tr>
+<tr><td>4</td><td>Number of attendance records</td></tr>
+<tr><td>5</td><td>IP address of Equioment</td></tr>
+<tr><td>6</td><td>Version of fingerprint algorithm</td></tr>
+<tr><td>7</td><td>Version of face algorithm</td></tr>
+<tr><td>8</td><td>Number of faces required for face enrollment,</td></tr>
+<tr><td>9</td><td>Number of enrolled faces</td></tr>
+<tr><td>10</td><td>Angka yang menunjukkan fungsi yang didukung mesin</td></tr>
+</tbody>
+</table>
+<p>Khusus untuk nomor 10, formatnya berupa 3 angka fungsi, tiap digitnya 0—tidak mendukung fungsi, 1—mendukung fungsi. Jadi jika misalnya <strong>101</strong> artinya:</p>
+<table>
+<thead>
+<tr><th>Digit ke</th><th>Data yang diminta</th><th>Nilai</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Fingerprint function</td><td>Ya</td></tr>
+<tr><td>2</td><td>Face function</td><td>Tidak</td></tr>
+<tr><td>3</td><td>User photo function</td><td>Ya</td></tr>
+</tbody>
+</table>
+<h2><a class="anchor" aria-hidden="true" id="mengirim-data"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#mengirim-data" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Mengirim Data</h2>
+<p>Pengiriman data bisa 3 cara:</p>
+<ul>
+<li>Realtime uploading (langsung)
+Untuk realtime, beritahu saat inisialisasi.</li>
+<li>Interval uploading (berjeda)
+Untuk interval, yang digunakan adalah parameter <code>TransInterval</code>.</li>
+<li>Timed uploading (terjadwal)
+Untuk pengiriman terjadwal, yang digunakan adalah parameter <code>TransTimes</code>.</li>
+</ul>
+<p>Keterangan lebih lanjut baca kembali terminologi di atas dan cara settingnya di bab <a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#inisialisasi-pertukaran-informasi-antara-client-dan-server">Inisialisasi</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="pengiriman-data-kehadiran"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#pengiriman-data-kehadiran" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pengiriman Data Kehadiran</h2>
+<p>Contoh request dari client:</p>
+<pre><code class="hljs"><span class="hljs-keyword">POST</span> <span class="hljs-string">/iclock/edata?SN=0316144680030&amp;table=ATTLOG&amp;Stamp=9999</span> HTTP/1.1
+<span class="hljs-attribute">Host</span>: 58.250.50.81:8011
+<span class="hljs-attribute">User-Agent</span>: IClock Proxy/1.09
+<span class="hljs-attribute">Connection</span>: close
+<span class="hljs-attribute">Accept</span>: */*
+<span class="hljs-attribute">Content-Length</span>: 315
+
+<span class="angelscript"><span class="hljs-number">1452</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">28</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+<span class="hljs-number">1452</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">29</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+<span class="hljs-number">1452</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">30</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+<span class="hljs-number">1452</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">31</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+<span class="hljs-number">1452</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">33</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+<span class="hljs-number">1452</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">34</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+<span class="hljs-number">1452</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">35</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+<span class="hljs-number">8965</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">36</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+<span class="hljs-number">8965</span> <span class="hljs-number">2015</span><span class="hljs-number">-07</span><span class="hljs-number">-30</span> <span class="hljs-number">15</span>:<span class="hljs-number">16</span>:<span class="hljs-number">37</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span>
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Contoh jawaban dari server:</p>
+<pre><code class="hljs"><span class="hljs-string">HITP/1.1</span> <span class="hljs-number">200</span> <span class="hljs-string">OK</span>
+<span class="hljs-string">Server:nginw/1.60</span>
+<span class="hljs-attr">Date:</span> <span class="hljs-string">Thu,</span> <span class="hljs-attr">30 Jul 2015 07: 25:</span> <span class="hljs-number">38</span> <span class="hljs-string">GMT</span>
+<span class="hljs-attr">Content-Type:</span> <span class="hljs-string">text/plain</span>
+<span class="hljs-attr">Content-Length:</span>
+<span class="hljs-attr">Connection:</span> <span class="hljs-string">close</span>
+<span class="hljs-attr">Pragma:</span> <span class="hljs-literal">no</span><span class="hljs-string">-cache</span>
+<span class="hljs-attr">Cache-Control:</span> <span class="hljs-literal">no</span><span class="hljs-string">-store</span>
+
+<span class="hljs-attr">OK:</span> <span class="hljs-number">9</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li>Format tabelnya sbb
+<ul>
+<li>Pin</li>
+<li>Time</li>
+<li>Status</li>
+<li>Verify</li>
+<li>Workcode</li>
+<li>Reserved</li>
+<li>Reserved</li>
+</ul></li>
+<li>Jawaban cukup OK dengan jumlah baris diterima</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="pengiriman-data-operasional"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#pengiriman-data-operasional" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pengiriman Data Operasional</h2>
+<p>Contoh data dari client:</p>
+<pre><code class="hljs css language-http">POST /iclock/cdata?SN=0316144680030&amp;table=OPERLOG&amp;Stamp=9999 HTTP/1.1
+Host: 58.250.50.81:8011
+User-Agent: IClock Proxy/1.09
+Connection: close
+Accept: */*
+Content-Length: 166
+OPLOG 4 14 2015-07-30 10: 22:340 0 0 0
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Contoh jawaban dari server:</p>
+<pre><code class="hljs"><span class="hljs-string">HITP/1.1</span> <span class="hljs-number">200</span> <span class="hljs-string">OK</span>
+<span class="hljs-string">Server:nginw/1.60</span>
+<span class="hljs-attr">Date:</span> <span class="hljs-string">Thu,</span> <span class="hljs-attr">30 Jul 2015 07:</span> <span class="hljs-number">25</span><span class="hljs-string">:38</span> <span class="hljs-string">GMT</span>
+<span class="hljs-attr">Content-Type:</span> <span class="hljs-string">text/plain</span>
+<span class="hljs-attr">Content-Length:</span> <span class="hljs-number">3</span>
+<span class="hljs-attr">Connection:</span> <span class="hljs-string">close</span>
+<span class="hljs-attr">Pragma:</span> <span class="hljs-literal">no</span><span class="hljs-string">-cache</span>
+<span class="hljs-string">Cache-Controk</span> <span class="hljs-literal">no</span><span class="hljs-string">-store</span>
+
+<span class="hljs-attr">OK:</span> <span class="hljs-number">1</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li><p>Format data terkirim:
+<code>OPLOGS&lt;spasi&gt;OpType&lt;tab&gt;OpWho&lt;tab&gt;OpTime&lt;tab&gt;Value1&lt;tab&gt;Value2&lt;tab&gt;Value3&lt;tab&gt;Reserved</code>
+<code>OpType</code>: Operation Type. Daftar <code>OpType</code>:</p>
+<table>
+<thead>
+<tr><th>Type</th><th>Deskripsi</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>Startup</td></tr>
+<tr><td>1</td><td>Shutdown</td></tr>
+<tr><td>2</td><td>Authentication fails</td></tr>
+<tr><td>3</td><td>Alarm</td></tr>
+<tr><td>4</td><td>Access menu</td></tr>
+<tr><td>5</td><td>Change settings</td></tr>
+<tr><td>6</td><td>Enroll fingerprint</td></tr>
+<tr><td>7</td><td>Enroll password</td></tr>
+<tr><td>8</td><td>Enroll HID card</td></tr>
+<tr><td>9</td><td>Delete user</td></tr>
+<tr><td>10</td><td>Delete fingerprint</td></tr>
+<tr><td>11</td><td>Delete password</td></tr>
+<tr><td>12</td><td>Delete RF card</td></tr>
+<tr><td>13</td><td>Clear data</td></tr>
+<tr><td>14</td><td>Create MF card</td></tr>
+<tr><td>15</td><td>Enroll MF card</td></tr>
+<tr><td>16</td><td>Register MF card</td></tr>
+<tr><td>17</td><td>Delete MF card registration</td></tr>
+<tr><td>18</td><td>Clear MF card content</td></tr>
+<tr><td>19</td><td>Move enrolled data into the card</td></tr>
+<tr><td>20</td><td>Copy data in the card to the machine</td></tr>
+<tr><td>21</td><td>Set time</td></tr>
+<tr><td>22</td><td>Delivery configuration</td></tr>
+<tr><td>23</td><td>Delete entry and exit records</td></tr>
+<tr><td>24</td><td>Clear administrator privilege</td></tr>
+</tbody>
+</table>
+<p><code>OpCode</code>: Operation Code. Daftarnya di antaranya:</p>
+<table>
+<thead>
+<tr><th>Code</th><th>Op.Obj 1</th><th>Op.Obj 2</th><th>Op.Obj 3</th><th>Op.Obj 4</th></tr>
+</thead>
+<tbody>
+<tr><td>2</td><td>If 1:1 authentication is used, this is user ID.</td><td></td><td></td><td></td></tr>
+<tr><td>3</td><td>Alarm</td><td>For alarm causes, see Appendix 5.</td><td></td><td></td></tr>
+<tr><td>5</td><td>Sequence number of modified setting item</td><td>Value after modification</td><td></td><td></td></tr>
+<tr><td>6</td><td>User ID</td><td>Sequence number of the fingerprint</td><td>Length of the fingerprint template</td><td></td></tr>
+<tr><td>9</td><td>User ID</td><td></td><td></td><td></td></tr>
+<tr><td>10</td><td>User ID</td><td></td><td></td><td></td></tr>
+<tr><td>11</td><td>User ID</td><td></td><td></td><td></td></tr>
+<tr><td>12</td><td>User ID</td><td></td><td></td><td></td></tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="pengiriman-info-user"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#pengiriman-info-user" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pengiriman Info User</h2>
+<p>Contoh data dari client:</p>
+<pre><code class="hljs css language-http">POST /iclock/cdata?SN=03161446800308table=OPERLOG&amp;Stamp=9999 HTTP/1.1
+Host: 58.250.50.81:8011
+User-Agent: iClock Proxy/1.09
+Connection: close
+Accept: */*
+Content-Length: 166
+USER PIN=36234 Name=36234 Pri=0 Passwd= Card=133440 Grp=1 TZ=0001000000000000
+USER PIN=36235 Name=36235 Pri=0 Passwd= Card=133440 Grp=1 TZ=0001000000000000                                                             
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Contoh jawaban dari server:</p>
+<pre><code class="hljs css language-http">HTTP/1.1 200 0K
+Server: nginw/1.60
+Date: Thu, 30 Jul 2015 07:25:38 GMT
+Content-Type: text/plain
+Content-Length: 4
+Connection: close
+Pragma: no-cache
+Cache-Contiol: no-store
+
+OK: 2
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<h2><a class="anchor" aria-hidden="true" id="pengiriman-data-template-fingerprint"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#pengiriman-data-template-fingerprint" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pengiriman Data Template Fingerprint</h2>
+<p>Contoh data dari client:</p>
+<pre><code class="hljs"><span class="hljs-keyword">POST</span> <span class="hljs-string">/iclock/cdata?SN=0316144680030&amp;table=OPERLOG&amp;Stamp=9999</span> HTTP/1.1
+<span class="hljs-attribute">Host</span>: 58.250.50.81:8011
+<span class="hljs-attribute">User-Agent</span>: iClock Proxy/1.09
+<span class="hljs-attribute">Connection</span>: close
+<span class="hljs-attribute">Accept</span>: */*
+<span class="hljs-attribute">Content-Length</span>: 4950
+
+<span class="lsl">FPPIN=<span class="hljs-number">2</span> FID=<span class="hljs-number">0</span> Size=<span class="hljs-number">1124</span> Valid=<span class="hljs-number">1</span> TMP=SghTUzixAAADSOOECAUHCC7QAAANSNKBAAAAQ
+NUfEsyAIEPHgH6ALFHROBBAPKPEWBAS2UPEWBTACYPeOtYAHKI|ACUAHGleQBtAGWEUABIS20,
+DhAB+AKSEXUuPAOoPJABWANVENODCANSPZODbSx8PbwDeACwPz0vjAJSPaWATAPFELADS
+AMwPVQASSVMIKMgAWwAQKPSUE2D keXQOuCQ B4AJT7GZuC3GyNyStvjOKT7X77SKYKBSLEMQh
+MCVSG1PUR+TOFIPIGT@MABQHp+XqBhclzg397xf0IDSCKQAXvErv3q4POZ940xfmXzBbSbcher2
+e7POKLAXyf8g)<span class="hljs-number">78</span>nP7iwFiQmAXcwKn3 LfiwoBIDQBAltbrAdL OBF wwvBEXVYStv7ABQBOE7+/CE
+\VGIBS/<span class="hljs-number">4</span>SqDwPo J4yHwMDEBcHDIcB/DQCrLkbAwgnFenwGAHn2gdilCQCsNoPCnm4RS75CjOr
+QwF qwS4HADFOZmwEAw/cR)/ABWA |WTCIVX+ whMAw4+Jw¥nC-+<span class="hljs-comment">//Aw3pCwsKOWRIAXFKIB</span>
+aPAstzCwSWLwaENAzSbesHBi4eqBwOPW4PBwsEoygBxknvCwcLAwax4WFIBO2WGWi86bOCL
+wab/ZMFx3ADXI4FSi3X/\wat2whjD /wkAc26 <span class="hljs-number">1</span>eMKKIGQBG249iwUDONPSXEAdDZwwYtSwcHC
+wME6weMuBQCeeANII gCOMWC/+ DwL S0UbQCAIF7cMLNAJO2CMHA+/xT20CCy2)A/pPAB
+MXTh2ZXEQEtnkCn/<span class="hljs-number">8</span>OLWWVdSOMB i <span class="hljs-number">81</span>DiwsBF8s9RZFcFUvqza3C/<span class="hljs-number">3</span>gAWwMOMW1 iZ8laxeXM7
+cFyxMDCpLvAdCDD/na HAKMcHsMH/QsACNe0/<span class="hljs-number">2</span>/tfxC/wsAGBVk/bf/T KF AAMAKIPxMHF)P/C
+BSDDISFZCgBs4p + EwhHBGwDr4qQEUCA2wsPBWMFA4BBOCEML+wAQAel/WwHIWB6/GmaSAFxI
+<span class="hljs-number">2</span>IWIPAgIg¥xe)<span class="hljs-number">46</span>UtangPBwarBbg JEHsO4vk8/cMkBRCIF NpxhCGe0)BERDTMGxti4/CrGb/FBA
+aMqiLccDAWMTFAMLAISPB/<span class="hljs-number">8</span>HAASWLOgi/DxDPPatA/<span class="hljs-number">8</span>GJtcRCDBDESSBV/<span class="hljs-number">7</span>JyZMEEGFRQ7T4
+FPPIN=<span class="hljs-number">2</span> FID=<span class="hljs-number">1</span> Size=<span class="hljs-number">2120</span> Valid=<span class="hljs-number">1</span> TMP=T3dTUzixAAAGNOSECAUHCc7QAARENWKBAAAA,
+htlDsjQJAKIPYgDIAHO7NGA IAHAPZgBSNKQPdwBWAQAPY)RYABMPSACIADM76w88ALKO208
+<span class="hljs-number">-4</span>NFgPVQCCAPOO2TSTALOOYABeAEO7T9CdAFMPwOGmNNgNwgCiAHOPnDSpAEQPCOFUAEIS
+eQCtAEcPIwCpNMoNEgGwAPKNVTSyADOP++ABxAEY/KgCTANUPVOC/NMMP7QCBAAWNHTTA
+AMOOSAAEAECS JgDCANQO7QDKNN4OzgDOAHAOHjTQANUODGAGAMCEZgDgAESPNgDmN
+MMOKQDiAKMOE;TIAOUCZaAhAM86QQDmAGUPRQDONFIPaQDWAAIPEDT3ADSOBGEZALKEU
+AD3AMQOCAAHNTQOPWAHAaEPDTUGAUIO!QDMAUY70QAMAUBPEAAINDOQOBGAZAXGPXD
+QFATSOCgHaACOS3AAPATYOZAAGNTOMmAAVAYOM/TQUACANYQD IACY6OGA2ATBOBAA/NCE
+LOgA7ASYPIDOBAWOLIQCEAIQ7 hOBEAGBOKWBCNbBORABMASOPADROAEUONACUACOSLVO}
+bON/vw8xbVZpO18G9+-JPAOZbg6sF <span class="hljs-number">2</span>hafgw2db/Kq3hanMILd p/HQLud8rxWbiqljsLeeSUSWA
+SSmAL-+<span class="hljs-number">8</span>DIEdPj/II MEKO}<span class="hljs-number">1</span> H1 ODOqPInf2aGYFZANzaKIW6/UONKQruWEgFTYAW/PMFSZ0Ajd203°
+(OSZbvLGIVugNbSYXuLNMxI-+QARCTTEK7VOI7aLIipZi2cOufv9-+-NHWGXoLNORG6PCWC7WAW|s
+UDDOUBfargLTBFRATCKH4be/q6ST3cYRI+<span class="hljs-number">3</span>fqD7LgB4KAmYECiic2SSdIEZMBVBIFMVIKDQIeAHU)
+|TeRCOAHYxwdKBTOHSEgOMH IHtenT/BYXRkrniT/c7TgcsH23GAPAWw203IWBggaézH27xWgGL
+RFyFNOMc7QwfqGD9FAl/i+/dHOpivH+<span class="hljs-number">2</span>AaHtkgGpfi9eff7vsiofaXaL ASMSEU+OAIXBMKGHYN3sb
+SSN2IMdCCwHZ7F Us| fyfXU8mW <span class="hljs-number">17</span> By JnEmaQBKYMGKTKXWN/KAXn22XgG6IPO3N/JE4hAMKQ
+ZAbpGpP24wP}fRRaSHpzBAEIEWBAUNgOQUOZWUAWAWAaACIMBEWDKAHOICtEQv4SAHZOE
+Z2PO/ONAWBL9xqCfPx3/CgDDC+L/UStKDOBNDAK#AVgMw/<span class="hljs-number">3</span>AFgCNyRcwHIVYVDyfBBXQChnBV
+FRSADFU/cbK/v7/<span class="hljs-number">08</span>H88cl <span class="hljs-number">4</span>y0gDAOQKLToLEgMb/TwwOQQnFuCAZS1X+CGwAmdvdkyf/AKWUA
+X+<span class="hljs-number">2</span>AdiEBUS4A/yeD/VdyZWADADMZtMAeNFcl APwwMDvA+WOZW/AxQTENDSZZAQApVCW
+COIXG9AYAelgg/ur/EZRUWRD+/v3 lwDEHTCE4GgADM+IV9PZ9wPOWKT pDxnhoEAAHAOLSO/VK
+<span class="hljs-number">1</span>N7+/JQHXAVUZS wg UASaWOTCYBCHLAR/<span class="hljs-number">4</span>FISx IOBAAX7wBkcozyBwRTDC/{<span class="hljs-number">7</span>CQBGCARCAVS,
+HBAByOX40EAQUAg3YANEWDaZ3CCMVYjwPOR)YEADSKXI4wAUSPVIVFxUg JePxPHOAEKRL+G
+P8x4/<span class="hljs-number">4</span>j/v+O/BIK/cFW/ykOxd+ QDvSXc8OCWIULBmufST)<span class="hljs-comment">//cDqBQ2Z/nINBBwBQZEz4y/8yBADDp</span>
+‘VHA COBI6tDUIE+ wecHwfSUAyrhW/dyv3E<span class="hljs-comment">//9/wX7+2MCAQevRSHDAQgbOMSBGB4GUZD9A</span>
+sAv7U3QOXAXUQEALG20GjgAB+x/<span class="hljs-number">7</span><span class="hljs-comment">///7-+0v24HCH+/8H9/X+-4 TeBCLOAWOXF7CZO/SLBCAD</span>
+‘AKD79Xb/<span class="hljs-number">1</span>AACygUoxsvB/t/<span class="hljs-number">94</span>+/<span class="hljs-number">04</span>/f]K/v3AWP<span class="hljs-comment">//BI3EOMH9/v3+HCUPOPID/MD+//86/fVP/SEFS//</span>
+‘AOz74MAAS3EISBMUIS | OxBgD/<span class="hljs-number">40</span>AH/Hk/ AWimUPSVhCIANN3nQMDEVBAAOI5)/OAKAIAQUEV
+O/POGAQvégSRAMRESCmLAIBEQRDHCewkQuAzyOPv14/<span class="hljs-number">8</span>FE)WPIFSwAXHWEZiOwgT/jcOFRHQ
+wObVOxxy/<span class="hljs-number">0</span>DEMMilncEF Nww/NIMEDEBYSRVUEEVBWmTBRYSTFIRCHBCpwDGOMHAWMBKAA,
+FP PIN=<span class="hljs-number">3</span> FID=<span class="hljs-number">0</span> Size=<span class="hljs-number">1592</span> Valid=<span class="hljs-number">1</span> TMP=TetTUziAAAEQKSECAUHCC7OAAACGWKBAAAAH
+FUooagrAKAPQADPAGKnZgAUAKKPtQA IqlsnQ8GAQOPTahKAGIPIgCrADanNwByAEIPngB6q
+DQOFgCLAGENJKINADOPIABTAKimdACKABOOVgCmakivOigCnAFgOtgiOAKSPIAByAJImyQC3A
+KsP]QDEqKwPngDBAF PiqjDAKIPaQAPABGnnwDQAIWPAQDOg)sP6wDUAFAPXKIgAISPWGANAL
+Om2QDrAlwPTgDralPQwDBAFYPdaq/A/QP9GDBAYmnugAGAXwPrwANGZMPEQAIAUYOWag
+TAYsP+AD2AWamVAAOAXBPUQASGYAP6ABDADIPKdPn+ <span class="hljs-number">18</span>ZTaTm3GePXwtHgid7mih7jADLY
+UitiGh IIRziwf¥<span class="hljs-number">1</span>pLTOpojmw VOD jqxleOdv2AFQSiMsI/IU6C2uTeQgwABW4PHhhcx2DhRNGC
+&lt;gSOPMpAGTwKaDYAKEWqQB88vGuWAISEOOLISKGUROf7PcOhDUZKcUGLX4xXs/aVLRGOWOV3
+<span class="hljs-number">26</span>BRpUqZZAhBMAPMX uSc/DZL <span class="hljs-number">1</span>wezA/p1XGADSBIONANWaPIICgNKSTSCQaxMCOKDZOxXAje!
+_XmBgv4DABROHBCBIig#fCX2VDY+<span class="hljs-number">5</span>LSdf0D79dl2/XX7LAVZvOHPS4H6QrLOxbvuTys+ <span class="hljs-number">2</span>sgRAHH
+pSVRDOCpBCtrimTEpgGOBKw4/<span class="hljs-number">55</span>qYKOBCOgP/ZHBAINGESCTAFOIxV27V/SHWP5(ZSOMBDYIHV
+‘SkwGKRBAQSCydZBQDDzifE7 wUATQONYNMAQLGBWP3+QVEhUIZOCGAL+D8O/<span class="hljs-number">3</span>EVF4WFWAGK
+ILO+VI/MTHTZCAEWY +-gAWws)SLDQAYEISxnd MINAGOI /<span class="hljs-number">8</span>LXQ2FDD Vhw/SpwnsFxdI2j IMA
+HQzHONU-+<span class="hljs-number">64</span>BRkprwsS2DwTmsS/<span class="hljs-number">38</span><span class="hljs-comment">// wwkMPGxawAnEonwjv/YGJAWYQOAEMKZBCKkSLBWSDA</span>
+-zwCawS)/WVjCcdQAUBVWxMPCwe'HW/tqwMDC/UsMxTlafif9/M09/qoMBPRUTBLDxMBYwWiu
+AZwN1F LAww8/<span class="hljs-number">3</span>UHDW8DDB8UzcubRWSIGADM2Q8LgCOBleCIDIWEfGAGF yf<span class="hljs-comment">///T++VK+/17/</span>
+|WwP4F/ARowitv8gBaQDTGIAWAedipwivizwW2hfhUAFOBDOfpX<span class="hljs-comment">//39/S7/7nwiq8yPOBLCIAV+XKAB|</span>
+<span class="hljs-number">-489</span>)MK2BAQdKDSDFOCIV6v7IMFHW8TCwgb/xtTANQUACZvniw/poCgAVoD2SuWODALESIHS
+(CSURVSjCacHB/sPGAKZIFSAGAEZE4cF-+rwFsyRPAnjsGBKbLKCLAIAnFa8q2w/Cw1MGxcjSVBHC
+RQQAWYEXftZHSQQA3O3KWO20)vAD@Ef/xgBOVRLABRANAMKHArH3AAL+WATWvwKOQAUQKQ
+QTAP2GthF uCOZpwMgQ/<span class="hljs-number">7</span>qHdsOCQ/<span class="hljs-number">4</span>FwRWALhYswi/COsJUaMNOQBAQOUYIAFIAZMb+ YAM
+ICTYM2QJEQMtK/<span class="hljs-number">77</span>V1<span class="hljs-comment">// UQUQWAHSUKCRSTAWLCCeUM2vEZA7IVIdyRDG7nvA/2iC/Q/DIQ7XA</span>
+PAbcI7/cb6QwALQWAADKcPCQ==
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Contoh jawaban dari server:</p>
+<pre><code class="hljs"><span class="hljs-string">HITP/1.1</span> <span class="hljs-string">200K</span>
+<span class="hljs-string">Server:nginx/1.60</span>
+<span class="hljs-attr">Date:</span> <span class="hljs-string">Thu,</span> <span class="hljs-attr">30 Jul 2015 07:</span> <span class="hljs-number">25</span><span class="hljs-string">:38</span> <span class="hljs-string">GMT</span>
+<span class="hljs-attr">Content-Type:</span> <span class="hljs-string">text/plain</span>
+<span class="hljs-attr">Content-Length:</span> <span class="hljs-number">4</span>
+<span class="hljs-attr">Connection:</span> <span class="hljs-string">close</span>
+<span class="hljs-attr">Pragma:</span> <span class="hljs-literal">no</span><span class="hljs-string">-cache</span>
+<span class="hljs-attr">Cache-Control:</span> <span class="hljs-literal">no</span><span class="hljs-string">-store</span>
+
+<span class="hljs-string">OK:3</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<h2><a class="anchor" aria-hidden="true" id="mengambil-perintah-dari-pusat"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#mengambil-perintah-dari-pusat" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Mengambil Perintah dari Pusat</h2>
+<p>Jika server ingin melakukan operasional dari pusat, server membuat format command,
+tunggu sampai mesin memulai koneksi, lalu server membalas dengan perintah ke mesin</p>
+<p>Contoh request dari client:</p>
+<pre><code class="hljs"><span class="hljs-builtin-name">Get</span> /iclock/getrequest?<span class="hljs-attribute">SN</span>=0316144680030
+Host: 58.250.50.81:8011
+<span class="hljs-built_in">..</span>dst<span class="hljs-built_in">..</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Contoh jawaban dari server, jika tidak ada perintah dikirimkan, maka jawabannya sbb:</p>
+<pre><code class="hljs">HTTP/1.1 <span class="hljs-number">200</span> OK
+<span class="hljs-attribute">Date</span>: xxx
+<span class="hljs-attribute">Content-Length</span>: 2
+
+<span class="ebnf"><span class="hljs-attribute">OK</span>
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jika ada perintah dikirimkan, jawabannnya sbb:</p>
+<pre><code class="hljs">HTTP/1.1 <span class="hljs-number">200</span> OK 
+<span class="hljs-attribute">Date</span>: xxx
+<span class="hljs-attribute">Content-Length</span>: xxx
+
+<span class="haskell">&lt;<span class="hljs-class"><span class="hljs-keyword">data</span> command&gt;</span>
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Tag data command kelak diisi sesuai peruntukannya.</p>
+<h2><a class="anchor" aria-hidden="true" id="command-data"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-data" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Command DATA</h2>
+<h3><a class="anchor" aria-hidden="true" id="command-update"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-update" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Command UPDATE</h3>
+<ol>
+<li><p>Perintah Update Data User
+Format perintahnya untuk tiap baris:</p>
+<pre><code class="hljs"><span class="xml">C:</span><span class="hljs-template-variable">{{CmdId}}</span><span class="xml">:DATA<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>UPDATE<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>USERINFO<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>PIN=</span><span class="hljs-template-variable">{{UserID}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>Name=</span><span class="hljs-template-variable">{{Nama}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>Passwd=</span><span class="hljs-template-variable">{{passwd}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>Card=</span><span class="hljs-template-variable">{{card}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>Grp=</span><span class="hljs-template-variable">{{group}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>TZ=</span><span class="hljs-template-variable">{{timePeriod}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>Pri=</span><span class="hljs-template-variable">{{userPrivillegeValue}}</span><span class="xml">
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li><code>PIN</code> menunjukkan UserId</li>
+<li><code>Group</code> menunjukkan termasuk group apa ybs</li>
+<li><code>TZ</code> menunjukan time period yang digunakan oleh user.
+<ul>
+<li>Digit 1-4 --&gt; group time period</li>
+<li>Digit 5-8 --&gt; Personal time period 1</li>
+<li>Digit 9-12 --&gt; Personal time period 2</li>
+<li>Digit 13-16 --&gt; Personal time period 3</li>
+</ul></li>
+<li><code>Pri</code> menunjukkan privillege user:
+<ul>
+<li>0  Normal User</li>
+<li>2  Registrar</li>
+<li>6  Admin</li>
+<li>10  User-defined</li>
+<li>14  Super Admin</li>
+</ul></li>
+</ul></li>
+<li><p>Perintah Update Fingerprint Data
+TBD</p></li>
+<li><p>Perintah Update Face Template
+TBD</p></li>
+<li><p>Perintah Update User Photo</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:DATA&lt;spasi&gt;UPDATE&lt;spasi&gt;USERPIC&lt;spasi&gt;PIN=</span>{{UserId}}&lt;tab&gt;Size={{Size}}&lt;tab&gt;Content={{fileContent}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li>Size: Panjang file dalam format base64</li>
+<li>Content: Isi file setelah diencode dalam base64</li>
+</ul></li>
+<li><p>Perintah Kirim Pesan Singkat</p>
+<pre><code class="hljs"><span class="xml">C:</span><span class="hljs-template-variable">{{CmdId}}</span><span class="xml">:DATA<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>UPDATE<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>SMS<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>MSG=</span><span class="hljs-template-variable">{{Message}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>TAG=</span><span class="hljs-template-variable">{{Tag}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>UID=</span><span class="hljs-template-variable">{{MessageNumber}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>MIN=</span><span class="hljs-template-variable">{{Duration}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>StartTime=</span><span class="hljs-template-variable">{{StartTime}}</span><span class="xml">
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li>TAG diisi nilai sesuai jenisnya:
+<ul>
+<li>253  Public short message</li>
+<li>254  User short message</li>
+<li>255  Reserved short message</li>
+</ul></li>
+<li>UID diisi nomor dari SMS (integer)</li>
+<li>MIN diisi menit durasi ditampilkannya short message</li>
+<li>Start time diiisi kapan mulai ditampilkannya pesan dalam format YYYY-MM-DD HH:MM:SS</li>
+</ul></li>
+<li><p>Perintah Kirim Pesan-Pesan Singkat Personal, untuk tiap baris:</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:DATA&lt;spasi&gt;UPDATE&lt;spasi&gt;USER_SMS&lt;spasi&gt;PIN=</span>{{UserId}}&lt;tab&gt;UID={{MessageNumber}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="command-delete"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-delete" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Command DELETE</h3>
+<ol>
+<li><p>Perintah Delete Data User
+Format perintahnya untuk tiap baris:</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:DATA&lt;spasi&gt;DELETE&lt;spasi&gt;USERINFO&lt;spasi&gt;PIN=</span>{{UserID}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li><code>PIN</code> menunjukkan UserId</li>
+</ul></li>
+<li><p>Perintah Delete Data Template Fingerprint
+TBD</p></li>
+<li><p>Perintah Delete Data Template Face
+TBD</p></li>
+<li><p>Perintah Delete Data User Photo
+TBD</p></li>
+<li><p>Perintah Delete Data Short Message untuk tiap baris:</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:DATA&lt;spasi&gt;DELETE&lt;spasi&gt;SMS&lt;spasi&gt;UID=</span>{{MessageNumber}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="command-query"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-query" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Command QUERY</h3>
+<ol>
+<li><p>Meminta data kehadiran:</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:DATA&lt;spasi&gt;QUERY&lt;spasi&gt;ATTLOG&lt;spasi&gt;StartTime</span>{{StartTime}}&lt;tab&gt;EndTime={{EndTime}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li>Format start &amp; end time YYYY-MM-DD HH:MM:SS</li>
+</ul></li>
+<li><p>Meminta data foto kehadiran:
+TBD</p></li>
+<li><p>Meminta data userinfo:</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:DATA&lt;spasi&gt;QUERY&lt;spasi&gt;USERINFO&lt;spasi&gt;PIN=</span>{{UserID}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li><code>PIN</code> menunjukkan UserId</li>
+</ul></li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="command-clear"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-clear" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Command CLEAR</h3>
+<ol>
+<li><p>Meminta data kehadiran:</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:CLEAR&lt;spasi&gt;LOG</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID=<span class="hljs-template-variable">{{CmdId}}</span>&amp;Return=<span class="hljs-template-variable">{{ErrorCode}}</span>&amp;CMD=CLEAR_LOG
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Menghapus data foto kehadiran:
+TBD</p></li>
+<li><p>Menghapus semua data:</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:CLEAR&lt;spasi&gt;DATA</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID=<span class="hljs-template-variable">{{CmdId}}</span>&amp;Return=<span class="hljs-template-variable">{{ErrorCode}}</span>&amp;CMD=CLEAR_DATA
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="command-check"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-check" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Command Check</h3>
+<ol>
+<li><p>Mencek Data Update</p>
+<p>Normal nya mesin diminta membaca konfigurasi dari server dan mengupload data sesuai dengan timestampnya. Baca inisialisasi.
+Saat ini hanya didukung server mereset timestamp ke 0. Misalnya, dari server set Stamp jadi 0.
+Setelah membaca konfigurasi, mesin mengirimkan ulang data kehadiran lagi.</p>
+<pre><code class="hljs"><span class="hljs-attribute">C</span>:{{CmdId}}<span class="hljs-selector-pseudo">:CHECK</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID={{CmdId}}<span class="hljs-variable">&amp;Return</span>={{ErrorCode}}<span class="hljs-variable">&amp;CMD</span>=<span class="hljs-meta">CHECK</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Mencek dan Mengirim Data Baru</p>
+<pre><code class="hljs"><span class="hljs-attribute">C</span>:{{CmdId}}<span class="hljs-selector-pseudo">:LOG</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID={{CmdId}}&amp;<span class="hljs-keyword">Return</span>={{ErrorCode}}&amp;CMD=<span class="hljs-built_in">LOG</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Melakukan verifikasi Data Kehadiran</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:VERIFY&lt;spasi&gt;SUM&lt;spasi&gt;ATTLOG&lt;spasi&gt;StartTime=</span>{{StartTime}}&lt;tab&gt;EndTime={{EndTime}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs"><span class="xml">ID=</span><span class="hljs-template-variable">{{CmdId}}</span><span class="xml">&amp;Return=</span><span class="hljs-template-variable">{{ErrorCode}}</span><span class="xml">&amp;CMD=VERIFY<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>SUM&amp;StartTime=</span><span class="hljs-template-variable">{{StartTime}}</span><span class="xml">&amp;EndTime=</span><span class="hljs-template-variable">{{EndTime}}</span><span class="xml">&amp;AttlogSum=</span><span class="hljs-template-variable">{{AttLogSum}}</span><span class="xml">
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li>AttLogSum: jumlah total kehadiran dalam periode yang diminta</li>
+</ul></li>
+</ol>
+<h4><a class="anchor" aria-hidden="true" id="command-option"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-option" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Command Option</h4>
+<ol>
+<li><p>Option untuk Setting Client</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:SET&lt;spasi&gt;OPTION&lt;spasi&gt;</span>{{Key}}={{Value}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID={{CmdId}}&amp;<span class="hljs-keyword">Return</span>={{ErrorCode}}&amp;CMD=<span class="hljs-keyword">SET</span>&lt;spasi&gt;<span class="hljs-keyword">OPTION</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Option untuk Refreshing Client</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:RELOAD&lt;spasi&gt;OPTIONS</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs"><span class="xml">ID=</span><span class="hljs-template-variable">{{CmdId}}</span><span class="xml">&amp;Return=</span><span class="hljs-template-variable">{{ErrorCode}}</span><span class="xml">&amp;CMD=RELOAD<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>OPTION
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Mengirim Informasi Client ke Server</p>
+<pre><code class="hljs"><span class="hljs-attribute">C</span>:{{CmdId}}<span class="hljs-selector-pseudo">:INFO</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID=<span class="hljs-template-variable">{{CmdId}}</span>&amp;Return=<span class="hljs-template-variable">{{ErrorCode}}</span>&amp;CMD=INFO
+<span class="hljs-template-variable">{{Key0}}</span>=<span class="hljs-template-variable">{{Value0}}</span>
+<span class="hljs-template-variable">{{Key1}}</span>=<span class="hljs-template-variable">{{Value1}}</span>
+<span class="hljs-template-variable">{{Key2}}</span>=<span class="hljs-template-variable">{{Value2}}</span>
+..dst..
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+</ol>
+<h4><a class="anchor" aria-hidden="true" id="enrollment-pendaftaran-fingerprint-secara-remote"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#enrollment-pendaftaran-fingerprint-secara-remote" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Enrollment (Pendaftaran Fingerprint) secara Remote</h4>
+<p>Pendaftaran fingerprint diinisiasi dari server, dan dilakukan di client.
+Perintahnya dari server:</p>
+<pre><code class="hljs"><span class="xml">C:</span><span class="hljs-template-variable">{{CmdId}}</span><span class="xml">:ENROLL_FP<span class="hljs-tag">&lt;<span class="hljs-name">spasi</span>&gt;</span>PIN=</span><span class="hljs-template-variable">{{UserId}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>FID=</span><span class="hljs-template-variable">{{FingerPrintID}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>RETRY=</span><span class="hljs-template-variable">{{NumberOfRetry}}</span><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">tab</span>&gt;</span>OVERWRITE=</span><span class="hljs-template-variable">{{OverwriteExisting}}</span><span class="xml">
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Keterangan:</p>
+<ul>
+<li><code>PIN</code> menunjukkan UserId</li>
+<li><code>FID</code> menunjukkan nomor fingerprint</li>
+<li><code>RETRY</code> menunjukkan berapa kali harus coba ulang kalau enroll gagal</li>
+<li><code>OVERWRITE</code> menunjukkan apakah fingerprint yang ada harus ditimpa atau tidak.
+0 --&gt; tidak usah
+1 --&gt; timpa</li>
+</ul>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID=<span class="hljs-template-variable">{{CmdId}}</span>&amp;Return=<span class="hljs-template-variable">{{ErrorCode}}</span>&amp;CMD=ENROLL_FP
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<h4><a class="anchor" aria-hidden="true" id="perintah-control"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#perintah-control" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Perintah Control</h4>
+<ol>
+<li><p>Mereboot Client</p>
+<pre><code class="hljs"><span class="hljs-attribute">C</span>:{{CmdId}}<span class="hljs-selector-pseudo">:REBOOT</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID=<span class="hljs-template-variable">{{CmdId}}</span>&amp;Return=<span class="hljs-template-variable">{{ErrorCode}}</span>&amp;CMD=REBOOT
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Membuka kunci pintu</p>
+<pre><code class="hljs"><span class="hljs-attribute">C</span>:{{CmdId}}<span class="hljs-selector-pseudo">:AC_UNLOCK</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID=<span class="hljs-template-variable">{{CmdId}}</span>&amp;Return=<span class="hljs-template-variable">{{ErrorCode}}</span>&amp;CMD=AC_UNLOCK
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Mematikan sinyal output alarm</p>
+<pre><code class="hljs"><span class="hljs-attribute">C</span>:{{CmdId}}<span class="hljs-selector-pseudo">:AC_UNALARM</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs">ID=<span class="hljs-template-variable">{{CmdId}}</span>&amp;Return=<span class="hljs-template-variable">{{ErrorCode}}</span>&amp;CMD=AC_UNALARM
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+<li><p>Memanggil perintah shell</p>
+<pre><code class="hljs"><span class="hljs-symbol">C:</span>{{CmdId}}<span class="hljs-symbol">:SHELL&lt;spasi&gt;</span>{{ShellCmd}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban mesin:</p>
+<pre><code class="hljs"><span class="hljs-attr">ID</span>={{CmdId}}
+<span class="hljs-attr">SN</span>={{SerialNumber}}
+<span class="hljs-attr">Return</span>={{ErrorCode}}
+<span class="hljs-attr">CMD</span>=SHELL
+<span class="hljs-attr">FILENAME</span>=shellout.txt
+<span class="hljs-attr">Content</span>={{CmdResult}}
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre></li>
+</ol>
+<h2><a class="anchor" aria-hidden="true" id="membalas-perintah-dari-pusat"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#membalas-perintah-dari-pusat" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Membalas Perintah dari Pusat</h2>
+<p>Berikut ini contoh syntax balasan mesin atas perintah dari pusat sesuai uraian di atas:</p>
+<pre><code class="hljs"><span class="hljs-keyword">POST</span> <span class="hljs-string">/iclock/devicecmd?SN=0316144680030</span> HTTP/1.1
+<span class="hljs-attribute">Host</span>: 58.250.50.81:8011
+<span class="hljs-attribute">User-Agent</span>: IClock Proxy/1.09
+<span class="hljs-attribute">Connection</span>: close
+<span class="hljs-attribute">Accept</span>: */*
+<span class="hljs-attribute">Content-Length</span>: 143
+
+<span class="ini"><span class="hljs-attr">ID</span>=info8487&amp;Return=<span class="hljs-number">08</span>CMD=DATA
+<span class="hljs-attr">ID</span>=info8488&amp;Return=<span class="hljs-number">0</span>&amp;<span class="hljs-number">8</span>CMD=DATA
+<span class="hljs-attr">ID</span>=info8489&amp;Return=<span class="hljs-number">0</span>&amp;CMD=DATA
+<span class="hljs-attr">ID</span>=info7464&amp;Return=<span class="hljs-number">0</span>&amp;CMD=DATA
+<span class="hljs-attr">ID</span>=fp74648Return=<span class="hljs-number">0</span>&amp;CMD=DATA
+</span></code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<p>Jawaban kembali dari server cukup simpel saja</p>
+<pre><code class="hljs"><span class="hljs-string">HTTP/1.1</span> <span class="hljs-number">200</span> <span class="hljs-string">0K</span>
+<span class="hljs-attr">Server:</span> <span class="hljs-string">nginx/1.60</span>
+<span class="hljs-attr">Date:</span> <span class="hljs-string">Tue,</span> <span class="hljs-number">30</span> <span class="hljs-string">Jun</span> <span class="hljs-number">2015</span> <span class="hljs-number">01</span><span class="hljs-string">:24:48</span> <span class="hljs-string">GMT</span>
+<span class="hljs-attr">Content-Type:</span> <span class="hljs-string">text/plain</span>
+<span class="hljs-attr">Content-Length:</span> <span class="hljs-number">2</span>
+<span class="hljs-attr">Connection:</span> <span class="hljs-string">close</span>
+<span class="hljs-attr">Pragma:</span> <span class="hljs-literal">no</span><span class="hljs-string">-cache</span>
+<span class="hljs-attr">Cache-Control:</span> <span class="hljs-literal">no</span><span class="hljs-string">-store</span>
+
+<span class="hljs-string">OK</span>
+</code><button class="btnIcon btnClipboard" type="button" aria-label="Copy code to clipboard"><div class="btnIcon__body"><svg width="12" height="12" viewBox="340 364 14 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M342 375.974h4v.998h-4v-.998zm5-5.987h-5v.998h5v-.998zm2 2.994v-1.995l-3 2.993 3 2.994v-1.996h5v-1.995h-5zm-4.5-.997H342v.998h2.5v-.997zm-2.5 2.993h2.5v-.998H342v.998zm9 .998h1v1.996c-.016.28-.11.514-.297.702-.187.187-.422.28-.703.296h-10c-.547 0-1-.452-1-.998v-10.976c0-.546.453-.998 1-.998h3c0-1.107.89-1.996 2-1.996 1.11 0 2 .89 2 1.996h3c.547 0 1 .452 1 .998v4.99h-1v-2.995h-10v8.98h10v-1.996zm-9-7.983h8c0-.544-.453-.996-1-.996h-1c-.547 0-1-.453-1-.998 0-.546-.453-.998-1-.998-.547 0-1 .452-1 .998 0 .545-.453.998-1 .998h-1c-.547 0-1 .452-1 .997z" fill-rule="evenodd"></path></svg><strong class="btnIcon__label">Copy</strong></div></button></pre>
+<h2><a class="anchor" aria-hidden="true" id="laporan-kehadiran-jarak-jauh-tidak-di-tempat"></a><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#laporan-kehadiran-jarak-jauh-tidak-di-tempat" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Laporan Kehadiran Jarak Jauh/tidak di tempat</h2>
+<p>TBD</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="https://docs.nufaza.com/docs/devices/zkteco_attendance/intro"><span class="arrow-prev">← </span><span>Intro</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#inisialisasi-pertukaran-informasi-antara-client-dan-server" class="active">Inisialisasi Pertukaran Informasi antara Client dan Server</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#mengirim-rekap-informasi-terkini" class="">Mengirim Rekap Informasi Terkini</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#mengirim-data">Mengirim Data</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#pengiriman-data-kehadiran">Pengiriman Data Kehadiran</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#pengiriman-data-operasional" class="">Pengiriman Data Operasional</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#pengiriman-info-user">Pengiriman Info User</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#pengiriman-data-template-fingerprint" class="">Pengiriman Data Template Fingerprint</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#mengambil-perintah-dari-pusat">Mengambil Perintah dari Pusat</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-data">Command DATA</a><ul class="toc-headings"><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-update" class="">Command UPDATE</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-delete">Command DELETE</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-query" class="">Command QUERY</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-clear">Command CLEAR</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#command-check" class="">Command Check</a></li></ul></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#membalas-perintah-dari-pusat" class="">Membalas Perintah dari Pusat</a></li><li><a href="https://docs.nufaza.com/docs/devices/zkteco_attendance/push_protocol/#laporan-kehadiran-jarak-jauh-tidak-di-tempat" class="">Laporan Kehadiran Jarak Jauh/tidak di tempat</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="https://docs.nufaza.com/" class="nav-home"><img src="./Push Protocol · Nufaza Docs_files/nufaza_logo.svg" alt="Nufaza Docs" width="66" height="58"></a><div><h5>Docs</h5><a href="https://docs.nufaza.com/docs/en/design/intro">Design</a><a href="https://docs.nufaza.com/docs/en/frontend/intro">Frontend</a><a href="https://docs.nufaza.com/docs/en/backend/intro">Backend</a><a href="https://docs.nufaza.com/docs/en/mobile/intro">Mobile</a><a href="https://docs.nufaza.com/docs/en/devops/intro">Devops</a></div><div><h5>Company</h5><a href="http://www.nufaza.com/" target="_blank" rel="noreferrer noopener">Nufaza Corp Website</a></div><div><h5>More</h5><a href="https://docs.nufaza.com/blog">Blog</a><a href="https://github.com/">GitHub</a><span></span></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="./Push Protocol · Nufaza Docs_files/oss_logo.png" alt="Facebook Open Source" width="170" height="45"></a><section class="copyright">Copyright © 2019 PT. Nufaza</section></footer></div></body></html>

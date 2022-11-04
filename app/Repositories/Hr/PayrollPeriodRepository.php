@@ -2,6 +2,13 @@
 
 namespace App\Repositories\Hr;
 
+use App\Library\SalaryComponent\Component;
+use App\Library\SalaryComponent\DoubleRitase;
+use App\Library\SalaryComponent\DoubleSalary;
+use App\Library\SalaryComponent\GajiPokokHarian;
+use App\Library\SalaryComponent\Kilometer;
+use App\Library\SalaryComponent\Overtime;
+use App\Library\SalaryComponent\PotonganKehadiran;
 use App\Models\Hr\Employee;
 use App\Models\Hr\Holiday;
 use App\Models\Hr\Payroll;
@@ -164,7 +171,40 @@ class PayrollPeriodRepository extends BaseRepository
     }
 
     private function calculateComponent($workDayCount, $employeeId, $value, $code){
-        return $workDayCount * $value;
+        $result = $value;
+        $componentObj = null;
+        switch($code){
+            case 'TDGJ':
+                $doubleRitaseCount = 0; // nanti cari data ritase berdasarkan employeeId                
+                $componentObj = new DoubleRitase($doubleRitaseCount, $value);
+                break;
+            case 'TDDRT':
+                $doubleSalary = 0; // nanti cari data ritase berdasarkan employeeId                
+                $componentObj = new DoubleSalary($doubleSalary, $value);
+                break;
+            case 'GPH':                
+                $componentObj = new GajiPokokHarian($workDayCount, $value);
+                break;
+            case 'TDKM':
+                $kmCount = 0; // nanti cari data ritase berdasarkan employeeId                
+                $componentObj = new Kilometer($kmCount, $value);
+                break;
+            case 'OT':
+                $overtimeCount = 0; // nanti cari data ritase berdasarkan employeeId                
+                $componentObj = new Overtime($overtimeCount, $value);
+                break;
+            case 'PTHD':
+                $amountHour = 0;
+                $amountDay = 0;            
+                $componentObj = new PotonganKehadiran($amountHour, $amountDay, $value);
+                break;
+            
+            default:
+        }
+        if($componentObj instanceof Component){
+            $result = $componentObj->calculate();
+        }
+        return $result;
     }
 
     /** jika endDate melewati endOfMonth dari startDate maka split berdasarkan bulannya */
