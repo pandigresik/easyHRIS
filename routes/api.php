@@ -77,3 +77,8 @@ Route::group(['prefix' => 'hr'], function () {
 Route::group(['prefix' => 'hr'], function () {
     Route::resource('payroll_period_groups', App\Http\Controllers\API\Hr\Hr\PayrollPeriodGroupAPIController::class);
 });
+
+
+Route::group(['prefix' => 'hr'], function () {
+    Route::resource('ritase_drivers', App\Http\Controllers\API\Hr\Hr\RitaseDriverAPIController::class);
+});

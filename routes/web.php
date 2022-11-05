@@ -66,6 +66,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('fingerprintDevices', Hr\FingerprintDeviceController::class, ["as" => 'hr']);
         Route::resource('leaves', Hr\LeafController::class, ["as" => 'hr']);
         Route::resource('overtimes', Hr\OvertimeController::class, ["as" => 'hr']);
+        Route::resource('ritaseDrivers', Hr\RitaseDriverController::class, ["as" => 'hr']);
 
         Route::resource('payrollPeriodGroups', Hr\PayrollPeriodGroupController::class, ["as" => 'hr']);
         Route::resource('payrollPeriods', Hr\PayrollPeriodController::class, ["as" => 'hr']);
@@ -114,4 +115,9 @@ Route::group(['prefix' => 'artisan'], function () {
     Route::get('clear_cache', function(){
         Artisan::call('cache:clear');
     });
+});
+
+
+Route::group(['prefix' => 'hr'], function () {
+    
 });
