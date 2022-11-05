@@ -73,3 +73,7 @@ Route::group(['prefix' => 'hr'], function () {
     Route::resource('request_workshifts', Hr\RequestWorkshiftAPIController::class);
     Route::resource('workshift_groups', Hr\WorkshiftGroupAPIController::class);
 });
+
+Route::group(['prefix' => 'hr'], function () {
+    Route::resource('payroll_period_groups', App\Http\Controllers\API\Hr\Hr\PayrollPeriodGroupAPIController::class);
+});

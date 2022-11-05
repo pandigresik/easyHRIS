@@ -75,9 +75,10 @@ class PayrollPeriodRepository extends BaseRepository
             $periods = $this->splitPeriod($input['range_period']);
             $employeeId = $input['employee_id'] ?? [];
             $bpjsFee = $input['bpjs_fee'] ?? [];
+            $payrollPeriodGroupId = $input['payroll_period_group_id'] ?? NULL;
             $this->setBpjsFee($bpjsFee);
             foreach($periods as $period){
-                $this->calculatePayroll($input['company_id'], $period, $this->getPayrollPeriod(), $employeeId);
+                $this->calculatePayroll($input['company_id'], $period, $payrollPeriodGroupId, $employeeId);
             }
             $this->model->getConnection()->commit();            
             return $this->model;
@@ -91,16 +92,16 @@ class PayrollPeriodRepository extends BaseRepository
         // create payrollPeriod if not exists
         $startDateObj = Carbon::parse($period['start_period']);
         $period['company_id'] = $companyId;
-        $period['type_period'] = $payrollPeriod;
+        $period['payroll_period_group_id'] = $payrollPeriod;
         $period['year'] = $startDateObj->format('Y');
         $period['month'] = $startDateObj->format('m'); 
         $period['name'] = 'Periode gaji '. localFormatDate($period['start_period']).' sd '.localFormatDate($period['end_period']);
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
-                
+        
         // get list employee
         $employeeOjb = Employee::select(['id', 'code'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
-        }])->where(['payroll_period' => $payrollPeriod]);
+        }])->where(['payroll_period_group_id' => $payrollPeriod]);
 
         if(!empty($employeeId)){
             $employeeOjb->whereIn('id', $employeeId);
@@ -143,7 +144,7 @@ class PayrollPeriodRepository extends BaseRepository
                 ];
             }
             /** jika tidak ada dalam list potongan bpjs yang dipilih maka set 0 */
-            if(in_array($periodPayroll->getRawOriginal('type_period'), ['weekly', 'biweekly'])){
+            if(in_array($periodPayroll->payrollPeriodGroup->getRawOriginal('type_period'), ['weekly', 'biweekly'])){
                 $listBpjsFee = config('local.bpjs_fee');
                 if(in_array($tmp['component_id'], $listBpjsFee)){
                     if(!in_array($tmp['component_id'], $this->getBpjsFee())){                        

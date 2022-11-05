@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('leaves', Hr\LeafController::class, ["as" => 'hr']);
         Route::resource('overtimes', Hr\OvertimeController::class, ["as" => 'hr']);
 
+        Route::resource('payrollPeriodGroups', Hr\PayrollPeriodGroupController::class, ["as" => 'hr']);
         Route::resource('payrollPeriods', Hr\PayrollPeriodController::class, ["as" => 'hr']);
         Route::resource('payrollMonthlyPeriods', Hr\PayrollMonthlyPeriodController::class, ["as" => 'hr']);
         Route::resource('payrollBiweeklyPeriods', Hr\PayrollBiweeklyPeriodController::class, ["as" => 'hr']);

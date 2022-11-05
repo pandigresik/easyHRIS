@@ -77,7 +77,8 @@ class Employee extends Model
         'profile_size',
         'salary_group_id',
         'shiftment_group_id',
-        'payroll_period'
+        'payroll_period',
+        'payroll_period_group_id'
     ];
 
     /**

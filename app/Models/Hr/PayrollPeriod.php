@@ -80,7 +80,7 @@ class PayrollPeriod extends Model
         'month',
         'start_period',
         'end_period',
-        'type_period',
+        'payroll_period_group_id',
         'closed'
     ];
 
@@ -139,6 +139,10 @@ class PayrollPeriod extends Model
         return $this->hasMany(\App\Models\Hr\Tax::class, 'period_id');
     }
 
+    public function payrollPeriodGroup(){
+        return $this->belongsTo(\App\Models\Hr\PayrollPeriodGroup::class, 'payroll_period_group_id');
+    }
+
     public function getStartPeriodAttribute($value){
         return localFormatDate($value);
     }
@@ -151,16 +155,26 @@ class PayrollPeriod extends Model
         return $this->start_period.' - '.$this->end_period;
     }
 
+    public function getMonthAttribute($value){
+        return localFormatMonth($value);
+    }    
+
     public function scopeWeekly($query){
-        return $query->where(['type_period' => 'weekly']);
+        return $query->whereIn('payroll_period_group_id', function($q){
+            return $q->select(['id'])->from('payroll_period_groups')->where(['type_period' => 'weekly']);
+        });
     }
 
     public function scopeBiweekly($query){
-        return $query->where(['type_period' => 'biweekly']);
+        return $query->whereIn('payroll_period_group_id', function($q){
+            return $q->select(['id'])->from('payroll_period_groups')->where(['type_period' => 'biweekly']);
+        });
     }
 
     public function scopeMonthly($query){
-        return $query->where(['type_period' => 'monthly']);
+        return $query->whereIn('payroll_period_group_id', function($q){
+            return $q->select(['id'])->from('payroll_period_groups')->where(['type_period' => 'monthly']);
+        });
     }
 
     public function scopeClosed($query){

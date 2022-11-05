@@ -8,6 +8,16 @@
     </div>
 </div>
 
+<!-- Period group Id Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('payroll_period_group_id', __('models/payrollPeriods.fields.payroll_period_group_id').':', ['class' => 'col-md-3
+    col-form-label']) !!}
+    <div class="col-md-9">
+        {!! Form::select('payroll_period_group_id', $periodItems, null, ['class' => 'form-control select2', 'required' =>
+        'required']) !!}
+    </div>
+</div>
+
 <!-- Start Period Field -->
 <div class="form-group row mb-3">
     {!! Form::label('employee_id', __('models/payrollPeriods.fields.employee_id').':', ['class' => 'col-md-3

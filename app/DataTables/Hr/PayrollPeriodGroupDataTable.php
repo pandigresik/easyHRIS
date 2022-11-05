@@ -2,15 +2,13 @@
 
 namespace App\DataTables\Hr;
 
-use App\Models\Hr\PayrollPeriod;
+use App\Models\Hr\PayrollPeriodGroup;
 use App\DataTables\BaseDataTable as DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class PayrollPeriodDataTable extends DataTable
+class PayrollPeriodGroupDataTable extends DataTable
 {
-    protected $typePeriod;
-    protected $routePath;
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
@@ -37,36 +35,18 @@ class PayrollPeriodDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', function($item){
-            return view('hr.payroll_periods.datatables_actions', array_merge($item->toArray(), ['routePath' => $this->getRoutePath()]));
-        });
+        return $dataTable->addColumn('action', 'hr.payroll_period_groups.datatables_actions');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\PayrollPeriod $model
+     * @param \App\Models\PayrollPeriodGroup $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(PayrollPeriod $model)
+    public function query(PayrollPeriodGroup $model)
     {
-        $tmp = $model->select([$model->getTable().'.*']);
-        if($this->getTypePeriod()){
-            $type = $this->getTypePeriod();
-            switch($type){
-                case 'weekly':
-                    $tmp->weekly();
-                    break;
-                case 'biweekly':
-                    $tmp->biweekly();
-                    break;
-                case 'monthly':
-                    $tmp->monthly();
-                    break;
-            }   
-        }
-        return $tmp->with(['company', 'payrollPeriodGroup'])->newQuery();
-        
+        return $model->newQuery();
     }
 
     /**
@@ -80,7 +60,7 @@ class PayrollPeriodDataTable extends DataTable
                     [
                        'extend' => 'create',
                        'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.generate').''
+                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
                     ],
                     [
                        'extend' => 'export',
@@ -135,14 +115,9 @@ class PayrollPeriodDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'company_id' => new Column(['title' => __('models/payrollPeriods.fields.company_id'),'name' => 'company_id', 'data' => 'company.name', 'searchable' => true, 'elmsearch' => 'text']),
-            'name' => new Column(['title' => __('models/payrollPeriods.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
-            'year' => new Column(['title' => __('models/payrollPeriods.fields.year'),'name' => 'year', 'data' => 'year', 'searchable' => true, 'elmsearch' => 'text']),
-            'month' => new Column(['title' => __('models/payrollPeriods.fields.month'),'name' => 'month', 'data' => 'month', 'searchable' => true, 'elmsearch' => 'text']),
-            'start_period' => new Column(['title' => __('models/payrollPeriods.fields.start_period'),'name' => 'start_period', 'data' => 'start_period', 'searchable' => true, 'elmsearch' => 'text']),
-            'end_period' => new Column(['title' => __('models/payrollPeriods.fields.end_period'),'name' => 'end_period', 'data' => 'end_period', 'searchable' => true, 'elmsearch' => 'text']),
-            'payroll_period_group_id' => new Column(['title' => __('models/payrollPeriods.fields.payroll_period_group_id'),'name' => 'payroll_period_group_id', 'data' => 'payroll_period_group.name', 'searchable' => true, 'elmsearch' => 'text']),
-            'closed' => new Column(['title' => __('models/payrollPeriods.fields.closed'),'name' => 'closed', 'data' => 'closed', 'searchable' => true, 'elmsearch' => 'text'])
+            'name' => new Column(['title' => __('models/payrollPeriodGroups.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
+            'type_period' => new Column(['title' => __('models/payrollPeriodGroups.fields.type_period'),'name' => 'type_period', 'data' => 'type_period', 'searchable' => true, 'elmsearch' => 'text']),
+            'description' => new Column(['title' => __('models/payrollPeriodGroups.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 
@@ -153,46 +128,6 @@ class PayrollPeriodDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'payroll_periods_datatable_' . time();
-    }
-
-    /**
-     * Get the value of typePeriod
-     */ 
-    public function getTypePeriod()
-    {
-        return $this->typePeriod;
-    }
-
-    /**
-     * Set the value of typePeriod
-     *
-     * @return  self
-     */ 
-    public function setTypePeriod($typePeriod)
-    {
-        $this->typePeriod = $typePeriod;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of routePath
-     */ 
-    public function getRoutePath()
-    {
-        return $this->routePath;
-    }
-
-    /**
-     * Set the value of routePath
-     *
-     * @return  self
-     */ 
-    public function setRoutePath($routePath)
-    {
-        $this->routePath = $routePath;
-
-        return $this;
+        return 'payroll_period_groups_datatable_' . time();
     }
 }

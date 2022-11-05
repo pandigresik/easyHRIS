@@ -42,8 +42,7 @@ class CreateEmployeesTable extends Migration
             $table->string('profile_image')->nullable();
             $table->integer('profile_size')->nullable();            
             $table->unsignedBigInteger('salary_group_id')->nullable();
-            $table->unsignedBigInteger('shiftment_group_id')->nullable();
-            $table->enum('payroll_period', ['weekly','biweekly','monthly','daily'])->nullable()->default('monthly');
+            $table->unsignedBigInteger('shiftment_group_id')->nullable();            
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

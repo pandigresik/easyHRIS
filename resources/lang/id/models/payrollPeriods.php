@@ -15,6 +15,7 @@ return array (
     'start_period' => 'Start Period',
     'end_period' => 'End Period',
     'range_period' => 'Periode',
+    'payroll_period_group_id' => 'Grup Payroll',
     'closed' => 'Closed',
   ),
 );

@@ -178,7 +178,7 @@ class PayrollPeriodController extends AppBaseController
      * @return Response
      */
     protected function getOptionItems(){
-        $company = new CompanyRepository();
+        $company = new CompanyRepository();        
         return [
             'companyItems' => $company->pluck(),
             'routePath' => $this->routePath         
@@ -187,7 +187,17 @@ class PayrollPeriodController extends AppBaseController
 
     protected function getNextPeriodPayroll(){
         $result = NULL;
-        $lastPeriod = PayrollPeriod::where(['type_period' => $this->type])->orderBy('end_period', 'desc')->first();
+        switch($this->type){
+            case 'weekly':
+                $lastPeriod = PayrollPeriod::weekly()->orderBy('end_period', 'desc')->first();
+                break;
+            case 'biweekly':
+                $lastPeriod = PayrollPeriod::biweekly()->orderBy('end_period', 'desc')->first();
+                break;
+            default:            
+                $lastPeriod = PayrollPeriod::daily()->orderBy('end_period', 'desc')->first();                
+        }
+        
         if($lastPeriod){
             $result = Carbon::parse($lastPeriod->getRawOriginal('end_period'))->addDay()->format('Y-m-d');
         }

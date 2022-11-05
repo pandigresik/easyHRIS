@@ -4,10 +4,11 @@ namespace App\Http\Requests\Hr;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Hr\PayrollPeriod;
+use App\Models\Hr\PayrollPeriodGroup;
 
-class CreatePayrollPeriodRequest extends FormRequest
+class UpdatePayrollPeriodGroupRequest extends FormRequest
 {
+    private $excludeKeys = []; 
 
     /**
      * Determine if the user is authorized to make this request.
@@ -16,7 +17,7 @@ class CreatePayrollPeriodRequest extends FormRequest
      */
     public function authorize()
     {
-        $permissionName = 'payroll_periods-create';
+        $permissionName = 'payroll_period_groups-update';
         return Auth::user()->can($permissionName);
     }
 
@@ -27,10 +28,10 @@ class CreatePayrollPeriodRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'company_id' => 'required',            
-            'range_period' => 'required',
-        ];
+        $rules = PayrollPeriodGroup::$rules;
+        
+        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
+        return $rules;
     }
 
     /**
@@ -41,7 +42,8 @@ class CreatePayrollPeriodRequest extends FormRequest
      * @return array
     */
     public function all($keys = null){
-        $keys = ['range_period', 'company_id', 'employee_id', 'bpjs_fee','payroll_period_group_id'];        
+        $keys = (new PayrollPeriodGroup)->fillable;
+        $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         return parent::all($keys);
     }
 }
