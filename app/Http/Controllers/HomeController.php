@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hr\Overtime;
+
 class HomeController extends Controller
 {
     /**
@@ -34,5 +36,10 @@ class HomeController extends Controller
         array_push($widgets, \AsyncWidget::run('popularWidget', []));
 
         return view('home')->with(['widgets' => $widgets]);
+    }
+
+    public function tes(){
+        $overtime = Overtime::with(['benefitValue'])->get();
+        dd($overtime);
     }
 }

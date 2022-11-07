@@ -17,6 +17,7 @@ class AttendanceDataTable extends DataTable
         'state' => \App\DataTables\FilterClass\InKeyword::class,
         'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'employee.code' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
+        'attendance_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
     ];
     
     private $mapColumnSearch = [

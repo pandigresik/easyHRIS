@@ -9,11 +9,19 @@ use App\Library\SalaryComponent\GajiPokokHarian;
 use App\Library\SalaryComponent\Kilometer;
 use App\Library\SalaryComponent\Overtime;
 use App\Library\SalaryComponent\PotonganKehadiran;
+use App\Library\SalaryComponent\PremiKehadiran;
+use App\Library\SalaryComponent\UangMakan;
+use App\Library\SalaryComponent\UangMakanLemburMinggu;
+use App\Library\SalaryComponent\UangMakanLuarKota;
+use App\Models\Hr\Attendance;
+use App\Models\Hr\AttendanceSummary;
 use App\Models\Hr\Employee;
 use App\Models\Hr\Holiday;
+use App\Models\Hr\Overtime as HrOvertime;
 use App\Models\Hr\Payroll;
 use App\Models\Hr\PayrollDetail;
 use App\Models\Hr\PayrollPeriod;
+use App\Models\Hr\RitaseDriver;
 use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
@@ -28,6 +36,12 @@ class PayrollPeriodRepository extends BaseRepository
 {
     protected $payrollPeriod;
     protected $bpjsFee;
+    private $ritaseEmployee; // untuk hitung tunjangan km dan double rit
+    private $summaryAttendanceEmployee; // untuk hitung premi kehadiran
+    private $luarKotaEmployee; // hitung uang makan luar kota dan double salary
+    private $overtimeEmployee; // hitung uang makan dan tunjangan minggu
+    private $attendanceEmployee; // untuk hitung potongan kehadiran
+        
     /**
      * @var array
      */
@@ -76,9 +90,13 @@ class PayrollPeriodRepository extends BaseRepository
             $employeeId = $input['employee_id'] ?? [];
             $bpjsFee = $input['bpjs_fee'] ?? [];
             $payrollPeriodGroupId = $input['payroll_period_group_id'] ?? NULL;
-            $this->setBpjsFee($bpjsFee);
-            foreach($periods as $period){
+            $this->setBpjsFee($bpjsFee);                        
+            foreach($periods as $_index => $period){                
                 $this->calculatePayroll($input['company_id'], $period, $payrollPeriodGroupId, $employeeId);
+                if($_index){
+                    // jika dibagi menjadi 2 periode, maka set null potongan Bpjs periode yang kedua
+                    $this->setBpjsFee([]);
+                }
             }
             $this->model->getConnection()->commit();            
             return $this->model;
@@ -116,6 +134,20 @@ class PayrollPeriodRepository extends BaseRepository
                 ->pluck('workday', 'employee_id')->toArray();
         
         $holidayNotSunday = $this->getHoliday($period['start_period'], $period['end_period']);
+        $listEmployees = $employees->pluck('id','id');
+        \Log::error($listEmployees);
+        $this->setRitaseEmployee(RitaseDriver::whereIn('employee_id', $listEmployees)->whereBetween('work_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
+        
+        $this->setSummaryAttendanceEmployee(NULL);
+        $startDateObj->endOfMonth();
+        if($startDateObj->format('Y-m-d') == $period['end_period']){
+            $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => $startDateObj->format('m')])->whereIn('employee_id', $listEmployees)->keyBy('employee_id'));
+        }
+        
+        $this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
+        $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
+        $this->setAttendanceEmployee(Attendance::absentLeaveLate()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
+        
         foreach($employees as $employee){
             $workDayCount = $workDayEmployee[$employee->id] ?? 0;
             if(in_array($this->getPayrollPeriod(), ['weekly', 'biweekly'])){
@@ -167,8 +199,7 @@ class PayrollPeriodRepository extends BaseRepository
             $detail['payroll_id'] = $payroll->id;
             $detail['created_by'] = $userId;
             PayrollDetail::upsert($detail, ['payroll_id', 'component_id']);            
-        }
-        // $payroll->payrollDetails()->sync($detail);
+        }        
     }
 
     private function calculateComponent($workDayCount, $employeeId, $value, $code){
@@ -199,7 +230,20 @@ class PayrollPeriodRepository extends BaseRepository
                 $amountDay = 0;            
                 $componentObj = new PotonganKehadiran($amountHour, $amountDay, $value);
                 break;
-            
+            case 'PRHD':                 
+                $absentCount = 0;
+                $offCount = 0;
+                $componentObj = new PremiKehadiran($workDayCount, $value, $absentCount, $offCount);
+                break;
+            case 'UM':                
+                $componentObj = new UangMakan($workDayCount, $value);
+                break;
+            case 'TUMLM':                
+                $componentObj = new UangMakanLemburMinggu($workDayCount, $value);
+                break;
+            case 'TDUM':                
+                $componentObj = new UangMakanLuarKota($workDayCount, $value);
+                break;
             default:
         }
         if($componentObj instanceof Component){
@@ -274,6 +318,106 @@ class PayrollPeriodRepository extends BaseRepository
     public function setBpjsFee($bpjsFee)
     {
         $this->bpjsFee = $bpjsFee;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of ritaseEmployee
+     */ 
+    public function getRitaseEmployee($employeeId = null)
+    {
+        return empty($employeeId) ? $this->ritaseEmployee : ($this->ritaseEmployee[$employeeId] ?? null);
+    }
+
+    /**
+     * Set the value of ritaseEmployee
+     *
+     * @return  self
+     */ 
+    public function setRitaseEmployee($ritaseEmployee)
+    {
+        $this->ritaseEmployee = $ritaseEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of summaryAttendanceEmployee
+     */ 
+    public function getSummaryAttendanceEmployee($employeeId = null)
+    {
+        return empty($employeeId) ? $this->summaryAttendanceEmployee : ($this->summaryAttendanceEmployee[$employeeId] ?? null);
+    }
+
+    /**
+     * Set the value of summaryAttendanceEmployee
+     *
+     * @return  self
+     */ 
+    public function setSummaryAttendanceEmployee($summaryAttendanceEmployee)
+    {
+        $this->summaryAttendanceEmployee = $summaryAttendanceEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of luarKotaEmployee
+     */ 
+    public function getLuarKotaEmployee($employeeId = null)
+    {
+        return empty($employeeId) ? $this->luarKotaEmployee : ($this->luarKotaEmployee[$employeeId] ?? null);
+    }
+
+    /**
+     * Set the value of luarKotaEmployee
+     *
+     * @return  self
+     */ 
+    public function setLuarKotaEmployee($luarKotaEmployee)
+    {
+        $this->luarKotaEmployee = $luarKotaEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of overtimeEmployee
+     */ 
+    public function getOvertimeEmployee($employeeId = null)
+    {
+        return empty($employeeId) ? $this->overtimeEmployee : ($this->overtimeEmployee[$employeeId] ?? null); 
+    }
+
+    /**
+     * Set the value of overtimeEmployee
+     *
+     * @return  self
+     */ 
+    public function setOvertimeEmployee($overtimeEmployee)
+    {
+        $this->overtimeEmployee = $overtimeEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of attendanceEmployee
+     */ 
+    public function getAttendanceEmployee($employeeId = null)
+    {
+        return empty($employeeId) ? $this->attendanceEmployee : $this->attendanceEmployee[$employeeId] ?? null;
+    }
+
+    /**
+     * Set the value of attendanceEmployee
+     *
+     * @return  self
+     */ 
+    public function setAttendanceEmployee($attendanceEmployee)
+    {
+        $this->attendanceEmployee = $attendanceEmployee;
 
         return $this;
     }

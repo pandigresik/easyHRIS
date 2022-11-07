@@ -2,7 +2,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('employee_id', __('models/requestWorkshifts.fields.employee_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('employee_id', $employeeItems, null, array_merge(['class' => 'form-control select2','id' => 'employee_id', 'data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository'], config('local.select2.ajax')) ) !!}
+    {!! Form::select('employee_id', [], null, array_merge(['class' => 'form-control select2','id' => 'employee_id', 'data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository'], config('local.select2.ajax')) ) !!}
 </div>
 </div>
 
@@ -18,7 +18,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('work_date', __('models/requestWorkshifts.fields.work_date').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('work_date', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'work_date']) !!}
+    {!! Form::text('work_date', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( config('local.daterange')),'id'=>'work_date']) !!}
 </div>
 </div>
 

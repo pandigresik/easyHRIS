@@ -27,6 +27,7 @@ class CreateOvertimesTable extends Migration
             $table->unsignedFloat('calculated_value')->nullable()->default(0);
             $table->tinyInteger('holiday');
             $table->tinyInteger('overday');
+            $table->unsignedInteger('amount')->nullable();
             $table->string('description')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();

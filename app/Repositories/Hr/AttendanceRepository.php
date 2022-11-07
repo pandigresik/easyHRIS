@@ -2,12 +2,14 @@
 
 namespace App\Repositories\Hr;
 
+use App\Library\SalaryComponent\Overtime as SalaryComponentOvertime;
 use App\Models\Base\Setting;
 use App\Models\Hr\AbsentReason;
 use App\Models\Hr\Attendance;
 use App\Models\Hr\AttendanceLogfinger;
 use App\Models\Hr\LeaveDetails;
 use App\Models\Hr\Overtime;
+use App\Models\Hr\SalaryBenefit;
 use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
@@ -97,7 +99,7 @@ class AttendanceRepository extends BaseRepository
     private function processAttendance($startDate, $endDate, $shiftmentGroup, $employeeId){                
         $attandanceLogs = $this->listAttendanceLog($startDate, $endDate, $shiftmentGroup, $employeeId);
         $workshifts = $this->listWorkshift($startDate, $endDate, $shiftmentGroup, $employeeId);        
-        $overtimes = $this->listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId);        
+        $overtimes = $this->listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId);            
         $leaves = $this->listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId);        
         foreach($workshifts as $employee => $workshift){
             $log = $attandanceLogs[$employee] ?? collect([]);
@@ -174,12 +176,12 @@ class AttendanceRepository extends BaseRepository
                 
                 if(!is_null($tmp['check_in'])){
                     $tmp['early_in'] = $tmp['check_in_schedule'] > $fingerClassification['check_in'] ? diffMinute($fingerClassification['check_in'], $tmp['check_in_schedule']): 0;
-                    $tmp['late_in'] = $fingerClassification['check_in'] > $tmp['check_in_schedule'] ? diffMinute($fingerClassification['check_in'], $tmp['check_in_schedule']): 0;
+                    $tmp['late_in'] = !isWorkshiftOff($tmp) && $fingerClassification['check_in'] > $tmp['check_in_schedule'] ? diffMinute($fingerClassification['check_in'], $tmp['check_in_schedule']): 0;
                 }
                 
                 if(!is_null($tmp['check_out'])){
                     $tmp['early_out'] = $tmp['check_out_schedule'] > $fingerClassification['check_out'] ? diffMinute($fingerClassification['check_out'], $tmp['check_out_schedule']): 0;                                
-                    $tmp['late_out'] = $fingerClassification['check_out'] > $tmp['check_out_schedule'] ? diffMinute($fingerClassification['check_out'], $tmp['check_out_schedule']): 0;
+                    $tmp['late_out'] = !isWorkshiftOff($tmp) && $fingerClassification['check_out'] > $tmp['check_out_schedule'] ? diffMinute($fingerClassification['check_out'], $tmp['check_out_schedule']): 0;
                 }
 
                 if(!is_null($tmp['check_out']) && !is_null($tmp['check_in'])){                    
@@ -201,27 +203,36 @@ class AttendanceRepository extends BaseRepository
             if(!empty($overtimeCurrentDate)){
                 $startOvertime = $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('start_hour');
                 $endOvertime = $overtimeCurrentDate->getRawOriginal('overday') ? Carbon::parse($overtimeCurrentDate->getRawOriginal('overtime_date'))->addDay()->format('Y-m-d').' '.$overtimeCurrentDate->getRawOriginal('end_hour') : $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('end_hour');
+                $realStartOvertime = substr($startOvertime, -8);
+                $realEndOvertime = substr($endOvertime, -8);                 
+                $overtimeCurrentDate->end_hour_real = $realEndOvertime;
+                $overtimeCurrentDate->start_hour_real = $realStartOvertime;
                 // lembur diakhir
                 if(!empty($tmp['check_out'])){                    
-                    if($endOvertime > $tmp['check_out_schedule'])
-                    $overtimeCurrentDate->end_hour_real = substr($tmp['check_out'], -8);
-                    $overtimeCurrentDate->start_hour_real = $overtimeCurrentDate->start_hour;
+                    if(($endOvertime > $tmp['check_out_schedule']) || isWorkshiftOff($tmp)){
+                        $realEndOvertime = substr($tmp['check_out'], -8);
+                        $overtimeCurrentDate->end_hour_real = $realEndOvertime;
+                    }               
                 }
                 // lembur awal
-                if(!empty($tmp['check_in'])){                    
-                    if($startOvertime < $tmp['check_in_schedule'])
-                    $overtimeCurrentDate->start_hour_real = substr($tmp['check_in'], -8);
-                    $overtimeCurrentDate->end_hour_real = $overtimeCurrentDate->end_hour;
+                if(!empty($tmp['check_in'])){                   
+                    if(($startOvertime < $tmp['check_in_schedule']) || isWorkshiftOff($tmp) ){
+                        $realStartOvertime = substr($tmp['check_in'], -8);
+                        $overtimeCurrentDate->start_hour_real = $realStartOvertime;
+                    }                                     
                 }
-                $overtimeCurrentDate->syncOriginal();
-                $startRealOvertime = $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('start_hour_real');
-                $endRealOvertime = $overtimeCurrentDate->getRawOriginal('overday') ? Carbon::parse($overtimeCurrentDate->getRawOriginal('overtime_date'))->addDay()->format('Y-m-d').' '.$overtimeCurrentDate->getRawOriginal('end_hour_real') : $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$overtimeCurrentDate->getRawOriginal('end_hour_real');
+                
+                $startRealOvertime = $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$realStartOvertime;
+                $endRealOvertime = $overtimeCurrentDate->getRawOriginal('overday') ? Carbon::parse($overtimeCurrentDate->getRawOriginal('overtime_date'))->addDay()->format('Y-m-d').' '.$realEndOvertime : $overtimeCurrentDate->getRawOriginal('overtime_date').' '.$realEndOvertime;
                 $maxHourOvertime = Carbon::parse($startOvertime)->diffInMinutes($endOvertime);
                 $rawValue = Carbon::parse($startRealOvertime)->diffInMinutes($endRealOvertime);
+                $calculateValue = $rawValue > $maxHourOvertime ? $maxHourOvertime :  $rawValue;
+                $amountOvertime = $overtimeCurrentDate->benefit->getRawOriginal('benefit_value') ?? 0;
                 $overtimeCurrentDate->raw_value = $rawValue;
-                $overtimeCurrentDate->calculated_value = $rawValue > $maxHourOvertime ? $maxHourOvertime :  $rawValue;
-                
+                $overtimeCurrentDate->calculated_value = $calculateValue;              
+                $overtimeCurrentDate->amount = (new SalaryComponentOvertime(minuteToHour($calculateValue) , $amountOvertime))->calculate();
                 $overtimeResult[] = $overtimeCurrentDate;
+                
             }
         }
         
@@ -258,7 +269,9 @@ class AttendanceRepository extends BaseRepository
     }
 
     private function listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId){
-        $att = Overtime::select(['overtime_date', 'id', 'employee_id','start_hour', 'end_hour', 'overday'])->whereBetween('overtime_date',[$startDate,$endDate]);
+        $att = Overtime::select(['overtime_date', 'id', 'employee_id','start_hour', 'end_hour', 'overday'])
+            ->with(['benefit'])
+            ->whereBetween('overtime_date',[$startDate,$endDate]);
         if(!empty($employeeId)){    
             $att->whereIn('employee_id', $employeeId);         
         }else{

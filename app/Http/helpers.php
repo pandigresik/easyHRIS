@@ -201,3 +201,22 @@ if (!function_exists('diffMinute')) {
         return Carbon::parse($start)->diffInMinutes($end);
     }
 }
+
+if (!function_exists('minuteToHour')) {
+    function minuteToHour($minutes)
+    {
+        return $minutes / 60;
+    }
+}
+
+
+if (!function_exists('isWorkshiftOff')) {
+    function isWorkshiftOff($workshift)
+    {
+        if(is_array($workshift)){
+            return $workshift['check_in_schedule'] == $workshift['check_out_schedule'];
+        }
+        return $workshift->getRawOriginal('check_in_schedule') == $workshift->getRawOriginal('check_out_schedule');
+    }
+}
+

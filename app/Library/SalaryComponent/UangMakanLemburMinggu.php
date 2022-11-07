@@ -2,12 +2,12 @@
 namespace App\Library\SalaryComponent; 
 class UangMakanLemburMinggu extends Component{
     protected $code = 'TUMLM';
-    private $amount;
+    private $amounts = [];
     private $value;
     
-    function __construct($amount, $value)
+    function __construct($amounts, $value)
     {
-        $this->amount = $amount;
+        $this->amounts = $amounts;
         $this->value = $value;
     }
     /*
@@ -16,14 +16,24 @@ class UangMakanLemburMinggu extends Component{
     - >= 7 jam mendapatkan 100%
     */
     public function calculate(){
+        $result = 0;
+        if(empty($this->amounts)) return 0;
+
+        foreach($this->amounts as $amount){
+            $result += $this->calculateDay($amount);
+        }
+        return $result;
+    }
+
+    private function calculateDay($amount){
         $pengali = 0;
-        if($this->amount >= 5){
+        if($amount >= 5){
             $pengali = 0.5;
         }
 
-        if($this->amount >= 7){
+        if($amount >= 7){
             $pengali = 1;
         }
-        return $pengali * $this->amount * $this->value;
+        return $pengali * $amount * $this->value;
     }
 }

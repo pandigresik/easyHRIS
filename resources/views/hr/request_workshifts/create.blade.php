@@ -22,7 +22,7 @@
                             </div>
                             <div class="card-body">                                
 
-                                   @include('hr.request_workshifts.fields')
+                                   @include('hr.request_workshifts.generate_fields')
                                 
                             </div>
                             <div class="card-footer">

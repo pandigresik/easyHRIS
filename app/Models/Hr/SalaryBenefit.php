@@ -97,4 +97,10 @@ class SalaryBenefit extends Model
     public function getBenefitValueAttribute($value){
         return localNumberFormat($value, 0);
     }
+
+    public function scopeOvertime($query){
+        return $query->where('component_id', function($q){
+            return $q->select(['id'])->from('salary_components')->whereCode('OT')->limit(1);
+        });
+    }
 }

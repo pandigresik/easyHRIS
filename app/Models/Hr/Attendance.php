@@ -223,4 +223,14 @@ class Attendance extends Model
     public function scopeInvalid($query){
         return $query->where(['state' => 'INVALID']);
     }
+
+    public function scopeAbsentLeaveLate($query){
+        return $query->where(function($q){
+            return $q->whereIn('state',['PC', 'DT','LATEIN','INVALID'])->orWhere('absent',0);
+        })
+    }
+
+    public function scopeLuarKota($query){
+        return $query->where('state', 'LK');
+    }
 }

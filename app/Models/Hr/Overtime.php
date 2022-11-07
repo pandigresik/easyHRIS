@@ -128,6 +128,7 @@ class Overtime extends Model
         'calculated_value',
         'holiday',
         'overday',
+        'amount',
         'description'
     ];
 
@@ -194,7 +195,15 @@ class Overtime extends Model
         return $this->belongsTo(\App\Models\Hr\Employee::class, 'employee_id');
     }
 
+    public function benefit(){
+        return $this->hasOneThrough(\App\Models\Hr\SalaryBenefit::class, \App\Models\Hr\Employee::class, 'id', 'employee_id', 'employee_id')->overtime();
+    }
+
     public function getOvertimeDateAttribute($value){
         return localFormatDate($value);
+    }
+
+    public function getAmountAttribute($value){
+        return localNumberFormat($value, 0);
     }
 }

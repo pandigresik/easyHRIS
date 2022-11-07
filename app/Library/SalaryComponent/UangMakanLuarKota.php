@@ -11,6 +11,6 @@ class UangMakanLuarKota extends Component{
         $this->value = $value;
     }
     public function calculate(){
-        return $this->amount * $this->value;
+        return 3 * $this->amount * $this->value;
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Hr\Shiftment;
 use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Exception;
 
 /**
@@ -51,8 +52,22 @@ class RequestWorkshiftRepository extends BaseRepository
     {
         $this->model->getConnection()->beginTransaction();
         try {
-            $input['status'] = RequestWorkshift::INITIAL_STATE;
-            $workDate = $input['work_date'];
+            $workDate = generatePeriod($input['work_date']);
+            unset($input['work_date']);
+            foreach(CarbonPeriod::create($workDate['startDate'], $workDate['endDate']) as $date){
+                $model = $this->generateWorkshift($input, $date->format('Y-m-d'));
+            }
+            $this->model->getConnection()->commit();
+            return $model;
+        } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }
+    }
+
+    private function generateWorkshift($input, $workDate){
+        $input['status'] = RequestWorkshift::INITIAL_STATE;            
+        $input['work_date'] = $workDate;
             $employeeId = $input['employee_id'];
             $shiftmentOrigin = Workshift::select(['shiftment_id'])->where(['work_date' => $workDate, 'employee_id' => $employeeId])->first();
             if(!$shiftmentOrigin){
@@ -71,12 +86,7 @@ class RequestWorkshiftRepository extends BaseRepository
             if($model->getRawOriginal('status') == RequestWorkshift::APPROVE_STATE){
                 $this->updateWorkshift($model);
             }
-            $this->model->getConnection()->commit();
-            return $model;
-        } catch (\Exception $e) {
-            $this->model->getConnection()->rollBack();
-            return $e;
-        }
+        return $model;
     }
 
     public function update($input, $id)

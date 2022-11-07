@@ -47,6 +47,7 @@
 </div>
 </div>
 
+@if (isset($overtime))
 <!-- Start Hour Real Field -->
 <div class="form-group row mb-3">
     {!! Form::label('start_hour_real', __('models/overtimes.fields.start_hour_real').':', ['class' => 'col-md-3 col-form-label']) !!}
@@ -84,7 +85,7 @@
     </div>    
 </div>
 </div>
-
+@endif
 <!-- Holiday Field -->
 <div class="form-group row mb-3">
     {!! Form::label('holiday', __('models/overtimes.fields.holiday').':', ['class' => 'col-md-3 col-form-label']) !!}

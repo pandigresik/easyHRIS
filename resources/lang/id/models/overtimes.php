@@ -18,6 +18,7 @@ return array (
     'calculated_value' => 'Calculated Value',
     'holiday' => 'Holiday',
     'overday' => 'Overday',
+    'amount' => 'Amount',
     'description' => 'Description',
   ),
 );

@@ -5,5 +5,5 @@ abstract class Component {
     protected $fixed;
     protected $state;
 
-    abstract function calculate();
+    abstract function calculate();    
 }
