@@ -4,16 +4,20 @@ namespace App\Http\Controllers\Hr;
 
 use App\Models\Hr\PayrollPeriodGroup;
 use App\Models\Hr\SalaryComponent;
-use App\Repositories\Hr\PayrollPeriodRepository;
+use App\Repositories\Hr\PayrollPeriodBiweeklyRepository;
 
 
 class PayrollBiweeklyPeriodController extends PayrollPeriodController
 {
-    /** @var  PayrollPeriodRepository */
+    /** @var  PayrollPeriodBiweeklyRepository */
     protected $repository;
     protected $type = 'biweekly';    
     protected $routePath = 'hr.payrollBiweeklyPeriods';
     
+    public function __construct()
+    {
+        $this->repository = PayrollPeriodBiweeklyRepository::class;        
+    }    
     
     /**
      * Show the form for creating a new PayrollPeriod.

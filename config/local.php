@@ -38,5 +38,7 @@ return [
     // id untuk shiftment yang libur
     'shiftment_off' => [2],
     // untuk perhitungan premi
-    'leave_code' => ['PC', 'DT']
+    'leave_code' => ['PC', 'DT'],
+    // untuk tunjangan yang diberikan di akhir bulan saja
+    'benefit_end_of_month' => ['TJ', 'PRHD']
 ];

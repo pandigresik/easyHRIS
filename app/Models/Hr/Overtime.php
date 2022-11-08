@@ -3,6 +3,7 @@
 namespace App\Models\Hr;
 
 use App\Models\Base as Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -205,5 +206,9 @@ class Overtime extends Model
 
     public function getAmountAttribute($value){
         return localNumberFormat($value, 0);
+    }
+
+    public function isSundayOvertime(){
+        return Carbon::parse($this->attributes['overtime_date'])->dayOfWeek == Carbon::SUNDAY;
     }
 }

@@ -14,7 +14,7 @@
     col-form-label']) !!}
     <div class="col-md-9">
         {!! Form::select('payroll_period_group_id', $periodItems, null, ['class' => 'form-control select2', 'required' =>
-        'required']) !!}
+        'required', 'onchange' => 'updateFilterEmployee(this)']) !!}
     </div>
 </div>
 
@@ -24,7 +24,7 @@
     col-form-label']) !!}
     <div class="col-md-9">
         {!! Form::select('employee_id[]', [], null, array_merge(['class' => 'form-control select2','id' =>
-        'employee_id', 'data-filter' => json_encode(['payroll_period' => 'biweekly']), 'data-url' =>
+        'employee_id', 'data-filter' => json_encode([]), 'data-url' =>
         route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple' ],
         config('local.select2.ajax')) ) !!}
     </div>
@@ -58,3 +58,15 @@
         
     </div>
 </div>
+
+
+@push('scripts')
+<script>
+    function updateFilterEmployee(elm){
+        if(!_.isEmpty($(elm).val())){
+            $('#employee_id').data('filter', {payroll_period_group_id : $(elm).val()});
+        }        
+    }
+
+</script>
+@endpush

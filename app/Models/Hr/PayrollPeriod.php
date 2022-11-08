@@ -3,6 +3,7 @@
 namespace App\Models\Hr;
 
 use App\Models\Base as Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -157,7 +158,11 @@ class PayrollPeriod extends Model
 
     public function getMonthAttribute($value){
         return localFormatMonth($value);
-    }    
+    }
+
+    public function isEndOfMonth(){
+        return Carbon::parse($this->attributes['start_period'])->endOfMonth()->format('Y-m-d') == $this->attributes['end_period'];
+    }
 
     public function scopeWeekly($query){
         return $query->whereIn('payroll_period_group_id', function($q){

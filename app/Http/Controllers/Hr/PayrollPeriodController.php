@@ -22,6 +22,7 @@ class PayrollPeriodController extends AppBaseController
     protected $type;
     protected $viewPath = 'hr.payroll_periods';
     protected $routePath = 'hr.payrollPeriods';
+    
     public function __construct()
     {
         $this->repository = PayrollPeriodRepository::class;        

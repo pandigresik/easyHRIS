@@ -13,8 +13,6 @@ use App\Library\SalaryComponent\PremiKehadiran;
 use App\Library\SalaryComponent\UangMakan;
 use App\Library\SalaryComponent\UangMakanLemburMinggu;
 use App\Library\SalaryComponent\UangMakanLuarKota;
-use App\Models\Hr\Attendance;
-use App\Models\Hr\AttendanceSummary;
 use App\Models\Hr\Employee;
 use App\Models\Hr\Holiday;
 use App\Models\Hr\Overtime as HrOvertime;
@@ -36,11 +34,11 @@ class PayrollPeriodRepository extends BaseRepository
 {
     protected $payrollPeriod;
     protected $bpjsFee;
-    private $ritaseEmployee; // untuk hitung tunjangan km dan double rit
-    private $summaryAttendanceEmployee; // untuk hitung premi kehadiran
-    private $luarKotaEmployee; // hitung uang makan luar kota dan double salary
-    private $overtimeEmployee; // hitung uang makan dan tunjangan minggu
-    private $attendanceEmployee; // untuk hitung potongan kehadiran
+    protected $ritaseEmployee; // untuk hitung tunjangan km dan double rit
+    protected $summaryAttendanceEmployee; // untuk hitung premi kehadiran
+    protected $luarKotaEmployee; // hitung uang makan luar kota dan double salary
+    protected $overtimeEmployee; // hitung uang makan dan tunjangan minggu
+    protected $attendanceEmployee; // untuk hitung potongan kehadiran
         
     /**
      * @var array
@@ -72,158 +70,40 @@ class PayrollPeriodRepository extends BaseRepository
     public function model()
     {
         return PayrollPeriod::class;
-    }
+    }    
 
-    /**
-     * Create model record.
-     *
-     * @param array $input
-     *
-     * @return Model
-     */
-    public function create($input)
-    {
-        $this->model->getConnection()->beginTransaction();
-        
-        try {
-            $periods = $this->splitPeriod($input['range_period']);
-            $employeeId = $input['employee_id'] ?? [];
-            $bpjsFee = $input['bpjs_fee'] ?? [];
-            $payrollPeriodGroupId = $input['payroll_period_group_id'] ?? NULL;
-            $this->setBpjsFee($bpjsFee);                        
-            foreach($periods as $_index => $period){                
-                $this->calculatePayroll($input['company_id'], $period, $payrollPeriodGroupId, $employeeId);
-                if($_index){
-                    // jika dibagi menjadi 2 periode, maka set null potongan Bpjs periode yang kedua
-                    $this->setBpjsFee([]);
-                }
-            }
-            $this->model->getConnection()->commit();            
-            return $this->model;
-        } catch (\Exception $e) {
-            $this->model->getConnection()->rollBack();
-            return $e;
-        }        
-    }
-
-    private function calculatePayroll($companyId, $period, $payrollPeriod, $employeeId = []){
-        // create payrollPeriod if not exists
-        $startDateObj = Carbon::parse($period['start_period']);
-        $period['company_id'] = $companyId;
-        $period['payroll_period_group_id'] = $payrollPeriod;
-        $period['year'] = $startDateObj->format('Y');
-        $period['month'] = $startDateObj->format('m'); 
-        $period['name'] = 'Periode gaji '. localFormatDate($period['start_period']).' sd '.localFormatDate($period['end_period']);
-        $periodPayroll = PayrollPeriod::firstOrCreate($period);
-        
-        // get list employee
-        $employeeOjb = Employee::select(['id', 'code'])->with(['salaryBenefits' => function($q){
-            $q->with(['component']);
-        }])->where(['payroll_period_group_id' => $payrollPeriod]);
-
-        if(!empty($employeeId)){
-            $employeeOjb->whereIn('id', $employeeId);
-        }
-
-        $employees = $employeeOjb->get();
-        $workDayEmployee = Workshift::selectRaw('employee_id, count(*) as workday')
-                ->whereIn('employee_id', $employees->pluck('id')->toArray())
-                ->whereBetween('work_date', [$period['start_period'], $period['end_period']])
-                ->groupBy('employee_id')
-                ->get()
-                ->pluck('workday', 'employee_id')->toArray();
-        
-        $holidayNotSunday = $this->getHoliday($period['start_period'], $period['end_period']);
-        $listEmployees = $employees->pluck('id','id');
-        \Log::error($listEmployees);
-        $this->setRitaseEmployee(RitaseDriver::whereIn('employee_id', $listEmployees)->whereBetween('work_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
-        
-        $this->setSummaryAttendanceEmployee(NULL);
-        $startDateObj->endOfMonth();
-        if($startDateObj->format('Y-m-d') == $period['end_period']){
-            $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => $startDateObj->format('m')])->whereIn('employee_id', $listEmployees)->keyBy('employee_id'));
-        }
-        
-        $this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
-        $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
-        $this->setAttendanceEmployee(Attendance::absentLeaveLate()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
-        
-        foreach($employees as $employee){
-            $workDayCount = $workDayEmployee[$employee->id] ?? 0;
-            if(in_array($this->getPayrollPeriod(), ['weekly', 'biweekly'])){
-                $workDayCount += $holidayNotSunday;
-            }
-            $this->calculateEmployeePayroll($workDayCount, $employee, $periodPayroll);
-        }
-        (new PayrollDetail())->flushCache();
-    }
-
-    private function calculateEmployeePayroll($workDayCount, $employee, $periodPayroll){          
-        $details = [];
-        $takeHomePay = 0;
-        foreach($employee->salaryBenefits as $benefit){
-            if($benefit->component->fixed){
-                $tmp = [
-                    'benefit_value' => $benefit->getRawOriginal('benefit_value'),
-                    'component_id' => $benefit->component_id,
-                    'sign_value' => $benefit->component->getRawOriginal('state') == 'p' ? 1 : -1, 
-                ];
-            }else{
-                $tmp = [
-                    'benefit_value' => $this->calculateComponent($workDayCount, $employee->id, $benefit->getRawOriginal('benefit_value'), $benefit->component->code),
-                    'component_id' => $benefit->component_id,
-                    'sign_value' => $benefit->component->getRawOriginal('state') == 'p' ? 1 : -1, 
-                ];
-            }
-            /** jika tidak ada dalam list potongan bpjs yang dipilih maka set 0 */
-            if(in_array($periodPayroll->payrollPeriodGroup->getRawOriginal('type_period'), ['weekly', 'biweekly'])){
-                $listBpjsFee = config('local.bpjs_fee');
-                if(in_array($tmp['component_id'], $listBpjsFee)){
-                    if(!in_array($tmp['component_id'], $this->getBpjsFee())){                        
-                        $tmp['benefit_value'] = 0;
-                    }
-                }
-            }
-
-            $takeHomePay += ($tmp['sign_value'] * $tmp['benefit_value']);
-            $details[] = $tmp;            
-        }
-        $payroll = Payroll::firstOrNew([
-            'payroll_period_id' => $periodPayroll->id,
-            'employee_id' => $employee->id
-        ]);
-        $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
-        $payroll->save();
-        $userId = \Auth::id();
-        foreach($details as $detail){
-            $detail['payroll_id'] = $payroll->id;
-            $detail['created_by'] = $userId;
-            PayrollDetail::upsert($detail, ['payroll_id', 'component_id']);            
-        }        
-    }
-
-    private function calculateComponent($workDayCount, $employeeId, $value, $code){
+    protected function calculateComponent($workDayCount, $employeeId, $value, $code){
         $result = $value;
         $componentObj = null;
         switch($code){
             case 'TDGJ':
-                $doubleRitaseCount = 0; // nanti cari data ritase berdasarkan employeeId                
+                $doubleRitaseCount = $this->getRitaseEmployee($employeeId)->sum(function($item){
+                    return $item->getRawOriginal('double_rit');
+                });
                 $componentObj = new DoubleRitase($doubleRitaseCount, $value);
                 break;
             case 'TDDRT':
-                $doubleSalary = 0; // nanti cari data ritase berdasarkan employeeId                
+                $doubleSalary = $this->getLuarKotaEmployee($employeeId)->count();
                 $componentObj = new DoubleSalary($doubleSalary, $value);
                 break;
-            case 'GPH':                
+            case 'GPH':              
                 $componentObj = new GajiPokokHarian($workDayCount, $value);
                 break;
             case 'TDKM':
-                $kmCount = 0; // nanti cari data ritase berdasarkan employeeId                
+                $kmCount = $this->getRitaseEmployee($employeeId)->sum(function($item){
+                    return $item->getRawOriginal('km');
+                });
                 $componentObj = new Kilometer($kmCount, $value);
                 break;
             case 'OT':
-                $overtimeCount = 0; // nanti cari data ritase berdasarkan employeeId                
-                $componentObj = new Overtime($overtimeCount, $value);
+                $overtimes = $this->getOvertimeEmployee($employeeId)->map(function($item){
+                    \Log::error('$item');
+                    \Log::error($item);
+                    return $item->getRawOriginal('amount');
+                })->toArray();
+                \Log::error('$overtimes');
+                \Log::error($overtimes);               
+                $componentObj = new Overtime($overtimes);
                 break;
             case 'PTHD':
                 $amountHour = 0;
@@ -238,11 +118,13 @@ class PayrollPeriodRepository extends BaseRepository
             case 'UM':                
                 $componentObj = new UangMakan($workDayCount, $value);
                 break;
-            case 'TUMLM':                
-                $componentObj = new UangMakanLemburMinggu($workDayCount, $value);
+            case 'TUMLM':
+                $overtimes = $this->getOvertimeSundayEmployee($employeeId);                              
+                $componentObj = new UangMakanLemburMinggu($overtimes, $value);
                 break;
             case 'TDUM':                
-                $componentObj = new UangMakanLuarKota($workDayCount, $value);
+                $luarKotaCount = $this->getLuarKotaEmployee($employeeId)->count();
+                $componentObj = new UangMakanLuarKota($luarKotaCount, $value);
                 break;
             default:
         }
@@ -250,26 +132,9 @@ class PayrollPeriodRepository extends BaseRepository
             $result = $componentObj->calculate();
         }
         return $result;
-    }
+    }    
 
-    /** jika endDate melewati endOfMonth dari startDate maka split berdasarkan bulannya */
-    private function splitPeriod($rangePeriod){
-        $resultPeriod = [];
-        $period = generatePeriod($rangePeriod);
-        $startDate = $period['startDate'];
-        $endOfMonthStartDate = Carbon::parse($startDate)->endOfMonth()->format('Y-m-d');
-        $endDate = $period['endDate'];
-
-        if($endDate > $endOfMonthStartDate){
-            $resultPeriod[] = ['start_period' => $startDate, 'end_period' => $endOfMonthStartDate];
-            $resultPeriod[] = ['start_period' => substr($endDate, 0, 7).'-01' , 'end_period' => $endDate];
-        }else{
-            $resultPeriod[] = ['start_period' => $startDate, 'end_period' => $endDate];
-        }
-        return $resultPeriod;
-    }
-
-    private function getHoliday($startDate, $endDate){
+    protected function getHoliday($startDate, $endDate){
         $result = 0;
         $holiday = Holiday::select(['holiday_date'])->whereBetween('holiday_date', [$startDate, $endDate])->get();
         if(!$holiday->isEmpty()){
@@ -327,7 +192,7 @@ class PayrollPeriodRepository extends BaseRepository
      */ 
     public function getRitaseEmployee($employeeId = null)
     {
-        return empty($employeeId) ? $this->ritaseEmployee : ($this->ritaseEmployee[$employeeId] ?? null);
+        return empty($employeeId) ? $this->ritaseEmployee : ($this->ritaseEmployee[$employeeId] ?? collect([]));
     }
 
     /**
@@ -347,7 +212,7 @@ class PayrollPeriodRepository extends BaseRepository
      */ 
     public function getSummaryAttendanceEmployee($employeeId = null)
     {
-        return empty($employeeId) ? $this->summaryAttendanceEmployee : ($this->summaryAttendanceEmployee[$employeeId] ?? null);
+        return empty($employeeId) ? $this->summaryAttendanceEmployee : ($this->summaryAttendanceEmployee[$employeeId] ?? collect([]));
     }
 
     /**
@@ -367,7 +232,7 @@ class PayrollPeriodRepository extends BaseRepository
      */ 
     public function getLuarKotaEmployee($employeeId = null)
     {
-        return empty($employeeId) ? $this->luarKotaEmployee : ($this->luarKotaEmployee[$employeeId] ?? null);
+        return empty($employeeId) ? $this->luarKotaEmployee : ($this->luarKotaEmployee[$employeeId] ?? collect([]));
     }
 
     /**
@@ -387,7 +252,26 @@ class PayrollPeriodRepository extends BaseRepository
      */ 
     public function getOvertimeEmployee($employeeId = null)
     {
-        return empty($employeeId) ? $this->overtimeEmployee : ($this->overtimeEmployee[$employeeId] ?? null); 
+        return empty($employeeId) ? $this->overtimeEmployee : ($this->overtimeEmployee[$employeeId] ?? collect([])); 
+    }
+
+    /**
+     * Get the value of overtimeEmployee
+     */ 
+    public function getOvertimeSundayEmployee($employeeId = null)
+    {
+        $result = [];
+        $overtimes = $this->getOvertimeEmployee($employeeId);
+        if(!empty($overtimes)){
+            if(!$overtimes->isEmpty()){
+                foreach($overtimes as $ot){
+                    if($ot->isSundayOvertime()){
+                        $result[] = minuteToHour($ot->getRawOriginal('calculated_value'));
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
     /**
@@ -407,7 +291,7 @@ class PayrollPeriodRepository extends BaseRepository
      */ 
     public function getAttendanceEmployee($employeeId = null)
     {
-        return empty($employeeId) ? $this->attendanceEmployee : $this->attendanceEmployee[$employeeId] ?? null;
+        return empty($employeeId) ? $this->attendanceEmployee : $this->attendanceEmployee[$employeeId] ?? collect([]);
     }
 
     /**
