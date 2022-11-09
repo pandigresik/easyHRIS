@@ -111,4 +111,8 @@ class Workshift extends Model
     public function getEndHourAttribute($value){
         return localFormatDateTime($value);
     }
+
+    public function isOffShift(){
+        return $this->attributes['start_hour'] == $this->attributes['end_hour'];
+    }
 }

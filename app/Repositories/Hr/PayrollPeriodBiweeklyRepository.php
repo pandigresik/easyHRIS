@@ -88,12 +88,12 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $this->setSummaryAttendanceEmployee([]);
         
         if($periodPayroll->isEndOfMonth()){
-            $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => $startDateObj->format('m')])->whereIn('employee_id', $listEmployees)->get()->keyBy('employee_id'));
+            $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => $startDateObj->format('m')])->whereIn('employee_id', $listEmployees)->get()->groupBy('employee_id'));
         }
         
         $this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
-        $this->setAttendanceEmployee(Attendance::absentLeaveLate()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
+        $this->setAbsentLateEmployee(Attendance::absentLeaveLate()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         
         foreach($employees as $employee){
             $workDayCount = $workDayEmployee[$employee->id] ?? 0;

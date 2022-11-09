@@ -32,6 +32,7 @@ class CreateEmployeesTable extends Migration
             $table->date('date_of_birth');
             $table->string('identity_number', 27)->nullable();
             $table->string('identity_type', 5)->nullable();
+            $table->string('account_bank', 20)->nullable();
             $table->string('marital_status', 1)->nullable();
             $table->string('email')->nullable();
             $table->integer('leave_balance')->nullable();

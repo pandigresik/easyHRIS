@@ -29,14 +29,14 @@ class AppServiceProvider extends ServiceProvider
         }
         // config(['app.locale' => 'id']);
         // Carbon::setLocale('id');
-        //if (env('APP_DEBUG')) {
-        \DB::listen(function ($query) {
-            \File::append(
-                storage_path('/logs/query.log'),
-                $query->sql.' ['.implode(', ', $query->bindings).']'.PHP_EOL
-            );
-        });
-        //}
+        if (env('APP_DEBUG')) {
+            \DB::listen(function ($query) {
+                \File::append(
+                    storage_path('/logs/query.log'),
+                    $query->sql.' ['.implode(', ', $query->bindings).']'.PHP_EOL
+                );
+            });
+        }
         // code ini hanya akan dijalankan ketika render view menu
         view()->composer('layouts.menu', function ($view) {
             $items = \App\Models\Base\Menus::with(['permissions'])->orderBy('seq_number')->get();

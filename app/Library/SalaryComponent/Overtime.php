@@ -6,7 +6,7 @@ class Overtime extends Component{
 
     function __construct($amounts)
     {
-        $this->amount = $amounts;        
+        $this->amounts = $amounts;        
     }    
 
     public function calculate(){

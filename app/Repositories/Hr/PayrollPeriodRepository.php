@@ -13,14 +13,8 @@ use App\Library\SalaryComponent\PremiKehadiran;
 use App\Library\SalaryComponent\UangMakan;
 use App\Library\SalaryComponent\UangMakanLemburMinggu;
 use App\Library\SalaryComponent\UangMakanLuarKota;
-use App\Models\Hr\Employee;
 use App\Models\Hr\Holiday;
-use App\Models\Hr\Overtime as HrOvertime;
-use App\Models\Hr\Payroll;
-use App\Models\Hr\PayrollDetail;
 use App\Models\Hr\PayrollPeriod;
-use App\Models\Hr\RitaseDriver;
-use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 
@@ -38,7 +32,7 @@ class PayrollPeriodRepository extends BaseRepository
     protected $summaryAttendanceEmployee; // untuk hitung premi kehadiran
     protected $luarKotaEmployee; // hitung uang makan luar kota dan double salary
     protected $overtimeEmployee; // hitung uang makan dan tunjangan minggu
-    protected $attendanceEmployee; // untuk hitung potongan kehadiran
+    protected $absentLateEmployee; // untuk hitung potongan kehadiran
         
     /**
      * @var array
@@ -96,26 +90,26 @@ class PayrollPeriodRepository extends BaseRepository
                 $componentObj = new Kilometer($kmCount, $value);
                 break;
             case 'OT':
-                $overtimes = $this->getOvertimeEmployee($employeeId)->map(function($item){
-                    \Log::error('$item');
-                    \Log::error($item);
+                $overtimes = $this->getOvertimeEmployee($employeeId)->map(function($item){                    
                     return $item->getRawOriginal('amount');
-                })->toArray();
-                \Log::error('$overtimes');
-                \Log::error($overtimes);               
+                })->toArray();         
                 $componentObj = new Overtime($overtimes);
                 break;
-            case 'PTHD':
-                $amountHour = 0;
-                $amountDay = 0;            
-                $componentObj = new PotonganKehadiran($amountHour, $amountDay, $value);
+            // berdasarkan data absensi 
+            case 'PTHD':                
+                $amountMinute = $this->getAbsentLateEmployee($employeeId)->sum(function($item){
+                    return $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out');
+                });
+                $amountDay = $this->getAbsentLateEmployee($employeeId)->sum('absent');            
+                $componentObj = new PotonganKehadiran(minuteToHour($amountMinute), $amountDay, $value);
                 break;
-            case 'PRHD':                 
-                $absentCount = 0;
-                $offCount = 0;
-                $componentObj = new PremiKehadiran($workDayCount, $value, $absentCount, $offCount);
+            case 'PRHD':                          
+                $absentMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_absent');
+                $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');
+                $offMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_off');;
+                $componentObj = new PremiKehadiran($workDayMonthCount, $value, $absentMonthCount, $offMonthCount);
                 break;
-            case 'UM':                
+            case 'UM':        
                 $componentObj = new UangMakan($workDayCount, $value);
                 break;
             case 'TUMLM':
@@ -289,9 +283,9 @@ class PayrollPeriodRepository extends BaseRepository
     /**
      * Get the value of attendanceEmployee
      */ 
-    public function getAttendanceEmployee($employeeId = null)
+    public function getAbsentLateEmployee($employeeId = null)
     {
-        return empty($employeeId) ? $this->attendanceEmployee : $this->attendanceEmployee[$employeeId] ?? collect([]);
+        return empty($employeeId) ? $this->absentLateEmployee : $this->absentLateEmployee[$employeeId] ?? collect([]);
     }
 
     /**
@@ -299,9 +293,9 @@ class PayrollPeriodRepository extends BaseRepository
      *
      * @return  self
      */ 
-    public function setAttendanceEmployee($attendanceEmployee)
+    public function setAbsentLateEmployee($absentLateEmployee)
     {
-        $this->attendanceEmployee = $attendanceEmployee;
+        $this->absentLateEmployee = $absentLateEmployee;
 
         return $this;
     }

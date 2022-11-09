@@ -157,7 +157,7 @@ class AttendanceRepository extends BaseRepository
                 'late_out' => 0, 
                 'check_in' => NULL,
                 'check_out' => NULL,
-                'state' => $schedule->getRawOriginal('start_hour') == $schedule->getRawOriginal('end_hour') ? 'OK' : 'INVALID',
+                'state' => $schedule->isOffShift() ? 'OK' : 'INVALID',
                 'created_by' => \Auth::id()
             ];
 
@@ -173,15 +173,15 @@ class AttendanceRepository extends BaseRepository
                 
                 $tmp['check_in'] = $fingerClassification['check_in'];
                 $tmp['check_out'] = $fingerClassification['check_out'];
-                
-                if(!is_null($tmp['check_in'])){
+                // dihitung keterlambatan jika bukan hari libur
+                if(!is_null($tmp['check_in'] && !isWorkshiftOff($tmp) )){
                     $tmp['early_in'] = $tmp['check_in_schedule'] > $fingerClassification['check_in'] ? diffMinute($fingerClassification['check_in'], $tmp['check_in_schedule']): 0;
-                    $tmp['late_in'] = !isWorkshiftOff($tmp) && $fingerClassification['check_in'] > $tmp['check_in_schedule'] ? diffMinute($fingerClassification['check_in'], $tmp['check_in_schedule']): 0;
+                    $tmp['late_in'] = $fingerClassification['check_in'] > $tmp['check_in_schedule'] ? diffMinute($fingerClassification['check_in'], $tmp['check_in_schedule']): 0;
                 }
-                
-                if(!is_null($tmp['check_out'])){
+                // dihitung keterlambatan jika bukan hari libur
+                if(!is_null($tmp['check_out']) && !isWorkshiftOff($tmp) ){
                     $tmp['early_out'] = $tmp['check_out_schedule'] > $fingerClassification['check_out'] ? diffMinute($fingerClassification['check_out'], $tmp['check_out_schedule']): 0;                                
-                    $tmp['late_out'] = !isWorkshiftOff($tmp) && $fingerClassification['check_out'] > $tmp['check_out_schedule'] ? diffMinute($fingerClassification['check_out'], $tmp['check_out_schedule']): 0;
+                    $tmp['late_out'] = $fingerClassification['check_out'] > $tmp['check_out_schedule'] ? diffMinute($fingerClassification['check_out'], $tmp['check_out_schedule']): 0;
                 }
 
                 if(!is_null($tmp['check_out']) && !is_null($tmp['check_in'])){                    
