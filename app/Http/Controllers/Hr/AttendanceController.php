@@ -7,9 +7,7 @@ use App\DataTables\Hr\AttendanceDataTable;
 use App\Http\Requests\Hr\CreateAttendanceRequest;
 use App\Http\Requests\Hr\UpdateAttendanceRequest;
 use App\Repositories\Hr\AttendanceRepository;
-use App\Repositories\Hr\ShiftmentRepository;
-use App\Repositories\Hr\AbsentReasonRepository;
-use App\Repositories\Hr\EmployeeRepository;
+
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Hr\ShiftmentGroupRepository;
@@ -174,7 +172,7 @@ class AttendanceController extends AppBaseController
     private function getOptionItems(){        
         $shiftmentGroup = new ShiftmentGroupRepository();
         return [
-            'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck(),
+            'shiftmentGroupItems' => $shiftmentGroup->pluck(),
         ];
     }    
 }

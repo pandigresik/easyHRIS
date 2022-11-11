@@ -28,12 +28,11 @@ return [
     'choose' => 'Pilih',    
     'option' => [
         'vehicleGroup_placeholder' => 'Pilih group kendaraan',
-        'dmsInvVehicle_placeholder' => 'Pilih kendaraan',
-        'Vendor_placeholder' => 'Pilih vendor',
+        'business_unit_placeholder' => 'Pilih bisnis unit',
+        'department_placeholder' => 'Pilih departement',        
         'city_placeholder_origin' => 'Pilih kota asal',
         'city_placeholder_destination' => 'Pilih kota tujuan',
         'product_categories_placeholder' => 'Pilih jenis produk',
         'trip_placeholder' => 'Pilih Trip',
-        'dmsInvProduct_placeholder' => 'Pilih produk',
     ]
 ];

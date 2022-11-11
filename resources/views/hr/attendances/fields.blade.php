@@ -3,7 +3,7 @@
     {!! Form::label('shiftment_group_id', __('models/workshiftGroups.fields.shiftment_group_id').':', ['class' =>
     'col-md-2 col-form-label']) !!}
     <div class="col-md-10">
-        {!! Form::select('shiftment_group_id', $shiftmentGroupItems, null, ['class' => 'form-control select2', 'required' => 'required', 'onchange' => 'updateFilterEmployee(this)']) !!}
+        {!! Form::select('shiftment_group_id[]', $shiftmentGroupItems, null, ['class' => 'form-control select2', 'required' => 'required', 'multiple' => 'multiple', 'onchange' => 'updateFilterEmployee(this)']) !!}
     </div>
 </div>
 
@@ -30,9 +30,10 @@
 @push('scripts')
 <script>
     function updateFilterEmployee(elm){
-        if(!_.isEmpty($(elm).val())){
-            $('#employee_id').data('filter', {shiftment_group_id : $(elm).val()});
-        }        
+        $('#employee_id').data('filter', {})
+        if(!_.isEmpty($(elm).val())){            
+            $('#employee_id').data('filter', {shiftment_group_id : $(elm).val()})
+        }
     }
 
 </script>

@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('cities', Base\CityController::class, ["as" => 'base']);
         Route::resource('companies', Base\CompanyController::class, ["as" => 'base']);
         Route::resource('departments', Base\DepartmentController::class, ["as" => 'base']);
+        Route::resource('businessUnits', Base\BusinessUnitController::class, ["as" => 'base']);
         Route::resource('regions', Base\RegionController::class, ["as" => 'base']);
         Route::resource('settings', Base\SettingController::class, ["as" => 'base']);
     });
@@ -117,7 +118,3 @@ Route::group(['prefix' => 'artisan'], function () {
     });
 });
 
-
-Route::group(['prefix' => 'hr'], function () {
-    
-});

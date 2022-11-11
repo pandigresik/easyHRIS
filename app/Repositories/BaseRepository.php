@@ -85,9 +85,15 @@ abstract class BaseRepository
         if (!empty($search)) {
             $query->search($search['keyword'], $search['column']);
         }
-
-        if($this->getFilter()){
-            $query->where($this->getFilter());
+        $filters = $this->getFilter();
+        if(!empty($filters)){
+            foreach($filters as $column => $valueSearch){
+                if(is_array($valueSearch)){
+                    $query->whereIn($column, $valueSearch);
+                }else{
+                    $query->where($column, $valueSearch);
+                }
+            }            
         }
 
         return $query->simplePaginate($perPage, $columns, 'page', $currentPage);

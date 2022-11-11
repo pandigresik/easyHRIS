@@ -9,6 +9,7 @@ return array (
     'contract_id' => 'Contract Id',
     'company_id' => 'Company',
     'department_id' => 'Department Id',
+    'business_unit_id' => 'Business Unit',
     'joblevel_id' => 'Joblevel Id',
     'jobtitle_id' => 'Jobtitle Id',
     'supervisor_id' => 'Supervisor Id',
@@ -17,7 +18,7 @@ return array (
     'address' => 'Address',
     'join_date' => 'Join Date',
     'employee_status' => 'Employee Status',
-    'code' => 'Code',
+    'code' => 'NIK',
     'full_name' => 'Full Name',
     'gender' => 'Gender',
     'date_of_birth' => 'Date Of Birth',
@@ -34,5 +35,6 @@ return array (
     'profile_size' => 'Profile Size',
     'salary_group_id' => 'Salary Group Id',
     'shiftment_group_id' => 'Shiftment Group Id',
+    'payroll_period_group_id' => 'Payroll Period'
   ),
 );

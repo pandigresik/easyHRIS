@@ -123,7 +123,7 @@ class AttendanceDataTable extends DataTable
      */
     protected function getColumns()
     {
-        $stateItem = convertArrayPairValueWithKey(Attendance::STATE + AbsentReason::pluck('code')->toArray());
+        $stateItem = convertArrayPairValueWithKey(Attendance::STATE + AbsentReason::pluck('code', 'code')->toArray());
         return [
             'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),

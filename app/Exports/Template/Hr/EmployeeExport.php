@@ -53,6 +53,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'contract_id',
             'company_id',
             'department_id',
+            'business_unit',
             'joblevel_id',
             'jobtitle_id',
             'supervisor_id',
@@ -73,6 +74,10 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'have_overtime_benefit',
             'overtime',
             'salary',
+            'position_allowance',
+            'bpjs_kesehatan',
+            'bpjs_jht',
+            'bpjs_jp',
             'salary_group_id',
             'shiftment_group_id'
         ];

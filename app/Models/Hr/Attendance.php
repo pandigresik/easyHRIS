@@ -113,7 +113,8 @@ class Attendance extends Model
         'OK' => 'OK',
         'INVALID' => 'INVALID',
         'EARLYOUT' => 'EARLYOUT',
-        'LATEIN' => 'LATEIN'
+        'LATEIN' => 'LATEIN',
+        'ABSENT' => 'ABSENT'
     ];
 
     protected $dates = ['deleted_at'];

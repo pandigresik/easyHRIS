@@ -22,7 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->unsignedBigInteger('jobtitle_id')->nullable();
             $table->unsignedBigInteger('supervisor_id')->nullable();
             $table->unsignedBigInteger('region_of_birth_id')->nullable();
-            $table->unsignedBigInteger('city_of_birth_id')->nullable();
+            $table->unsignedBigInteger('city_of_birth_id')->nullable();            
             $table->string('address')->nullable();
             $table->date('join_date');
             $table->string('employee_status', 1);

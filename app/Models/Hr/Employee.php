@@ -52,6 +52,7 @@ class Employee extends Model
         'contract_id',
         'company_id',
         'department_id',
+        'business_unit_id',
         'joblevel_id',
         'jobtitle_id',
         'supervisor_id',
@@ -76,8 +77,7 @@ class Employee extends Model
         'profile_image',
         'profile_size',
         'salary_group_id',
-        'shiftment_group_id',
-        'payroll_period',
+        'shiftment_group_id',        
         'payroll_period_group_id'
     ];
 
@@ -134,14 +134,14 @@ class Employee extends Model
         'city_of_birth_id' => 'nullable',
         'address' => 'nullable|string|max:255',
         'join_date' => 'required',
-        'employee_status' => 'nullable|string|max:1',
+        'employee_status' => 'nullable|string|max:10',
         'code' => 'nullable|string|max:17',
         'full_name' => 'nullable|string|max:255',
         'gender' => 'nullable|string|max:1',
         'date_of_birth' => 'required',
         'identity_number' => 'nullable|string|max:27',
-        'identity_type' => 'nullable|string|max:1',
-        'marital_status' => 'nullable|string|max:1',
+        'identity_type' => 'nullable|string|max:10',
+        'marital_status' => 'nullable|string|max:2',
         'email' => 'nullable|string|max:255',
         'leave_balance' => 'nullable|integer',
         'tax_group' => 'nullable|string|max:3',
@@ -184,6 +184,10 @@ class Employee extends Model
     public function department()
     {
         return $this->belongsTo(\App\Models\Base\Department::class, 'department_id');
+    }
+
+    public function businessUnit(){
+        return $this->belongsTo(\App\Models\Base\BusinessUnit::class, 'business_unit_id');
     }
 
     /**
@@ -383,11 +387,24 @@ class Employee extends Model
         return $this->hasMany(\App\Models\Hr\Workshift::class, 'employee_id');
     }
 
+    public function scopeActive($query, $date = NULL){
+        return $query->where(function($q) use ($date){
+            if(empty($date)){
+                return $q->whereNull('resign_date');
+            }
+            return $q->whereNull('resign_date')->orWhere('resign_date','>=', $date);
+        });
+    }
+
     public function getJoinDateAttribute($value){
         return localFormatDate($value);
     }
 
     public function getDateOfBirthAttribute($value){
+        return localFormatDate($value);
+    }
+
+    public function getResignDateAttribute($value){
         return localFormatDate($value);
     }
 

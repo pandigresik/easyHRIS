@@ -100,11 +100,12 @@ class LeaveDetails extends Model
 
     public function scopeShiftmentGroupApprove($query, $shiftmentGroup){
         $approveState = Leaf::APPROVE_STATE;
+        $shiftmentGroup = is_array($shiftmentGroup) ? $shiftmentGroup : [$shiftmentGroup];
         return $query->join('leaves', function($q) use ($approveState, $shiftmentGroup) {
             $q->on('leave_details.leave_id','=','leaves.id')
                 ->where('status', $approveState)
                 ->whereIn('employee_id', function($q) use ($shiftmentGroup){
-                    return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);
+                    return $q->select(['id'])->from('employees')->whereIn('shiftment_group_id', $shiftmentGroup);
                 });
         });
     }

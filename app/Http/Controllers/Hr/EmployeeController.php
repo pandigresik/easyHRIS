@@ -16,6 +16,8 @@ use App\Repositories\Hr\JobLevelRepository;
 use App\Repositories\Hr\JobTitleRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Base\BusinessUnitRepository;
+use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use App\Repositories\Hr\SalaryGroupRepository;
 use App\Repositories\Hr\ShiftmentGroupRepository;
 use Response;
@@ -182,17 +184,20 @@ class EmployeeController extends AppBaseController
         $city = new CityRepository();
         $company = new CompanyRepository();
         $department = new DepartmentRepository();
+        $businessUnit = new BusinessUnitRepository();
         $region = new RegionRepository();
         $jobLevel = new JobLevelRepository();
         $jobTitle = new JobTitleRepository();
         $employee = new EmployeeRepository();
         $shiftmentGroup = new ShiftmentGroupRepository();
         $salaryGroup = new SalaryGroupRepository();
+        $payrollPeriodGroup = new PayrollPeriodGroupRepository();
         return [
             'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->pluck(),
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
             'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
             'departmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck(),
+            'businessUnitItems' => ['' => __('crud.option.business_unit_placeholder')] + $businessUnit->pluck(),
             'regionItems' => ['' => __('crud.option.region_placeholder')] + $region->pluck(),
             'regionOfBirthItems' => ['' => __('crud.option.region_placeholder')] + $region->pluck(),
             'cityOfBirthItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
@@ -201,6 +206,7 @@ class EmployeeController extends AppBaseController
             'supervisorItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
             'salaryGroupItems' => ['' => __('crud.option.salary_group_placeholder')] + $salaryGroup->pluck(),
             'shiftmentGroupItems' => ['' => __('crud.option.shiftment_group_placeholder')] + $shiftmentGroup->pluck(),
+            'payrollPeriodGroupItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $payrollPeriodGroup->pluck(),
         ];
     }
 }

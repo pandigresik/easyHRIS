@@ -82,3 +82,8 @@ Route::group(['prefix' => 'hr'], function () {
 Route::group(['prefix' => 'hr'], function () {
     Route::resource('ritase_drivers', App\Http\Controllers\API\Hr\Hr\RitaseDriverAPIController::class);
 });
+
+
+Route::group(['prefix' => 'base'], function () {
+    Route::resource('business_units', App\Http\Controllers\API\Base\Base\BusinessUnitAPIController::class);
+});

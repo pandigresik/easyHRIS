@@ -40,8 +40,16 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
       foreach($rows as $row){
         $overtime = $row['overtime'];
         $salary = $row['salary'];
+        $positionAllowance = $row['position_allowance'];
+        $bpjsFeeJkn = $row['bpjs_kesehatan'];
+        $bpjsFeeJht = $row['bpjs_jht'];
+        $bpjsFeeJp = $row['bpjs_jp'];
         unset($row['overtime']);
         unset($row['salary']);
+        unset($row['position_allowance']);
+        unset($row['bpjs_kesehatan']);
+        unset($row['bpjs_jht']);
+        unset($row['bpjs_jp']);
         $department = $row['department_id'];
         $row['department_id'] = $this->departement[$department]->id ?? NULL;
         $jobLevel = $row['joblevel_id'];
@@ -52,7 +60,15 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $row['shiftment_group_id'] = $this->shiftmentGroup[$shiftmentGroup]->id ?? NULL;
         $employee = Employee::updateOrCreate($row->toArray());
         $salaryDetails = $this->salaryGroup[$salaryGroup]->salaryGroupDetails ?? NULL;
-        $this->createSalaryBenefit($employee, $salaryDetails ,[$this->salaryComponent['OT']->id => $overtime, $this->salaryComponent['GP']->id => $salary]);
+        $this->createSalaryBenefit($employee, $salaryDetails ,[
+            $this->salaryComponent['OT']->id => $overtime, 
+            $this->salaryComponent['GPH']->id => $salary, 
+            $this->salaryComponent['GP']->id => $salary,
+            $this->salaryComponent['JPM']->id => $bpjsFeeJp, 
+            $this->salaryComponent['JHTM']->id => $bpjsFeeJht,
+            $this->salaryComponent['PJKNM']->id => $bpjsFeeJkn,
+            $this->salaryComponent['TJ']->id => $positionAllowance,
+        ]);
       }
     }
 

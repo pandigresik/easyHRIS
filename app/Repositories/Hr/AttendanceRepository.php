@@ -9,11 +9,9 @@ use App\Models\Hr\Attendance;
 use App\Models\Hr\AttendanceLogfinger;
 use App\Models\Hr\LeaveDetails;
 use App\Models\Hr\Overtime;
-use App\Models\Hr\SalaryBenefit;
 use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class AttendanceRepository
@@ -100,7 +98,8 @@ class AttendanceRepository extends BaseRepository
         $attandanceLogs = $this->listAttendanceLog($startDate, $endDate, $shiftmentGroup, $employeeId);
         $workshifts = $this->listWorkshift($startDate, $endDate, $shiftmentGroup, $employeeId);        
         $overtimes = $this->listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId);            
-        $leaves = $this->listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId);        
+        $leaves = $this->listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId);
+        
         foreach($workshifts as $employee => $workshift){
             $log = $attandanceLogs[$employee] ?? collect([]);
             $overtime = $overtimes[$employee] ?? collect([]); 
@@ -123,10 +122,10 @@ class AttendanceRepository extends BaseRepository
         $logDate = $log->groupBy('finger_date');
         
         $overtimeDate = $overtime->keyBy(function($item){ return $item->getRawOriginal('overtime_date');});
-        $leaveDate = $leave->keyBy(function($item){ return $item->getRawOriginal('leave_date');});
+        $leaveDate = $leave->keyBy(function($item){ return $item->getRawOriginal('leave_date');});        
         $attendanceResult = [];
         $overtimeResult = [];
-        foreach($workshiftDate as $date => $schedule){
+        foreach($workshiftDate as $date => $schedule){            
             /** ambil juga data hari berikutnya untuk case shift 2,3 dan lembur */
             $prevDate = Carbon::parse($date)->subDay()->format('Y-m-d');
             $nextDate = Carbon::parse($date)->addDay()->format('Y-m-d');
@@ -145,7 +144,7 @@ class AttendanceRepository extends BaseRepository
             $tmp = [
                 'employee_id' => $schedule->employee_id,
                 'shiftment_id' => $schedule->shiftment_id,
-                'reason_id' => isset($leaveDate[$date]) ? $leaveDate[$date]->first()->reason_id : null,
+                'reason_id' => isset($leaveDate[$date]) ? $leaveDate[$date]->reason_id : null,
                 'attendance_date' => $schedule->getRawOriginal('work_date'),
                 'description' => null,
                 'check_in_schedule' => $schedule->getRawOriginal('start_hour'),
@@ -173,8 +172,9 @@ class AttendanceRepository extends BaseRepository
                 
                 $tmp['check_in'] = $fingerClassification['check_in'];
                 $tmp['check_out'] = $fingerClassification['check_out'];
+                
                 // dihitung keterlambatan jika bukan hari libur
-                if(!is_null($tmp['check_in'] && !isWorkshiftOff($tmp) )){
+                if(!is_null($tmp['check_in']) && !isWorkshiftOff($tmp) ){
                     $tmp['early_in'] = $tmp['check_in_schedule'] > $fingerClassification['check_in'] ? diffMinute($fingerClassification['check_in'], $tmp['check_in_schedule']): 0;
                     $tmp['late_in'] = $fingerClassification['check_in'] > $tmp['check_in_schedule'] ? diffMinute($fingerClassification['check_in'], $tmp['check_in_schedule']): 0;
                 }
@@ -184,7 +184,7 @@ class AttendanceRepository extends BaseRepository
                     $tmp['late_out'] = $fingerClassification['check_out'] > $tmp['check_out_schedule'] ? diffMinute($fingerClassification['check_out'], $tmp['check_out_schedule']): 0;
                 }
 
-                if(!is_null($tmp['check_out']) && !is_null($tmp['check_in'])){                    
+                if(!is_null($tmp['check_out']) && !is_null($tmp['check_in']) ){                    
                     if($tmp['state'] == 'INVALID'){
                         $lateinTolerance = $this->getLateinTolerance();
                         if($tmp['late_in'] > (0 + $lateinTolerance) ){
@@ -193,10 +193,14 @@ class AttendanceRepository extends BaseRepository
                             $tmp['state'] = 'EARLYOUT';
                         }else{
                             $tmp['state'] = 'OK';
-                        }    
+                        }
                     }                    
                 }
                 $tmp['absent'] = 0;
+            }else{
+                if($tmp['state'] == 'INVALID'){
+                    $tmp['state'] = 'ABSENT';
+                }
             }
                       
             $attendanceResult[] = $tmp;
@@ -249,7 +253,10 @@ class AttendanceRepository extends BaseRepository
             $att->whereIn('employee_id', $employeeId);         
         }else{
             $att->whereIn('employee_id', function($q) use ($shiftmentGroup){
-                return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);         
+                // return $q->select(['id'])->from('employees')->whereIn('shiftment_group_id', $shiftmentGroup);         
+                // aneh juga ketika menggunakan whereIn akan ada error vsprintf(): Too few arguments, ganti pakai whereRaw aja
+                $shiftmentGroupString = implode(',', $shiftmentGroup);
+                return $q->select(['id'])->from('employees')->whereRaw('shiftment_group_id in ('. $shiftmentGroupString.')');
             });
         }
         
@@ -262,7 +269,10 @@ class AttendanceRepository extends BaseRepository
             $att->whereIn('employee_id', $employeeId);         
         }else{
             $att->whereIn('employee_id', function($q) use ($shiftmentGroup){
-                return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);         
+                // return $q->select(['id'])->from('employees')->whereIn('shiftment_group_id', $shiftmentGroup);    
+                // aneh juga ketika menggunakan whereIn akan ada error vsprintf(): Too few arguments, ganti pakai whereRaw aja
+                $shiftmentGroupString = implode(',', $shiftmentGroup);
+                return $q->select(['id'])->from('employees')->whereRaw('shiftment_group_id in ('. $shiftmentGroupString.')');     
             });
         }
         return $att->get()->groupBy('employee_id');
@@ -271,12 +281,15 @@ class AttendanceRepository extends BaseRepository
     private function listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId){
         $att = Overtime::select(['overtime_date', 'id', 'employee_id','start_hour', 'end_hour', 'overday'])
             ->with(['benefit'])
-            ->whereBetween('overtime_date',[$startDate,$endDate]);
+            ->whereBetween('overtime_date',[$startDate,$endDate]);        
         if(!empty($employeeId)){    
             $att->whereIn('employee_id', $employeeId);         
         }else{
             $att->whereIn('employee_id', function($q) use ($shiftmentGroup){
-                return $q->select(['id'])->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);         
+                // return $q->select(['id'])->from('employees')->whereIn('shiftment_group_id', $shiftmentGroup);
+                // aneh juga ketika menggunakan whereIn akan ada error vsprintf(): Too few arguments, ganti pakai whereRaw aja
+                $shiftmentGroupString = implode(',', $shiftmentGroup);
+                return $q->select(['id'])->from('employees')->whereRaw('shiftment_group_id in ('. $shiftmentGroupString.')');
             });
         }
         return $att->get()->groupBy('employee_id');

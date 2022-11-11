@@ -62,7 +62,7 @@ class AttendanceSummaryRepository extends BaseRepository
             // pastikan attendance sudah tidak ada yang berstatus INVALID
             $invalidAttendance = Attendance::whereBetween('attendance_date', [$startDate, $endDate])->invalid()->count();
             if($invalidAttendance > 0){
-                // throw(new \Exception('Masih ada '.$invalidAttendance.' data invalid <a href="'.route('hr.attendances.index').'">proses absensi</a>'));
+                throw(new \Exception('Masih ada '.$invalidAttendance.' data invalid <a href="'.route('hr.attendances.index').'">proses absensi</a>'));
             }
             $summaries = $this->summary($startDate, $endDate, $employeeId);
             $userId = \Auth::id();
