@@ -125,8 +125,9 @@ class OvertimeController extends AppBaseController
 
             return redirect(route('hr.overtimes.index'));
         }
-
-        $overtime = $this->getRepositoryObj()->update($request->all(), $id);
+        $input = $request->all();
+        $input['employee_id'] = end($input['employee_id']); 
+        $overtime = $this->getRepositoryObj()->update($input, $id);
         if($overtime instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $overtime->getMessage()]);
         }

@@ -2,15 +2,16 @@
 namespace App\Library\SalaryComponent; 
 class Overtime extends Component{
     protected $code = 'OT';
-    private $amounts;   
+    private $amount;
+    private $value;   
 
-    function __construct($amounts)
+    function __construct($amount, $value)
     {
-        $this->amounts = $amounts;        
+        $this->amount = $amount;
+        $this->value = $value;        
     }    
 
-    public function calculate(){
-        if(empty($this->amounts)) return 0;
-        return array_sum($this->amounts);
+    public function calculate(){        
+        return $this->amount * $this->value;
     }
 }

@@ -12,6 +12,7 @@ return array (
     'overtime_date' => 'Overtime Date',
     'start_hour' => 'Start Hour',
     'end_hour' => 'End Hour',
+    'breaktime_value' => 'Breaktime',
     'start_hour_real' => 'Start Hour Real',
     'end_hour_real' => 'End Hour Real',
     'raw_value' => 'Raw Value',

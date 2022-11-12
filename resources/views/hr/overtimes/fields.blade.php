@@ -47,6 +47,17 @@
 </div>
 </div>
 
+<!-- Breaktime Value Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('breaktime_value', __('models/overtimes.fields.breaktime_value').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    <div class="input-group">
+    {!! Form::text('breaktime_value', null, ['class' => 'form-control inputmask','data-optionmask' => json_encode(config('local.number.integer'))]) !!}
+    <span class="input-group-text">Minute</span>
+    </div>    
+</div>
+</div>
+
 @if (isset($overtime))
 <!-- Start Hour Real Field -->
 <div class="form-group row mb-3">

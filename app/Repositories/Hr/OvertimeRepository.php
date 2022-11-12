@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Hr;
 
+use App\Library\SalaryComponent\Overtime as SalaryComponentOvertime;
 use App\Models\Hr\Overtime;
+use App\Models\Hr\SalaryBenefit;
 use App\Repositories\BaseRepository;
 
 /**
@@ -79,5 +81,26 @@ class OvertimeRepository extends BaseRepository
         }
 
         return $model;
+    }
+
+    public function update($input, $id)
+    {
+        $this->model->getConnection()->beginTransaction();
+        try{
+            $query = $this->model->newQuery();
+            $model = $query->findOrFail($id);
+            $model->fill($input);
+            $salaryBenefit = SalaryBenefit::where(['employee_id' => $model->employee_id])->where('component_id', function($q){
+                return $q->select(['id'])->from('salary_components')->where(['code' => 'OT']);
+            })->first();
+            $amountOvertime = $salaryBenefit->getRawOriginal('benefit_value');
+            $model->amount = (new  SalaryComponentOvertime(minuteToHour($model->calculated_value) , $amountOvertime))->calculate();
+            $model->save();
+            $this->model->getConnection()->commit();
+            return $model;
+        } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }
     }
 }

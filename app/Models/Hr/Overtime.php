@@ -123,6 +123,7 @@ class Overtime extends Model
         'overtime_date',
         'start_hour',
         'end_hour',
+        'breaktime_value',
         'start_hour_real',
         'end_hour_real',
         'raw_value',
@@ -210,5 +211,16 @@ class Overtime extends Model
 
     public function isSundayOvertime(){
         return Carbon::parse($this->attributes['overtime_date'])->dayOfWeek == Carbon::SUNDAY;
+    }
+
+    public function getRawStartHourDate(){
+        return $this->attributes['overtime_date'].' '.$this->attributes['start_hour'];
+    }
+
+    public function getRawEndHourDate(){
+        if($this->attributes['overday']){
+            return Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d').' '.$this->attributes['end_hour'];    
+        }
+        return $this->attributes['overtime_date'].' '.$this->attributes['end_hour'];
     }
 }
