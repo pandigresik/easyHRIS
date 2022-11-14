@@ -144,7 +144,7 @@ class Overtime extends Model
         'employee_id' => 'integer',
         'shiftment_id' => 'integer',
         'approved_by_id' => 'integer',
-        'overtime_date' => 'date',
+        'overtime_date' => 'date:Y-m-d',
         'raw_value' => 'float',
         'calculated_value' => 'float',
         'holiday' => 'boolean',

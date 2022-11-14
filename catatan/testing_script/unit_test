@@ -1,0 +1,1 @@
+php artisan test tests\Unit\CalculateOvertimeTest.php --stop-on-failure --env=testing
