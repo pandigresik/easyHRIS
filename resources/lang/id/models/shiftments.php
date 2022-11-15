@@ -10,5 +10,6 @@ return array (
     'name' => 'Name',
     'start_hour' => 'Start Hour',
     'end_hour' => 'End Hour',
+    'next_day' => 'Next Day'
   ),
 );

@@ -19,7 +19,7 @@
         {!! Form::select('employee_id[]', [], null, array_merge(['class' => 'form-control select2','id' =>
         'employee_id', 'data-filter' => json_encode([]), 'data-url' =>
         route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple' ],
-        config('local.select2.ajax')) ) !!}
+        config('local.select2.ajax')) ) !!}        
     </div>
 </div>
 

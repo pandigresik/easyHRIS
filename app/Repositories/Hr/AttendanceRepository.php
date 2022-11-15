@@ -108,11 +108,11 @@ class AttendanceRepository extends BaseRepository
             $processResult = $this->processEmployeeAttendance($log, $workshift, $overtime, $leave);
             if(!empty($processResult['attendance'])){
                 Attendance::upsert($processResult['attendance'], ['employee_id', 'attendance_date']);
-            }
-
+            }            
+            
             if(!empty($processResult['overtime'])){
-                foreach($processResult['overtime'] as $overtime){
-                    $overtime->save();
+                foreach($processResult['overtime'] as $ot){                    
+                    $ot->save();                    
                 }
             }
         }
@@ -205,10 +205,12 @@ class AttendanceRepository extends BaseRepository
             }
                       
             $attendanceResult[] = $tmp;
-            if(!empty($fingerClassification['overtimes'])){
+            if(!empty($fingerClassification['overtimes'])){                
                 foreach($fingerClassification['overtimes'] as $ot){
-                    $amountOvertime = $overtimeCurrentDate->benefit->getRawOriginal('benefit_value') ?? 0;                    
-                    $overtimeCurrentDate->amount = (new SalaryComponentOvertime(minuteToHour($ot->getRawOriginal('calculated_value')) , $amountOvertime))->calculate();
+                    $amountOvertime = $ot->benefit->getRawOriginal('benefit_value') ?? 0;                    
+                    // not use calculated_value because maybe calculated value formated not as number
+                    $ot->amount = (new SalaryComponentOvertime(minuteToHour($ot->raw_calculated_value) , $amountOvertime))->calculate();
+                    unset($ot->raw_calculated_value);
                     $overtimeResult[] = $ot;
                 }                
             }

@@ -66,7 +66,9 @@ class OvertimeRepository extends BaseRepository
         try {
             $employees = $input['employee_id'];
             unset($input['employee_id']);
-            
+            if(is_null($input['breaktime_value'])){
+                $input['breaktime_value'] = 0;
+            }
             foreach($employees as $employee){                
                 $input['employee_id'] = $employee;
                 $model = parent::create($input);

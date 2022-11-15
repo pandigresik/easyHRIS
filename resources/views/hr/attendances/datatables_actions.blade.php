@@ -1,6 +1,6 @@
 {!! Form::open(['route' => ['hr.attendances.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group'>    
-    <a href="{{ route('hr.attendances.edit', $id) }}" class='btn btn-ghost-info'>
+    <a href="#" data-json="{}" data-url="{{ route('hr.attendanceLogfingers.detailLog', [$raw_attendance_date, $employee_id]) }}" onclick="main.popupModal(this, 'get');return false;" class='btn btn-ghost-info'>
        <i class="fa fa-list"></i>
     </a>
     {!! Form::button('<i class="fa fa-trash"></i>', [

@@ -55,7 +55,7 @@ class AttendanceDataTable extends DataTable
      */
     public function query(Attendance $model)
     {
-        return $model->with(['employee', 'shiftment','reason'])->newQuery();
+        return $model->selectRaw($model->getTable().'.*, attendance_date as raw_attendance_date')->with(['employee', 'shiftment','reason'])->newQuery();
     }
 
     /**
@@ -135,10 +135,10 @@ class AttendanceDataTable extends DataTable
             //'check_out_schedule' => new Column(['title' => __('models/attendances.fields.check_out_schedule'),'name' => 'check_out_schedule', 'data' => 'check_out_schedule', 'searchable' => true, 'elmsearch' => 'text']),
             'check_in' => new Column(['title' => __('models/attendances.fields.check_in'),'name' => 'check_in', 'data' => 'check_in', 'searchable' => false, 'elmsearch' => 'text']),
             'check_out' => new Column(['title' => __('models/attendances.fields.check_out'),'name' => 'check_out', 'data' => 'check_out', 'searchable' => false, 'elmsearch' => 'text']),
-            'early_in' => new Column(['title' => __('models/attendances.fields.early_in'),'name' => 'early_in', 'data' => 'early_in', 'searchable' => false, 'elmsearch' => 'text']),
-            'early_out' => new Column(['title' => __('models/attendances.fields.early_out'),'name' => 'early_out', 'data' => 'early_out', 'searchable' => false, 'elmsearch' => 'text']),
-            'late_in' => new Column(['title' => __('models/attendances.fields.late_in'),'name' => 'late_in', 'data' => 'late_in', 'searchable' => false, 'elmsearch' => 'text']),
-            'late_out' => new Column(['title' => __('models/attendances.fields.late_out'),'name' => 'late_out', 'data' => 'late_out', 'searchable' => false, 'elmsearch' => 'text']),
+            'early_in' => new Column(['title' => __('models/attendances.fields.early_in').' (minutes)','name' => 'early_in', 'data' => 'early_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
+            'early_out' => new Column(['title' => __('models/attendances.fields.early_out').' (minutes)','name' => 'early_out', 'data' => 'early_out', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
+            'late_in' => new Column(['title' => __('models/attendances.fields.late_in').' (minutes)','name' => 'late_in', 'data' => 'late_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
+            'late_out' => new Column(['title' => __('models/attendances.fields.late_out').' (minutes)','name' => 'late_out', 'data' => 'late_out', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             // 'absent' => new Column(['title' => __('models/attendances.fields.absent'),'name' => 'absent', 'data' => 'absent', 'searchable' => true, 'elmsearch' => 'text']),
             'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple'])
         ];

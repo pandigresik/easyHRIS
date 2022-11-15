@@ -46,13 +46,13 @@ class Shiftment extends Model
 
     protected $dates = ['deleted_at'];
 
-
-
+    
     public $fillable = [
         'code',
         'name',
         'start_hour',
-        'end_hour'
+        'end_hour',
+        'next_day'
     ];
 
     /**
@@ -63,7 +63,8 @@ class Shiftment extends Model
     protected $casts = [
         'id' => 'integer',
         'code' => 'string',
-        'name' => 'string'
+        'name' => 'string',
+        'next_day' => 'boolean'
     ];
 
     /**

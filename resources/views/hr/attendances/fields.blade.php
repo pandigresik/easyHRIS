@@ -3,7 +3,11 @@
     {!! Form::label('shiftment_group_id', __('models/workshiftGroups.fields.shiftment_group_id').':', ['class' =>
     'col-md-2 col-form-label']) !!}
     <div class="col-md-10">
-        {!! Form::select('shiftment_group_id[]', $shiftmentGroupItems, null, ['class' => 'form-control select2', 'required' => 'required', 'multiple' => 'multiple', 'onchange' => 'updateFilterEmployee(this)']) !!}
+        {!! Form::select('shiftment_group_id[]', $shiftmentGroupItems, null, ['id' => 'shiftment_group_id', 'class' => 'form-control select2', 'required' => 'required', 'multiple' => 'multiple', 'onchange' => 'updateFilterEmployee(this)']) !!}
+        <label class="checkbox-inline">                                            
+            {!! Form::checkbox('', '1', null,['onchange' => 'main.select2AllOption(this,\'#shiftment_group_id\')']) !!}
+            pilih semua
+        </label>
     </div>
 </div>
 
@@ -12,7 +16,7 @@
     {!! Form::label('employee_id', __('models/workshifts.fields.employee_id').':', ['class' => 'col-md-2
     col-form-label']) !!}
     <div class="col-md-10">
-        {!! Form::select('employee_id[]', [], null, array_merge(['class' => 'form-control select2', 'id' => 'employee_id', 'data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple' ], config('local.select2.ajax')) ) !!}
+        {!! Form::select('employee_id[]', [], null, array_merge(['class' => 'form-control select2', 'id' => 'employee_id', 'data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple' ], config('local.select2.ajax')) ) !!}        
     </div>
 </div>
 

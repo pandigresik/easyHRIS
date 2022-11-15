@@ -9,7 +9,8 @@ use App\Repositories\Hr\AttendanceLogfingerRepository;
 use App\Repositories\Hr\FingerprintDeviceRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
-use App\Models\Hr\Employee;
+use App\Models\Hr\Workshift;
+use Carbon\Carbon;
 use Response;
 use Exception;
 
@@ -178,5 +179,15 @@ class AttendanceLogfingerController extends AppBaseController
             'absentTypeItems' => self::ABSEN_TYPE,
             'fingerprintDeviceItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $fingerprintDevice->pluck()
         ];
+    }
+
+    public function detailLog(String $workDate, int $employeeId)
+    {
+        $workshift = Workshift::select(['start_hour', 'end_hour'])->where(['employee_id' => $employeeId, 'work_date' => $workDate])->first();        
+        $startWorkshift = Carbon::parse($workshift->getRawOriginal('start_hour'))->subMinutes(120);
+        $endWorkshift = Carbon::parse($workshift->getRawOriginal('end_hour'))->addMinutes(420);
+        $attendanceLogfinger = $this->getRepositoryObj()->allQuery()->with(['employee'])->where(['employee_id' => $employeeId])->whereBetween('fingertime', [$startWorkshift, $endWorkshift])->get();        
+
+        return view('hr.attendance_logfingers.detail_log')->with('attendanceLogfinger', $attendanceLogfinger);
     }
 }

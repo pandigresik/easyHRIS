@@ -21,3 +21,18 @@ html:not([dir=rtl]) .wrapper {
 .sidebar-nav .nav-group-items .nav-link{
     padding-left: 5rem;
 }
+/* custom close button di modal*/
+.modal-body > .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5rem 0.75rem;
+    z-index: 1;
+}
+
+button.close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}

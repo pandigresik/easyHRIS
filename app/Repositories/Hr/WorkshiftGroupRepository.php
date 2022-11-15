@@ -102,7 +102,7 @@ class WorkshiftGroupRepository extends BaseRepository
                 $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
             }
             
-            $selectedShiftment = ['id' => $shifment[$currentShiftment]->id, 'code' => $shifment[$currentShiftment]->code, 'name' => $shifment[$currentShiftment]->name];
+            $selectedShiftment = ['id' => $shifment[$currentShiftment]->id, 'code' => $shifment[$currentShiftment]->code, 'name' => $shifment[$currentShiftment]->name, 'next_day' => $shifment[$currentShiftment]->next_day ];
             $selectedShiftment['start_hour'] = $currentScheduleShiftment[$date->dayOfWeek]->start_hour;
             $selectedShiftment['end_hour'] = $currentScheduleShiftment[$date->dayOfWeek]->end_hour;
             

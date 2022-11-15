@@ -211,23 +211,23 @@ class WorkshiftGroupController extends AppBaseController
                 'start' => $date,
                 'color' => $event['start_hour'] == $event['end_hour'] ? 'red' : 'green'
             ];
-            // $events[] = [
-            //     'title' => 'Masuk',
-            //     'allDay' => false,
-            //     'start' => $date.' '.$event['start_hour'],                
-            //     'color' => $event['start_hour'] == $event['end_hour'] ? 'red' : 'green'
-            // ];
-            // $events[] = [
-            //     'title' => 'Pulang',
-            //     'allDay' => false,
-            //     'start' => $date.' '.$event['end_hour'],                
-            //     'color' => $event['start_hour'] == $event['end_hour'] ? 'red' : 'green'
-            // ];
+            
+            $startHourShift = $date.' '.$event['start_hour'];
+            $endHourShift = $date.' '.$event['end_hour'];
+            if($event['next_day']){
+                $startHourShift = Carbon::parse($date)->addDay()->format('Y-m-d').' '.$event['start_hour'];
+                $endHourShift = Carbon::parse($date)->addDay()->format('Y-m-d').' '.$event['end_hour'];
+            }else{
+                if($event['start_hour'] > $event['end_hour']){
+                    $endHourShift = Carbon::parse($date)->addDay()->format('Y-m-d').' '.$event['end_hour']; 
+                }
+            }
+
             $dataInsert[] = [
                 'work_date' => $date,
                 'shiftment_id' => $event['id'],
-                'start_hour' => $date.' '.$event['start_hour'],
-                'end_hour' => $event['start_hour'] > $event['end_hour'] ? Carbon::parse($date)->addDay()->format('Y-m-d').' '.$event['end_hour'] : $date.' '.$event['end_hour'],
+                'start_hour' => $startHourShift,
+                'end_hour' => $endHourShift,
             ];
         }
         return view('hr.workshift_groups.calendar', compact('events', 'eventTimeFormat', 'initialDate', 'dataInsert'));

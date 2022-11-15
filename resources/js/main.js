@@ -750,6 +750,17 @@ class Main {
             _callback();
         }
     }
+
+    select2AllOption(elm, ref){        
+        if($(elm).is(':checked')){
+            $(`${ref} > option`).prop("selected", "selected");
+            $(ref).trigger("change");
+        }else{
+            let _formgroup = $(ref).closest('.form-group');
+            _formgroup.find('button.select2-selection__clear').click();
+            $(ref).trigger("change");
+        }
+    }
 }
 
 export default new Main()

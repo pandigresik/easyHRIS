@@ -102,6 +102,10 @@ class AttendanceLogfinger extends Model
         return localFormatDateTime($value);
     }
 
+    public function getRawFingertimeAttribute($value){
+        return $this->attributes['fingertime'];
+    }
+
     public function getFingerDateAttribute($value){
         return Carbon::parse($this->attributes['fingertime'])->format('Y-m-d');
     }

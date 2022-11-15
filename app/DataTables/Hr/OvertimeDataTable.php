@@ -15,6 +15,7 @@ class OvertimeDataTable extends DataTable
     */
     private $columnFilterOperator = [
         'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'shiftment_id' => \App\DataTables\FilterClass\InKeyword::class,        
     ];
     
@@ -119,7 +120,8 @@ class OvertimeDataTable extends DataTable
         $shiftmentRepository = new ShiftmentRepository();        
         $shiftmentItem = convertArrayPairValueWithKey($shiftmentRepository->pluck());
         return [
-            'employee.full_name' => new Column(['title' => __('models/overtimes.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.full_name' => new Column(['title' => __('models/overtimes.fields.employee_full_name'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.code' => new Column(['title' => __('models/overtimes.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/overtimes.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'listItem' => $shiftmentItem, 'multiple' => 'multiple' ,'elmsearch' => 'dropdown']),
             // 'approved_by_id' => new Column(['title' => __('models/overtimes.fields.approved_by_id'),'name' => 'approved_by_id', 'data' => 'approved_by_id', 'searchable' => true, 'elmsearch' => 'text']),
             'overtime_date' => new Column(['title' => __('models/overtimes.fields.overtime_date'),'name' => 'overtime_date', 'data' => 'overtime_date', 'searchable' => true, 'elmsearch' => 'text']),
@@ -127,7 +129,7 @@ class OvertimeDataTable extends DataTable
             'end_hour' => new Column(['title' => __('models/overtimes.fields.end_hour'),'name' => 'end_hour', 'data' => 'end_hour', 'searchable' => true, 'elmsearch' => 'text']),
             'start_hour_real' => new Column(['title' => __('models/overtimes.fields.start_hour_real'),'name' => 'start_hour_real', 'data' => 'start_hour_real', 'searchable' => true, 'elmsearch' => 'text']),
             'end_hour_real' => new Column(['title' => __('models/overtimes.fields.end_hour_real'),'name' => 'end_hour_real', 'data' => 'end_hour_real', 'searchable' => true, 'elmsearch' => 'text']),
-            'raw_value' => new Column(['title' => __('models/overtimes.fields.raw_value'),'name' => 'raw_value', 'data' => 'raw_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
+            // 'raw_value' => new Column(['title' => __('models/overtimes.fields.raw_value'),'name' => 'raw_value', 'data' => 'raw_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'calculated_value' => new Column(['title' => __('models/overtimes.fields.calculated_value'),'name' => 'calculated_value', 'data' => 'calculated_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'holiday' => new Column(['title' => __('models/overtimes.fields.holiday'),'name' => 'holiday', 'data' => 'holiday', 'searchable' => false, 'elmsearch' => 'text']),
             'overday' => new Column(['title' => __('models/overtimes.fields.overday'),'name' => 'overday', 'data' => 'overday', 'searchable' => false, 'elmsearch' => 'text']),

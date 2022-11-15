@@ -213,6 +213,10 @@ class Attendance extends Model
         return localFormatDate($value);
     }
 
+    public function getRawAttendanceDateAttribute($value){
+        return $this->attributes['attendance_date'];
+    }
+
     public function getCheckInAttribute($value){
         return localFormatDateTime($value);
     }

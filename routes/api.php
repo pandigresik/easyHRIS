@@ -23,6 +23,7 @@ Route::group(['prefix' => 'base'], function () {
     Route::resource('departments', Base\DepartmentAPIController::class);
     Route::resource('regions', Base\RegionAPIController::class);
     Route::resource('settings', Base\SettingAPIController::class);
+    Route::resource('business_units', Base\BusinessUnitAPIController::class);
 });
 
 
@@ -72,18 +73,7 @@ Route::group(['prefix' => 'hr'], function () {
     Route::resource('workshifts', Hr\WorkshiftAPIController::class);
     Route::resource('request_workshifts', Hr\RequestWorkshiftAPIController::class);
     Route::resource('workshift_groups', Hr\WorkshiftGroupAPIController::class);
-});
 
-Route::group(['prefix' => 'hr'], function () {
-    Route::resource('payroll_period_groups', App\Http\Controllers\API\Hr\Hr\PayrollPeriodGroupAPIController::class);
-});
-
-
-Route::group(['prefix' => 'hr'], function () {
-    Route::resource('ritase_drivers', App\Http\Controllers\API\Hr\Hr\RitaseDriverAPIController::class);
-});
-
-
-Route::group(['prefix' => 'base'], function () {
-    Route::resource('business_units', App\Http\Controllers\API\Base\Base\BusinessUnitAPIController::class);
+    Route::resource('payroll_period_groups', Hr\PayrollPeriodGroupAPIController::class);
+    Route::resource('ritase_drivers', Hr\RitaseDriverAPIController::class);
 });

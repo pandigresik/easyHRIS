@@ -48,6 +48,7 @@ class OvertimeDay{
             $startOvertime = $ot->getRawStartHourDate();
             $endOvertime = $ot->getRawEndHourDate();
             $breakTime = $ot->getRawOriginal('breaktime_value');
+            $finalCalculateValue = 0;
             // lembur awal
             if($checkInRealObj->lessThanOrEqualTo($startOvertime)){
                 if($startOvertime < $startWorkshift){
@@ -57,7 +58,7 @@ class OvertimeDay{
                         $calculateValue = Carbon::parse($startOvertime)->diffInMinutes($endOvertime);
                         $rawValue = $checkInRealObj->diffInMinutes($endOvertime);
                         $ot->raw_value = $rawValue;
-                        $ot->calculated_value = $calculateValue - $breakTime;    
+                        $finalCalculateValue = $calculateValue - $breakTime;                            
                     }
                 }            
                 
@@ -73,7 +74,7 @@ class OvertimeDay{
                             $rawValue = Carbon::parse($startOvertime)->diffInMinutes($checkOutRealObj);
                         }                                                                        
                         $ot->raw_value = $rawValue;
-                        $ot->calculated_value = $rawValue - $breakTime;
+                        $finalCalculateValue = $rawValue - $breakTime;
                     }
                 }
             }
@@ -90,10 +91,11 @@ class OvertimeDay{
                     }                                        
                     
                     $ot->raw_value = $rawValue;
-                    $ot->calculated_value = $calculateValue - $breakTime;
+                    $finalCalculateValue = $calculateValue - $breakTime;
                 }
             }                        
-            $ot->syncOriginal();
+            $ot->raw_calculated_value = $finalCalculateValue;
+            $ot->calculated_value = $finalCalculateValue;
             $this->result['overtimes'][] = $ot;            
         }
     }

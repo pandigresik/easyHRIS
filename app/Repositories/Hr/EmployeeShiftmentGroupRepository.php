@@ -70,6 +70,7 @@ class EmployeeShiftmentGroupRepository extends BaseRepository
     public function paginate($perPage, $currentPage = 1, $columns = ['*'], $search = [])
     {
         $columns[] = 'code';
+        $search['column'][] = 'code';
         $dataPaging = parent::paginate($perPage, $currentPage , $columns, $search);
         $dataPaging->getCollection()->map(function($item){            
             return $item['text'] = $item['text'].' ( '.$item['code'].' )';

@@ -58,7 +58,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('jobMutations', Hr\JobMutationController::class, ["as" => 'hr']);
         Route::resource('jobPlacements', Hr\JobPlacementController::class, ["as" => 'hr']);
         Route::resource('jobTitles', Hr\JobTitleController::class, ["as" => 'hr']);
-        Route::resource('attendanceLogfingers', Hr\AttendanceLogfingerController::class, ["as" => 'hr']);
+        Route::get('attendanceLogfingers/detail/{workDate}/{employeeId}', [App\Http\Controllers\Hr\AttendanceLogfingerController::class, 'detailLog'])->name('hr.attendanceLogfingers.detailLog');
+        Route::resource('attendanceLogfingers', Hr\AttendanceLogfingerController::class, ["as" => 'hr']);        
         Route::resource('attendanceSummaries', Hr\AttendanceSummaryController::class, ["as" => 'hr']);
         Route::resource('attendances', Hr\AttendanceController::class, ["as" => 'hr']);
         

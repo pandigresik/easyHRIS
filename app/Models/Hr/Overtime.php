@@ -104,7 +104,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Overtime extends Model
 {
     use HasFactory;
-        use SoftDeletes;
+    use SoftDeletes;
 
     public $table = 'overtimes';
     
@@ -215,7 +215,7 @@ class Overtime extends Model
 
     public function getRawStartHourDate(){
         return $this->attributes['overtime_date'].' '.$this->attributes['start_hour'];
-    }
+    }    
 
     public function getRawEndHourDate(){
         if($this->attributes['overday']){
