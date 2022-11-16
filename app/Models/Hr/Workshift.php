@@ -46,8 +46,6 @@ class Workshift extends Model
 
     protected $dates = ['deleted_at'];
 
-
-
     public $fillable = [
         'employee_id',
         'shiftment_id',
@@ -67,7 +65,7 @@ class Workshift extends Model
         'employee_id' => 'integer',
         'shiftment_id' => 'integer',
         'description' => 'string',
-        'work_date' => 'date',
+        'work_date' => 'date:Y-m-d',
         'start_hour' => 'datetime',
         'end_hour' => 'datetime',
     ];
@@ -114,5 +112,13 @@ class Workshift extends Model
 
     public function isOffShift(){
         return $this->attributes['start_hour'] == $this->attributes['end_hour'];
+    }
+
+    public function isEndOverDay(){        
+        return explode(' ',$this->attributes['end_hour'])[0] != $this->attributes['work_date'];
+    }
+
+    public function isStartOverDay(){
+        return explode(' ',$this->attributes['start_hour'])[0] != $this->attributes['work_date'];
     }
 }

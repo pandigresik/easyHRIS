@@ -107,14 +107,13 @@ class Overtime extends Model
     use SoftDeletes;
 
     public $table = 'overtimes';
-    
+    protected $hidden = ['raw_calculated_value'];
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
     protected $dates = ['deleted_at'];
-
-
+    private $startValidOvertimeDate;
+    private $endValidOvertimeDate;
 
     public $fillable = [
         'employee_id',
@@ -214,13 +213,32 @@ class Overtime extends Model
     }
 
     public function getRawStartHourDate(){
-        return $this->attributes['overtime_date'].' '.$this->attributes['start_hour'];
+        $validDate = $this->startValidOvertimeDate ?? $this->attributes['overtime_date'];
+        return $validDate.' '.$this->attributes['start_hour'];
     }    
 
     public function getRawEndHourDate(){
-        if($this->attributes['overday']){
-            return Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d').' '.$this->attributes['end_hour'];    
+        // if($this->attributes['overday']){
+        //     return Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d').' '.$this->attributes['end_hour'];    
+        // }
+        $validDate = $this->endValidOvertimeDate ?? $this->attributes['overtime_date'];
+        return $validDate.' '.$this->attributes['end_hour'];
+    }
+    
+    public function setValidOvertimeDate(Workshift $workshift){
+        // contoh lembur jam 22:00 sd 00:00
+        if($this->attributes['start_hour'] > $this->attributes['end_hour']){
+            $this->endValidOvertimeDate = Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d');
+            echo 'masuk sini';
         }
-        return $this->attributes['overtime_date'].' '.$this->attributes['end_hour'];
+
+        // lembur akhir atau ditengah shift 3
+        if($workshift->isEndOverDay()){
+            echo 'masuk sini overday';            
+            $this->endValidOvertimeDate = Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d');
+            if($this->attributes['start_hour'] < $this->attributes['end_hour']){
+                $this->startValidOvertimeDate = $this->endValidOvertimeDate;
+            }
+        }
     }
 }

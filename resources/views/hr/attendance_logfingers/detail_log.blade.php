@@ -1,23 +1,19 @@
-<h3>Data absensi karyawan</h3>
+<h4>Data Fingerprint {{ $workshift->employee->full_name }} ( {{ $workshift->employee->code }} ) Tanggal {{ $workshift->work_date }} </h4>
 <div class="table-responsive">    
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Nama</th>
-                <th>NIK</th>
                 <th>Waktu Absensi</th>
             </tr>
         </thead>
         <tbody>
             @forelse($attendanceLogfinger as $log)
-                <tr>
-                    <td>{{ $log->employee->full_name }}</td>
-                    <td>{{ $log->employee->code }}</td>
+                <tr>                    
                     <td>{{ $log->fingertime }}</td>
                 </tr>
             @empty
             <tr>
-                <td colspan="3">Data tidak ditemukan</td>
+                <td>Data tidak ditemukan</td>
             </tr>
             @endforelse
         </tbody>

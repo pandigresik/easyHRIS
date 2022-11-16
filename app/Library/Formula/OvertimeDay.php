@@ -35,18 +35,19 @@ class OvertimeDay{
         $endWorkshift = $this->workshift->getRawOriginal('end_hour');
         $checkInReal = $this->result['checkin'];
         $checkOutReal = $this->result['checkout'];
+        
         if(is_null($checkInReal) || is_null($checkOutReal)){
             foreach($this->overtimes as $ot){
                 $this->result['overtimes'][] = $ot; 
             }
             return;
-        }        
+        }
         
         $checkInRealObj = Carbon::parse($checkInReal);
         $checkOutRealObj = Carbon::parse($checkOutReal);
-        foreach($this->overtimes as $ot){
+        foreach($this->overtimes as $ot){            
             $startOvertime = $ot->getRawStartHourDate();
-            $endOvertime = $ot->getRawEndHourDate();
+            $endOvertime = $ot->getRawEndHourDate();        
             $breakTime = $ot->getRawOriginal('breaktime_value');
             $finalCalculateValue = 0;
             // lembur awal
@@ -104,6 +105,7 @@ class OvertimeDay{
         $this->startHour = $this->workshift->getRawOriginal('start_hour');
         $this->endHour = $this->workshift->getRawOriginal('end_hour');        
         foreach($this->overtimes as $ot){
+            $ot->setValidOvertimeDate($this->workshift);
             $startOvertime = $ot->getRawStartHourDate();
             $endOvertime = $ot->getRawEndHourDate();            
             if($startOvertime < $this->startHour){

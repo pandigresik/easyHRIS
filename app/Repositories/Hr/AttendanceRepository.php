@@ -101,10 +101,11 @@ class AttendanceRepository extends BaseRepository
         $overtimes = $this->listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId);            
         $leaves = $this->listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId);
         
-        foreach($workshifts as $employee => $workshift){
+        foreach($workshifts as $employee => $workshift){            
             $log = $attandanceLogs[$employee] ?? collect([]);
             $overtime = $overtimes[$employee] ?? collect([]); 
             $leave = $leaves[$employee] ?? collect([]);
+                        
             $processResult = $this->processEmployeeAttendance($log, $workshift, $overtime, $leave);
             if(!empty($processResult['attendance'])){
                 Attendance::upsert($processResult['attendance'], ['employee_id', 'attendance_date']);
@@ -126,7 +127,13 @@ class AttendanceRepository extends BaseRepository
         $leaveDate = $leave->keyBy(function($item){ return $item->getRawOriginal('leave_date');});        
         $attendanceResult = [];
         $overtimeResult = [];
-        foreach($workshiftDate as $date => $schedule){            
+        foreach($workshiftDate as $date => $schedule){
+            $resignDate = $schedule->employee->getRawOriginal('resign_date');
+            if($resignDate){
+                if($schedule->getRawOriginal('work_date') >= $resignDate){
+                    continue;
+                }
+            }            
             /** ambil juga data hari berikutnya untuk case shift 2,3 dan lembur */
             $prevDate = Carbon::parse($date)->subDay()->format('Y-m-d');
             $nextDate = Carbon::parse($date)->addDay()->format('Y-m-d');
@@ -196,8 +203,15 @@ class AttendanceRepository extends BaseRepository
                             $tmp['state'] = 'OK';
                         }
                     }                    
-                }
+                }                
                 $tmp['absent'] = 0;
+                // jika checkin dan checkout null maka set sebagai absent
+                if(is_null($tmp['check_out']) && is_null($tmp['check_in']) ){                    
+                    if($tmp['state'] == 'INVALID'){
+                        $tmp['absent'] = 1;
+                        $tmp['state'] = 'ABSENT';
+                    }
+                }
             }else{
                 if($tmp['state'] == 'INVALID'){
                     $tmp['state'] = 'ABSENT';
@@ -240,7 +254,10 @@ class AttendanceRepository extends BaseRepository
     }
 
     private function listWorkshift($startDate, $endDate, $shiftmentGroup, $employeeId){
-        $att = Workshift::select(['shiftment_id','employee_id', 'work_date', 'start_hour', 'end_hour'])->whereBetween('work_date',[$startDate,$endDate])->orderBy('work_date');
+        $att = Workshift::select(['shiftment_id','employee_id', 'work_date', 'start_hour', 'end_hour'])
+            ->with(['employee' => function($q){
+                return $q->select(['id', 'resign_date']);
+            }])->whereBetween('work_date',[$startDate,$endDate])->orderBy('work_date');
         if(!empty($employeeId)){    
             $att->whereIn('employee_id', $employeeId);         
         }else{

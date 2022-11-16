@@ -183,11 +183,13 @@ class AttendanceLogfingerController extends AppBaseController
 
     public function detailLog(String $workDate, int $employeeId)
     {
-        $workshift = Workshift::select(['start_hour', 'end_hour'])->where(['employee_id' => $employeeId, 'work_date' => $workDate])->first();        
-        $startWorkshift = Carbon::parse($workshift->getRawOriginal('start_hour'))->subMinutes(120);
-        $endWorkshift = Carbon::parse($workshift->getRawOriginal('end_hour'))->addMinutes(420);
-        $attendanceLogfinger = $this->getRepositoryObj()->allQuery()->with(['employee'])->where(['employee_id' => $employeeId])->whereBetween('fingertime', [$startWorkshift, $endWorkshift])->get();        
+        $workshift = Workshift::select(['start_hour', 'end_hour','employee_id', 'work_date'])->with(['employee' => function($q){
+            return $q->select(['id', 'full_name', 'code']);
+        }])->where(['employee_id' => $employeeId, 'work_date' => $workDate])->first();
+        $startWorkshift = Carbon::parse($workshift->getRawOriginal('start_hour'))->subMinutes(240);
+        $endWorkshift = Carbon::parse($workshift->getRawOriginal('end_hour'))->addMinutes(360);
+        $attendanceLogfinger = $this->getRepositoryObj()->allQuery()->where(['employee_id' => $employeeId])->whereBetween('fingertime', [$startWorkshift, $endWorkshift])->get();        
 
-        return view('hr.attendance_logfingers.detail_log')->with('attendanceLogfinger', $attendanceLogfinger);
+        return view('hr.attendance_logfingers.detail_log')->with(['attendanceLogfinger' => $attendanceLogfinger, 'workshift' => $workshift]);
     }
 }
