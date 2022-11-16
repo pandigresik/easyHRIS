@@ -7,7 +7,7 @@ use App\Library\SalaryComponent\DoubleRitase;
 use App\Library\SalaryComponent\DoubleSalary;
 use App\Library\SalaryComponent\GajiPokokHarian;
 use App\Library\SalaryComponent\Kilometer;
-use App\Library\SalaryComponent\Overtime;
+use App\Library\SalaryComponent\SummaryOvertime;
 use App\Library\SalaryComponent\PotonganKehadiran;
 use App\Library\SalaryComponent\PremiKehadiran;
 use App\Library\SalaryComponent\UangMakan;
@@ -93,7 +93,7 @@ class PayrollPeriodRepository extends BaseRepository
                 $overtimes = $this->getOvertimeEmployee($employeeId)->map(function($item){                    
                     return $item->getRawOriginal('amount');
                 })->toArray();         
-                $componentObj = new Overtime($overtimes);
+                $componentObj = new SummaryOvertime($overtimes);
                 break;
             // berdasarkan data absensi 
             case 'PTHD':                
@@ -105,8 +105,9 @@ class PayrollPeriodRepository extends BaseRepository
                 break;
             case 'PRHD':                          
                 $absentMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_absent');
-                $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');
-                $offMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_off');;
+                // $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');
+                $workDayMonthCount = 25; // dalam satu bulan default 25 hari
+                $offMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_off');                
                 $componentObj = new PremiKehadiran($workDayMonthCount, $value, $absentMonthCount, $offMonthCount);
                 break;
             case 'UM':        

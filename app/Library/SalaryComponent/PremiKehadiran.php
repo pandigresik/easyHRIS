@@ -34,7 +34,9 @@ class PremiKehadiran extends Component{
         if($this->absentCount >= 3){
             $pengurang = 1;
         }
-        $workDayCount = $this->amount - ($this->absentCount + $this->offCount);
-        return ($workDayCount * $this->value) - ($pengurang * $workDayCount * $this->value);
+        $premiDefault = $this->amount * $this->value;
+        $premiMinus = $this->value  * ($this->absentCount + $this->offCount);
+        $premiAmount = $premiDefault - $premiMinus;
+        return  $premiAmount - ($pengurang * $premiAmount);
     }
 }

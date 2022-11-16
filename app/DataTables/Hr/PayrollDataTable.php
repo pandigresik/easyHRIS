@@ -14,7 +14,8 @@ class PayrollDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,        
+        'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -48,9 +49,9 @@ class PayrollDataTable extends DataTable
     public function query(Payroll $model)
     {
         if($this->getPayrollPeriod()){
-            return $model->where(['payroll_period_id' => $this->getPayrollPeriod()])->with('employee')->newQuery();    
+            return $model->selectRaw($model->getTable().'.*')->where(['payroll_period_id' => $this->getPayrollPeriod()])->with('employee')->newQuery();    
         }
-        return $model->with('employee')->newQuery();
+        return $model->selectRaw($model->getTable().'.*')->with('employee')->newQuery();
     }
 
     /**
@@ -109,8 +110,8 @@ class PayrollDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'employee_id' => new Column(['title' => __('models/payrolls.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
-            'employee_code' => new Column(['title' => __('models/payrolls.fields.employee_code'),'name' => 'employee_code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.full_name' => new Column(['title' => __('models/payrolls.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.code' => new Column(['title' => __('models/payrolls.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
             // 'payroll_period_id' => new Column(['title' => __('models/payrolls.fields.payroll_period_id'),'name' => 'payroll_period_id', 'data' => 'payroll_period_id', 'searchable' => true, 'elmsearch' => 'text']),
             'take_home_pay' => new Column(['title' => __('models/payrolls.fields.take_home_pay'),'name' => 'take_home_pay', 'data' => 'take_home_pay', 'class' => 'text-end','searchable' => true, 'elmsearch' => 'text']),            
         ];

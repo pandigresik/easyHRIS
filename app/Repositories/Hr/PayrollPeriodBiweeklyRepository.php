@@ -37,13 +37,13 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             $employeeId = $input['employee_id'] ?? [];
             $bpjsFee = $input['bpjs_fee'] ?? [];
             $payrollPeriodGroupId = $input['payroll_period_group_id'] ?? NULL;
-            $this->setBpjsFee($bpjsFee);                        
-            foreach($periods as $_index => $period){                
-                $this->calculatePayroll($input['company_id'], $period, $payrollPeriodGroupId, $employeeId);
+            $this->setBpjsFee([]);
+            foreach($periods as $_index => $period){                                
                 if($_index){
-                    // jika dibagi menjadi 2 periode, maka set null potongan Bpjs periode yang kedua
-                    $this->setBpjsFee([]);
+                    // jika dibagi menjadi 2 periode, maka set potongan Bpjs periode yang kedua                    
+                    $this->setBpjsFee($bpjsFee);
                 }
+                $this->calculatePayroll($input['company_id'], $period, $payrollPeriodGroupId, $employeeId);
             }
             $this->model->getConnection()->commit();            
             return $this->model;
@@ -88,7 +88,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $this->setSummaryAttendanceEmployee([]);
         
         if($periodPayroll->isEndOfMonth()){
-            $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => $startDateObj->format('m')])->whereIn('employee_id', $listEmployees)->get()->groupBy('employee_id'));
+            $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => intval($startDateObj->format('m'))])->whereIn('employee_id', $listEmployees)->get()->groupBy('employee_id'));
         }
         
         $this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
@@ -115,17 +115,16 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
                 'benefit_value' => 0
             ];
             
+            if($benefit->component->fixed){
+                $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');                
+            }else{
+                $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee->id, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);                
+            }
             /** untuk tunjangan jabatan hanya diberikan di akhir bulan saja */
-            if( in_array($benefit->component->getRawOriginal('code') , config('local.benefit_end_of_month'))){
+            if(in_array($benefit->component->getRawOriginal('code') , config('local.benefit_end_of_month'))){
                 if(!$periodPayroll->isEndOfMonth()){
                     $tmp['benefit_value'] = 0;
                 }                
-            }else{
-                if($benefit->component->fixed){
-                    $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');                
-                }else{
-                    $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee->id, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);                
-                }
             }
 
             /** jika tidak ada dalam list potongan bpjs yang dipilih maka set 0 */
