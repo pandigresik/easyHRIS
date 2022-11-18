@@ -96,8 +96,8 @@ class PayrollPeriod extends Model
         'name' => 'string',
         'year' => 'integer',
         'month' => 'integer',
-        'start_period' => 'date',
-        'end_period' => 'date',
+        'start_period' => 'date:Y-m-d',
+        'end_period' => 'date:Y-m-d',
         'closed' => 'boolean'
     ];
 

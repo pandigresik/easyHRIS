@@ -24,6 +24,7 @@ return array (
     'date_of_birth' => 'Date Of Birth',
     'identity_number' => 'Identity Number',
     'identity_type' => 'Identity Type',
+    'account_bank' => 'Account Bank',
     'marital_status' => 'Marital Status',
     'email' => 'Email',
     'leave_balance' => 'Leave Balance',

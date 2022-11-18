@@ -104,6 +104,6 @@ class PayrollDetail extends Model
     }
 
     public function getBenefitValueAttribute($value){
-        return localNumberFormat($value);
+        return localNumberFormat($value, 0);
     }
 }

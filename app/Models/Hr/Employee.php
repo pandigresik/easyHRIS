@@ -67,6 +67,7 @@ class Employee extends Model
         'date_of_birth',
         'identity_number',
         'identity_type',
+        'account_bank',
         'marital_status',
         'email',
         'leave_balance',
@@ -105,6 +106,7 @@ class Employee extends Model
         'date_of_birth' => 'date',
         'identity_number' => 'string',
         'identity_type' => 'string',
+        'account_bank' => 'string',
         'marital_status' => 'string',
         'email' => 'string',
         'leave_balance' => 'integer',
@@ -370,7 +372,11 @@ class Employee extends Model
     {
         return $this->hasMany(\App\Models\Hr\TaxGroupHistory::class, 'employee_id');
     }
-
+    
+    public function groupPayrollEmployeeReport()
+    {
+        return $this->hasOne(\App\Models\Hr\GroupingPayrollEmployeeReport::class, 'employee_id');
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
@@ -393,6 +399,12 @@ class Employee extends Model
                 return $q->whereNull('resign_date');
             }
             return $q->whereNull('resign_date')->orWhere('resign_date','>=', $date);
+        });
+    }
+
+    public function scopeDriver($query){
+        return $query->where('jobtitle_id',function($q){
+            return $q->select(['id'])->from('job_titles')->where('name','like','%driver%');
         });
     }
 

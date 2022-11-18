@@ -17,7 +17,8 @@ class CreatePayrollsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->unsignedBigInteger('payroll_period_id')->nullable();
-            $table->decimal('take_home_pay',15, 2,true)->nullable();            
+            $table->decimal('take_home_pay',15, 2,true)->nullable();
+            $table->text('additional_info')->nullable();            
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

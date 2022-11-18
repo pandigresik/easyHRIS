@@ -12,9 +12,8 @@
              <div class="row">
                  <div class="col-lg-12">
                      <div class="card">
-                         <div class="card-header">
-                             <i class="fa fa-align-justify"></i>
-                             {{ $title }}                             
+                         <div class="card-header">                             
+                             <h4><i class="fa fa-align-justify"></i> {{ $title }}</h4>
                          </div>
                          <div class="card-body">                             
                              @include('hr.payroll_details.table')                             

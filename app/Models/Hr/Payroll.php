@@ -60,7 +60,8 @@ class Payroll extends Model
         'employee_id',
         'payroll_period_id',
         'take_home_pay',
-        'take_home_pay_key'
+        'take_home_pay_key',
+        'additional_info'
     ];
 
     /**
@@ -73,7 +74,8 @@ class Payroll extends Model
         'employee_id' => 'integer',
         'payroll_period_id' => 'integer',
         'take_home_pay' => 'string',
-        'take_home_pay_key' => 'string'
+        'take_home_pay_key' => 'string',
+        'additional_info' => 'array'
     ];
 
     /**

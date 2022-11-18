@@ -10,6 +10,7 @@ use App\Repositories\Hr\RitaseDriverRepository;
 use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\Employee;
 use Response;
 use Exception;
 
@@ -169,9 +170,9 @@ class RitaseDriverController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $employee = new EmployeeRepository();
+        $employee = Employee::driver()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id');
         return [
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck()            
+            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->toArray()
         ];
     }
 }

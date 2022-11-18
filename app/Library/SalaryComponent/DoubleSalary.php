@@ -1,7 +1,7 @@
 <?php
 namespace App\Library\SalaryComponent; 
 class DoubleSalary extends Component{
-    protected $code = 'TDDRT';
+    protected $code = 'TDGJ';
     private $amount;
     private $value;
 

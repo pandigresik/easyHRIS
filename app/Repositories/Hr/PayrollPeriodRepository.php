@@ -70,14 +70,15 @@ class PayrollPeriodRepository extends BaseRepository
         $result = $value;
         $componentObj = null;
         switch($code){
-            case 'TDGJ':
+            case 'TDDRT':
                 $doubleRitaseCount = $this->getRitaseEmployee($employeeId)->sum(function($item){
                     return $item->getRawOriginal('double_rit');
                 });
+                
                 $componentObj = new DoubleRitase($doubleRitaseCount, $value);
                 break;
-            case 'TDDRT':
-                $doubleSalary = $this->getLuarKotaEmployee($employeeId)->count();
+            case 'TDGJ':
+                $doubleSalary = $this->getLuarKotaEmployee($employeeId)->count();                
                 $componentObj = new DoubleSalary($doubleSalary, $value);
                 break;
             case 'GPH':              

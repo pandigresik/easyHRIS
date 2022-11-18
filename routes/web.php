@@ -76,6 +76,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('payrollBiweeklyPeriods', Hr\PayrollBiweeklyPeriodController::class, ["as" => 'hr']);
         Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr']);
         Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr'])->only(['index', 'show', 'update', 'edit']);
+        Route::get('payrollDownload/{id}', [App\Http\Controllers\Hr\PayrollPeriodDownloadController::class, 'exportExcel'])->name('hr.payrollDownload.download');
         Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr']);
 
         Route::resource('salaryAllowances', Hr\SalaryAllowanceController::class, ["as" => 'hr']);
@@ -96,6 +97,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('requestWorkshifts', Hr\RequestWorkshiftController::class, ["as" => 'hr']);
         Route::resource('workshiftGroups', Hr\WorkshiftGroupController::class, ["as" => 'hr']);
         Route::get('workshiftGroups.generate', [App\Http\Controllers\Hr\WorkshiftGroupController::class, 'generate'])->name('hr.workshiftGroups.generate');
+
+        Route::resource('groupingPayrollEntities', Hr\GroupingPayrollEntityController::class, ["as" => 'hr']);
+        Route::resource('groupingPayrollEmployeeReports', Hr\GroupingPayrollEmployeeReportController::class, ["as" => 'hr']);
     });
 
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
@@ -118,4 +122,6 @@ Route::group(['prefix' => 'artisan'], function () {
         Artisan::call('cache:clear');
     });
 });
+
+
 

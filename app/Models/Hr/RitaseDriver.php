@@ -71,7 +71,7 @@ class RitaseDriver extends Model
     protected $casts = [
         'id' => 'integer',
         'employee_id' => 'integer',
-        'work_date' => 'date',
+        'work_date' => 'date:Y-m-d',
         'km' => 'integer',
         'double_rit' => 'integer'
     ];
@@ -85,7 +85,7 @@ class RitaseDriver extends Model
         'employee_id' => 'required',
         'work_date' => 'required',
         'km' => 'required',
-        'double_rit' => 'required|boolean'
+        'double_rit' => 'required|numeric'
     ];
 
     /**

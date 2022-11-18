@@ -126,6 +126,14 @@
 </div>
 </div>
 
+<!-- Identity Type Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('account_bank', __('models/employees.fields.account_bank').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    {!! Form::text('account_bank', null, ['class' => 'form-control','maxlength' => 15]) !!}
+</div>
+</div>
+
 <!-- Identity Number Field -->
 <div class="form-group row mb-3">
     {!! Form::label('identity_number', __('models/employees.fields.identity_number').':', ['class' => 'col-md-3 col-form-label']) !!}

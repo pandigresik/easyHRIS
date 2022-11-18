@@ -7,8 +7,6 @@ use App\DataTables\Hr\PayrollDetailDataTable;
 use App\Http\Requests\Hr\CreatePayrollDetailRequest;
 use App\Http\Requests\Hr\UpdatePayrollDetailRequest;
 use App\Repositories\Hr\PayrollDetailRepository;
-use App\Repositories\Hr\PayrollRepository;
-use App\Repositories\Hr\SalaryComponentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Hr\Payroll;
@@ -34,7 +32,7 @@ class PayrollDetailController extends AppBaseController
     public function index(PayrollDetailDataTable $payrollDetailDataTable)
     {
         $payroll = Payroll::with(['employee', 'payrollPeriod'])->find(request()->get('payroll_id'));
-        return $payrollDetailDataTable->setPayrollId($payroll->id)->render('hr.payroll_details.index', ['title' => $payroll->employee->full_name. ' '. $payroll->payrollPeriod->name. ' ('.$payroll->take_home_pay.')' ]);
+        return $payrollDetailDataTable->setPayrollId($payroll->id)->render('hr.payroll_details.index', ['title' => $payroll->employee->full_name. ' ('.$payroll->employee->code.') '. $payroll->payrollPeriod->name. ' ('.$payroll->take_home_pay.')' ]);
     }
 
     /**

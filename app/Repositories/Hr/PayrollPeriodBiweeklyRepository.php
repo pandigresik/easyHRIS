@@ -108,7 +108,23 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
     protected function calculateEmployeePayroll($workDayCount, $employee, $periodPayroll){          
         $details = [];
         $takeHomePay = 0;
+        $overtimeSalary = 0;
+        $dailySalary = 0;
+        $kmSalary = 0;
+        $doubleRitSalary = 0;
         foreach($employee->salaryBenefits as $benefit){
+            if($benefit->component->getRawOriginal('code') == 'GPH'){
+                $dailySalary = $benefit->getRawOriginal('benefit_value');
+            }
+            if($benefit->component->getRawOriginal('code') == 'OT'){
+                $overtimeSalary = $benefit->getRawOriginal('benefit_value');
+            }
+            if($benefit->component->getRawOriginal('code') == 'TDKM'){
+                $kmSalary = $benefit->getRawOriginal('benefit_value');
+            }
+            if($benefit->component->getRawOriginal('code') == 'TDDRT'){
+                $doubleRitSalary = $benefit->getRawOriginal('benefit_value');
+            }
             $tmp = [
                 'component_id' => $benefit->component_id,
                 'sign_value' => $benefit->component->getRawOriginal('state') == 'p' ? 1 : -1, 
@@ -145,7 +161,23 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             'payroll_period_id' => $periodPayroll->id,
             'employee_id' => $employee->id
         ]);
+        $amountLateMinute = $this->getAbsentLateEmployee($employee->id)->sum(function($item){
+            return $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out');
+        });
+        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->sum('absent');
         $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
+        $payroll->additional_info = [
+            'workday' => $workDayCount,
+            'dailySalary' => $dailySalary,
+            'doubleRitSalary' => $doubleRitSalary,
+            'kmSalary' => $kmSalary,
+            'overtimeSalary' => $overtimeSalary,            
+            'overtime' => $this->getOvertimeEmployee($employee->id)->sum(function($item){                    
+                        return $item->getRawOriginal('calculated_value');
+                    }),
+            'late_early'=> $amountLateMinute,
+            'absent' => $amountAbsentDay
+        ];
         $payroll->save();
         $userId = \Auth::id();
         foreach($details as $detail){            

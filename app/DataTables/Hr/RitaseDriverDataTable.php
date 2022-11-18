@@ -13,7 +13,9 @@ class RitaseDriverDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,        
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'work_date' =>  \App\DataTables\FilterClass\BetweenKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -115,10 +117,11 @@ class RitaseDriverDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'employee_id' => new Column(['title' => __('models/ritaseDrivers.fields.employee_id'),'name' => 'employee_id', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
-            'work_date' => new Column(['title' => __('models/ritaseDrivers.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'text']),
-            'km' => new Column(['title' => __('models/ritaseDrivers.fields.km'),'name' => 'km', 'data' => 'km', 'searchable' => true, 'elmsearch' => 'text']),
-            'double_rit' => new Column(['title' => __('models/ritaseDrivers.fields.double_rit'),'name' => 'double_rit', 'data' => 'double_rit', 'searchable' => true, 'elmsearch' => 'text'])
+            'employee.full_name' => new Column(['title' => __('models/ritaseDrivers.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.code' => new Column(['title' => __('models/ritaseDrivers.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
+            'work_date' => new Column(['title' => __('models/ritaseDrivers.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'km' => new Column(['title' => __('models/ritaseDrivers.fields.km'),'name' => 'km', 'data' => 'km', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
+            'double_rit' => new Column(['title' => __('models/ritaseDrivers.fields.double_rit'),'name' => 'double_rit', 'data' => 'double_rit', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end'])
         ];
     }
 
