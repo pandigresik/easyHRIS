@@ -38,11 +38,20 @@ class EasyAuthorize
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function handle($request, Closure $next)
-    {
+    {   
+        $mapPermission = [
+            'index' => 'index',
+            'store' => 'create',
+            'create' => 'create',
+            'show' => 'index',
+            'destroy' => 'delete',
+            'update' => 'update',
+            'edit' => 'update',
+        ];
         $route = $request->route()->getName();
         $tmp = explode('.', $route);
         $arrLength = count($tmp);
-        $ability = $tmp[$arrLength-2].'-'.$tmp[$arrLength-1];
+        $ability = $tmp[$arrLength-2].'-'.$mapPermission[$tmp[$arrLength-1]] ?? $tmp[$arrLength-1];
         $this->gate->authorize($ability);
 
         return $next($request);
