@@ -22,6 +22,8 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tes', [App\Http\Controllers\HomeController::class, 'tes']);
+Route::get('password.change', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'showResetForm'])->name('password.change');
+Route::post('password.change', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'reset'])->name('password.change');
 
 //Route::group(['middleware' => ['auth','role:administrator']],function (){
 Route::group(['middleware' => ['auth']], function () {
@@ -61,7 +63,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('attendanceLogfingers/detail/{workDate}/{employeeId}', [App\Http\Controllers\Hr\AttendanceLogfingerController::class, 'detailLog'])->name('hr.attendanceLogfingers.detailLog');
         Route::resource('attendanceLogfingers', Hr\AttendanceLogfingerController::class, ["as" => 'hr']);        
         Route::resource('attendanceSummaries', Hr\AttendanceSummaryController::class, ["as" => 'hr']);
-        Route::resource('attendances', Hr\AttendanceController::class, ["as" => 'hr']);
+        Route::resource('attendances', Hr\AttendanceController::class, ["as" => 'hr', 'middleware' => [
+            'index' => 'can:attendances-index',
+            'create' => 'can:attendances-create',
+            'edit' => 'can:attendances-update',
+            'store' => 'can:attendances-create',
+            'update' => 'can:attendances-update',
+            'destroy' => 'can:attendances-delete'
+        ]]);
         
         Route::resource('careerHistories', Hr\CareerHistoryController::class, ["as" => 'hr']);
         Route::resource('employeeShiftments', Hr\EmployeeShiftmentController::class, ["as" => 'hr']);

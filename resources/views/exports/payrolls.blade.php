@@ -63,6 +63,9 @@
         </tr>
     </thead>
     <tbody>
+        @php
+            $awalBarisData = 8;
+        @endphp
         @foreach($payrolls as $no =>  $payroll)
         @php
             $additionalInfo = $payroll->additional_info;
@@ -165,5 +168,37 @@
             <td>{{ $totalPenerimaan - $totalPotongan }}</td>
         </tr>
         @endforeach
+        <tr>
+            <td colspan="10"></td>
+            <td>=sum(K{{ $awalBarisData }}:K{{ $no + $awalBarisData }})</td>
+            <td></td>
+            <td>=sum(M{{ $awalBarisData }}:M{{ $no + $awalBarisData }})</td>
+            <td>=sum(N{{ $awalBarisData }}:N{{ $no + $awalBarisData }})</td>
+            <td>=sum(O{{ $awalBarisData }}:O{{ $no + $awalBarisData }})</td>
+            <td>=sum(P{{ $awalBarisData }}:P{{ $no + $awalBarisData }})</td>
+            <td>=sum(Q{{ $awalBarisData }}:Q{{ $no + $awalBarisData }})</td>
+            <td>=sum(R{{ $awalBarisData }}:R{{ $no + $awalBarisData }})</td>
+            <td>=sum(S{{ $awalBarisData }}:S{{ $no + $awalBarisData }})</td>
+            <td>=sum(T{{ $awalBarisData }}:T{{ $no + $awalBarisData }})</td>
+            <td>=sum(U{{ $awalBarisData }}:U{{ $no + $awalBarisData }})</td>
+            <td>=sum(V{{ $awalBarisData }}:V{{ $no + $awalBarisData }})</td>
+            <td>=sum(W{{ $awalBarisData }}:W{{ $no + $awalBarisData }})</td>
+            <td>=sum(X{{ $awalBarisData }}:X{{ $no + $awalBarisData }})</td>
+            <td>=sum(Y{{ $awalBarisData }}:Y{{ $no + $awalBarisData }})</td>
+            <td>=sum(Z{{ $awalBarisData }}:Z{{ $no + $awalBarisData }})</td>
+            <td>=sum(AA{{ $awalBarisData }}:AA{{ $no + $awalBarisData }})</td>
+            <td></td>            
+            <td>=sum(AC{{ $awalBarisData }}:AC{{ $no + $awalBarisData }})</td>
+            <td>=sum(AD{{ $awalBarisData }}:AD{{ $no + $awalBarisData }})</td>
+            <td>=sum(AE{{ $awalBarisData }}:AE{{ $no + $awalBarisData }})</td>
+            <td>=sum(AF{{ $awalBarisData }}:AF{{ $no + $awalBarisData }})</td>
+            <td>=sum(AG{{ $awalBarisData }}:AG{{ $no + $awalBarisData }})</td>
+            <td>=sum(AH{{ $awalBarisData }}:AH{{ $no + $awalBarisData }})</td>
+            <td>=sum(AI{{ $awalBarisData }}:AI{{ $no + $awalBarisData }})</td>
+            <td>=sum(AJ{{ $awalBarisData }}:AJ{{ $no + $awalBarisData }})</td>
+            <td>=sum(AK{{ $awalBarisData }}:AK{{ $no + $awalBarisData }})</td>
+            <td>=sum(AL{{ $awalBarisData }}:AL{{ $no + $awalBarisData }})</td>
+            <td>=sum(AM{{ $awalBarisData }}:AM{{ $no + $awalBarisData }})</td>            
+        </tr>
     </tbody>
 </table>

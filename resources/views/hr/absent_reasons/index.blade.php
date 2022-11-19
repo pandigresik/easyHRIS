@@ -15,7 +15,7 @@
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
                              @lang('models/absentReasons.plural')
-                             <a class="pull-right" href="{{ route('hr.absentReasons.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             
                          </div>
                          <div class="card-body">                             
                              @include('hr.absent_reasons.table')                             

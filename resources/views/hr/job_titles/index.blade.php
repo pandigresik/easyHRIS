@@ -15,7 +15,7 @@
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
                              @lang('models/jobTitles.plural')
-                             <a class="pull-right" href="{{ route('hr.jobTitles.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             
                          </div>
                          <div class="card-body">                             
                              @include('hr.job_titles.table')                             

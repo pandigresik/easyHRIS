@@ -19,22 +19,20 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="11"></td>
+            <td colspan="10"></td>
         </tr>
-        @foreach($collection as $idEntity => $payrolls)
-            @php
-                $totalSalary = 0;
-            @endphp
+        @php
+            $awalBarisData = 5;
+            $barisPemisah = 5;
+        @endphp
+        @foreach($collection as $idEntity => $payrolls)            
             <tr>
-                <td colspan="11">{{ $payrollEntity[$idEntity] ?? '-' }}</td>
+                <td colspan="10">{{ $payrollEntity[$idEntity] ?? '-' }}</td>
             </tr>
             <tr>
-                <td colspan="11"></td>
+                <td colspan="10"></td>
             </tr>
-            @foreach($payrolls as $no =>  $payroll)
-            @php
-                $totalSalary += $payroll->getRawOriginal('take_home_pay');
-            @endphp
+            @foreach($payrolls as $no =>  $payroll)            
             <tr>
                 <td>{{ ($no + 1) }}</td>
                 <td>{{ $payroll->employee->code }}</td>
@@ -50,14 +48,17 @@
             @endforeach
             <tr>
                 <td colspan="5">Total</td>
-                <td>{{ $totalSalary }}</td>
-                <td>{{ $totalSalary }}</td>
-                <td>{{ $totalSalary }}</td>
+                <td>=sum(F{{$awalBarisData + 3}}:F{{$awalBarisData + $no + 3}})</td>
+                <td>=sum(G{{$awalBarisData + 3}}:G{{$awalBarisData + $no + 3}})</td>
+                <td>=sum(H{{$awalBarisData + 3}}:H{{$awalBarisData + $no + 3}})</td>
                 <td colspan="2"></td>
             </tr>
             <tr>
-                <td colspan="11"></td>
+                <td colspan="10"></td>
             </tr>
+            @php
+                $awalBarisData += $no + $barisPemisah;
+            @endphp
         @endforeach
     </tbody>
 </table>

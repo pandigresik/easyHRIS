@@ -32,6 +32,7 @@ class AttendanceController extends AppBaseController
      */
     public function index(AttendanceDataTable $attendanceDataTable)
     {
+        return 'ok';
         return $attendanceDataTable->render('hr.attendances.index');
     }
 

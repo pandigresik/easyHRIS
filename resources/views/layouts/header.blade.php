@@ -21,7 +21,11 @@
                     </div><a class="dropdown-item" href="#">
                         <svg class="icon me-2">
                             <use xlink:href="vendor/coreui/icons/svg/free.svg#cil-user"></use>
-                        </svg> Profile</a><a class="dropdown-item" href="#">
+                        </svg> Profile</a>
+                        <a class="dropdown-item" href="{{ route('password.change') }}">
+                            <i class="cil-lock-locked"></i>
+                            Change Password</a>
+                        <a class="dropdown-item" href="#">                         
                         <svg class="icon me-2">
                             <use xlink:href="vendor/coreui/icons/svg/free.svg#cil-settings"></use>
                         </svg> Settings</a><a class="dropdown-item" href="#">

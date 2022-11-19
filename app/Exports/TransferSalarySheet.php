@@ -50,8 +50,7 @@ class TransferSalarySheet implements FromView, WithColumnFormatting, WithTitle, 
         return [
             'F' => $formatNumber,
             'G' => $formatNumber,
-            'H' => $formatNumber,
-            'I' => $formatNumber,
+            'H' => $formatNumber,            
         ];
     }
 
@@ -61,11 +60,18 @@ class TransferSalarySheet implements FromView, WithColumnFormatting, WithTitle, 
             AfterSheet::class => function(AfterSheet $event){
                 $headerCellRange = 'A4:J4';
                 $worksheet = $event->sheet->getDelegate();
+                $lastRow = $worksheet->getHighestDataRow();
+                $tableRange = 'A4:J'.$lastRow;
                 $worksheet->freezePane('A5');
                 $worksheet->getStyle($headerCellRange)->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                     ->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_YELLOW);
-                $worksheet->getStyle($headerCellRange)->getFont()->setSize(12);
+                $worksheet->getStyle($headerCellRange)->getFont()->setSize(11)->setBold(true);
+                $worksheet->getStyle($headerCellRange)->applyFromArray(['alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER]]);
+                $worksheet->getStyle($tableRange)->applyFromArray(['borders' => [
+                    'allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],                                    
+                    ]]);
+                
             }
         ];
     }

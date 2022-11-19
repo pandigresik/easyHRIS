@@ -7,9 +7,12 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithPreCalculateFormulas;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-class EmployeePayrollSheet implements FromView, WithColumnFormatting, WithTitle
+class EmployeePayrollSheet implements FromView, WithColumnFormatting, WithTitle, WithEvents, WithPreCalculateFormulas
 {
     private $salaryComponent;
     private $sheetName;    
@@ -79,6 +82,30 @@ class EmployeePayrollSheet implements FromView, WithColumnFormatting, WithTitle
             'AK' => $formatNumber,
             'AL' => $formatNumber,
             'AM' => $formatNumber            
+        ];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function(AfterSheet $event){
+                $headerCellRange = 'A4:AM7';                
+                $worksheet = $event->sheet->getDelegate();
+                $lastRow = $worksheet->getHighestDataRow();
+                $tableRange = 'A4:AM'.$lastRow;
+                $worksheet->freezePane('A8');
+                $worksheet->getStyle($headerCellRange)->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_YELLOW);
+                $worksheet->getStyle($headerCellRange)->getFont()->setSize(11)->setBold(true);
+                $worksheet->getStyle($headerCellRange)->applyFromArray(['alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER]]);
+                $worksheet->getStyle($tableRange)->applyFromArray(['borders' => [
+                    'allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                    // 'top' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                    // 'left' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                    // 'right' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]                    
+                    ]]);
+            }
         ];
     }
 }
