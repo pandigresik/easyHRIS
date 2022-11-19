@@ -28,87 +28,80 @@ Route::post('password.change', [\App\Http\Controllers\Auth\ChangePasswordControl
 //Route::group(['middleware' => ['auth','role:administrator']],function (){
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'base'], function () {
-        Route::resource('import', Base\ImportController::class, ['as' => 'base']);
-        Route::resource('export', Base\ExportController::class, ['as' => 'base']);
-        Route::resource('roles', Base\RoleController::class, ['as' => 'base']);
-        Route::resource('permissions', Base\PermissionController::class, ['as' => 'base']);
-        Route::resource('users', Base\UserController::class, ['as' => 'base']);
-        Route::resource('menus', Base\MenusController::class, ['as' => 'base']);
+        Route::resource('import', Base\ImportController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('export', Base\ExportController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('roles', Base\RoleController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('permissions', Base\PermissionController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('users', Base\UserController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('menus', Base\MenusController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         
-        Route::resource('cities', Base\CityController::class, ["as" => 'base']);
-        Route::resource('companies', Base\CompanyController::class, ["as" => 'base']);
-        Route::resource('departments', Base\DepartmentController::class, ["as" => 'base']);
-        Route::resource('businessUnits', Base\BusinessUnitController::class, ["as" => 'base']);
-        Route::resource('regions', Base\RegionController::class, ["as" => 'base']);
-        Route::resource('settings', Base\SettingController::class, ["as" => 'base']);
+        Route::resource('cities', Base\CityController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('companies', Base\CompanyController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('departments', Base\DepartmentController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('businessUnits', Base\BusinessUnitController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('regions', Base\RegionController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('settings', Base\SettingController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
     });
 
     Route::group(['prefix' => 'accounting'], function () {
-        Route::resource('taxes', Accounting\TaxController::class, ["as" => 'accounting']);
-        Route::resource('taxGroupHistories', Accounting\TaxGroupHistoryController::class, ["as" => 'accounting']);
+        Route::resource('taxes', Accounting\TaxController::class, ["as" => 'accounting', 'middleware' => ['easyauth']]);
+        Route::resource('taxGroupHistories', Accounting\TaxGroupHistoryController::class, ["as" => 'accounting', 'middleware' => ['easyauth']]);
     });
     
     Route::group(['prefix' => 'hr'], function () {
-        Route::resource('absentReasons', Hr\AbsentReasonController::class, ["as" => 'hr']);
-        Route::resource('educationTitles', Hr\EducationTitleController::class, ["as" => 'hr']);
-        Route::resource('educationalInstitutes', Hr\EducationalInstituteController::class, ["as" => 'hr']);
-        Route::resource('contracts', Hr\ContractController::class, ["as" => 'hr']);
-        Route::resource('employees', Hr\EmployeeController::class, ["as" => 'hr']);
-        Route::resource('employees.salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr']);
-        Route::resource('holidays', Hr\HolidayController::class, ["as" => 'hr']);
-        Route::resource('jobLevels', Hr\JobLevelController::class, ["as" => 'hr']);
-        Route::resource('jobMutations', Hr\JobMutationController::class, ["as" => 'hr']);
-        Route::resource('jobPlacements', Hr\JobPlacementController::class, ["as" => 'hr']);
-        Route::resource('jobTitles', Hr\JobTitleController::class, ["as" => 'hr']);
+        Route::resource('absentReasons', Hr\AbsentReasonController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('educationTitles', Hr\EducationTitleController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('educationalInstitutes', Hr\EducationalInstituteController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('contracts', Hr\ContractController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('employees', Hr\EmployeeController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('employees.salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('holidays', Hr\HolidayController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('jobLevels', Hr\JobLevelController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('jobMutations', Hr\JobMutationController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('jobPlacements', Hr\JobPlacementController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('jobTitles', Hr\JobTitleController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::get('attendanceLogfingers/detail/{workDate}/{employeeId}', [App\Http\Controllers\Hr\AttendanceLogfingerController::class, 'detailLog'])->name('hr.attendanceLogfingers.detailLog');
-        Route::resource('attendanceLogfingers', Hr\AttendanceLogfingerController::class, ["as" => 'hr']);        
-        Route::resource('attendanceSummaries', Hr\AttendanceSummaryController::class, ["as" => 'hr']);
-        Route::resource('attendances', Hr\AttendanceController::class, ["as" => 'hr', 'middleware' => [
-            'index' => 'can:attendances-index',
-            'create' => 'can:attendances-create',
-            'edit' => 'can:attendances-update',
-            'store' => 'can:attendances-create',
-            'update' => 'can:attendances-update',
-            'destroy' => 'can:attendances-delete'
-        ]]);
+        Route::resource('attendanceLogfingers', Hr\AttendanceLogfingerController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);        
+        Route::resource('attendanceSummaries', Hr\AttendanceSummaryController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('attendances', Hr\AttendanceController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         
-        Route::resource('careerHistories', Hr\CareerHistoryController::class, ["as" => 'hr']);
-        Route::resource('employeeShiftments', Hr\EmployeeShiftmentController::class, ["as" => 'hr']);
-        Route::resource('fingerprintDevices', Hr\FingerprintDeviceController::class, ["as" => 'hr']);
-        Route::resource('leaves', Hr\LeafController::class, ["as" => 'hr']);
-        Route::resource('overtimes', Hr\OvertimeController::class, ["as" => 'hr']);
-        Route::resource('ritaseDrivers', Hr\RitaseDriverController::class, ["as" => 'hr']);
+        Route::resource('careerHistories', Hr\CareerHistoryController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('employeeShiftments', Hr\EmployeeShiftmentController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('fingerprintDevices', Hr\FingerprintDeviceController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('leaves', Hr\LeafController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('overtimes', Hr\OvertimeController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('ritaseDrivers', Hr\RitaseDriverController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
 
-        Route::resource('payrollPeriodGroups', Hr\PayrollPeriodGroupController::class, ["as" => 'hr']);
-        Route::resource('payrollPeriods', Hr\PayrollPeriodController::class, ["as" => 'hr']);
-        Route::resource('payrollMonthlyPeriods', Hr\PayrollMonthlyPeriodController::class, ["as" => 'hr']);
-        Route::resource('payrollBiweeklyPeriods', Hr\PayrollBiweeklyPeriodController::class, ["as" => 'hr']);
-        Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr']);
-        Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr'])->only(['index', 'show', 'update', 'edit']);
+        Route::resource('payrollPeriodGroups', Hr\PayrollPeriodGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('payrollPeriods', Hr\PayrollPeriodController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('payrollMonthlyPeriods', Hr\PayrollMonthlyPeriodController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('payrollBiweeklyPeriods', Hr\PayrollBiweeklyPeriodController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr', 'middleware' => ['easyauth']])->only(['index', 'show', 'update', 'edit']);
         Route::get('payrollDownload/{id}', [App\Http\Controllers\Hr\PayrollPeriodDownloadController::class, 'exportExcel'])->name('hr.payrollDownload.download');
-        Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr']);
+        Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
 
-        Route::resource('salaryAllowances', Hr\SalaryAllowanceController::class, ["as" => 'hr']);
-        Route::resource('salaryBenefitHistories', Hr\SalaryBenefitHistoryController::class, ["as" => 'hr']);
-        // Route::resource('salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr']);
-        Route::resource('salaryComponents', Hr\SalaryComponentController::class, ["as" => 'hr']);
-        Route::resource('salaryGroupDetails', Hr\SalaryGroupDetailController::class, ["as" => 'hr']);
-        Route::resource('salaryGroups', Hr\SalaryGroupController::class, ["as" => 'hr']);
-        Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr']);
-        Route::resource('shiftments', Hr\ShiftmentController::class, ["as" => 'hr']);
-        Route::resource('shiftmentGroups.details', Hr\ShiftmentGroupDetailController::class, ["as" => 'hr']);
-        Route::resource('shiftmentSchedules', Hr\ShiftmentScheduleController::class, ["as" => 'hr']);
-        Route::resource('skillGroups', Hr\SkillGroupController::class, ["as" => 'hr']);
-        Route::resource('skills', Hr\SkillController::class, ["as" => 'hr']);
+        Route::resource('salaryAllowances', Hr\SalaryAllowanceController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('salaryBenefitHistories', Hr\SalaryBenefitHistoryController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        // Route::resource('salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('salaryComponents', Hr\SalaryComponentController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('salaryGroupDetails', Hr\SalaryGroupDetailController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('salaryGroups', Hr\SalaryGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('shiftments', Hr\ShiftmentController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('shiftmentGroups.details', Hr\ShiftmentGroupDetailController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('shiftmentSchedules', Hr\ShiftmentScheduleController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('skillGroups', Hr\SkillGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('skills', Hr\SkillController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         
-        Route::resource('workshifts', Hr\WorkshiftController::class, ["as" => 'hr']);        
+        Route::resource('workshifts', Hr\WorkshiftController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);        
         Route::get('workshifts.generate', [App\Http\Controllers\Hr\WorkshiftController::class, 'generate'])->name('hr.workshifts.generate');
-        Route::resource('requestWorkshifts', Hr\RequestWorkshiftController::class, ["as" => 'hr']);
-        Route::resource('workshiftGroups', Hr\WorkshiftGroupController::class, ["as" => 'hr']);
+        Route::resource('requestWorkshifts', Hr\RequestWorkshiftController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('workshiftGroups', Hr\WorkshiftGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::get('workshiftGroups.generate', [App\Http\Controllers\Hr\WorkshiftGroupController::class, 'generate'])->name('hr.workshiftGroups.generate');
 
-        Route::resource('groupingPayrollEntities', Hr\GroupingPayrollEntityController::class, ["as" => 'hr']);
-        Route::resource('groupingPayrollEmployeeReports', Hr\GroupingPayrollEmployeeReportController::class, ["as" => 'hr']);
+        Route::resource('groupingPayrollEntities', Hr\GroupingPayrollEntityController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('groupingPayrollEmployeeReports', Hr\GroupingPayrollEmployeeReportController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
     });
 
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
