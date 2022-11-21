@@ -4,7 +4,7 @@
         "fzaninotto/faker": "^1.9",
         "ramsey/uuid": "^3.9",
         "phpoffice/phpspreadsheet": "^1.11",
-        "dompdf/dompdf": "^0.8.5"
+        "dompdf/dompdf": "^2.0.1"
     },
     "require-dev": {
         "doctrine/dbal": "^2",
