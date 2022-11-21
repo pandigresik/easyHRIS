@@ -48,7 +48,7 @@ class RitaseDriverDataTable extends DataTable
      */
     public function query(RitaseDriver $model)
     {
-        return $model->select($model->getTable().'.*')->with(['employee'])->newQuery();
+        return $model->employeeDescendants()->select($model->getTable().'.*')->with(['employee'])->newQuery();
     }
 
     /**

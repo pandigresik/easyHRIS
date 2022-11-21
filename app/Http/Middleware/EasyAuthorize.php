@@ -51,7 +51,7 @@ class EasyAuthorize
         $route = $request->route()->getName();
         $tmp = explode('.', $route);
         $arrLength = count($tmp);
-        $ability = $tmp[$arrLength-2].'-'.$mapPermission[$tmp[$arrLength-1]] ?? $tmp[$arrLength-1];
+        $ability = \Str::snake($tmp[$arrLength-2]).'-'.$mapPermission[$tmp[$arrLength-1]] ?? $tmp[$arrLength-1];        
         $this->gate->authorize($ability);
 
         return $next($request);

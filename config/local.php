@@ -40,5 +40,7 @@ return [
     // untuk perhitungan premi
     'leave_code' => ['PC', 'DT'],
     // untuk tunjangan yang diberikan di akhir bulan saja
-    'benefit_end_of_month' => ['TJ', 'PRHD']
+    'benefit_end_of_month' => ['TJ', 'PRHD'],
+    // job level leader code
+    'job_level_leader' => ['MGR','SPV', 'FRM'],
 ];

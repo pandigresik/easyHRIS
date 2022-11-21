@@ -95,7 +95,7 @@ abstract class BaseRepository
                 }
             }            
         }
-
+        
         return $query->simplePaginate($perPage, $columns, 'page', $currentPage);
     }
 

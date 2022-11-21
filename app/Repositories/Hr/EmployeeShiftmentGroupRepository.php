@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Base\Department;
 use App\Models\Hr\Employee;
 use App\Repositories\BaseRepository;
 
@@ -71,10 +72,28 @@ class EmployeeShiftmentGroupRepository extends BaseRepository
     {
         $columns[] = 'code';
         $search['column'][] = 'code';
+        $this->employeeDescendants();
         $dataPaging = parent::paginate($perPage, $currentPage , $columns, $search);
-        $dataPaging->getCollection()->map(function($item){            
+        $dataPaging->getCollection()->map(function($item){
             return $item['text'] = $item['text'].' ( '.$item['code'].' )';
         })->toArray();
         return $dataPaging;
+    }
+
+    private function employeeDescendants(){        
+        $employee = \Auth::user()->employee;        
+        $jobLevelLeader = config('local.job_level_leader');        
+        if($employee){
+            if($employee->department_id){
+                $jobLevelEmployee = $employee->jobLevel;
+                if(in_array($jobLevelEmployee->code, $jobLevelLeader)){
+                    $filters = $this->getFilter();
+                    $allDescendants = Department::descendantsAndSelf($employee->department_id)->toFlatTree()->pluck('id')->toArray();            
+                    $filters['department_id'] = $allDescendants;
+                    $this->setFilter($filters);
+                }
+                
+            }            
+        }
     }
 }

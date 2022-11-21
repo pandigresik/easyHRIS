@@ -78,6 +78,7 @@ class User extends Authenticatable
         'email_verified_at',
         'password',
         'remember_token',
+        'employee_id'
     ];
 
     /**
@@ -109,6 +110,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'string',
         'remember_token' => 'string',
+        'employee_id' => 'integer',
     ];
 
     // Cache permissions and roles
@@ -146,5 +148,13 @@ class User extends Authenticatable
         });
 
         return $result;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function employee()
+    {
+        return $this->belongsTo(\App\Models\Hr\Employee::class, 'employee_id');
     }
 }

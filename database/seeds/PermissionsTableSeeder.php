@@ -22,7 +22,7 @@ class PermissionsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'menu-index',
+                'name' => 'menus-index',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -30,7 +30,7 @@ class PermissionsTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'name' => 'menu-create',
+                'name' => 'menus-create',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -38,7 +38,7 @@ class PermissionsTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'name' => 'menu-update',
+                'name' => 'menus-update',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -46,7 +46,7 @@ class PermissionsTableSeeder extends Seeder
             3 => 
             array (
                 'id' => 4,
-                'name' => 'menu-delete',
+                'name' => 'menus-delete',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -54,7 +54,7 @@ class PermissionsTableSeeder extends Seeder
             4 => 
             array (
                 'id' => 5,
-                'name' => 'user-index',
+                'name' => 'users-index',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -62,7 +62,7 @@ class PermissionsTableSeeder extends Seeder
             5 => 
             array (
                 'id' => 6,
-                'name' => 'user-create',
+                'name' => 'users-create',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -70,7 +70,7 @@ class PermissionsTableSeeder extends Seeder
             6 => 
             array (
                 'id' => 7,
-                'name' => 'user-update',
+                'name' => 'users-update',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -78,7 +78,7 @@ class PermissionsTableSeeder extends Seeder
             7 => 
             array (
                 'id' => 8,
-                'name' => 'user-delete',
+                'name' => 'users-delete',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -86,7 +86,7 @@ class PermissionsTableSeeder extends Seeder
             8 => 
             array (
                 'id' => 9,
-                'name' => 'role-index',
+                'name' => 'roles-index',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -94,7 +94,7 @@ class PermissionsTableSeeder extends Seeder
             9 => 
             array (
                 'id' => 10,
-                'name' => 'role-create',
+                'name' => 'roles-create',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -102,7 +102,7 @@ class PermissionsTableSeeder extends Seeder
             10 => 
             array (
                 'id' => 11,
-                'name' => 'role-update',
+                'name' => 'roles-update',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -110,7 +110,7 @@ class PermissionsTableSeeder extends Seeder
             11 => 
             array (
                 'id' => 12,
-                'name' => 'role-delete',
+                'name' => 'roles-delete',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -118,7 +118,7 @@ class PermissionsTableSeeder extends Seeder
             12 => 
             array (
                 'id' => 13,
-                'name' => 'permission-index',
+                'name' => 'permissions-index',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -126,7 +126,7 @@ class PermissionsTableSeeder extends Seeder
             13 => 
             array (
                 'id' => 14,
-                'name' => 'permission-create',
+                'name' => 'permissions-create',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -134,7 +134,7 @@ class PermissionsTableSeeder extends Seeder
             14 => 
             array (
                 'id' => 15,
-                'name' => 'permission-update',
+                'name' => 'permissions-update',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
@@ -142,7 +142,7 @@ class PermissionsTableSeeder extends Seeder
             15 => 
             array (
                 'id' => 16,
-                'name' => 'permission-delete',
+                'name' => 'permissions-delete',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,

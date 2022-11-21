@@ -28,8 +28,8 @@ Route::post('password.change', [\App\Http\Controllers\Auth\ChangePasswordControl
 //Route::group(['middleware' => ['auth','role:administrator']],function (){
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'base'], function () {
-        Route::resource('import', Base\ImportController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
-        Route::resource('export', Base\ExportController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::resource('import', Base\ImportController::class, ["as" => 'base']);
+        Route::resource('export', Base\ExportController::class, ["as" => 'base']);
         Route::resource('roles', Base\RoleController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         Route::resource('permissions', Base\PermissionController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         Route::resource('users', Base\UserController::class, ["as" => 'base', 'middleware' => ['easyauth']]);

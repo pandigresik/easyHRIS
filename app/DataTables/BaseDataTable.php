@@ -6,5 +6,5 @@ use Yajra\DataTables\Services\DataTable;
 
 class BaseDataTable extends DataTable
 {
-    protected $fastExcel = true;
+    protected $fastExcel = true;    
 }

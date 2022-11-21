@@ -6,6 +6,7 @@ use App\Models\Base as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kalnoy\Nestedset\NodeTrait;
 
 /**
  * @SWG\Definition(
@@ -39,7 +40,7 @@ class Department extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
+    use NodeTrait;
     public $table = 'departments';
 
     public const CREATED_AT = 'created_at';

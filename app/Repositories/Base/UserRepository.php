@@ -67,6 +67,7 @@ class UserRepository extends BaseRepository
      */
     public function update($input, $id)
     {
+        $input['employee_id'] = $input['employee_id'] ?? NULL;
         $model = parent::update($input, $id);
         $roles = $input['roles'] ?? [];
         $model->syncRoles($roles);

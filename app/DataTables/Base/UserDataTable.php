@@ -5,20 +5,37 @@ namespace App\DataTables\Base;
 use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Base\User;
 use Yajra\DataTables\EloquentDataTable;
+use Yajra\DataTables\Html\Column;
 
 class UserDataTable extends DataTable
 {
     /**
+    * example mapping filter column to search by keyword, default use %keyword%
+    */
+    private $columnFilterOperator = [
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+    ];
+    
+    private $mapColumnSearch = [
+        //'entity.name' => 'entity_id',
+    ];
+
+    /**
      * Build DataTable class.
      *
-     * @param mixed $query results from query() method
-     *
+     * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
     public function dataTable($query)
     {
         $dataTable = new EloquentDataTable($query);
-
+        if (!empty($this->columnFilterOperator)) {
+            foreach ($this->columnFilterOperator as $column => $operator) {
+                $columnSearch = $this->mapColumnSearch[$column] ?? $column;
+                $dataTable->filterColumn($column, new $operator($columnSearch));                
+            }
+        }
         return $dataTable->addColumn('action', 'base.users.datatables_actions');
     }
 
@@ -29,7 +46,7 @@ class UserDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery();
+        return $model->select([$model->getTable().'.*'])->with(['employee'])->newQuery();
     }
 
     /**
@@ -68,8 +85,10 @@ class UserDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'name',
-            'email',
+            'name' => new Column(['title' => __('models/users.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
+            'email' => new Column(['title' => __('models/users.fields.email'),'name' => 'email', 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.full_name' => new Column(['title' => __('models/users.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'defaultContent' => '', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.code' => new Column(['title' => __('models/users.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'defaultContent' => '', 'searchable' => true, 'elmsearch' => 'text']),
         ];
     }
 

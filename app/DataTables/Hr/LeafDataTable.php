@@ -54,7 +54,7 @@ class LeafDataTable extends DataTable
      */
     public function query(Leaf $model)
     {
-        return $model->selectRaw($model->getTable().'.*')->with(['employee', 'reason'])->newQuery();
+        return $model->employeeDescendants()->selectRaw($model->getTable().'.*')->with(['employee', 'reason'])->newQuery();
     }
 
     /**

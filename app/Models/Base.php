@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Base\Department;
 use App\Traits\BlameableCustomTrait;
 use App\Traits\SearchModelTrait;
 use App\Traits\ShowColumnOptionTrait;
@@ -58,5 +59,22 @@ class Base extends Model
     public function updatedBy()
     {
         return $this->belongsTo(\App\Models\Base\User::class, static::UPDATED_BY);
+    }
+
+    protected function scopeEmployeeDescendants($query){        
+        $employee = \Auth::user()->employee;        
+        $jobLevelLeader = config('local.job_level_leader');        
+        if($employee){
+            if($employee->department_id){                
+                $jobLevelEmployee = $employee->jobLevel;
+                if(in_array($jobLevelEmployee->code, $jobLevelLeader)){                    
+                    $allDescendants = Department::descendantsAndSelf($employee->department_id)->toFlatTree()->pluck('id')->toArray();            
+                    return $query->whereIn('employee_id', function($q) use ($allDescendants){
+                        return $q->select(['id'])->from('employees')->whereIn('department_id', $allDescendants);
+                    });
+                }                
+            }        
+        }
+        return $query;
     }
 }

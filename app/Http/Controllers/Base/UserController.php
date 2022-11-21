@@ -86,15 +86,19 @@ class UserController extends AppBaseController
      */
     public function edit($id)
     {
-        $user = $this->getRepositoryObj()->find($id);
+        $user = $this->getRepositoryObj()->with(['employee'])->find($id);
 
         if (empty($user)) {
             Flash::error('User not found');
 
             return redirect(route('base.users.index'));
         }
-
-        return view('base.users.edit')->with($this->getOptionItems())->with(['user' => $user, 'roles' => $this->listRoles()]);
+        $optionItems = $this->getOptionItems();
+        if($user->employee){
+            $optionItems['employeeItems'] = [$user->employee_id => $user->employee->full_name .'('.$user->employee->code.')']; 
+        } 
+        
+        return view('base.users.edit')->with($optionItems)->with(['user' => $user, 'roles' => $this->listRoles()]);
     }
 
     /**
@@ -163,6 +167,7 @@ class UserController extends AppBaseController
     private function getOptionItems()
     {
         return [
+            'employeeItems' => []
         ];
     }
 }

@@ -49,7 +49,8 @@ class OvertimeDataTable extends DataTable
      */
     public function query(Overtime $model)
     {
-        return $model->selectRaw($model->getTable().'.*')->with(['employee', 'shiftment'])->newQuery();
+        // get own data user and all employee descendant        
+        return $model->employeeDescendants()->selectRaw($model->getTable().'.*')->with(['employee', 'shiftment'])->newQuery();
     }
 
     /**

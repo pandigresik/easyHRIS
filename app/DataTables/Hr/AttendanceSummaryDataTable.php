@@ -47,7 +47,7 @@ class AttendanceSummaryDataTable extends DataTable
      */
     public function query(AttendanceSummary $model)
     {
-        return $model->with(['employee'])->newQuery();
+        return $model->employeeDescendants()->with(['employee'])->newQuery();
     }
 
     /**
