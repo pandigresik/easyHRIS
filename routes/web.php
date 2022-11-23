@@ -62,6 +62,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('jobTitles', Hr\JobTitleController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::get('attendanceLogfingers/detail/{workDate}/{employeeId}', [App\Http\Controllers\Hr\AttendanceLogfingerController::class, 'detailLog'])->name('hr.attendanceLogfingers.detailLog');
         Route::resource('attendanceLogfingers', Hr\AttendanceLogfingerController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);        
+        Route::get('downloadLogFingers/download', [App\Http\Controllers\Hr\DownloadLogfingerController::class, 'index']);
+        Route::post('downloadLogFingers/download/{fingerprintDeviceId}', [App\Http\Controllers\Hr\DownloadLogfingerController::class, 'download']);
         Route::resource('attendanceSummaries', Hr\AttendanceSummaryController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('attendances', Hr\AttendanceController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         

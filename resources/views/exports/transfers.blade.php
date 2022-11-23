@@ -38,7 +38,7 @@
                 <td>{{ $payroll->employee->code }}</td>
                 <td>{{ $payroll->employee->full_name }}</td>
                 <td>{{ $payroll->employee->businessUnit->name ?? '' }}</td>                
-                <td>{{ $payroll->employee->jobTitle->name ?? '' }}</td>
+                <td>{{ $payroll->employee->jobtitle->name ?? '' }}</td>
                 <td>{{ $payroll->getRawOriginal('take_home_pay') }}</td>
                 <td>{{ $payroll->getRawOriginal('take_home_pay') }}</td>
                 <td>{{ $payroll->getRawOriginal('take_home_pay') }}</td>

@@ -24,6 +24,7 @@ class CreateAttendanceLogfingersTable extends Migration
             $table->dateTime('deleted_at')->nullable();
             $table->foreign('employee_id', 'fk_attendance_log_1')->references('id')->on('employees');
             $table->foreign('fingerprint_device_id', 'fk_attendance_log_2')->references('id')->on('fingerprint_devices');
+            $table->unique(['employee_id', 'fingertime'], 'uq_attendance_logfingers_1');
         });
     }
 

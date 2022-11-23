@@ -1,0 +1,4 @@
+pyzk
+mysql-connector
+pymysql
+python-dotenv

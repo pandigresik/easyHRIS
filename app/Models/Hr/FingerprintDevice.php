@@ -52,6 +52,7 @@ class FingerprintDevice extends Model
     public $fillable = [
         'serial_number',
         'ip',
+        'port',
         'display_name'
     ];
 
@@ -64,6 +65,7 @@ class FingerprintDevice extends Model
         'id' => 'integer',
         'serial_number' => 'string',
         'ip' => 'string',
+        'port' => 'integer',
         'display_name' => 'string'
     ];
 
@@ -75,6 +77,7 @@ class FingerprintDevice extends Model
     public static $rules = [
         'serial_number' => 'required|string|max:50',
         'ip' => 'required|string|max:30',
+        'port' => 'required|integer',
         'display_name' => 'required|string|max:30'
     ];
 

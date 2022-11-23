@@ -180,11 +180,13 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         ];
         $payroll->save();
         $userId = \Auth::id();
-        foreach($details as $detail){            
+        $updateData = [];
+        foreach($details as $detail){                        
             $detail['payroll_id'] = $payroll->id;
             $detail['created_by'] = $userId;
-            PayrollDetail::upsert($detail, ['payroll_id', 'component_id']);            
+            $updateData[] = $detail;            
         }        
+        PayrollDetail::upsert($updateData, ['payroll_id', 'component_id']);            
     }
     
     /** jika endDate melewati endOfMonth dari startDate maka split berdasarkan bulannya */

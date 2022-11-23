@@ -132,7 +132,7 @@
             <td>{{ $payroll->employee->full_name }}</td>
             <td>{{ $payroll->employee->businessUnit->name ?? '' }}</td>
             <td>{{ $payroll->employee->department->name ?? '' }}</td>
-            <td>{{ $payroll->employee->jobTitle->name ?? '' }}</td>
+            <td>{{ $payroll->employee->jobtitle->name ?? '' }}</td>
             <td>{{ $payroll->employee->employee_status }}</td>
             <td>{{ $dailySalary }}</td>
             <td>{{ $workday }}</td>

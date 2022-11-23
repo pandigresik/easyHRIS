@@ -117,6 +117,7 @@ class FingerprintDeviceDataTable extends DataTable
         return [
             'serial_number' => new Column(['title' => __('models/fingerprintDevices.fields.serial_number'),'name' => 'serial_number', 'data' => 'serial_number', 'searchable' => true, 'elmsearch' => 'text']),
             'ip' => new Column(['title' => __('models/fingerprintDevices.fields.ip'),'name' => 'ip', 'data' => 'ip', 'searchable' => true, 'elmsearch' => 'text']),
+            'port' => new Column(['title' => __('models/fingerprintDevices.fields.port'),'name' => 'port', 'data' => 'port', 'searchable' => false, 'elmsearch' => 'text']),
             'display_name' => new Column(['title' => __('models/fingerprintDevices.fields.display_name'),'name' => 'display_name', 'data' => 'display_name', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1704a21adef251320587dc60a1d533f3",
+    "content-hash": "3cd911c37a36ebb1eef1cf430c6403d3",
     "packages": [
         {
             "name": "acaronlex/laravel-calendar",
@@ -2785,50 +2785,6 @@
             "time": "2022-01-31T16:01:37+00:00"
         },
         {
-            "name": "laradevsbd/zkteco-sdk",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laradevsbd/zkteco-sdk-laravel.git",
-                "reference": "0f03093e726d483dd7febba6268ca64e3dd3fac8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laradevsbd/zkteco-sdk-laravel/zipball/0f03093e726d483dd7febba6268ca64e3dd3fac8",
-                "reference": "0f03093e726d483dd7febba6268ca64e3dd3fac8",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Laradevsbd\\Zkteco\\ZktecoServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laradevsbd\\Zkteco\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nur Karim",
-                    "email": "nurkarim772@gmail.com"
-                }
-            ],
-            "description": "ZKLibrary is PHP Library for ZK Time & Attendance Devices",
-            "support": {
-                "issues": "https://github.com/laradevsbd/zkteco-sdk-laravel/issues",
-                "source": "https://github.com/laradevsbd/zkteco-sdk-laravel/tree/v1.0.0"
-            },
-            "time": "2021-08-25T07:28:36+00:00"
-        },
-        {
             "name": "laravel/framework",
             "version": "v8.83.26",
             "source": {
@@ -5592,6 +5548,43 @@
                 "source": "https://github.com/rap2hpoutre/fast-excel/tree/v3.2.0"
             },
             "time": "2022-02-09T16:04:44+00:00"
+        },
+        {
+            "name": "rats/zkteco",
+            "version": "V002",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/raihanafroz/zkteco.git",
+                "reference": "6e17024370ec56c89d87c85a54a1c55079304834"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/raihanafroz/zkteco/zipball/6e17024370ec56c89d87c85a54a1c55079304834",
+                "reference": "6e17024370ec56c89d87c85a54a1c55079304834",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Rats\\Zkteco\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raihan Afroz",
+                    "email": "raihanafroz9@gmail.com"
+                }
+            ],
+            "description": "ZKTeco Laravel Library",
+            "support": {
+                "issues": "https://github.com/raihanafroz/zkteco/issues",
+                "source": "https://github.com/raihanafroz/zkteco/tree/V002"
+            },
+            "time": "2021-11-21T17:53:28+00:00"
         },
         {
             "name": "spatie/laravel-menu",

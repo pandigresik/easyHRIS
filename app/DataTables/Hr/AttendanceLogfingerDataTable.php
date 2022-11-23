@@ -61,6 +61,19 @@ class AttendanceLogfingerDataTable extends DataTable
     {
         $buttons = [
                     [
+                        'extend' => 'create',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.download').'',
+                        'action' => <<<FUNC
+                            function(e, dt, button, config){
+                                button.data('url', 'hr/downloadLogFingers/download')
+                                button.data('target', '_parent')
+                                button.data('tipe', 'get')
+                                main.redirectUrl(button)
+                            }
+FUNC
+                    ],
+                    [
                        'extend' => 'create',
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''

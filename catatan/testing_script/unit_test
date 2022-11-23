@@ -1,2 +1,3 @@
 php artisan test tests\Unit\CalculateOvertimeTest.php --stop-on-failure --env=testing
 php artisan test tests\Unit\CalculateOvertimeShift3Test.php --stop-on-failure --env=testing
+php artisan test tests\Unit\FingerDeviceConnectionTest.php --stop-on-failure --env=testing
