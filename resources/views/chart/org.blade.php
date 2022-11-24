@@ -34,7 +34,7 @@
         var oc = $('#chart-container').orgchart({
             'data' : datascource,
             'nodeContent': 'title',
-            'exportButton': true,
+            // 'exportButton': true,
             'zoom': true,
             'pan': true
         });

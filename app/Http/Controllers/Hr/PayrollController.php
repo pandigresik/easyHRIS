@@ -11,9 +11,11 @@ use App\Repositories\Hr\EmployeeRepository;
 use App\Repositories\Hr\PayrollPeriodRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\Payroll;
 use App\Models\Hr\PayrollPeriod;
 use Response;
 use Exception;
+use PDF;
 
 class PayrollController extends AppBaseController
 {
@@ -180,5 +182,19 @@ class PayrollController extends AppBaseController
             'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
             'payrollPeriodItems' => ['' => __('crud.option.payrollPeriod_placeholder')] + $payrollPeriod->pluck()
         ];
+    }
+
+    public function payslip($id){
+        $payroll = Payroll::with(['employee' => function($q){
+            return $q->select(['id', 'company_id','department_id', 'code', 'jobtitle_id', 'joblevel_id','full_name'])->with(['company', 'department', 'joblevel', 'jobtitle']);
+        }, 'payrollPeriod', 'payrollDetails' => function($r){
+            return $r->with(['component']);
+        }])->find($id);
+        $html = view('pdf.payslip',['payroll' => $payroll])->render();
+        // return $html;
+        $pdf = PDF::loadHTML($html)->setPaper('a4')->setOrientation('landscape')->setOption('margin-bottom', 0);
+        // PDF::loadView('pdf.payslip',['payroll' => $payroll])->setPaper('a4')->setOrientation('landscape');
+        return $pdf->download('payslip.pdf');
+
     }
 }

@@ -98,7 +98,7 @@ class Employee extends Model
         'region_of_birth_id' => 'integer',
         'city_of_birth_id' => 'integer',
         'address' => 'string',
-        'join_date' => 'date',
+        'join_date' => 'date:Y-m-d',
         'employee_status' => 'string',
         'code' => 'string',
         'full_name' => 'string',
@@ -422,5 +422,10 @@ class Employee extends Model
 
     public function getCodeNameAttribute($value){
         return $this->attributes['full_name'].' ('.$this->attributes['code'].')';
+    }
+
+    // jika sudah lebih dari waktu tertentu maka hari libur tetap dibayar
+    public function isHolidayPay($minJoinDate){
+        return $this->attributes['join_date'] <= $minJoinDate;
     }
 }

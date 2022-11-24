@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Base\Setting;
 use App\Models\Hr\Attendance;
 use App\Models\Hr\AttendanceSummary;
 use App\Models\Hr\Employee;
@@ -62,7 +63,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $period['month'] = $startDateObj->format('m'); 
         $period['name'] = 'Periode gaji '. localFormatDate($period['start_period']).' sd '.localFormatDate($period['end_period']);
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
-        
+        $setting = Setting::where(['type' => 'payroll'])->get()->keyBy('name');
         // get list employee
         $employeeOjb = Employee::select(['id', 'code'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
@@ -98,7 +99,14 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         foreach($employees as $employee){
             $workDayCount = $workDayEmployee[$employee->id] ?? 0;
             if(in_array($this->getPayrollPeriod(), ['weekly', 'biweekly'])){
-                $workDayCount += $holidayNotSunday;
+                if(!empty($holidayNotSunday)){
+                    foreach($holidayNotSunday as $holiday){
+                        $minJoinDate = Carbon::parse($holiday)->subMonth($setting['min_joindate_month'])->format('Y-m-d');
+                        if($employee->isHolidayPay($minJoinDate)){
+                            $workDayCount += 1;
+                        }
+                    }
+                }                
             }
             $this->calculateEmployeePayroll($workDayCount, $employee, $periodPayroll);
         }

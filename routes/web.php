@@ -80,7 +80,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('payrollPeriods', Hr\PayrollPeriodController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('payrollMonthlyPeriods', Hr\PayrollMonthlyPeriodController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('payrollBiweeklyPeriods', Hr\PayrollBiweeklyPeriodController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
-        Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::get('payrolls/payslip/{id}', [App\Http\Controllers\Hr\PayrollController::class, 'payslip'])->name('hr.payrolls.payslip');
+        Route::resource('payrolls', Hr\PayrollController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);        
         Route::resource('payrollDetails', Hr\PayrollDetailController::class, ["as" => 'hr', 'middleware' => ['easyauth']])->only(['index', 'show', 'update', 'edit']);
         Route::get('payrollDownload/{id}', [App\Http\Controllers\Hr\PayrollPeriodDownloadController::class, 'exportExcel'])->name('hr.payrollDownload.download');
         Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);

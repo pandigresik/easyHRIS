@@ -131,12 +131,12 @@ class PayrollPeriodRepository extends BaseRepository
     }    
 
     protected function getHoliday($startDate, $endDate){
-        $result = 0;
+        $result = [];
         $holiday = Holiday::select(['holiday_date'])->whereBetween('holiday_date', [$startDate, $endDate])->get();
         if(!$holiday->isEmpty()){
             foreach($holiday as $day){
                 if(Carbon::parse($day->getRawOriginal('holiday_date'))->dayOfWeek !== Carbon::SUNDAY ){
-                    $result += 1;
+                    $result[] = $day->getRawOriginal('holiday_date');
                 }
             }
         }
