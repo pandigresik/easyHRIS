@@ -10,11 +10,13 @@ use App\Repositories\Hr\JobLevelRepository;
 
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Traits\ChartOrgTrait;
 use Response;
 use Exception;
 
 class JobLevelController extends AppBaseController
 {
+    use ChartOrgTrait;
     /** @var  JobLevelRepository */
     protected $repository;
 

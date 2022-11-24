@@ -1,6 +1,8 @@
 {!! Form::open(['route' => ['hr.jobLevels.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group'>
-    
+    <a href="{{ route('hr.jobLevels.chart', $id) }}" class='btn btn-ghost-info'>
+       <i class="fa fa-sitemap"></i>
+    </a>
     <a href="{{ route('hr.jobLevels.edit', $id) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>

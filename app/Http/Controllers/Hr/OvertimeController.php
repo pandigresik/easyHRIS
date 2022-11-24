@@ -173,10 +173,11 @@ class OvertimeController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $shiftment = new ShiftmentRepository();
+        // $shiftment = new ShiftmentRepository();
         
         return [
-            'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck(),
+            // 'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck(),
+            'shiftmentItems' => [],
             'employeeItems' => []           
         ];
     }

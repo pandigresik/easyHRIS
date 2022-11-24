@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\CityDataTable;
-use App\Http\Requests\Base;
+
 use App\Http\Requests\Base\CreateCityRequest;
 use App\Http\Requests\Base\UpdateCityRequest;
 use App\Repositories\Base\CityRepository;

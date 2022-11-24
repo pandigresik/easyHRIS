@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\BusinessUnitDataTable;
-use App\Http\Requests\Base;
+
 use App\Http\Requests\Base\CreateBusinessUnitRequest;
 use App\Http\Requests\Base\UpdateBusinessUnitRequest;
 use App\Repositories\Base\BusinessUnitRepository;

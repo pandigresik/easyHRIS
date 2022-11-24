@@ -25,7 +25,8 @@ return [
         'print' => 'Cetak',
         'reset' => 'Reset',
         'reload' => 'Refresh',
-        'download' => 'Download'
+        'download' => 'Download',
+        'chart' => 'Chart'
     ]
 
 ];

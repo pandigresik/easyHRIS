@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('cities', Base\CityController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         Route::resource('companies', Base\CompanyController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         Route::resource('departments', Base\DepartmentController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+        Route::get('departments/display/chart/{id?}', [\App\Http\Controllers\Base\DepartmentController::class, 'displayChart'])->name('base.departments.chart');
         Route::resource('businessUnits', Base\BusinessUnitController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         Route::resource('regions', Base\RegionController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         Route::resource('settings', Base\SettingController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
@@ -57,6 +58,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('employees.salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('holidays', Hr\HolidayController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('jobLevels', Hr\JobLevelController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::get('jobLevels/display/chart/{id?}', [\App\Http\Controllers\Hr\JobLevelController::class, 'displayChart'])->name('hr.jobLevels.chart');
         Route::resource('jobMutations', Hr\JobMutationController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('jobPlacements', Hr\JobPlacementController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('jobTitles', Hr\JobTitleController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);

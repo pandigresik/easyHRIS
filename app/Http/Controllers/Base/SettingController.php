@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\SettingDataTable;
-use App\Http\Requests\Base;
+
 use App\Http\Requests\Base\CreateSettingRequest;
 use App\Http\Requests\Base\UpdateSettingRequest;
 use App\Repositories\Base\SettingRepository;

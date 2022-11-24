@@ -6,14 +6,14 @@
 </div>
 </div>
 
-<!-- Shiftment Id Field -->
+<!-- Shiftment Id Field
 <div class="form-group row mb-3">
     {!! Form::label('shiftment_id', __('models/overtimes.fields.shiftment_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
     {!! Form::select('shiftment_id', $shiftmentItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>
-
+-->
 <!-- Approved By Id Field
 <div class="form-group row mb-3">
     {!! Form::label('approved_by_id', __('models/overtimes.fields.approved_by_id').':', ['class' => 'col-md-3 col-form-label']) !!}

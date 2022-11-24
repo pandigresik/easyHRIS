@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Base\Department;
+use App\Models\Hr\JobLevel;
 use App\Models\Hr\Overtime;
 
 class HomeController extends Controller
@@ -39,7 +41,8 @@ class HomeController extends Controller
     }
 
     public function tes(){
-        $overtime = Overtime::with(['benefitValue'])->get();
-        dd($overtime);
+        
+        $tes = (new JobLevel())->generateChartData(3);
+        dd($tes);
     }
 }

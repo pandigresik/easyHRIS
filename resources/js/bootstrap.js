@@ -13,7 +13,8 @@ try {
   window.$ = window.jQuery = require('jquery')
   window.moment = require('moment')
   window.toastr = require('toastr')
-  window.bootbox = require('bootbox')  
+  window.bootbox = require('bootbox')
+    
   require('bootstrap')
   window.coreui = require('@coreui/coreui')
   require('@coreui/icons')

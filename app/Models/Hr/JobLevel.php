@@ -6,6 +6,7 @@ use App\Models\Base as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Kalnoy\Nestedset\NodeTrait;
 
 /**
  * @SWG\Definition(
@@ -38,6 +39,7 @@ class JobLevel extends Model
 {
     use HasFactory;
         use SoftDeletes;
+    use NodeTrait;
 
     public $table = 'job_levels';
     
@@ -134,5 +136,9 @@ class JobLevel extends Model
     public function parent(): BelongsTo
     {
         return $this->belongsTo(JobLevel::class, 'parent_id');
+    }
+
+    public function generateChartData($id = null){
+        return empty($id) ? $this->selectRaw('id, parent_id, code as title, name ,_lft, _rgt')->get()->toTree()->toArray() : $this->selectRaw('id, parent_id, code as title, name,_lft, _rgt')->descendantsAndSelf($id)->toTree()->toArray();
     }
 }

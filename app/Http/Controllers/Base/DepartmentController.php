@@ -3,18 +3,22 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DepartmentDataTable;
-use App\Http\Requests\Base;
+
 use App\Http\Requests\Base\CreateDepartmentRequest;
 use App\Http\Requests\Base\UpdateDepartmentRequest;
 use App\Repositories\Base\DepartmentRepository;
 
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Base\Department;
+use App\Traits\ChartOrgTrait;
 use Response;
 use Exception;
 
 class DepartmentController extends AppBaseController
 {
+    use ChartOrgTrait;
+
     /** @var  DepartmentRepository */
     protected $repository;
 
@@ -175,4 +179,9 @@ class DepartmentController extends AppBaseController
             'parentItems' => ['' => 'Pilih '] + $parentItems
         ];
     }
+
+    protected function getDataChart($id = null){
+        return (new Department())->generateChartData($id);
+    }
+    
 }

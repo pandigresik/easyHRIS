@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\CompanyDataTable;
-use App\Http\Requests\Base;
+
 use App\Http\Requests\Base\CreateCompanyRequest;
 use App\Http\Requests\Base\UpdateCompanyRequest;
 use App\Repositories\Base\CompanyRepository;

@@ -18,6 +18,8 @@ class CreateJobLevelsTable extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('code', 7)->nullable();
             $table->string('name')->nullable();
+            $table->unsignedInteger('_lft')->nullable();
+            $table->unsignedInteger('_rgt')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

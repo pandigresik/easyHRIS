@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\RegionDataTable;
-use App\Http\Requests\Base;
+
 use App\Http\Requests\Base\CreateRegionRequest;
 use App\Http\Requests\Base\UpdateRegionRequest;
 use App\Repositories\Base\RegionRepository;

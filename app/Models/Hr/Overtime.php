@@ -158,7 +158,7 @@ class Overtime extends Model
      */
     public static $rules = [
         'employee_id' => 'required',
-        'shiftment_id' => 'required',
+        'shiftment_id' => 'nullable',
         'approved_by_id' => 'nullable',
         'overtime_date' => 'required',
         'start_hour' => 'required',

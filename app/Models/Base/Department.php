@@ -137,4 +137,8 @@ class Department extends Model
     {
         return $this->belongsTo(Department::class, 'parent_id');
     }
+
+    public function generateChartData($id = null){
+        return empty($id) ? $this->selectRaw('id, parent_id, code as title, name ,_lft, _rgt')->get()->toTree()->toArray() : $this->selectRaw('id, parent_id, code as title, name,_lft, _rgt')->descendantsAndSelf($id)->toTree()->toArray();
+    }
 }

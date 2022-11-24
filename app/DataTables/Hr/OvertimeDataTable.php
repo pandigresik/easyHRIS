@@ -16,7 +16,7 @@ class OvertimeDataTable extends DataTable
     private $columnFilterOperator = [
         'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
-        'shiftment_id' => \App\DataTables\FilterClass\InKeyword::class,        
+        // 'shiftment_id' => \App\DataTables\FilterClass\InKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -50,7 +50,7 @@ class OvertimeDataTable extends DataTable
     public function query(Overtime $model)
     {
         // get own data user and all employee descendant        
-        return $model->employeeDescendants()->selectRaw($model->getTable().'.*')->with(['employee', 'shiftment'])->newQuery();
+        return $model->employeeDescendants()->selectRaw($model->getTable().'.*')->with(['employee'])->newQuery();
     }
 
     /**
@@ -119,11 +119,11 @@ class OvertimeDataTable extends DataTable
     protected function getColumns()
     {
         $shiftmentRepository = new ShiftmentRepository();        
-        $shiftmentItem = convertArrayPairValueWithKey($shiftmentRepository->pluck());
+        // $shiftmentItem = convertArrayPairValueWithKey($shiftmentRepository->pluck());
         return [
             'employee.full_name' => new Column(['title' => __('models/overtimes.fields.employee_full_name'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'employee.code' => new Column(['title' => __('models/overtimes.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
-            'shiftment_id' => new Column(['title' => __('models/overtimes.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'listItem' => $shiftmentItem, 'multiple' => 'multiple' ,'elmsearch' => 'dropdown']),
+            // 'shiftment_id' => new Column(['title' => __('models/overtimes.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'listItem' => $shiftmentItem, 'multiple' => 'multiple' ,'elmsearch' => 'dropdown']),
             // 'approved_by_id' => new Column(['title' => __('models/overtimes.fields.approved_by_id'),'name' => 'approved_by_id', 'data' => 'approved_by_id', 'searchable' => true, 'elmsearch' => 'text']),
             'overtime_date' => new Column(['title' => __('models/overtimes.fields.overtime_date'),'name' => 'overtime_date', 'data' => 'overtime_date', 'searchable' => true, 'elmsearch' => 'text']),
             'start_hour' => new Column(['title' => __('models/overtimes.fields.start_hour'),'name' => 'start_hour', 'data' => 'start_hour', 'searchable' => true, 'elmsearch' => 'text']),

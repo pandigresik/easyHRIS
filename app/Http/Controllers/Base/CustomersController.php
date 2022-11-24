@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\CustomersDataTable;
-use App\Http\Requests\Base;
+
 use App\Http\Requests\Base\CreateCustomersRequest;
 use App\Http\Requests\Base\UpdateCustomersRequest;
 use App\Repositories\Base\CustomersRepository;
