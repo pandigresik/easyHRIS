@@ -47,21 +47,14 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
         $mapRelation = [
             'company_id' => 'company',
             'department_id' => 'department',
-            'business_unit' => 'businessUnit',
+            'business_unit_id' => 'businessUnit',
             'joblevel_id' => 'joblevel',
             'jobtitle_id' => 'jobtitle',            
             'region_of_birth_id' => 'regionOfBirth',
             'city_of_birth_id' => 'cityOfBirth',
             'salary_group_id' => 'salaryGroup',
             'shiftment_group_id' => 'shiftmentGroup'
-        ];
-        // $this->salaryComponent['OT']->id => $overtime, 
-        //     $this->salaryComponent['GPH']->id => $salary, 
-        //     $this->salaryComponent['GP']->id => $salary,
-        //     $this->salaryComponent['JPM']->id => $bpjsFeeJp, 
-        //     $this->salaryComponent['JHTM']->id => $bpjsFeeJht,
-        //     $this->salaryComponent['PJKNM']->id => $bpjsFeeJkn,
-        //     $this->salaryComponent['TJ']->id => $positionAllowance,
+        ];        
         $mapRelationBenefit = [
             'overtime' => 'OT',
             'salary' => ['GPH', 'GP'],	
@@ -72,10 +65,9 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
         ];  
         $attribute = $this->headings();
         foreach ($attribute as $name) {
-            $defaultValue = $item->{$name};
+            $defaultValue = $item->getRawOriginal($name);
             if(isset($mapRelation[$name])){
-                $mapRelationName = $mapRelation[$name];
-                \Log::error($mapRelationName);                
+                $mapRelationName = $mapRelation[$name];                
                 $itemRelation = $item->{$mapRelationName} ?? [];
                 if(!empty($itemRelation)){
                     $defaultValue = $itemRelation->name;
@@ -104,7 +96,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'contract_id',
             'company_id',
             'department_id',
-            'business_unit',
+            'business_unit_id',
             'joblevel_id',
             'jobtitle_id',
             'supervisor_id',
