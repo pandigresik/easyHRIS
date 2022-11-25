@@ -123,6 +123,6 @@ class Payroll extends Model
     }
 
     public function getTakeHomePayAttribute($value){
-        return localNumberFormat($value);
+        return localNumberFormat($value, 0);
     }
 }

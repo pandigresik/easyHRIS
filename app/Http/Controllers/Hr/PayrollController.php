@@ -192,7 +192,7 @@ class PayrollController extends AppBaseController
         }])->find($id);
         $html = view('pdf.payslip',['payroll' => $payroll])->render();
         // return $html;
-        $pdf = PDF::loadHTML($html)->setPaper('a4')->setOrientation('landscape')->setOption('margin-bottom', 0);
+        $pdf = PDF::loadHTML($html)->setPaper('a5')->setOrientation('landscape')->setOption('margin-top', 2)->setOption('margin-bottom', 0);
         // PDF::loadView('pdf.payslip',['payroll' => $payroll])->setPaper('a4')->setOrientation('landscape');
         return $pdf->download('payslip.pdf');
 

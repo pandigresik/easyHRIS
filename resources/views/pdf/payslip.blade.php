@@ -5,87 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style type="text/css" media="all">
-        @page {
-            size: A4;
-            margin: 0;
-            orientation: landscape;
-        }
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
+        .table {
+            font-size: 85%;
+            vertical-align: top;
         }
 
-        body {
-            background-color: blac;
-            display: flex;
-            justify-content: center;
-            background-color: #313131;
-        }
-
-        .slip-gaji {
-            width: 750px;
-            min-height: 100vh;
-            background-color: #fff;
-            padding: 20px;
-        }
-
-        .slip-gaji .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            font-size: 14px;
-        }
-
-        .slip-gaji .content-body .data-karyawan,
-        .slip-gaji .content-body .data-karyawan .left,
-        .slip-gaji .content-body .data-karyawan .right,
-        .slip-gaji .content-body .detail-fee,
-        .slip-gaji .content-body .total-fee {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 10px 0;
-            font-size: 12px;
-        }
-
-        .slip-gaji .content-body .data-karyawan .left .label,
-        .slip-gaji .content-body .data-karyawan .right .label {
-            font-size: 12px;
-        }
-
-        .slip-gaji .content-body .data-karyawan .label {
-            margin-right: 10px;
-        }
-
-        .slip-gaji .content-body .detail-fee h3 {
-            margin-bottom: 10px;
-        }
-
-        .slip-gaji .content-body .detail-fee .pendapatan {            
-            padding: 20px;
-            flex-basis: 50%;
-            margin-right: 10px;
-            border-radius: 5px;            
-        }
-
-        .slip-gaji .content-body .detail-fee .potongan {            
-            padding: 20px;
-            flex-basis: 50%;
-            margin-left: 10px;
-            border-radius: 5px;            
-        }
-
-        .slip-gaji .content-body .detail-fee th,
-        .slip-gaji .content-body .detail-fee td {
-            padding: 5px 10px;
-            box-sizing: border-box;
-        }        
-
-        .slip-gaji .content-body .total-fee {
-            align-items: center;
-            flex-direction: column;
+        .table-header td {
+            padding: 4px 2px;
         }
     </style>
 
@@ -94,64 +20,122 @@
 
 <body>
     <div class="slip-gaji">
-        <div class="header">
-            <h2 class="pb-2" style="text-align: center;">Slip Gaji Karyawan</h2>
-            <h3 class="brand-name" style="text-align: center;">{{$payroll->employee->company->name }}</h3>
-            <h3>Periode {{ $payroll->payrollPeriod->range_period }}</h3>
-        </div>        
-        <div class="content-body">
-            <div class="data-karyawan">
-                <div class="left">
-                    <div class="label" style="text-align: justify;">                        
-                        <h4>NIK : <em>{{ $payroll->employee->code }}</em></h4>
-                        <h4>Nama Karyawan : <em>{{ $payroll->employee->full_name }}</em></h4>
-                        <h4>Jabatan : <em>{{ $payroll->employee->jobtitle->name }}</em></h4>
-                        <h4>Tanggal Cetak : <em>{{ localFormatDate(date('Y-m-d')) }}</em></h4>
-                    </div>
-                </div>
-            </div>
-            <hr>            
-            <div class="detail-fee">
-                <div class="pendapatan">
-                    <h3>Rincian Pendapatan</h3>
-                    <table class="table">
-                        <tbody>
-                        @php
-                        $pendapatan = $payroll->payrollDetails->filter(function($item){ return $item->sign_value > 0 ; });
-                        $potongan = $payroll->payrollDetails->filter(function($item){ return $item->sign_value < 0 ; });                        
-                        @endphp
-                        @foreach($pendapatan as $no => $g)
-                            <tr>                                
-                                <td>{{ $g->component->name }}</td>                                
-                                <td>Rp {{ $g->benefit_value }}</td>
-                            </tr>
-                            
-                            @endforeach                
-                        </tbody>
-                    </table>
-                </div>
-                <br>
-                <div class="potongan">
-                    <h3>Rincian Potongan</h3>
-                    <table class="table">
-                        <tbody>
-                        @foreach($potongan as $no => $g)
-                            <tr>                                
-                                <td>{{ $g->component->name }}</td>                                
-                                <td>Rp {{ $g->benefit_value }}</td>
-                            </tr>
-                            
-                            @endforeach                
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            
-        </div>
+        <table class="table-header">
+            <tr>
+                <td>
+                    <img width="118" height="46" src="{{ url('/vendor/coreui/icons/svg/brand.svg') }}" />
+                </td>
+                <td>
+                    <div style="font-size:120%">SLIP GAJI KARYAWAN</div>
+                    <div style="font-size:120%">{{ $payroll->employee->company->name }}</div>
+                </td>
+
+            </tr>
+        </table>
         <hr>
-        <br>
-        
+        <table class="table-header"  width="100%">
+            <tbody>
+                <tr>
+                    <td width="50%">
+                        <table>
+                            <tr>
+                                <td>NIK</td>
+                                <td>: <strong>{{ $payroll->employee->code }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Nama</td>
+                                <td>: <strong>{{ $payroll->employee->full_name }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Jabatan</td>
+                                <td>: <strong>{{ $payroll->employee->jobtitle->name ?? '-' }}</strong></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="50%">
+                        <table>
+                            <tr>
+                                <td>Periode</td>
+                                <td>: <strong>{{ $payroll->payrollPeriod->range_period }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Tanggal Cetak</td>
+                                <td>: <strong>{{ localFormatDate(date('Y-m-d')) }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Total Terima</td>
+                                <td>: <strong>Rp. {{ $payroll->take_home_pay }}</strong></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+        <table class="table" cellspacing="10px" width="100%">
+            <tr>
+                <td>
+                    <strong>Rincian Pendapatan</strong>
+                </td>
+                <td>
+                    <strong>Rincian Potongan</strong>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" style="border: 1px solid gray; vertical-align: top">
+                    <table class="table" width="100%">
+                        <tbody>
+                            @php
+                            $pendapatan = $payroll->payrollDetails->filter(function($item){ return
+                            $item->sign_value
+                            > 0 ; });
+                            $potongan = $payroll->payrollDetails->filter(function($item){ return
+                            $item->sign_value < 0 ; }); @endphp @foreach($pendapatan as $no=> $g)
+                                <tr>
+                                    <td width="65%">{{ $g->component->name }}</td>
+                                    <td width="5%">Rp</td>
+                                    <td style="text-align:right">{{ $g->benefit_value }}</td>
+                                </tr>
+                                @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan=3><hr></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td width="5%">Rp</td>
+                                <td style="text-align:right">{{ localNumberFormat($pendapatan->sum( function($item){ return $item->getRawOriginal('benefit_value'); }), 0) }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </td>
+
+                <td width="50%" style="border: 1px solid gray; vertical-align: top">
+                    <table class="table" width="100%">
+                        <tbody>
+                            @foreach($potongan as $no => $g)
+                            <tr>
+                                <td width="65%">{{ $g->component->name }}</td>
+                                <td width="5%">Rp</td>
+                                <td style="text-align:right">{{ $g->benefit_value }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                                <td colspan=3><hr></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td width="5%">Rp</td>
+                                <td style="text-align:right">{{ localNumberFormat($potongan->sum( function($item){ return $item->getRawOriginal('benefit_value'); }), 0) }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </div>
 </body>
 

@@ -169,7 +169,7 @@ class Employee extends Model
      **/
     public function cityOfBirth()
     {
-        return $this->belongsTo(\App\Models\Hr\City::class, 'city_of_birth_id');
+        return $this->belongsTo(\App\Models\Base\City::class, 'city_of_birth_id');
     }
 
     /**
@@ -197,7 +197,7 @@ class Employee extends Model
      **/
     public function regionOfBirth()
     {
-        return $this->belongsTo(\App\Models\Hr\Region::class, 'region_of_birth_id');
+        return $this->belongsTo(\App\Models\Base\Region::class, 'region_of_birth_id');
     }
 
     /**
@@ -267,6 +267,11 @@ class Employee extends Model
     public function shiftmentGroup()
     {
         return $this->belongsTo(\App\Models\Hr\ShiftmentGroup::class, 'shiftment_group_id');
+    }
+
+    public function salaryGroup()
+    {
+        return $this->belongsTo(\App\Models\Hr\SalaryGroup::class, 'salary_group_id');
     }
 
     /**

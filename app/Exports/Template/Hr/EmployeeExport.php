@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use stdClass;
 
 class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, WithMapping
 {
@@ -24,11 +25,15 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
      */
     public function collection()
     {
-        if ($this->isTemplate) {
-            return Employee::limit(1)->get();
+        if ($this->isTemplate) {            
+            return Employee::whereNotNUll(['jobtitle_id', 'department_id', 'business_unit_id', 'joblevel_id'])->with(['joblevel', 'jobtitle', 'company', 'department','regionOfBirth', 'businessUnit', 'shiftmentGroup', 'salaryGroup', 'salaryBenefits' => function($q){
+                return $q->with(['component']);
+            }])->limit(1)->get();
         }
 
-        return Employee::all();
+        return Employee::with(['joblevel', 'jobtitle', 'company', 'department','regionOfBirth', 'businessUnit', 'shiftmentGroup', 'salaryGroup', 'salaryBenefits'  => function($q){
+            return $q->with(['component']);
+        }])->all();
     }
 
     /**
@@ -39,9 +44,55 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
     public function map($item): array
     {
         $result = [];
+        $mapRelation = [
+            'company_id' => 'company',
+            'department_id' => 'department',
+            'business_unit' => 'businessUnit',
+            'joblevel_id' => 'joblevel',
+            'jobtitle_id' => 'jobtitle',            
+            'region_of_birth_id' => 'regionOfBirth',
+            'city_of_birth_id' => 'cityOfBirth',
+            'salary_group_id' => 'salaryGroup',
+            'shiftment_group_id' => 'shiftmentGroup'
+        ];
+        // $this->salaryComponent['OT']->id => $overtime, 
+        //     $this->salaryComponent['GPH']->id => $salary, 
+        //     $this->salaryComponent['GP']->id => $salary,
+        //     $this->salaryComponent['JPM']->id => $bpjsFeeJp, 
+        //     $this->salaryComponent['JHTM']->id => $bpjsFeeJht,
+        //     $this->salaryComponent['PJKNM']->id => $bpjsFeeJkn,
+        //     $this->salaryComponent['TJ']->id => $positionAllowance,
+        $mapRelationBenefit = [
+            'overtime' => 'OT',
+            'salary' => ['GPH', 'GP'],	
+            'position_allowance' => 'TJ',
+            'bpjs_kesehatan' => 'PJKNM',
+            'bpjs_jht' => 'JHTM',
+            'bpjs_jp' => 'JPM'
+        ];  
         $attribute = $this->headings();
         foreach ($attribute as $name) {
-            array_push($result, $item->{$name});
+            $defaultValue = $item->{$name};
+            if(isset($mapRelation[$name])){
+                $mapRelationName = $mapRelation[$name];
+                \Log::error($mapRelationName);                
+                $itemRelation = $item->{$mapRelationName} ?? [];
+                if(!empty($itemRelation)){
+                    $defaultValue = $itemRelation->name;
+                }                
+            }
+
+            if(isset($mapRelationBenefit[$name])){
+                $benefitMap = $mapRelationBenefit[$name];
+                if(is_array($benefitMap)){
+                    $salaryBenefits = $item->salaryBenefits->whereIn('component.code', $benefitMap)->first();
+                }else{
+                    $salaryBenefits = $item->salaryBenefits->where('component.code', $benefitMap)->first();
+                }
+                $defaultValue = $salaryBenefits->getRawOriginal('benefit_value');
+            }
+
+            array_push($result, $defaultValue);
         }
 
         return $result;
