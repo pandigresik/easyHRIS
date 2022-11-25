@@ -31,7 +31,7 @@ attendance_updates = []
 try:
     conn = zk.connect()
     serial_number = conn.get_serialnumber()
-    serial_number = 'FDFAFAFA'
+    
     fingerprint_device_id = 1
     last_fingertime = connect_db.get_last_timestamp(serial_number)
     start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')

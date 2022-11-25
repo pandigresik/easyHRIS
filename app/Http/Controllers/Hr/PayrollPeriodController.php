@@ -50,7 +50,7 @@ class PayrollPeriodController extends AppBaseController
     public function create()
     {
         $nextPeriod = $this->getNextPeriodPayroll();
-        $paramDate = ['startDate' => is_null($nextPeriod) ? $nextPeriod : localFormatDate($nextPeriod)];
+        $paramDate = ['startDate' => is_null($nextPeriod) ? localFormatDate(Carbon::now()->startOfMonth()) : localFormatDate($nextPeriod)];
         $paramDate['endDate'] = localFormatDate($this->getEndNextPeriodPayroll($nextPeriod));
         return view($this->viewPath.'.create')->with($this->getOptionItems())->with($paramDate);
     }
@@ -196,7 +196,7 @@ class PayrollPeriodController extends AppBaseController
                 $lastPeriod = PayrollPeriod::biweekly()->orderBy('end_period', 'desc')->first();
                 break;
             default:            
-                $lastPeriod = PayrollPeriod::daily()->orderBy('end_period', 'desc')->first();                
+                $lastPeriod = PayrollPeriod::monthly()->orderBy('end_period', 'desc')->first();                
         }
         
         if($lastPeriod){

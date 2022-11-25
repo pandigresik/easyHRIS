@@ -4,6 +4,7 @@ namespace App\DataTables\Hr;
 
 use App\Models\Hr\PayrollPeriod;
 use App\DataTables\BaseDataTable as DataTable;
+use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -15,7 +16,10 @@ class PayrollPeriodDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'month' => \App\DataTables\FilterClass\InKeyword::class,
+        'start_period' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'end_period' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'payroll_period_group_id' => \App\DataTables\FilterClass\InKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -128,16 +132,21 @@ class PayrollPeriodDataTable extends DataTable
      * @return array
      */
     protected function getColumns()
-    {
+    {   $listMonth = [];
+        for($i = 1; $i <= 12; $i++){
+            $listMonth[$i] = localFormatMonth($i);
+        }
+        $payrollPeriodGroupItems = convertArrayPairValueWithKey( (new PayrollPeriodGroupRepository())->pluck());
+        $monthItems = convertArrayPairValueWithKey( $listMonth );
         return [
             'company_id' => new Column(['title' => __('models/payrollPeriods.fields.company_id'),'name' => 'company_id', 'data' => 'company.name', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/payrollPeriods.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
             'year' => new Column(['title' => __('models/payrollPeriods.fields.year'),'name' => 'year', 'data' => 'year', 'searchable' => true, 'elmsearch' => 'text']),
-            'month' => new Column(['title' => __('models/payrollPeriods.fields.month'),'name' => 'month', 'data' => 'month', 'searchable' => true, 'elmsearch' => 'text']),
-            'start_period' => new Column(['title' => __('models/payrollPeriods.fields.start_period'),'name' => 'start_period', 'data' => 'start_period', 'searchable' => true, 'elmsearch' => 'text']),
-            'end_period' => new Column(['title' => __('models/payrollPeriods.fields.end_period'),'name' => 'end_period', 'data' => 'end_period', 'searchable' => true, 'elmsearch' => 'text']),
-            'payroll_period_group_id' => new Column(['title' => __('models/payrollPeriods.fields.payroll_period_group_id'),'name' => 'payroll_period_group_id', 'data' => 'payroll_period_group.name', 'searchable' => true, 'elmsearch' => 'text']),
-            'closed' => new Column(['title' => __('models/payrollPeriods.fields.closed'),'name' => 'closed', 'data' => 'closed', 'searchable' => true, 'elmsearch' => 'text'])
+            'month' => new Column(['title' => __('models/payrollPeriods.fields.month'),'name' => 'month', 'data' => 'month', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $monthItems, 'multiple' => 'multiple']),
+            'start_period' => new Column(['title' => __('models/payrollPeriods.fields.start_period'),'name' => 'start_period', 'data' => 'start_period', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'end_period' => new Column(['title' => __('models/payrollPeriods.fields.end_period'),'name' => 'end_period', 'data' => 'end_period', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'payroll_period_group_id' => new Column(['title' => __('models/payrollPeriods.fields.payroll_period_group_id'),'name' => 'payroll_period_group_id', 'data' => 'payroll_period_group.name', 'searchable' => true, 'elmsearch' => 'dropdown', 'multiple' => 'multiple', 'listItem' => $payrollPeriodGroupItems]),
+            // 'closed' => new Column(['title' => __('models/payrollPeriods.fields.closed'),'name' => 'closed', 'data' => 'closed', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 
