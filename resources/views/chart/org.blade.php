@@ -22,11 +22,11 @@
 @endsection
 
 @push('styles')
-<link rel="stylesheet" href="/vendor/orgchart/css/jquery.orgchart.min.css" />
+<link rel="stylesheet" href="{{ asset('/vendor/orgchart/css/jquery.orgchart.min.css') }}" />
 @endpush
 
 @push('scripts')
-<script src="/vendor/orgchart/js/jquery.orgchart.min.js"></script>
+<script src="{{ asset('/vendor/orgchart/js/jquery.orgchart.min.js') }}"></script>
 <script type="text/javascript">
     $(function(){
         var datascource = {!! json_encode($source[0] ?? new StdClass ) !!};
