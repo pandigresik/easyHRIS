@@ -9,7 +9,8 @@ class ExportController extends AppBaseController
 {
     public function index(Request $request)
     {
-        $urlOrigin = parse_url($request->input('urlOrigin'));
+        // $urlOrigin = parse_url($request->input('urlOrigin'));
+        $urlOrigin = parse_url(substr($request->input('urlOrigin'),strlen(config('app.url'))));
         $model = $this->getModel($urlOrigin['path']);
         $fileName = str_replace('\\', '_', $model);
         $modelEksport = '\\App\Exports\\Template\\'.$model.'Export';
