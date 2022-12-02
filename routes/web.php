@@ -94,7 +94,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('salaryGroups', Hr\SalaryGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('shiftmentGroups', Hr\ShiftmentGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('shiftments', Hr\ShiftmentController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
-        Route::resource('shiftmentGroups.details', Hr\ShiftmentGroupDetailController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('shiftmentGroups.details', Hr\ShiftmentGroupDetailController::class, ["as" => 'hr']);
         Route::resource('shiftmentSchedules', Hr\ShiftmentScheduleController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('skillGroups', Hr\SkillGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('skills', Hr\SkillController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);

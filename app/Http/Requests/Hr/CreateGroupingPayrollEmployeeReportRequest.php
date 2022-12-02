@@ -16,7 +16,7 @@ class CreateGroupingPayrollEmployeeReportRequest extends FormRequest
      */
     public function authorize()
     {
-        $permissionName = 'grouping_payroll_employee_report-create';
+        $permissionName = 'grouping_payroll_employee_reports-create';
         return Auth::user()->can($permissionName);
     }
 

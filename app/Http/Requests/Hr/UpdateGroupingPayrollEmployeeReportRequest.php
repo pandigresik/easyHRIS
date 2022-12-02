@@ -17,7 +17,7 @@ class UpdateGroupingPayrollEmployeeReportRequest extends FormRequest
      */
     public function authorize()
     {
-        $permissionName = 'grouping_payroll_employee_report-update';
+        $permissionName = 'grouping_payroll_employee_reports-update';
         return Auth::user()->can($permissionName);
     }
 
