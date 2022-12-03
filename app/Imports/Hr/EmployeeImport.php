@@ -8,6 +8,7 @@ use App\Models\Base\Department;
 use App\Models\Hr\Employee;
 use App\Models\Hr\JobLevel;
 use App\Models\Hr\JobTitle;
+use App\Models\Hr\PayrollPeriodGroup;
 use App\Models\Hr\SalaryBenefit;
 use App\Models\Hr\SalaryComponent;
 use App\Models\Hr\SalaryGroup;
@@ -30,6 +31,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     private $businessUnit;
     private $company;
     private $joTitle;
+    private $payrollGroup;
     public function __construct()
     {
         $this->departement = Department::get()->keyBy('name');
@@ -40,6 +42,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ'])->get()->keyBy('code');
         $this->businessUnit = BusinessUnit::get()->keyBy('name');
         $this->company = Company::get()->keyBy('name');
+        $this->payrollGroup = PayrollPeriodGroup::get()->keyBy('name');
     }
     public function collection(Collection $rows)
     {      
@@ -73,6 +76,8 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $row['salary_group_id'] = $this->salaryGroup[$salaryGroup]->id ?? NULL;
         $shiftmentGroup = $row['shiftment_group_id'];
         $row['shiftment_group_id'] = $this->shiftmentGroup[$shiftmentGroup]->id ?? NULL;
+        $payrollGroup = $row['payroll_period_group_id'];
+        $row['payroll_period_group_id'] = $this->$this->payrollGroup[$payrollGroup]->id ?? NULL;
         $employee = Employee::updateOrCreate($row->toArray());
         $salaryDetails = $this->salaryGroup[$salaryGroup]->salaryGroupDetails ?? NULL;
         $this->createSalaryBenefit($employee, $salaryDetails ,[

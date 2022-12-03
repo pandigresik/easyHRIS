@@ -112,7 +112,7 @@ class Employee extends Model
         'leave_balance' => 'integer',
         'tax_group' => 'string',
         'resign_date' => 'date',
-        'have_overtime_benefit' => 'boolean',
+        'have_overtime_benefit' => 'integer',
         'risk_ratio' => 'string',
         'profile_image' => 'string',
         'profile_size' => 'integer',
@@ -382,6 +382,12 @@ class Employee extends Model
     {
         return $this->hasOne(\App\Models\Hr\GroupingPayrollEmployeeReport::class, 'employee_id');
     }
+
+    public function payrollPeriodGroup()
+    {
+        return $this->belongsTo(\App\Models\Hr\PayrollPeriodGroup::class, 'payroll_period_group_id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/

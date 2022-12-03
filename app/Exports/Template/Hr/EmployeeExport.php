@@ -26,7 +26,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
     public function collection()
     {
         if ($this->isTemplate) {            
-            return Employee::whereNotNUll(['jobtitle_id', 'department_id', 'business_unit_id', 'joblevel_id'])->with(['joblevel', 'jobtitle', 'company', 'department','regionOfBirth', 'businessUnit', 'shiftmentGroup', 'salaryGroup', 'salaryBenefits' => function($q){
+            return Employee::whereNotNUll(['jobtitle_id', 'department_id', 'business_unit_id', 'joblevel_id'])->with(['joblevel', 'jobtitle', 'company', 'department','regionOfBirth', 'businessUnit', 'shiftmentGroup', 'salaryGroup', 'payrollPeriodGroup', 'salaryBenefits' => function($q){
                 return $q->with(['component']);
             }])->limit(1)->get();
         }
@@ -53,7 +53,8 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'region_of_birth_id' => 'regionOfBirth',
             'city_of_birth_id' => 'cityOfBirth',
             'salary_group_id' => 'salaryGroup',
-            'shiftment_group_id' => 'shiftmentGroup'
+            'shiftment_group_id' => 'shiftmentGroup',
+            'payroll_period_group_id' => 'payrollPeriodGroup'
         ];        
         $mapRelationBenefit = [
             'overtime' => 'OT',
@@ -111,6 +112,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'date_of_birth',
             'identity_number',
             'identity_type',
+            'account_bank',
             'marital_status',
             'email',
             'leave_balance',        
@@ -122,7 +124,8 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'bpjs_jht',
             'bpjs_jp',
             'salary_group_id',
-            'shiftment_group_id'
+            'shiftment_group_id',
+            'payroll_period_group_id'
         ];
     }
 }
