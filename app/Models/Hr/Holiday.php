@@ -75,6 +75,10 @@ class Holiday extends Model
     ];
 
     public function getHolidayDateAttribute($value){
-        return $value;
-    }    
+        return localFormatDate($value);
+    }
+
+    public function getRawHolidayDateAttribute(){
+        return $this->attributes['holiday_date'];
+    }
 }

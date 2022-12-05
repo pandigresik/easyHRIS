@@ -57,7 +57,8 @@ class WorkshiftGroupRepository extends BaseRepository
         $shiftmentGroup = ShiftmentGroup::with(['shiftmentGroupDetails'])->find($data['shiftmentGroup']);
         $shiftmentGroupDetails = $shiftmentGroup->shiftmentGroupDetails;
         /** cari shift terakhir sebelumya */
-        $lastShift = WorkshiftGroup::where(['shiftment_group_id' => $data['shiftmentGroup']])->where('work_date','<=', $startDate->format('Y-m-d'))->orderBy('work_date','desc')->first();        
+        $lastShift = WorkshiftGroup::where(['shiftment_group_id' => $data['shiftmentGroup']])->where('work_date','<=', $startDate->format('Y-m-d'))->orderBy('work_date','desc')->first();
+        
         $currentShiftment = NULL;
         if($lastShift){
             $currentShiftment = $lastShift->shiftment_id;
@@ -67,8 +68,8 @@ class WorkshiftGroupRepository extends BaseRepository
         ];
     }
     /** return index shiftment */
-    protected function getNextShiftment($shiftmentGroupDetails, $currentShiftment = NULL){
-        $shiftmentGroupDetailByShiftment = $shiftmentGroupDetails->pluck('sequence','shiftment_id');
+    protected function getNextShiftment($shiftmentGroupDetails, $currentShiftment = NULL){        
+        $shiftmentGroupDetailByShiftment = $shiftmentGroupDetails->pluck('sequence','shiftment_id');        
         $shiftmentGroupDetailBySequence = $shiftmentGroupDetails->sortBy('sequence')->pluck('shiftment_id','sequence');
         
         $firstShiftment = $shiftmentGroupDetailBySequence->keys()->min();
@@ -94,7 +95,8 @@ class WorkshiftGroupRepository extends BaseRepository
         $shifment = Shiftment::with(['schedules'])->get()->keyBy('id');
         $currentShiftment = $firstShiftment ?? $this->getNextShiftment($shiftmentGroupDetails, $firstShiftment);
         /** cari hari libur di range tanggal tersebut */
-        $holiday = Holiday::whereBetween('holiday_date',[$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])->get()->pluck('holiday_date','holiday_date');
+        $holiday = Holiday::select(['holiday_date'])->whereBetween('holiday_date',[$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])->get()->pluck('raw_holiday_date','raw_holiday_date');
+        
         $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
         foreach($period as $date){
             if($date->dayOfWeek == $this->shiftmentMovement){
