@@ -65,6 +65,7 @@
     <tbody>
         @php
             $awalBarisData = 8;
+            $no = 0;
         @endphp
         @foreach($payrolls as $no =>  $payroll)
         @php

@@ -7,8 +7,6 @@ use App\DataTables\Hr\SalaryBenefitDataTable;
 use App\Http\Requests\Hr\CreateSalaryBenefitRequest;
 use App\Http\Requests\Hr\UpdateSalaryBenefitRequest;
 use App\Repositories\Hr\SalaryBenefitRepository;
-use App\Repositories\Hr\EmployeeRepository;
-use App\Repositories\Hr\SalaryComponentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Hr\Employee;
