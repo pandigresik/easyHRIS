@@ -84,6 +84,9 @@ class PayrollPeriodRepository extends BaseRepository
             case 'GPH':              
                 $componentObj = new GajiPokokHarian($workDayCount, $value);
                 break;
+            case 'TJH':              
+                $componentObj = new GajiPokokHarian($workDayCount, $value);
+                break;
             case 'TDKM':
                 $kmCount = $this->getRitaseEmployee($employeeId)->sum(function($item){
                     return $item->getRawOriginal('km');

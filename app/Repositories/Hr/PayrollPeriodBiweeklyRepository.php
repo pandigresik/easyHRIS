@@ -148,7 +148,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             if(in_array($benefit->component->getRawOriginal('code') , config('local.benefit_end_of_month'))){
                 if(!$periodPayroll->isEndOfMonth()){
                     $tmp['benefit_value'] = 0;
-                }                
+                }
             }
 
             /** jika tidak ada dalam list potongan bpjs yang dipilih maka set 0 */

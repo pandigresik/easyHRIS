@@ -51,8 +51,7 @@ class SalaryBenefit extends Model
     public $fillable = [
         'employee_id',
         'component_id',
-        'benefit_value',
-        'description'
+        'benefit_value'        
     ];
 
     /**

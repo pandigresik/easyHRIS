@@ -171,7 +171,7 @@ class SalaryComponentController extends AppBaseController
     private function getOptionItems()
     {
         return [
-
+            'stateItems' => ['p' => 'Plus', 'm' => 'Minus']
         ];
     }
 }

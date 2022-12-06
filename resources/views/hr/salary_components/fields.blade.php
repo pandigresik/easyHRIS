@@ -18,7 +18,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('state', __('models/salaryComponents.fields.state').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('state', null, ['class' => 'form-control','maxlength' => 1,'maxlength' => 1, 'required' => 'required']) !!}
+    {!! Form::select('state', $stateItems, null, ['class' => 'form-control', 'required' => 'required']) !!}
 </div>
 </div>
 

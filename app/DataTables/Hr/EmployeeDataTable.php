@@ -215,7 +215,7 @@ class EmployeeDataTable extends DataTable
             // 'identity_type' => new Column(['title' => __('models/employees.fields.identity_type'),'name' => 'identity_type', 'data' => 'identity_type', 'searchable' => true, 'elmsearch' => 'text']),
             // 'marital_status' => new Column(['title' => __('models/employees.fields.marital_status'),'name' => 'marital_status', 'data' => 'marital_status', 'searchable' => true, 'elmsearch' => 'text']),
             // 'email' => new Column(['title' => __('models/employees.fields.email'),'name' => 'email', 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
-            'leave_balance' => new Column(['title' => __('models/employees.fields.leave_balance'),'name' => 'leave_balance', 'data' => 'leave_balance', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'leave_balance' => new Column(['title' => __('models/employees.fields.leave_balance'),'name' => 'leave_balance', 'data' => 'leave_balance', 'searchable' => true, 'elmsearch' => 'text']),
             // 'tax_group' => new Column(['title' => __('models/employees.fields.tax_group'),'name' => 'tax_group', 'data' => 'tax_group', 'searchable' => true, 'elmsearch' => 'text']),
             // 'resign_date' => new Column(['title' => __('models/employees.fields.resign_date'),'name' => 'resign_date', 'data' => 'resign_date', 'searchable' => true, 'elmsearch' => 'text']),
             // 'have_overtime_benefit' => new Column(['title' => __('models/employees.fields.have_overtime_benefit'),'name' => 'have_overtime_benefit', 'data' => 'have_overtime_benefit', 'searchable' => true, 'elmsearch' => 'text']),
