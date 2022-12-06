@@ -30,7 +30,11 @@ class DetailPayrollExport implements WithMultipleSheets
         $sheets = [];
         $payrollEntity = GroupingPayrollEntity::pluck('name', 'id');
         foreach ($payrollEntity as $id => $entityName) {
-            $sheets[] = new EmployeePayrollSheet($this->collection[$id] ?? collect([]), $this->salaryComponent, $entityName, $this->payrollPeriod);
+            $data = $this->collection[$id] ?? collect([]);
+            if ($data->isEmpty()) {
+                continue;
+            }
+            $sheets[] = new EmployeePayrollSheet($data, $this->salaryComponent, $entityName, $this->payrollPeriod);
         }
         $sheets[] = new TransferSalarySheet($this->collection, $payrollEntity, 'REKAP DAFTAR TRANSFER', $this->payrollPeriod);
         return $sheets;
