@@ -21,9 +21,9 @@ class ImportController extends AppBaseController
 
     protected function store(Request $request)
     {
-        $urlOrigin = $request->input('urlOrigin');
+        $urlOrigin = substr($request->input('urlOrigin'),strlen(config('app.url')));
         $urlArray = parse_url($urlOrigin);
-
+        
         $model = $this->getModel($urlArray['path']);
 
         $modelImport = '\\App\Imports\\'.$model.'Import';

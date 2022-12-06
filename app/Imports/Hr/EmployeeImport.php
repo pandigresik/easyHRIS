@@ -46,7 +46,6 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     }
     public function collection(Collection $rows)
     {      
-      \Log::error($this->jobLevel);
       $userId = \Auth::id(); 
       foreach($rows as $row){
         $overtime = $row['overtime'];
