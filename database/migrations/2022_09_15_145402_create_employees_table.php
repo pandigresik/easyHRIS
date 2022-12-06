@@ -49,6 +49,7 @@ class CreateEmployeesTable extends Migration
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
             $table->index(['code', 'full_name'], 'employees_idx');
+            $table->unique('code','uq_employees_1');
             $table->foreign('supervisor_id', 'FK_BA82C30019E9AC5F')->references('id')->on('employees');
             $table->foreign('contract_id', 'FK_BA82C3002576E0FD')->references('id')->on('contracts');
             $table->foreign('city_of_birth_id', 'FK_BA82C3005BC7B076')->references('id')->on('cities');

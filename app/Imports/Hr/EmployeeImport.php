@@ -34,21 +34,20 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     private $payrollGroup;
     public function __construct()
     {
-        $this->departement = Department::get()->keyBy('name');
-        $this->jobLevel = JobLevel::get()->keyBy('name');  
-        $this->jobTitle = JobTitle::get()->keyBy('name');  
-        $this->salaryGroup = SalaryGroup::with('salaryGroupDetails')->get()->keyBy('name');
-        $this->shiftmentGroup = ShiftmentGroup::get()->keyBy('name');
+        $this->departement = Department::select(['id', 'name'])->get()->keyBy('name');
+        $this->jobLevel = JobLevel::select(['id', 'name'])->get()->keyBy('name');  
+        $this->jobTitle = JobTitle::select(['id', 'name'])->get()->keyBy('name');  
+        $this->salaryGroup = SalaryGroup::select(['id', 'name'])->with('salaryGroupDetails')->get()->keyBy('name');
+        $this->shiftmentGroup = ShiftmentGroup::select(['id', 'name'])->get()->keyBy('name');
         $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ'])->get()->keyBy('code');
-        $this->businessUnit = BusinessUnit::get()->keyBy('name');
-        $this->company = Company::get()->keyBy('name');
+        $this->businessUnit = BusinessUnit::select(['id', 'name'])->get()->keyBy('name');
+        $this->company = Company::select(['id', 'name'])->get()->keyBy('name');
         $this->payrollGroup = PayrollPeriodGroup::get()->keyBy('name');
     }
     public function collection(Collection $rows)
     {      
-       //SalaryBenefit::whereNull('deleted_at')->forceDelete();
-       //Employee::whereNull('deleted_at')->forceDelete();
-       
+      \Log::error($this->jobLevel);
+      $userId = \Auth::id(); 
       foreach($rows as $row){
         $overtime = $row['overtime'];
         $salary = $row['salary'];
@@ -77,8 +76,11 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $shiftmentGroup = $row['shiftment_group_id'];
         $row['shiftment_group_id'] = $this->shiftmentGroup[$shiftmentGroup]->id ?? NULL;
         $payrollGroup = $row['payroll_period_group_id'];
-        $row['payroll_period_group_id'] = $this->$this->payrollGroup[$payrollGroup]->id ?? NULL;
-        $employee = Employee::updateOrCreate($row->toArray());
+        $row['payroll_period_group_id'] = $this->payrollGroup[$payrollGroup]->id ?? NULL;
+        $row['created_by'] = $userId;
+        Employee::upsert($row->toArray(), ['code']);
+        (new Employee())->flushCache();  
+        $employee = Employee::whereCode($row['code'])->first();
         $salaryDetails = $this->salaryGroup[$salaryGroup]->salaryGroupDetails ?? NULL;
         $this->createSalaryBenefit($employee, $salaryDetails ,[
             $this->salaryComponent['OT']->id => $overtime, 
@@ -90,7 +92,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
             $this->salaryComponent['TJ']->id => $positionAllowance            
         ]);
       }
-      (new SalaryBenefit())->flushCache();
+      (new SalaryBenefit())->flushCache();      
     }
 
     private function createSalaryBenefit($employee, $salaryDetails, $dataBenefit){
@@ -103,7 +105,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
                 if(isset($dataBenefit[$componentId])){                   
                     $benefitValue = $dataBenefit[$componentId];            
                 }
-                $insertBenefit = ['employee_id' => $employee->id, 'component_id' => $detail->component_id, 'benefit_value' => $benefitValue, 'created_by' => $userId];                
+                $insertBenefit = ['employee_id' => $employee->id, 'component_id' => $detail->component_id, 'benefit_value' => $benefitValue, 'created_by' => $userId];
                 SalaryBenefit::upsert($insertBenefit, ['employee_id', 'component_id']);
             }
         }
