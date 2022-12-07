@@ -104,15 +104,18 @@ class EmployeeController extends AppBaseController
      */
     public function edit($id)
     {
-        $employee = $this->getRepositoryObj()->find($id);
+        $employee = $this->getRepositoryObj()->with(['contract'])->find($id);
 
         if (empty($employee)) {
             Flash::error(__('messages.not_found', ['model' => __('models/employees.singular')]));
 
             return redirect(route('hr.employees.index'));
         }
-
-        return view('hr.employees.edit')->with('employee', $employee)->with($this->getOptionItems());
+        $optionItems = $this->getOptionItems();
+        if($employee->contract_id){
+            $optionItems['contractItems'] += [$employee->contract_id => $employee->contract->letter_number];
+        }
+        return view('hr.employees.edit')->with('employee', $employee)->with($optionItems);
     }
 
     /**
@@ -193,7 +196,7 @@ class EmployeeController extends AppBaseController
         $salaryGroup = new SalaryGroupRepository();
         $payrollPeriodGroup = new PayrollPeriodGroupRepository();
         return [
-            'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->pluck(),
+            'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->allQuery(['used' => 0])->active()->pluck('letter_number', 'id')->toArray(),
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
             'companyItems' => ['' => __('crud.option.company_placeholder')] + $company->pluck(),
             'departmentItems' => ['' => __('crud.option.department_placeholder')] + $department->pluck(),

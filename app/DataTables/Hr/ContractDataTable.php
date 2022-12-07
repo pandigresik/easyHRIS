@@ -4,6 +4,7 @@ namespace App\DataTables\Hr;
 
 use App\Models\Hr\Contract;
 use App\DataTables\BaseDataTable as DataTable;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -13,7 +14,9 @@ class ContractDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'start_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'end_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'signed_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -35,6 +38,14 @@ class ContractDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
+        $dataTable->editColumn('path_file', function($item){
+            if($item->path_file){
+                return '<a href="'.Storage::url('').'?path='.$item->path_file.'" target="_blank">file attachment</a>';
+            }
+            return null;
+        })->editColumn('employee.code', function($item){
+            return $item->employee->codeName;
+        })->escapeColumns([]);
         return $dataTable->addColumn('action', 'hr.contracts.datatables_actions');
     }
 
@@ -46,7 +57,7 @@ class ContractDataTable extends DataTable
      */
     public function query(Contract $model)
     {
-        return $model->newQuery();
+        return $model->select([$model->getTable().'.*'])->with(['employee'])->newQuery();
     }
 
     /**
@@ -114,16 +125,17 @@ class ContractDataTable extends DataTable
      */
     protected function getColumns()
     {
-        return [
-            'type' => new Column(['title' => __('models/contracts.fields.type'),'name' => 'type', 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
+        return [            
             'letter_number' => new Column(['title' => __('models/contracts.fields.letter_number'),'name' => 'letter_number', 'data' => 'letter_number', 'searchable' => true, 'elmsearch' => 'text']),
             'subject' => new Column(['title' => __('models/contracts.fields.subject'),'name' => 'subject', 'data' => 'subject', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.code' => new Column(['title' => __('models/contracts.fields.employee'),'name' => 'employee.code', 'data' => 'employee.code', 'defaultContent' => '-' , 'searchable' => false, 'elmsearch' => 'text']),
             'description' => new Column(['title' => __('models/contracts.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
-            'start_date' => new Column(['title' => __('models/contracts.fields.start_date'),'name' => 'start_date', 'data' => 'start_date', 'searchable' => true, 'elmsearch' => 'text']),
-            'end_date' => new Column(['title' => __('models/contracts.fields.end_date'),'name' => 'end_date', 'data' => 'end_date', 'searchable' => true, 'elmsearch' => 'text']),
-            'signed_date' => new Column(['title' => __('models/contracts.fields.signed_date'),'name' => 'signed_date', 'data' => 'signed_date', 'searchable' => true, 'elmsearch' => 'text']),
+            'start_date' => new Column(['title' => __('models/contracts.fields.start_date'),'name' => 'start_date', 'data' => 'start_date', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'end_date' => new Column(['title' => __('models/contracts.fields.end_date'),'name' => 'end_date', 'data' => 'end_date', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'signed_date' => new Column(['title' => __('models/contracts.fields.signed_date'),'name' => 'signed_date', 'data' => 'signed_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'tags' => new Column(['title' => __('models/contracts.fields.tags'),'name' => 'tags', 'data' => 'tags', 'searchable' => true, 'elmsearch' => 'text']),
-            'used' => new Column(['title' => __('models/contracts.fields.used'),'name' => 'used', 'data' => 'used', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'used' => new Column(['title' => __('models/contracts.fields.used'),'name' => 'used', 'data' => 'used', 'searchable' => true, 'elmsearch' => 'text']),
+            'path_file' => new Column(['title' => __('models/contracts.fields.file_upload'),'name' => 'used', 'data' => 'path_file', 'searchable' => false, 'elmsearch' => 'text'])
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Base\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,6 +44,15 @@ class ChangePasswordController extends ResetPasswordController
         // redirect them back to where they came from with their error message.
 
         return $this->sendResetResponse($request, 'password changed succesfull');
+    }
+
+    public function resetByAdmin(User $user ,Request $request)
+    {          
+        $password = $user->email;
+        $this->setUserPassword($user, $password);
+        $user->save();
+
+        return $this->sendResetResponse($request, 'password user reset succesfull with new password '. $password);
     }
 
     /**

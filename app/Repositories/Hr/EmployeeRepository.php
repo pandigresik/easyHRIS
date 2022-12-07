@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Hr\Contract;
 use App\Models\Hr\Employee;
 use App\Repositories\BaseRepository;
 
@@ -63,5 +64,66 @@ class EmployeeRepository extends BaseRepository
     public function model()
     {
         return Employee::class;
+    }
+
+    public function create($input)
+    {
+        $this->model->getConnection()->beginTransaction();
+
+        try {
+            $model = parent::create($input);
+            if($input['contract_id']){
+                $this->updateContract($input['contract_id']);
+            }
+            
+            $this->model->getConnection()->commit();
+        } catch (\Exception $e) {            
+            $this->model->getConnection()->rollBack();
+
+            return $e;
+        }
+
+        return $model;
+    }
+    
+    public function update($input, $id)
+    {
+        $this->model->getConnection()->beginTransaction();
+
+        try {
+            $query = $this->model->newQuery();
+            $oldContract = $query->find($id);
+            $model = parent::update($input, $id);
+                        
+            if($input['contract_id']){                                
+                if($oldContract->contract_id != $input['contract_id']){
+                    // set unused old contract id
+                    $this->updateContract($input['contract_id']);
+                    if(!empty($oldContract->contract_id)){
+                        $this->updateContract($oldContract->contract_id, 0);
+                    }
+                    
+                }
+            }else{
+                // set unused old contract id
+                if($oldContract->contract_id){
+                    $this->updateContract($oldContract->contract_id, 0);
+                }                
+            }
+            
+            $this->model->getConnection()->commit();
+        } catch (\Exception $e) {            
+            $this->model->getConnection()->rollBack();
+
+            return $e;
+        }
+
+        return $model;
+    }
+
+    private function updateContract($contractId, $used = 1){
+        $contract = Contract::find($contractId);
+        $contract->used = $used;
+        $contract->save();        
     }
 }

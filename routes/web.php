@@ -22,11 +22,14 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tes', [App\Http\Controllers\HomeController::class, 'tes']);
-Route::get('password.change', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'showResetForm'])->name('password.change');
-Route::post('password.change', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'reset'])->name('password.change');
+
 
 //Route::group(['middleware' => ['auth','role:administrator']],function (){
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('password.change', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'showResetForm'])->name('password.change');
+    Route::post('password.change', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'reset'])->name('password.change');
+    Route::get('password/resetAdmin/{user}', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'resetByAdmin'])->name('password.resetByAdmin')->middleware(['can:users-passwordResetAdmin']);
+    
     Route::group(['prefix' => 'base'], function () {
         Route::resource('import', Base\ImportController::class, ["as" => 'base']);
         Route::resource('export', Base\ExportController::class, ["as" => 'base']);
@@ -110,6 +113,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
+    Route::get('/storage', 'StorageController');
 //    Route::get('/events', [App\Http\Controllers\EventsController::class, 'index'])->name('events.index');
 });
 

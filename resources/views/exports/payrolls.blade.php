@@ -71,10 +71,18 @@
         @php
             $additionalInfo = $payroll->additional_info;
             $payrollDetails = $payroll->payrollDetails->keyBy('component_id');
+            /* jenis gaji pokok ada 2, bulanan dan harian*/
             $salaryComponent = $payrollDetails[$component['GPH']] ?? [];
+            if(!$salaryComponent){
+                $salaryComponent = $payrollDetails[$component['GP']] ?? [];
+            }
             $overtimeComponent = $payrollDetails[$component['OT']] ?? [];
             $sundayOvertimeComponent = $payrollDetails[$component['TUMLM']] ?? [];
+            /* jenis tunjangan jabatan ada 2, ada yang tunjangan jabatan bulanan dan harian, cara hitungnya beda*/
             $positionComponent = $payrollDetails[$component['TJ']] ?? [];
+            if(!$positionComponent){
+                $positionComponent = $payrollDetails[$component['TJH']] ?? [];
+            }
             $otherComponent = $payrollDetails[$component['TJL']] ?? [];
             $premiComponent = $payrollDetails[$component['PRHD']] ?? [];
             $kmComponent = $payrollDetails[$component['TDKM']] ?? [];

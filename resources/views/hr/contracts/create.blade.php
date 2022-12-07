@@ -13,8 +13,8 @@
           <div class="animated fadeIn">
                 @include('common.errors')
                 <div class="row">
-                    <div class="col-lg-12">
-                        {!! Form::open(['route' => 'hr.contracts.store']) !!}
+                    <div class="col-lg-12">                        
+                        {!! Form::open(['route' => 'hr.contracts.store', 'enctype' => 'multipart/form-data']) !!}
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>

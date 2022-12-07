@@ -15,5 +15,7 @@ return array (
     'signed_date' => 'Signed Date',
     'tags' => 'Tags',
     'used' => 'Used',
+    'file_upload' => 'Attachment',
+    'employee' => 'Employee'
   ),
 );

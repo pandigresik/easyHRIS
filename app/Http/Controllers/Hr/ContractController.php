@@ -7,20 +7,22 @@ use App\DataTables\Hr\ContractDataTable;
 use App\Http\Requests\Hr\CreateContractRequest;
 use App\Http\Requests\Hr\UpdateContractRequest;
 use App\Repositories\Hr\ContractRepository;
-
+use App\Traits\UploadedFile;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use Response;
 use Exception;
 
 class ContractController extends AppBaseController
-{
+{    
+    use UploadedFile;
     /** @var  ContractRepository */
     protected $repository;
-
+    
     public function __construct()
     {
         $this->repository = ContractRepository::class;
+        $this->pathFolder .= '/contract';
     }
 
     /**
@@ -54,7 +56,9 @@ class ContractController extends AppBaseController
     public function store(CreateContractRequest $request)
     {
         $input = $request->all();
-
+        if($request->file('file_upload')){
+            $input['path_file'] = $this->uploadFile($request, 'file_upload');
+        }
         $contract = $this->getRepositoryObj()->create($input);
         if ($contract instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $contract->getMessage()]);
@@ -122,8 +126,11 @@ class ContractController extends AppBaseController
 
             return redirect(route('hr.contracts.index'));
         }
-
-        $contract = $this->getRepositoryObj()->update($request->all(), $id);
+        $input = $request->all();
+        if($request->file('file_upload')){            
+            $input['path_file'] = $this->uploadFile($request, 'file_upload');
+        }
+        $contract = $this->getRepositoryObj()->update($input, $id);
         if ($contract instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $contract->getMessage()]);
         }

@@ -49,8 +49,7 @@ class Contract extends Model
 
 
 
-    public $fillable = [
-        'type',
+    public $fillable = [        
         'letter_number',
         'subject',
         'description',
@@ -58,7 +57,8 @@ class Contract extends Model
         'end_date',
         'signed_date',
         'tags',
-        'used'
+        'used',
+        'path_file'
     ];
 
     /**
@@ -67,8 +67,7 @@ class Contract extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'type' => 'string',
+        'id' => 'integer',        
         'letter_number' => 'string',
         'subject' => 'string',
         'description' => 'string',
@@ -84,16 +83,14 @@ class Contract extends Model
      *
      * @var array
      */
-    public static $rules = [
-        'type' => 'nullable|string|max:1',
+    public static $rules = [        
         'letter_number' => 'nullable|string|max:27',
         'subject' => 'nullable|string|max:255',
         'description' => 'nullable|string|max:255',
         'start_date' => 'required',
         'end_date' => 'nullable',
         'signed_date' => 'required',
-        'tags' => 'nullable|string',
-        'used' => 'required|boolean'
+        'tags' => 'nullable|string',        
     ];
 
     /**
@@ -107,9 +104,14 @@ class Contract extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
-    public function employees()
+    // public function employees()
+    // {
+    //     return $this->hasMany(\App\Models\Hr\Employee::class, 'contract_id');
+    // }
+
+    public function employee()
     {
-        return $this->hasMany(\App\Models\Hr\Employee::class, 'contract_id');
+        return $this->hasOne(\App\Models\Hr\Employee::class, 'contract_id');
     }
 
     /**
@@ -134,5 +136,21 @@ class Contract extends Model
     public function salaryBenefitHistories()
     {
         return $this->hasMany(\App\Models\Hr\SalaryBenefitHistory::class, 'contract_id');
+    }
+
+    public function getStartDateAttribute($value){
+        return localFormatDate($value);
+    }
+
+    public function getEndDateAttribute($value){
+        return localFormatDate($value);
+    }
+
+    public function getSignedDateAttribute($value){
+        return localFormatDate($value);
+    }
+
+    protected function scopeActive($query){
+        return $query->whereUsed(0)->where('end_date', '>', today());
     }
 }

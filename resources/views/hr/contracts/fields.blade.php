@@ -1,11 +1,3 @@
-<!-- Type Field -->
-<div class="form-group row mb-3">
-    {!! Form::label('type', __('models/contracts.fields.type').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('type', null, ['class' => 'form-control','maxlength' => 1,'maxlength' => 1, 'required' => 'required']) !!}
-</div>
-</div>
-
 <!-- Letter Number Field -->
 <div class="form-group row mb-3">
     {!! Form::label('letter_number', __('models/contracts.fields.letter_number').':', ['class' => 'col-md-3 col-form-label']) !!}
@@ -62,14 +54,16 @@
 </div>
 </div>
 
-<!-- Used Field -->
+<!-- Name Field -->
 <div class="form-group row mb-3">
-    {!! Form::label('used', __('models/contracts.fields.used').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    <label class="checkbox-inline">
-        {!! Form::hidden('used', 0) !!}
-        {!! Form::checkbox('used', '1', null) !!}
-    </label>
+    {!! Form::label('file_upload', __('models/contracts.fields.file_upload').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9">
+    @if (isset($contract) && !empty($contract->path_file))
+    <div>
+        <a href="{{ Storage::url('').'?path='.$contract->path_file }}"  target="_blank" rel="noopener noreferrer">file attachment</a>    
+    </div>    
+    @endif     
+    {!! Form::file('file_upload') !!}    
 </div>
 </div>
 
