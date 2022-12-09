@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Hr\Employee;
 use App\Models\Hr\RequestWorkshift;
 use App\Models\Hr\Shiftment;
 use App\Models\Hr\Workshift;
@@ -54,9 +55,13 @@ class RequestWorkshiftRepository extends BaseRepository
         try {
             $workDate = generatePeriod($input['work_date']);
             unset($input['work_date']);
-            foreach(CarbonPeriod::create($workDate['startDate'], $workDate['endDate']) as $date){
-                $model = $this->generateWorkshift($input, $date->format('Y-m-d'));
-            }
+            $employees = $input['employee_id'];
+            unset($input['employee_id']);
+            foreach($employees as $employeeId){
+                foreach(CarbonPeriod::create($workDate['startDate'], $workDate['endDate']) as $date){
+                    $model = $this->generateWorkshift($employeeId, $input, $date->format('Y-m-d'));
+                }
+            }            
             $this->model->getConnection()->commit();
             return $model;
         } catch (\Exception $e) {
@@ -65,13 +70,14 @@ class RequestWorkshiftRepository extends BaseRepository
         }
     }
 
-    private function generateWorkshift($input, $workDate){
-        $input['status'] = RequestWorkshift::INITIAL_STATE;            
+    private function generateWorkshift($employeeId, $input, $workDate){
+        $input['status'] = RequestWorkshift::INITIAL_STATE;
         $input['work_date'] = $workDate;
-            $employeeId = $input['employee_id'];
+        $input['employee_id'] = $employeeId;
             $shiftmentOrigin = Workshift::select(['shiftment_id'])->where(['work_date' => $workDate, 'employee_id' => $employeeId])->first();
             if(!$shiftmentOrigin){
-                throw new Exception('Jadwal kerja untuk tanggal tersebut tidak ditemukan');
+                $employeeSelect = Employee::find($employeeId);
+                throw new Exception('Jadwal kerja karyawan '.$employeeSelect->code_name.' untuk tanggal '.localFormatDate($workDate).' tidak ditemukan');
             }
             $shiftmentId = $input['shiftment_id'];
             $newShiftmentId = Shiftment::with(['schedules' => function($q) use($workDate){
@@ -82,7 +88,7 @@ class RequestWorkshiftRepository extends BaseRepository
             $input['start_hour'] = $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('start_hour');
             $input['end_hour'] = $newShiftmentId->schedules->first()->getRawOriginal('start_hour') > $newShiftmentId->schedules->first()->getRawOriginal('end_hour') ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour') : $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour');
             $input['shiftment_id_origin'] = $shiftmentOrigin->shiftment_id;
-            $model = parent::create($input);
+            $model = parent::create($input);            
             if($model->getRawOriginal('status') == RequestWorkshift::APPROVE_STATE){
                 $this->updateWorkshift($model);
             }

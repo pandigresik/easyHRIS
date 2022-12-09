@@ -7,8 +7,6 @@ use App\DataTables\Hr\OvertimeDataTable;
 use App\Http\Requests\Hr\CreateOvertimeRequest;
 use App\Http\Requests\Hr\UpdateOvertimeRequest;
 use App\Repositories\Hr\OvertimeRepository;
-use App\Repositories\Hr\ShiftmentRepository;
-use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use Response;
@@ -125,8 +123,7 @@ class OvertimeController extends AppBaseController
 
             return redirect(route('hr.overtimes.index'));
         }
-        $input = $request->all();
-        $input['employee_id'] = end($input['employee_id']); 
+        $input = $request->all();        
         $overtime = $this->getRepositoryObj()->update($input, $id);
         if($overtime instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $overtime->getMessage()]);

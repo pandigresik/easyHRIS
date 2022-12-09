@@ -2,18 +2,14 @@
 <div class="form-group row mb-3">
     {!! Form::label('employee_id', __('models/overtimes.fields.employee_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('employee_id[]', $employeeItems, null, array_merge(['class' => 'form-control select2','data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple'], config('local.select2.ajax')) ) !!}
+    @if(empty($employeeItems))
+        {!! Form::select('employee_id[]', $employeeItems, null, array_merge(['class' => 'form-control select2','data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple'], config('local.select2.ajax')) ) !!}
+    @else
+    {!! Form::select('employee_id', $employeeItems, null, ['class' => 'form-control select2'] ) !!}
+    @endif    
 </div>
 </div>
 
-<!-- Shiftment Id Field
-<div class="form-group row mb-3">
-    {!! Form::label('shiftment_id', __('models/overtimes.fields.shiftment_id').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::select('shiftment_id', $shiftmentItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
-</div>
-</div>
--->
 <!-- Approved By Id Field
 <div class="form-group row mb-3">
     {!! Form::label('approved_by_id', __('models/overtimes.fields.approved_by_id').':', ['class' => 'col-md-3 col-form-label']) !!}

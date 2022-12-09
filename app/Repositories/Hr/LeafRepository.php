@@ -56,15 +56,22 @@ class LeafRepository extends BaseRepository
             $leaveStart = Carbon::parse($input['leave_start']);
             $input['amount'] = $leaveEnd->diffInDays($leaveStart) + 1;
             $input['status'] = Leaf::INITIAL_STATE;
-            $model = parent::create($input);
+            $employees = $input['employee_id'];
+            unset($input['employee_id']);
             $details = [];
             foreach(CarbonPeriod::create($leaveStart, $leaveEnd) as $date ){
                 $details[] = ['leave_date' => $date->format('Y-m-d')];
             }
-            $model->details()->sync($details);
+            //foreach($employees as $employee){
+                $input['employee_id'] = $employees[0];
+                $model = parent::create($input);
+                \Log::error($model);                
+                $model->details()->sync($details);
+            //}
+            
             $this->model->getConnection()->commit();
             return $model;
-        } catch (\Exception $e) {
+        } catch (\Exception $e) {            
             $this->model->getConnection()->rollBack();
             return $e;
         }        
