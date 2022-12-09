@@ -1,6 +1,6 @@
 <?php
 namespace App\Library\SalaryComponent; 
-class TunjanganJAbatanHarian extends Component{
+class TunjanganJabatanHarian extends Component{
     protected $code = 'TJH';
     private $amount;
     private $value;

@@ -10,6 +10,7 @@ use App\Library\SalaryComponent\Kilometer;
 use App\Library\SalaryComponent\SummaryOvertime;
 use App\Library\SalaryComponent\PotonganKehadiran;
 use App\Library\SalaryComponent\PremiKehadiran;
+use App\Library\SalaryComponent\TunjanganJabatanHarian;
 use App\Library\SalaryComponent\UangMakan;
 use App\Library\SalaryComponent\UangMakanLemburMinggu;
 use App\Library\SalaryComponent\UangMakanLuarKota;
@@ -85,7 +86,7 @@ class PayrollPeriodRepository extends BaseRepository
                 $componentObj = new GajiPokokHarian($workDayCount, $value);
                 break;
             case 'TJH':              
-                $componentObj = new GajiPokokHarian($workDayCount, $value);
+                $componentObj = new TunjanganJabatanHarian($workDayCount, $value);
                 break;
             case 'TDKM':
                 $kmCount = $this->getRitaseEmployee($employeeId)->sum(function($item){
