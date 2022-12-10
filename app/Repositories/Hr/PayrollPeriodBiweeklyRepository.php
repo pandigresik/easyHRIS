@@ -142,9 +142,9 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             ];
             
             if($benefit->component->fixed){
-                $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');                
+                $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');
             }else{
-                $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee->id, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);                
+                $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee->id, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);
             }
             /** untuk tunjangan jabatan hanya diberikan di akhir bulan saja */
             if(in_array($benefit->component->getRawOriginal('code') , config('local.benefit_end_of_month'))){

@@ -34,6 +34,6 @@ class UangMakanLemburMinggu extends Component{
         if($amount >= 7){
             $pengali = 1;
         }
-        return $pengali * $amount * $this->value;
+        return $pengali * $this->value;
     }
 }
