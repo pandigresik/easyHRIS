@@ -19,6 +19,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, WithChunkReading
 {
@@ -32,6 +33,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     private $company;
     private $joTitle;
     private $payrollGroup;
+    private $dateColumn = ['join_date', 'date_of_birth'];
     public function __construct()
     {
         $this->departement = Department::select(['id', 'name'])->get()->keyBy('name');
@@ -39,7 +41,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $this->jobTitle = JobTitle::select(['id', 'name'])->get()->keyBy('name');  
         $this->salaryGroup = SalaryGroup::select(['id', 'name'])->with('salaryGroupDetails')->get()->keyBy('name');
         $this->shiftmentGroup = ShiftmentGroup::select(['id', 'name'])->get()->keyBy('name');
-        $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ'])->get()->keyBy('code');
+        $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ','TUMLM'])->get()->keyBy('code');
         $this->businessUnit = BusinessUnit::select(['id', 'name'])->get()->keyBy('name');
         $this->company = Company::select(['id', 'name'])->get()->keyBy('name');
         $this->payrollGroup = PayrollPeriodGroup::get()->keyBy('name');
@@ -48,18 +50,25 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     {      
       $userId = \Auth::id(); 
       foreach($rows as $row){
+        foreach($this->dateColumn as $date){
+            if(is_numeric($row[$date])){
+                $row[$date] = Date::excelToDateTimeObject($row[$date])->format('Y-m-d');
+            }
+        }
         $overtime = $row['overtime'];
         $salary = $row['salary'];
         $positionAllowance = $row['position_allowance'];
         $bpjsFeeJkn = $row['bpjs_kesehatan'];
         $bpjsFeeJht = $row['bpjs_jht'];
         $bpjsFeeJp = $row['bpjs_jp'];
+        $tunjanganMinggu = $row['tunjangan_minggu'];
         unset($row['overtime']);
         unset($row['salary']);
         unset($row['position_allowance']);
         unset($row['bpjs_kesehatan']);
         unset($row['bpjs_jht']);
         unset($row['bpjs_jp']);
+        unset($row['tunjangan_minggu']);
         $company = $row['company_id'];
         $row['company_id'] = $this->company[$company]->id ?? NULL;
         $businessUnit = $row['business_unit_id'];
@@ -88,24 +97,37 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
             $this->salaryComponent['JPM']->id => $bpjsFeeJp, 
             $this->salaryComponent['JHTM']->id => $bpjsFeeJht,
             $this->salaryComponent['PJKNM']->id => $bpjsFeeJkn,
-            $this->salaryComponent['TJ']->id => $positionAllowance            
+            $this->salaryComponent['TJ']->id => $positionAllowance,
+            $this->salaryComponent['TUMLM']->id => $tunjanganMinggu            
         ]);
       }
-      (new SalaryBenefit())->flushCache();      
+//      (new SalaryBenefit())->flushCache();      
     }
 
     private function createSalaryBenefit($employee, $salaryDetails, $dataBenefit){
         $userId = \Auth::id();
         if($salaryDetails){
             foreach($salaryDetails as $detail){
-                $benefitValue = $detail->getRawOriginal('component_value');    
+                $insertBenefit = ['employee_id' => $employee->id, 'component_id' => $detail->component_id];
+                $salaryBenefit = SalaryBenefit::firstOrNew($insertBenefit);
+                
                 $componentId = $detail->getRawOriginal('component_id');
                 
-                if(isset($dataBenefit[$componentId])){                   
-                    $benefitValue = $dataBenefit[$componentId];            
+                if(isset($dataBenefit[$componentId])){
+                    $benefitValue = $dataBenefit[$componentId];
+                    $salaryBenefit->benefit_value = $benefitValue;
+                    $salaryBenefit->save();
+                }else{
+                    // jika belum ada maka buat, jika sudah ada maka biarkan saja
+                    // bisa jadi memang diubah manual 
+                    $benefitValue = $detail->getRawOriginal('component_value');
+                    if($salaryBenefit->wasRecentlyCreated){
+                        $salaryBenefit->benefit_value = $benefitValue;
+                        $salaryBenefit->save();
+                    }
                 }
-                $insertBenefit = ['employee_id' => $employee->id, 'component_id' => $detail->component_id, 'benefit_value' => $benefitValue, 'created_by' => $userId];
-                SalaryBenefit::upsert($insertBenefit, ['employee_id', 'component_id']);
+                                
+                // SalaryBenefit::upsert($insertBenefit, ['employee_id', 'component_id']);
             }
         }
     }

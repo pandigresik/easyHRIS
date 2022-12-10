@@ -62,7 +62,8 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'position_allowance' => 'TJ',
             'bpjs_kesehatan' => 'PJKNM',
             'bpjs_jht' => 'JHTM',
-            'bpjs_jp' => 'JPM'
+            'bpjs_jp' => 'JPM',
+            'tunjangan_minggu' => 'TUMLM'
         ];  
         $attribute = $this->headings();
         foreach ($attribute as $name) {
@@ -107,6 +108,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'bpjs_kesehatan',
             'bpjs_jht',
             'bpjs_jp',
+            'tunjangan_minggu',
             'joblevel_id',
             'supervisor_id',
             'have_overtime_benefit',
