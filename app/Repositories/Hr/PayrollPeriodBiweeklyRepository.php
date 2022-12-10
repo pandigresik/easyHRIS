@@ -75,9 +75,11 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
 
         $employees = $employeeOjb->get();
         $listEmployees = $employees->pluck('id')->toArray();
+        // cari hari kerja saja
         $workDayEmployee = Workshift::selectRaw('employee_id, count(*) as workday')
                 ->whereIn('employee_id', $listEmployees)
                 ->whereBetween('work_date', [$period['start_period'], $period['end_period']])
+                ->where('shiftment_id', '<>', 2)
                 ->groupBy('employee_id')
                 ->get()
                 ->pluck('workday', 'employee_id')->toArray();

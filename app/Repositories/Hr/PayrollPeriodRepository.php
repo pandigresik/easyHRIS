@@ -108,7 +108,7 @@ class PayrollPeriodRepository extends BaseRepository
                 $amountDay = $this->getAbsentLateEmployee($employeeId)->sum('absent');            
                 $componentObj = new PotonganKehadiran(minuteToHour($amountMinute), $amountDay, $value);
                 break;
-            case 'PRHD':                          
+            case 'PRHD':
                 $absentMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_absent');
                 // $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');
                 $workDayMonthCount = 25; // dalam satu bulan default 25 hari
