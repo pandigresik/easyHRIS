@@ -3,9 +3,11 @@
 namespace App\Repositories\Hr;
 
 use App\Library\SalaryComponent\Overtime as SalaryComponentOvertime;
+use App\Models\Hr\Employee;
 use App\Models\Hr\Overtime;
 use App\Models\Hr\SalaryBenefit;
 use App\Repositories\BaseRepository;
+use Exception;
 
 /**
  * Class OvertimeRepository
@@ -69,8 +71,10 @@ class OvertimeRepository extends BaseRepository
             if(is_null($input['breaktime_value'])){
                 $input['breaktime_value'] = 0;
             }
-            foreach($employees as $employee){                
+            foreach($employees as $employee){
                 $input['employee_id'] = $employee;
+                // pastikan tidak ada yang kembar data overtimenya
+                $this->isOvertimeExist($input);                
                 $model = parent::create($input);
             }
                         
@@ -103,6 +107,14 @@ class OvertimeRepository extends BaseRepository
         } catch (\Exception $e) {
             $this->model->getConnection()->rollBack();
             return $e;
+        }
+    }
+
+    private function isOvertimeExist($overtime){
+        $first = Overtime::where(['employee_id' => $overtime['employee_id'], 'start_hour' => $overtime['start_hour'], 'overtime_date' => $overtime['overtime_date']])->first();
+        if($first){
+            $employee = Employee::find($overtime['employee_id']);
+            throw new Exception("Data overtime karyawan ".$employee->code_name. " tanggal ".$first->overtime_date." jam ".$first->start_hour." sudah ada");
         }
     }
 }

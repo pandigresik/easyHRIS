@@ -58,7 +58,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('region_of_birth_id', __('models/employees.fields.region_of_birth_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('region_of_birth_id', $regionOfBirthItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+    {!! Form::select('region_of_birth_id', $regionOfBirthItems, null, ['class' => 'form-control select2']) !!}
 </div>
 </div>
 
@@ -66,7 +66,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('city_of_birth_id', __('models/employees.fields.city_of_birth_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('city_of_birth_id', $cityOfBirthItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+    {!! Form::select('city_of_birth_id', $cityOfBirthItems, null, ['class' => 'form-control select2']) !!}
 </div>
 </div>
 
@@ -74,7 +74,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('address', __('models/employees.fields.address').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('address', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
+    {!! Form::text('address', null, ['class' => 'form-control','maxlength' => 255]) !!}
 </div>
 </div>
 
@@ -122,7 +122,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('date_of_birth', __('models/employees.fields.date_of_birth').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('date_of_birth', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'date_of_birth']) !!}
+    {!! Form::text('date_of_birth', null, ['class' => 'form-control datetime' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'date_of_birth']) !!}
 </div>
 </div>
 

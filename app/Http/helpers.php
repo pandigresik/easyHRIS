@@ -131,11 +131,12 @@ if (!function_exists('generateMenu')) {
         return \Menu::build($tree, function ($menu, $item) {
             if (!$item->children->isEmpty()) {
                 $header = Link::to('#', '<i class="nav-icon '.$item->icon.'"></i>
-                                        &nbsp;'.$item->name ?? 'header')->addClass('nav-link nav-group-toggle');                                        
-                $menu->submenu($header, generateMenu($item->children->all())->addClass('nav-group-items')->addParentClass('nav-group'));
+                                        &nbsp;'.$item->name ?? 'header')->addClass('nav-link nav-group-toggle');
+                
+                $menu->submenuIfCan($item->permissions->pluck('name'), $header, generateMenu($item->children->all())->addClass('nav-group-items')->addParentClass('nav-group'));
             } else {
                 // $menu->add(Html::raw('<a class="nav-link" href="'.$item->route.'">
-                $menu->addIfCan($item->permissions->pluck('name'), Html::raw('<a class="nav-link" href="'.$item->route.'">                
+                $menu->addIfCan($item->permissions->pluck('name'), Html::raw('<a class="nav-link" href="'.$item->route.'">
                                         <i class="nav-icon '.$item->icon.'"></i>
                                         &nbsp;'.$item->name.'
                                     </a>')->addParentClass('nav-item'));

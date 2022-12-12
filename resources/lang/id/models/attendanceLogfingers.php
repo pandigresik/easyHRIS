@@ -6,7 +6,8 @@ return array (
   'fields' => 
   array (
     'id' => 'Id',
-    'employee_id' => 'Employee Id',
+    'employee_id' => 'Employee',
+    'employee_code' => 'NIK',
     'type_absen' => 'Type Absen',
     'fingertime' => 'Fingertime',
     'fingerprint_device_id' => 'Fingerprint Device Id',

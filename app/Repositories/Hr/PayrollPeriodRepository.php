@@ -95,7 +95,7 @@ class PayrollPeriodRepository extends BaseRepository
                 $componentObj = new Kilometer($kmCount, $value);
                 break;
             case 'OT':
-                $overtimes = $this->getOvertimeEmployee($employeeId)->map(function($item){                    
+                $overtimes = $this->getOvertimeEmployee($employeeId)->map(function($item){
                     return $item->getRawOriginal('amount');
                 })->toArray();         
                 $componentObj = new SummaryOvertime($overtimes);

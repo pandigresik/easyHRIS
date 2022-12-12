@@ -48,7 +48,7 @@ class OvertimeDay{
         foreach($this->overtimes as $ot){            
             $startOvertime = $ot->getRawStartHourDate();
             $endOvertime = $ot->getRawEndHourDate();        
-            $breakTime = $ot->getRawOriginal('breaktime_value');
+            $breakTime = $ot->getRawOriginal('breaktime_value');            
             $finalCalculateValue = 0;
             // lembur awal
             if($checkInRealObj->lessThanOrEqualTo($startOvertime)){
@@ -94,7 +94,8 @@ class OvertimeDay{
                     $ot->raw_value = $rawValue;
                     $finalCalculateValue = $calculateValue - $breakTime;
                 }
-            }                        
+            }
+            
             $ot->raw_calculated_value = $finalCalculateValue;
             $ot->calculated_value = $finalCalculateValue;
             $this->result['overtimes'][] = $ot;            
