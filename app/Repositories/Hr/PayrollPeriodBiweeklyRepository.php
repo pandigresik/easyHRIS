@@ -65,7 +65,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
         $setting = Setting::where(['type' => 'payroll'])->get()->keyBy('name');
         // get list employee
-        $employeeOjb = Employee::select(['id', 'code'])->with(['salaryBenefits' => function($q){
+        $employeeOjb = Employee::select(['id', 'code', 'join_date'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
         }])->where(['payroll_period_group_id' => $payrollPeriod]);
 
@@ -89,8 +89,8 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $ritaseDrivers = RitaseDriver::whereIn('employee_id', $listEmployees)->whereBetween('work_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id');
         $this->setRitaseEmployee($ritaseDrivers);        
         $this->setSummaryAttendanceEmployee([]);
-        
-        if($periodPayroll->isEndOfMonth()){
+        $this->setPremiPeriod($payrollPeriod->getRawOriginal('year').'-'.$payrollPeriod->getRawOriginal('month').'-01');
+        if($periodPayroll->isEndOfMonth()){            
             $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => intval($startDateObj->format('m'))])->whereIn('employee_id', $listEmployees)->get()->groupBy('employee_id'));
         }
         
@@ -144,7 +144,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             if($benefit->component->fixed){
                 $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');
             }else{
-                $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee->id, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);
+                $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);
             }
             /** untuk tunjangan jabatan hanya diberikan di akhir bulan saja */
             if(in_array($benefit->component->getRawOriginal('code') , config('local.benefit_end_of_month'))){

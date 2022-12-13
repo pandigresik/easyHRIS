@@ -164,6 +164,10 @@ class PayrollPeriod extends Model
         return Carbon::parse($this->attributes['start_period'])->endOfMonth()->format('Y-m-d') == $this->attributes['end_period'];
     }
 
+    public function startOfMonth(){
+        return Carbon::parse($this->attributes['start_period'])->startOfMonth()->format('Y-m-d');
+    }    
+
     public function scopeWeekly($query){
         return $query->whereIn('payroll_period_group_id', function($q){
             return $q->select(['id'])->from('payroll_period_groups')->where(['type_period' => 'weekly']);
