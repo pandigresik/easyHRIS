@@ -18,7 +18,7 @@ class CreateAttendanceLogfingersTable extends Migration
             $table->unsignedBigInteger('employee_id');
             $table->char('type_absen', 1)->nullable();
             $table->dateTime('fingertime');
-            $table->unsignedBigInteger('fingerprint_device_id');
+            $table->unsignedBigInteger('fingerprint_device_id')->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->dateTime('updated_at')->nullable()->useCurrent();
             $table->dateTime('deleted_at')->nullable();

@@ -12,6 +12,7 @@
         "php": "^7.4",
         "acaronlex/laravel-calendar": "^1.6",
         "alfa6661/laravel-autonumber": "dev-master",
+        "arcanedev/log-viewer": "8",
         "arielmejiadev/larapex-charts": "dev-master",
         "arrilot/laravel-widgets": "^3.13",
         "barryvdh/laravel-snappy": "^0.4.8",

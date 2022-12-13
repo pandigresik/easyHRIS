@@ -37,7 +37,7 @@ class WorkshiftImport implements ToCollection, WithHeadingRow, WithBatchInserts,
        //SalaryBenefit::whereNull('deleted_at')->forceDelete();
        //Employee::whereNull('deleted_at')->forceDelete();
        
-        foreach ($rows as $row) {            
+        foreach ($rows as $row) {
             $workshift = [
                 'employee_id' => $this->employee[$row['code']],
                 'shiftment_id' => $this->shiftment[$row['shift']],                
