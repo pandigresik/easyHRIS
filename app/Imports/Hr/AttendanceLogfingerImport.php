@@ -24,25 +24,25 @@ class AttendanceLogfingerImport implements ToModel, WithHeadingRow, WithBatchIns
         $this->mapEmployee = Employee::select(['code','id'])->get()->pluck('id','code')->toArray();
     }
     public function model(array $row)
-    {
-        \Log::error($row);
+    {        
         if(isset($this->mapEmployee[$row[$this->mapColumn['employee_id']]])){
             $raw = [
                 'employee_id' => $this->mapEmployee[$row[$this->mapColumn['employee_id']]],
-                'fingertime' => $this->createObjDdate($row[$this->mapColumn['fingertime']]),
+                // 'fingertime' => $this->createObjDate($row[$this->mapColumn['fingertime']]),
+                'fingertime' => $row[$this->mapColumn['fingertime']],
                 'fingerprint_device_id' => $row[$this->mapColumn['fingerprint_device_id']],
             ];
             return new AttendanceLogfinger($raw);
         }        
     }
 
-    private function createObjDdate($value){
-        return createLocalFormatDateTime($this->transformTimeFormat($value));
-    }
+    // private function createObjDate($value){
+    //     return createLocalFormatDateTime($this->transformTimeFormat($value));
+    // }
 
-    private function transformTimeFormat($value){
-        return str_replace('.',':', $value);
-    }
+    // private function transformTimeFormat($value){
+    //     return str_replace('.',':', $value);
+    // }
 
     public function batchSize(): int
     {
