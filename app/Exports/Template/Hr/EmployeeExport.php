@@ -58,7 +58,9 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
         ];        
         $mapRelationBenefit = [
             'overtime' => 'OT',
-            'salary' => ['GPH', 'GP'],	
+            'salary' => ['GPH', 'GP'],
+            'premi_kehadiran' => 'PRHD',
+            'uang_makan' => 'UM',
             'position_allowance' => 'TJ',
             'bpjs_kesehatan' => 'PJKNM',
             'bpjs_jht' => 'JHTM',
@@ -108,6 +110,8 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'bpjs_kesehatan',
             'bpjs_jht',
             'bpjs_jp',
+            'premi_kehadiran',
+            'uang_makan',
             'tunjangan_minggu',
             'joblevel_id',
             'supervisor_id',

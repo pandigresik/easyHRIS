@@ -39,6 +39,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             $bpjsFee = $input['bpjs_fee'] ?? [];
             $payrollPeriodGroupId = $input['payroll_period_group_id'] ?? NULL;
             $this->setBpjsFee([]);
+            $this->setStartPeriodPayroll($periods[0]['start_period']);
             foreach($periods as $_index => $period){                                
                 if($_index){
                     // jika dibagi menjadi 2 periode, maka set potongan Bpjs periode yang kedua                    
@@ -65,9 +66,10 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
         $setting = Setting::where(['type' => 'payroll'])->get()->keyBy('name');
         // get list employee
-        $employeeOjb = Employee::select(['id', 'code', 'join_date'])->with(['salaryBenefits' => function($q){
+        $employeeOjb = Employee::select(['id', 'code', 'join_date', 'resign_date'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
-        }])->where(['payroll_period_group_id' => $payrollPeriod]);
+        }])->where(['payroll_period_group_id' => $payrollPeriod])
+        ->active($this->getStartPeriodPayroll());
 
         if(!empty($employeeId)){
             $employeeOjb->whereIn('id', $employeeId);
@@ -79,7 +81,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $workDayEmployee = Workshift::selectRaw('employee_id, count(*) as workday')
                 ->whereIn('employee_id', $listEmployees)
                 ->whereBetween('work_date', [$period['start_period'], $period['end_period']])
-                ->where('shiftment_id', '<>', 2)
+                ->whereNotIn('shiftment_id', config('local.shiftment_off'))
                 ->groupBy('employee_id')
                 ->get()
                 ->pluck('workday', 'employee_id')->toArray();
@@ -89,7 +91,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $ritaseDrivers = RitaseDriver::whereIn('employee_id', $listEmployees)->whereBetween('work_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id');
         $this->setRitaseEmployee($ritaseDrivers);        
         $this->setSummaryAttendanceEmployee([]);
-        $this->setPremiPeriod($payrollPeriod->getRawOriginal('year').'-'.$payrollPeriod->getRawOriginal('month').'-01');
+        $this->setPremiPeriod($periodPayroll->getRawOriginal('year').'-'.$periodPayroll->getRawOriginal('month'));
         if($periodPayroll->isEndOfMonth()){            
             $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => intval($startDateObj->format('m'))])->whereIn('employee_id', $listEmployees)->get()->groupBy('employee_id'));
         }
@@ -109,6 +111,10 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
                         }
                     }
                 }                
+            }
+            /** jika join date > dari awal penggajian maka hitung lagi hari kerjanya */
+            if($employee->getRawOriginal('join_date') > $periodPayroll->getRawOriginal('start_period')){
+                $workDayCount = $this->actualWorkday($employee, $periodPayroll);
             }
             $this->calculateEmployeePayroll($workDayCount, $employee, $periodPayroll);
         }
@@ -174,7 +180,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $amountLateMinute = $this->getAbsentLateEmployee($employee->id)->sum(function($item){
             return $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out');
         });
-        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->sum('absent');
+        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->where('state','ABSENT')->count();
         $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
         $payroll->additional_info = [
             'workday' => $workDayCount,
@@ -214,5 +220,12 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             $resultPeriod[] = ['start_period' => $startDate, 'end_period' => $endDate];
         }
         return $resultPeriod;
+    }
+
+    private function actualWorkday($employee, $periodPayroll){
+        return Workshift::where('employee_id', $employee->id)
+        ->whereBetween('work_date', [$employee->getRawOriginal('join_date'), $periodPayroll->getRawOriginal('end_period')])
+        ->whereNotIn('shiftment_id', config('local.shiftment_off'))        
+        ->count();
     }
 }

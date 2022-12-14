@@ -14,21 +14,31 @@ use Yajra\DataTables\Html\Column;
 class EmployeeDataTable extends DataTable
 {
     protected $fastExcel = false;
-    protected $exportColumns = [
-        ['data' => 'contract_id', 'defaultContent' => '','title' => 'contract_id'],
+    protected $exportColumns = [        
         ['data' => 'company.name', 'defaultContent' => '','title' => 'company_id'],
-        ['data' => 'department.name', 'defaultContent' => '','title' => 'department_id'],
+        ['data' => 'code', 'defaultContent' => '','title' => 'code'],
+        ['data' => 'full_name', 'defaultContent' => '','title' => 'full_name'],
         ['data' => 'business_unit.name', 'defaultContent' => '','title' => 'business_unit_id'],
-        ['data' => 'joblevel.name', 'defaultContent' => '','title' => 'joblevel_id'],
+        ['data' => 'department.name', 'defaultContent' => '','title' => 'department_id'],                
         ['data' => 'jobtitle.name', 'defaultContent' => '','title' => 'jobtitle_id'],
-        ['data' => 'supervisor_id', 'defaultContent' => '','title' => 'supervisor_id'],
+        ['data' => 'employee_status', 'defaultContent' => '','title' => 'employee_status'],
+        ['data' => 'salary', 'defaultContent' => '','title' => 'salary'],
+        ['data' => 'overtime', 'defaultContent' => '','title' => 'overtime'],
+        ['data' => 'position_allowance', 'defaultContent' => '','title' => 'position_allowance'],
+        ['data' => 'bpjs_kesehatan', 'defaultContent' => '','title' => 'bpjs_kesehatan'],
+        ['data' => 'bpjs_jht', 'defaultContent' => '','title' => 'bpjs_jht'],
+        ['data' => 'bpjs_jp', 'defaultContent' => '','title' => 'bpjs_jp'], 
+        ['data' => 'premi_kehadiran', 'defaultContent' => '','title' => 'premi_kehadiran'], 
+        ['data' => 'uang_makan', 'defaultContent' => '','title' => 'uang_makan'],
+        ['data' => 'tunjangan_minggu', 'defaultContent' => '','title' => 'tunjangan_minggu'],
+        ['data' => 'joblevel.name', 'defaultContent' => '','title' => 'joblevel_id'],
+        ['data' => 'supervisor_id', 'defaultContent' => '','title' => 'supervisor_id'],        
+        ['data' => 'have_overtime_benefit', 'defaultContent' => '','title' => 'have_overtime_benefit'],
+        ['data' => 'contract_id', 'defaultContent' => '','title' => 'contract_id'],
         ['data' => 'region_of_birth_id', 'defaultContent' => '','title' => 'region_of_birth_id'],
         ['data' => 'city_of_birth_id', 'defaultContent' => '','title' => 'city_of_birth_id'],
         ['data' => 'address', 'defaultContent' => '','title' => 'address'],
-        ['data' => 'join_date', 'defaultContent' => '','title' => 'join_date'],
-        ['data' => 'employee_status', 'defaultContent' => '','title' => 'employee_status'],
-        ['data' => 'code', 'defaultContent' => '','title' => 'code'],
-        ['data' => 'full_name', 'defaultContent' => '','title' => 'full_name'],
+        ['data' => 'join_date', 'defaultContent' => '','title' => 'join_date'],                
         ['data' => 'gender', 'defaultContent' => '','title' => 'gender'],
         ['data' => 'date_of_birth', 'defaultContent' => '','title' => 'date_of_birth'],
         ['data' => 'identity_number', 'defaultContent' => '','title' => 'identity_number'],
@@ -36,16 +46,7 @@ class EmployeeDataTable extends DataTable
         ['data' => 'account_bank', 'defaultContent' => '','title' => 'account_bank'],
         ['data' => 'marital_status', 'defaultContent' => '','title' => 'marital_status'],
         ['data' => 'email', 'defaultContent' => '','title' => 'email'],
-        ['data' => 'leave_balance', 'defaultContent' => '','title' => 'leave_balance'],
-        // ['data' => 'tax_group', 'defaultContent' => '','title' => 'tax_group'],
-        // ['data' => 'resign_date', 'defaultContent' => '','title' => 'resign_date'],
-        ['data' => 'have_overtime_benefit', 'defaultContent' => '','title' => 'have_overtime_benefit'],        
-        ['data' => 'overtime', 'defaultContent' => '','title' => 'overtime'],
-        ['data' => 'salary', 'defaultContent' => '','title' => 'salary'],
-        ['data' => 'position_allowance', 'defaultContent' => '','title' => 'position_allowance'],
-        ['data' => 'bpjs_kesehatan', 'defaultContent' => '','title' => 'bpjs_kesehatan'],
-        ['data' => 'bpjs_jht', 'defaultContent' => '','title' => 'bpjs_jht'],
-        ['data' => 'bpjs_jp', 'defaultContent' => '','title' => 'bpjs_jp'], 
+        ['data' => 'leave_balance', 'defaultContent' => '','title' => 'leave_balance'],                                
         ['data' => 'salary_group.name', 'defaultContent' => '','title' => 'salary_group_id'],
         ['data' => 'shiftment_group.name', 'defaultContent' => '','title' => 'shiftment_group_id'],
         ['data' => 'payroll_period_group.name', 'defaultContent' => '','title' => 'payroll_period_group_id']        
@@ -79,7 +80,24 @@ class EmployeeDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        
+        $dataTable->editColumn('join_date', function($data){
+            if($this->request()->get('action') == 'excel'){
+                return $data->getRawOriginal('join_date');
+            }
+            return $data->join_date;
+        });
+        $dataTable->editColumn('date_of_birth', function($data){
+            if($this->request()->get('action') == 'excel'){
+                return $data->getRawOriginal('date_of_birth');
+            }
+            return $data->date_of_birth;
+        });
+        $dataTable->editColumn('resign_date', function($data){
+            if($this->request()->get('action') == 'excel'){
+                return $data->getRawOriginal('resign_date');
+            }
+            return $data->resign_date;
+        });
         $dataTable->editColumn('overtime', function ($data) {
             $item = $data->salaryBenefits->where('component.code', 'OT')->first();
             return $item ? $item->getRawOriginal('benefit_value') : NULL;
@@ -102,6 +120,18 @@ class EmployeeDataTable extends DataTable
         });
         $dataTable->editColumn('bpjs_jp', function ($data) {
             $item = $data->salaryBenefits->where('component.code', 'JPM')->first();
+            return $item ? $item->getRawOriginal('benefit_value') : NULL;
+        });
+        $dataTable->editColumn('uang_makan', function ($data) {
+            $item = $data->salaryBenefits->where('component.code', 'UM')->first();
+            return $item ? $item->getRawOriginal('benefit_value') : NULL;
+        });
+        $dataTable->editColumn('premi_kehadiran', function ($data) {
+            $item = $data->salaryBenefits->where('component.code', 'PRHD')->first();
+            return $item ? $item->getRawOriginal('benefit_value') : NULL;
+        });
+        $dataTable->editColumn('tunjangan_minggu', function ($data) {
+            $item = $data->salaryBenefits->where('component.code', 'TUMLM')->first();
             return $item ? $item->getRawOriginal('benefit_value') : NULL;
         });
         return $dataTable->addColumn('action', 'hr.employees.datatables_actions');

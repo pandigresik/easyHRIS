@@ -164,7 +164,7 @@ class PayrollController extends AppBaseController
 
         Flash::success(__('messages.deleted', ['model' => __('models/payrolls.singular')]));
 
-        return redirect(route('hr.payrolls.index'));
+        return redirect(route('hr.payrolls.index').'?payroll_period='.$payroll->payroll_period_id);
     }
 
     /**

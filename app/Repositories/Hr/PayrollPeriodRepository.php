@@ -35,6 +35,7 @@ class PayrollPeriodRepository extends BaseRepository
     protected $overtimeEmployee; // hitung uang makan dan tunjangan minggu
     protected $absentLateEmployee; // untuk hitung potongan kehadiran
     private $premiPeriod; // untuk hitung premi kehadiran
+    private $startPeriodPayroll;
     /**
      * @var array
      */
@@ -106,21 +107,27 @@ class PayrollPeriodRepository extends BaseRepository
                 $amountMinute = $this->getAbsentLateEmployee($employeeId)->sum(function($item){
                     return $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out');
                 });
-                $amountDay = $this->getAbsentLateEmployee($employeeId)->sum('absent');            
+                $amountDay = $this->getAbsentLateEmployee($employeeId)->where('state','ABSENT')->count();
                 $componentObj = new PotonganKehadiran(minuteToHour($amountMinute), $amountDay, $value);
                 break;
             case 'PRHD':
                 $joinDate = $employee->getRawOriginal('join_date');
+                $resignDate = $employee->getRawOriginal('resign_date');
                 $absentMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_absent');                
                 $workDayMonthCount = 25; // dalam satu bulan default 25 hari
-                if($joinDate > $this->getPremiPeriod()){
-                    $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');
+                if($joinDate > $this->getStartPremiPeriod()){
+                    $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');                    
                 }
-                                
+                if($resignDate){
+                    if($resignDate <= $this->getEndPremiPeriod()){
+                        $workDayMonthCount = 0;
+                    }
+                }
+                                                
                 $offMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_off');                
                 $componentObj = new PremiKehadiran($workDayMonthCount, $value, $absentMonthCount, $offMonthCount);
                 break;
-            case 'UM':        
+            case 'UM':  
                 $componentObj = new UangMakan($workDayCount, $value);
                 break;
             case 'TUMLM':
@@ -311,11 +318,37 @@ class PayrollPeriodRepository extends BaseRepository
         return $this;
     }
 
-    public function getPremiPeriod(){
-        return $this->premiPeriod;
+    public function getStartPremiPeriod(){
+        return Carbon::createFromFormat('Y-m', $this->premiPeriod)->startOfMonth()->format('Y-m-d');
+    }
+
+    public function getEndPremiPeriod(){
+        return Carbon::createFromFormat('Y-m', $this->premiPeriod)->endOfMonth()->format('Y-m-d');
     }
 
     public function setPremiPeriod($premiPeriod){
         $this->premiPeriod = $premiPeriod;
+    }
+
+
+
+    /**
+     * Get the value of startPeriodPayroll
+     */ 
+    public function getStartPeriodPayroll()
+    {
+        return $this->startPeriodPayroll;
+    }
+
+    /**
+     * Set the value of startPeriodPayroll
+     *
+     * @return  self
+     */ 
+    public function setStartPeriodPayroll($startPeriodPayroll)
+    {
+        $this->startPeriodPayroll = $startPeriodPayroll;
+
+        return $this;
     }
 }

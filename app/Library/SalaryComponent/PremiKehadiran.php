@@ -35,6 +35,9 @@ class PremiKehadiran extends Component{
             $pengurang = 1;
         }
         $premiDefault = $this->amount * $this->value;
+        if(empty($premiDefault)){
+            return 0;
+        }
         $premiMinus = $this->value  * $this->offCount;
         $premiAmount = $premiDefault - $premiMinus;
         return  $premiAmount - ($pengurang * $premiAmount);

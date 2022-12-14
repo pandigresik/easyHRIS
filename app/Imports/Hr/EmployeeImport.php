@@ -33,7 +33,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     private $company;
     private $joTitle;
     private $payrollGroup;
-    private $dateColumn = ['join_date', 'date_of_birth'];
+    private $dateColumn = ['join_date', 'date_of_birth', 'resign_date'];
     public function __construct()
     {
         $this->departement = Department::select(['id', 'name'])->get()->keyBy('name');
@@ -41,7 +41,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $this->jobTitle = JobTitle::select(['id', 'name'])->get()->keyBy('name');  
         $this->salaryGroup = SalaryGroup::select(['id', 'name'])->with('salaryGroupDetails')->get()->keyBy('name');
         $this->shiftmentGroup = ShiftmentGroup::select(['id', 'name'])->get()->keyBy('name');
-        $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ','TUMLM'])->get()->keyBy('code');
+        $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ','TUMLM', 'UM', 'PRHD'])->get()->keyBy('code');
         $this->businessUnit = BusinessUnit::select(['id', 'name'])->get()->keyBy('name');
         $this->company = Company::select(['id', 'name'])->get()->keyBy('name');
         $this->payrollGroup = PayrollPeriodGroup::get()->keyBy('name');
@@ -51,9 +51,12 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
       $userId = \Auth::id(); 
       foreach($rows as $row){
         foreach($this->dateColumn as $date){
-            if(is_numeric($row[$date])){
-                $row[$date] = Date::excelToDateTimeObject($row[$date])->format('Y-m-d');
+            if(isset($row[$date])){
+                if(is_numeric($row[$date])){
+                    $row[$date] = Date::excelToDateTimeObject($row[$date])->format('Y-m-d');
+                }
             }
+            
         }
         $overtime = $row['overtime'];
         $salary = $row['salary'];
@@ -61,6 +64,8 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $bpjsFeeJkn = $row['bpjs_kesehatan'];
         $bpjsFeeJht = $row['bpjs_jht'];
         $bpjsFeeJp = $row['bpjs_jp'];
+        $premiKehadiran = $row['premi_kehadiran'];
+        $uangMakan = $row['uang_makan'];
         $tunjanganMinggu = $row['tunjangan_minggu'];
         unset($row['overtime']);
         unset($row['salary']);
@@ -69,6 +74,8 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         unset($row['bpjs_jht']);
         unset($row['bpjs_jp']);
         unset($row['tunjangan_minggu']);
+        unset($row['premi_kehadiran']);
+        unset($row['uang_makan']);
         $company = $row['company_id'];
         $row['company_id'] = $this->company[$company]->id ?? NULL;
         $businessUnit = $row['business_unit_id'];
@@ -97,8 +104,10 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
             $this->salaryComponent['JPM']->id => $bpjsFeeJp, 
             $this->salaryComponent['JHTM']->id => $bpjsFeeJht,
             $this->salaryComponent['PJKNM']->id => $bpjsFeeJkn,
+            $this->salaryComponent['UM']->id => $uangMakan,
+            $this->salaryComponent['PRHD']->id => $premiKehadiran,
             $this->salaryComponent['TJ']->id => $positionAllowance,
-            $this->salaryComponent['TUMLM']->id => $tunjanganMinggu            
+            $this->salaryComponent['TUMLM']->id => $tunjanganMinggu
         ]);
       }
 //      (new SalaryBenefit())->flushCache();      
