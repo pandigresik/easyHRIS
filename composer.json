@@ -36,6 +36,7 @@
         "laravelcollective/html": "^6.1",
         "rap2hpoutre/fast-excel": "^3.2",
         "rats/zkteco": "^002.0",
+        "spatie/laravel-backup": "*",
         "spatie/laravel-menu": "^3.6",
         "spatie/laravel-mix-preload": "^1.2",
         "spatie/laravel-permission": "^5.3",
