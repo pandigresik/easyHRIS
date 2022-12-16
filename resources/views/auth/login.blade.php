@@ -10,7 +10,7 @@
                         <form method="post" action="{{ url('/login') }}">
                             @csrf                            
                             <div class="image text-center">
-                                <img src="vendor/images/logo-big.svg">
+                                <img src="vendor/images/logo-big.png">
                                 <p class="text-muted">Sign In to your account</p>
                             </div>
                             
