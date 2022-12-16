@@ -1,18 +1,13 @@
 <div class="sidebar sidebar-dark sidebar-fixed hide" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
-        <div class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
-            <img src="vendor/coreui/icons/svg/brand.svg"> </div>
-        <div class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
-            <img src="vendor/coreui/icons/svg/brand.svg"> </div>
-        </use>
-        </svg>
-    </div>
-    <div class="text-center">
-        <div class="avatar avatar-md">
-            <img class="avatar-img" src="vendor/images/default-avatar.jpg" alt="user@email.com">
+        <div class="sidebar-brand-full p-2" width="118" height="46" alt="CoreUI Logo">
+            <img src="vendor/images/logo.svg"> </div>
+        <div class="sidebar-brand-narrow p-2" width="46" height="46" alt="CoreUI Logo">
+            <img src="vendor/images/logo.svg"> 
         </div>
         <div>{{ Auth::user()->name }}</div>
     </div>
+    
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="init">
         <div class="simplebar-wrapper" style="margin: 0px;">
             <div class="simplebar-height-auto-observer-wrapper">

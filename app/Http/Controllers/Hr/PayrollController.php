@@ -190,8 +190,11 @@ class PayrollController extends AppBaseController
         }, 'payrollPeriod', 'payrollDetails' => function($r){
             return $r->with(['component']);
         }])->find($id);
-        $html = view('pdf.payslip',['payroll' => $payroll])->render();
-        // return $html;
+        $path = './vendor/images/logo.png';
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        $html = view('pdf.payslip',['payroll' => $payroll, 'base64' => $base64])->render();        
         $pdf = PDF::loadHTML($html)->setPaper('a5')->setOrientation('landscape')->setOption('margin-top', 2)->setOption('margin-bottom', 0);
         // PDF::loadView('pdf.payslip',['payroll' => $payroll])->setPaper('a4')->setOrientation('landscape');
         return $pdf->download('payslip.pdf');

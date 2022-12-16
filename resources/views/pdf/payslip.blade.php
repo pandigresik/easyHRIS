@@ -22,8 +22,8 @@
     <div class="slip-gaji">
         <table class="table-header">
             <tr>
-                <td>
-                    <img width="118" height="46" src="{{ url('/vendor/coreui/icons/svg/brand.svg') }}" />
+                <td>                    
+                    <img width="118" height="46" src="{{ $base64 }}" />
                 </td>
                 <td>
                     <div style="font-size:120%">SLIP GAJI KARYAWAN</div>

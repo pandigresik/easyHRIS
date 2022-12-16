@@ -11,7 +11,7 @@
     <% } %>
 </head>
 
-<body class="c-app flex-row align-items-center">
+<body class="app flex-row align-items-center">
     @yield('content')
     <% for(var i=0; i < htmlWebpackPlugin.files.js.length; i++) {%>
         <script type="text/javascript" src="{{ asset(mix('<%= htmlWebpackPlugin.files.js[i].replace('//js','/js') %>')) }}"></script>
