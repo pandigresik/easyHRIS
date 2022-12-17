@@ -2,8 +2,11 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Hr\Attendance;
 use App\Models\Hr\Contract;
 use App\Models\Hr\Employee;
+use App\Models\Hr\Payroll;
+use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
 
 /**
@@ -92,17 +95,23 @@ class EmployeeRepository extends BaseRepository
 
         try {
             $query = $this->model->newQuery();
-            $oldContract = $query->find($id);
+            $oldContract = $query->find($id);            
             $model = parent::update($input, $id);
+            
+            if($oldContract->getRawOriginal('resign_date') != $model->getRawOriginal('resign_date')){
+                // clean all transaction relation with this employee after resign date
+                if($model->getRawOriginal('resign_date')){
+                    $this->clearRelationTransaction($model);
+                }                
+            }
                         
-            if($input['contract_id']){                                
+            if($input['contract_id']){                     
                 if($oldContract->contract_id != $input['contract_id']){
                     // set unused old contract id
                     $this->updateContract($input['contract_id']);
                     if(!empty($oldContract->contract_id)){
                         $this->updateContract($oldContract->contract_id, 0);
-                    }
-                    
+                    }                    
                 }
             }else{
                 // set unused old contract id
@@ -125,5 +134,23 @@ class EmployeeRepository extends BaseRepository
         $contract = Contract::find($contractId);
         $contract->used = $used;
         $contract->save();        
+    }
+
+    /**
+     * remove attendance
+     * remove workshift
+     * remove payrolls
+     */
+    private function clearRelationTransaction($model){
+        Attendance::where(['employee_id' => $model->id])
+            ->where('attendance_date','>=', $model->getRawOriginal('resign_date'))
+            ->delete();
+        Workshift::where(['employee_id' => $model->id])
+            ->where('work_date','>=', $model->getRawOriginal('resign_date'))
+            ->delete();
+        Payroll::where(['employee_id' => $model->id])
+            ->whereHas('payrollPeriod', function($q) use ($model) {
+                return $q->where('start_period','>=', $model->getRawOriginal('resign_date'));
+        })->delete();
     }
 }

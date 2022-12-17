@@ -15,8 +15,10 @@ class LeafDataTable extends DataTable
     */
     private $columnFilterOperator = [
         'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'leave_start' => \App\DataTables\FilterClass\BetweenKeyword::class,
         'leave_end' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'updated_at' => \App\DataTables\FilterClass\BetweenDatetimeKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -75,11 +77,11 @@ class LeafDataTable extends DataTable
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
                     ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
+                    // [
+                    //    'extend' => 'import',
+                    //    'className' => 'btn btn-default btn-sm no-corner',
+                    //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
+                    // ],
                     [
                        'extend' => 'print',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -127,6 +129,7 @@ class LeafDataTable extends DataTable
         
         return [
             'employee.full_name' => new Column(['title' => __('models/leaves.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee.code' => new Column(['title' => __('models/leaves.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
             'reason_id' => new Column(['title' => __('models/leaves.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason.name', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $reasonItems, 'multiple' => 'multiple']),
             'leave_start' => new Column(['title' => __('models/leaves.fields.leave_start'),'name' => 'leave_start', 'data' => 'leave_start', 'searchable' => true, 'elmsearch' => 'daterange']),
             'leave_end' => new Column(['title' => __('models/leaves.fields.leave_end'),'name' => 'leave_end', 'data' => 'leave_end', 'searchable' => true, 'elmsearch' => 'daterange']),
@@ -134,7 +137,8 @@ class LeafDataTable extends DataTable
             // 'status' => new Column(['title' => __('models/leaves.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => false, 'elmsearch' => 'text']),
             // 'step_approval' => new Column(['title' => __('models/leaves.fields.step_approval'),'name' => 'step_approval', 'data' => 'step_approval', 'searchable' => false, 'elmsearch' => 'text']),
             // 'amount_approval' => new Column(['title' => __('models/leaves.fields.amount_approval'),'name' => 'amount_approval', 'data' => 'amount_approval', 'searchable' => false, 'elmsearch' => 'text']),
-            'description' => new Column(['title' => __('models/leaves.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
+            'description' => new Column(['title' => __('models/leaves.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'updated_at' => new Column(['title' => __('crud.updated_at'),'name' => 'updated_at', 'data' => 'updated_at', 'searchable' => true, 'elmsearch' => 'daterange']),
         ];
     }
 

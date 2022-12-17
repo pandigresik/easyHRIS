@@ -25,7 +25,9 @@ return [
     'state_active' => 'Aktif',
     'state_nonactive' => 'Non Aktif',
     'workday' => 'Hari kerja',
-    'choose' => 'Pilih',    
+    'choose' => 'Pilih', 
+    'updated_at' => 'Updated At',
+    'created_at' => 'Created At',   
     'option' => [
         'vehicleGroup_placeholder' => 'Pilih group kendaraan',
         'business_unit_placeholder' => 'Pilih bisnis unit',

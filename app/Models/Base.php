@@ -61,6 +61,14 @@ class Base extends Model
         return $this->belongsTo(\App\Models\Base\User::class, static::UPDATED_BY);
     }
 
+    public function getCreatedAtAttribute($value){
+        return localFormatDateTime($value);
+    }
+
+    public function getUpdatedAtAttribute($value){
+        return localFormatDateTime($value);
+    }
+
     protected function scopeEmployeeDescendants($query){
         $employee = \Auth::user()->employee;        
         $jobLevelLeader = config('local.job_level_leader');        
