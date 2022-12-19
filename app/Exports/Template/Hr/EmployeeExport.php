@@ -85,7 +85,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
                 }else{
                     $salaryBenefits = $item->salaryBenefits->where('component.code', $benefitMap)->first();
                 }
-                $defaultValue = $salaryBenefits->getRawOriginal('benefit_value');
+                $defaultValue = $salaryBenefits ? $salaryBenefits->getRawOriginal('benefit_value') : 0;
             }
 
             array_push($result, $defaultValue);
