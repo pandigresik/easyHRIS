@@ -297,8 +297,8 @@ class AttendanceRepository extends BaseRepository
 
     // cari absent berdasarkan jadwal kerja
     private function getFingerTimeDate($schedule, $fingerLog, $overtime){
-        $overday = new OvertimeDay($schedule, $fingerLog, $overtime, ['min' => $this->getMinCheckin(), 'max' => $this->getMaxCheckout()]);
-        return $overday->getResult();        
+        $overtime = new OvertimeDay($schedule, $fingerLog, $overtime, ['min' => $this->getMinCheckin(), 'max' => $this->getMaxCheckout()]);
+        return $overtime->getResult();
     }
 
 

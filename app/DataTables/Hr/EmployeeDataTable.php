@@ -58,7 +58,9 @@ class EmployeeDataTable extends DataTable
         'department_id' => \App\DataTables\FilterClass\InKeyword::class,
         'business_unit_id' => \App\DataTables\FilterClass\InKeyword::class,
         'joblevel_id' => \App\DataTables\FilterClass\InKeyword::class,
-        'jobtitle_id' => \App\DataTables\FilterClass\InKeyword::class,        
+        'jobtitle_id' => \App\DataTables\FilterClass\InKeyword::class,
+        'join_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'resign_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -237,7 +239,7 @@ class EmployeeDataTable extends DataTable
             // 'region_of_birth_id' => new Column(['title' => __('models/employees.fields.region_of_birth_id'),'name' => 'region_of_birth_id', 'data' => 'region_of_birth_id', 'searchable' => true, 'elmsearch' => 'text']),
             // 'city_of_birth_id' => new Column(['title' => __('models/employees.fields.city_of_birth_id'),'name' => 'city_of_birth_id', 'data' => 'city_of_birth_id', 'searchable' => true, 'elmsearch' => 'text']),
             // 'address' => new Column(['title' => __('models/employees.fields.address'),'name' => 'address', 'data' => 'address', 'searchable' => true, 'elmsearch' => 'text']),
-            'join_date' => new Column(['title' => __('models/employees.fields.join_date'),'name' => 'join_date', 'data' => 'join_date', 'searchable' => true, 'elmsearch' => 'text']),
+            'join_date' => new Column(['title' => __('models/employees.fields.join_date'),'name' => 'join_date', 'data' => 'join_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'employee_status' => new Column(['title' => __('models/employees.fields.employee_status'),'name' => 'employee_status', 'data' => 'employee_status', 'searchable' => true, 'elmsearch' => 'text']),            
             // 'gender' => new Column(['title' => __('models/employees.fields.gender'),'name' => 'gender', 'data' => 'gender', 'searchable' => true, 'elmsearch' => 'text']),
             // 'date_of_birth' => new Column(['title' => __('models/employees.fields.date_of_birth'),'name' => 'date_of_birth', 'data' => 'date_of_birth', 'searchable' => true, 'elmsearch' => 'text']),
@@ -247,7 +249,7 @@ class EmployeeDataTable extends DataTable
             // 'email' => new Column(['title' => __('models/employees.fields.email'),'name' => 'email', 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
             // 'leave_balance' => new Column(['title' => __('models/employees.fields.leave_balance'),'name' => 'leave_balance', 'data' => 'leave_balance', 'searchable' => true, 'elmsearch' => 'text']),
             // 'tax_group' => new Column(['title' => __('models/employees.fields.tax_group'),'name' => 'tax_group', 'data' => 'tax_group', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'resign_date' => new Column(['title' => __('models/employees.fields.resign_date'),'name' => 'resign_date', 'data' => 'resign_date', 'searchable' => true, 'elmsearch' => 'text']),
+            'resign_date' => new Column(['title' => __('models/employees.fields.resign_date'),'name' => 'resign_date', 'data' => 'resign_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             // 'have_overtime_benefit' => new Column(['title' => __('models/employees.fields.have_overtime_benefit'),'name' => 'have_overtime_benefit', 'data' => 'have_overtime_benefit', 'searchable' => true, 'elmsearch' => 'text']),
             // 'risk_ratio' => new Column(['title' => __('models/employees.fields.risk_ratio'),'name' => 'risk_ratio', 'data' => 'risk_ratio', 'searchable' => true, 'elmsearch' => 'text']),
             // 'profile_image' => new Column(['title' => __('models/employees.fields.profile_image'),'name' => 'profile_image', 'data' => 'profile_image', 'searchable' => true, 'elmsearch' => 'text']),

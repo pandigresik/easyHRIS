@@ -93,7 +93,7 @@ class AttendanceSummaryRepository extends BaseRepository
         $shiftmentOff = config('local.shiftment_off');
         $leaveCode = implode("','",config('local.leave_code'));
         $summary = Attendance::selectRaw("
-            employee_id, sum(absent) as total_absent, sum(case when state = 'OFF' then 1 else 0 end) as total_off 
+            employee_id, sum(absent) as total_absent, sum(case when state = 'OFF' then 1 else 0 end) as total_off
             , sum(case when late_in > $toleranceLate->value then late_in else 0 end) as total_late_in
             , sum(early_out) as total_early_out
             , count(*) as total_workday

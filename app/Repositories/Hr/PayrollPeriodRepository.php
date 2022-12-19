@@ -113,10 +113,10 @@ class PayrollPeriodRepository extends BaseRepository
             case 'PRHD':
                 $joinDate = $employee->getRawOriginal('join_date');
                 $resignDate = $employee->getRawOriginal('resign_date');
-                $absentMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_absent');                
+                $absentMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_absent');
                 $workDayMonthCount = 25; // dalam satu bulan default 25 hari
                 if($joinDate > $this->getStartPremiPeriod()){
-                    $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');                    
+                    $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');
                 }
                 if($resignDate){
                     if($resignDate <= $this->getEndPremiPeriod()){
