@@ -31,7 +31,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('start_hour', __('models/overtimes.fields.start_hour').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('start_hour', null, ['class' => 'form-control inputmask', 'data-optionmask' => json_encode(config('local.textmask.time')), 'required' => 'required']) !!}
+    {!! Form::text('start_hour', null, ['class' => 'form-control inputmask', 'data-optionmask' => json_encode(config('local.textmask.time-minute')), 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -39,7 +39,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('end_hour', __('models/overtimes.fields.end_hour').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('end_hour', null, ['class' => 'form-control inputmask', 'data-optionmask' => json_encode(config('local.textmask.time')), 'required' => 'required']) !!}
+    {!! Form::text('end_hour', null, ['class' => 'form-control inputmask', 'data-optionmask' => json_encode(config('local.textmask.time-minute')), 'required' => 'required']) !!}
 </div>
 </div>
 
