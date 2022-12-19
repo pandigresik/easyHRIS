@@ -84,7 +84,7 @@ class WorkshiftRepository extends BaseRepository
         $sqlMassInsert = <<<SQL
         insert into workshifts (employee_id , shiftment_id , work_date , start_hour , end_hour , created_by , created_at , updated_at)
         select e.id as employee_id, wg.shiftment_id , wg.work_date , wg.start_hour , wg.end_hour, 1, now(), now() from workshift_groups wg
-        join employees e on e.shiftment_group_id = wg.shiftment_group_id {$filterEmployee}
+        join employees e on e.shiftment_group_id = wg.shiftment_group_id and ( e.resign_date is null or e.resign_date >= '{$startDate}') and e.join_date <= '{$startDate}' {$filterEmployee}
         where wg.shiftment_group_id = {$shiftmentGroup} and wg.work_date between '{$startDate}' and '{$endDate}'
 SQL;
         return $this->model->fromQuery($sqlMassInsert);
