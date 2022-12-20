@@ -40,11 +40,11 @@ class AttendanceDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        // $dataTable->editColumn('employee_id', function($item){
-        //     $employee = $item->employee;
-            
-        //     return $employee->full_name.' ('.$employee->code.')';
-        // });
+        $dataTable->editColumn('check_out_schedule', function($item){
+            return localFormatDateTime($item->check_out_schedule);
+        })->editColumn('check_in_schedule', function($item){
+            return localFormatDateTime($item->check_in_schedule);
+        });
         return $dataTable->addColumn('action', 'hr.attendances.datatables_actions');
     }
 
@@ -132,8 +132,8 @@ class AttendanceDataTable extends DataTable
             'shiftment_id' => new Column(['title' => __('models/attendances.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'elmsearch' => 'text']),
             'reason_id' => new Column(['title' => __('models/attendances.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),            
             //'description' => new Column(['title' => __('models/attendances.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
-            //'check_in_schedule' => new Column(['title' => __('models/attendances.fields.check_in_schedule'),'name' => 'check_in_schedule', 'data' => 'check_in_schedule', 'searchable' => true, 'elmsearch' => 'text']),
-            //'check_out_schedule' => new Column(['title' => __('models/attendances.fields.check_out_schedule'),'name' => 'check_out_schedule', 'data' => 'check_out_schedule', 'searchable' => true, 'elmsearch' => 'text']),
+            'check_in_schedule' => new Column(['title' => __('models/attendances.fields.check_in_schedule'),'name' => 'check_in_schedule', 'data' => 'check_in_schedule', 'searchable' => false, 'elmsearch' => 'text']),
+            'check_out_schedule' => new Column(['title' => __('models/attendances.fields.check_out_schedule'),'name' => 'check_out_schedule', 'data' => 'check_out_schedule', 'searchable' => false, 'elmsearch' => 'text']),
             'check_in' => new Column(['title' => __('models/attendances.fields.check_in'),'name' => 'check_in', 'data' => 'check_in', 'searchable' => false, 'elmsearch' => 'text']),
             'check_out' => new Column(['title' => __('models/attendances.fields.check_out'),'name' => 'check_out', 'data' => 'check_out', 'searchable' => false, 'elmsearch' => 'text']),
             'early_in' => new Column(['title' => __('models/attendances.fields.early_in').' (minutes)','name' => 'early_in', 'data' => 'early_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
