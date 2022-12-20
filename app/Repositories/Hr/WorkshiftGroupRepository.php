@@ -104,19 +104,22 @@ class WorkshiftGroupRepository extends BaseRepository
                 $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
             }
             
-            $selectedShiftment = ['id' => $shifment[$currentShiftment]->id, 'code' => $shifment[$currentShiftment]->code, 'name' => $shifment[$currentShiftment]->name, 'next_day' => $shifment[$currentShiftment]->next_day ];
+            $selectedShiftment = ['id' => $shifment[$currentShiftment]->id, 'code' => $shifment[$currentShiftment]->code, 'name' => $shifment[$currentShiftment]->name ];
             $selectedShiftment['start_hour'] = $currentScheduleShiftment[$date->dayOfWeek]->start_hour;
             $selectedShiftment['end_hour'] = $currentScheduleShiftment[$date->dayOfWeek]->end_hour;
+            $selectedShiftment['next_day'] = $currentScheduleShiftment[$date->dayOfWeek]->next_day;
             
             $result[$date->format('Y-m-d')] = $selectedShiftment;
             
             /* jika jam awal = jam akhir maka hari libur */
             if($currentScheduleShiftment[$date->dayOfWeek]->start_hour == $currentScheduleShiftment[$date->dayOfWeek]->end_hour){
-                $result[$date->format('Y-m-d')] = $shifment[$this->shiftmentOff]->toArray();
+                $holidayShiftment = ['id' => $shifment[$this->shiftmentOff]->id, 'code' => $shifment[$this->shiftmentOff]->code, 'name' => $shifment[$this->shiftmentOff]->name, 'next_day' => false, 'start_hour' => $shifment[$this->shiftmentOff]->start_hour, 'end_hour' => $shifment[$this->shiftmentOff]->end_hour ];
+                $result[$date->format('Y-m-d')] = $holidayShiftment;
             }
 
             if(isset($holiday[$date->format('Y-m-d')])){
-                $result[$date->format('Y-m-d')] = $shifment[$this->shiftmentOff]->toArray();
+                $holidayShiftment = ['id' => $shifment[$this->shiftmentOff]->id, 'code' => $shifment[$this->shiftmentOff]->code, 'name' => $shifment[$this->shiftmentOff]->name, 'next_day' => false, 'start_hour' => $shifment[$this->shiftmentOff]->start_hour, 'end_hour' => $shifment[$this->shiftmentOff]->end_hour ];
+                $result[$date->format('Y-m-d')] = $holidayShiftment;
             }
         }
         return $result;

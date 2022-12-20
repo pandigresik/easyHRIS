@@ -19,6 +19,7 @@ class CreateShiftmentSchedule extends Migration
             $table->string('work_day', 10);            
             $table->time('start_hour');
             $table->time('end_hour');
+            $table->boolean('next_day')->nullable()->default(0);
             $table->timestamps();
             $table->softDeletes();                                    
             $table->foreign('shiftment_id', 'shiftment_schedules_fk1')->references('id')->on('shiftments');

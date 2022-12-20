@@ -51,8 +51,7 @@ class Shiftment extends Model
         'code',
         'name',
         'start_hour',
-        'end_hour',
-        'next_day'
+        'end_hour'        
     ];
 
     /**

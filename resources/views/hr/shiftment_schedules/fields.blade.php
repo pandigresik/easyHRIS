@@ -29,3 +29,14 @@
     {!! Form::text('end_hour', null, ['class' => 'form-control inputmask', 'data-optionmask' =>  json_encode(config('local.textmask.time')) ,'required' => 'required']) !!}
 </div>
 </div>
+
+<!-- next_day Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('next_day', __('models/overtimes.fields.next_day').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    <label class="checkbox-inline">
+        {!! Form::hidden('next_day', 0) !!}
+        {!! Form::checkbox('next_day', '1', null) !!}
+    </label>
+</div>
+</div>

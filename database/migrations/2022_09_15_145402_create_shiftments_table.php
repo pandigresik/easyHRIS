@@ -18,8 +18,7 @@ class CreateShiftmentsTable extends Migration
             $table->string('code', 7);
             $table->string('name');
             $table->time('start_hour');
-            $table->time('end_hour');
-            $table->boolean('next_day')->nullable()->default(0);
+            $table->time('end_hour');            
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

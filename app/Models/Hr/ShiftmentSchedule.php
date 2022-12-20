@@ -53,7 +53,8 @@ class ShiftmentSchedule extends Model
         'shiftment_id',
         'work_day',
         'start_hour',
-        'end_hour'
+        'end_hour',
+        'next_day'
     ];
 
     /**
@@ -64,7 +65,8 @@ class ShiftmentSchedule extends Model
     protected $casts = [
         'id' => 'integer',
         'shiftment_id' => 'integer',
-        'work_day' => 'string'
+        'work_day' => 'string',
+        'next_day' => 'boolean'
     ];
 
     /**

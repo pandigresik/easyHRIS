@@ -204,7 +204,9 @@ class WorkshiftGroupController extends AppBaseController
             'second' => '2-digit',
             'hour12' => false
         ];
+        \Log::error($workshift['schedule']);
         foreach($workshift['schedule'] as $date => $event){
+            
             $events[] = [
                 'title' => $event['code'].' ('.$event['start_hour'].'-'.$event['end_hour'].')',
                 'allDay' => true,
