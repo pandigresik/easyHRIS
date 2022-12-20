@@ -186,8 +186,8 @@ class AttendanceLogfingerController extends AppBaseController
         $workshift = Workshift::select(['start_hour', 'end_hour','employee_id', 'work_date'])->with(['employee' => function($q){
             return $q->select(['id', 'full_name', 'code']);
         }])->where(['employee_id' => $employeeId, 'work_date' => $workDate])->first();
-        $startWorkshift = Carbon::parse($workshift->getRawOriginal('start_hour'))->subMinutes(240);
-        $endWorkshift = Carbon::parse($workshift->getRawOriginal('end_hour'))->addMinutes(360);
+        $startWorkshift = Carbon::parse($workshift->getRawOriginal('start_hour'))->subMinutes(1440);
+        $endWorkshift = Carbon::parse($workshift->getRawOriginal('end_hour'))->addMinutes(1440);
         $attendanceLogfinger = $this->getRepositoryObj()->allQuery()->where(['employee_id' => $employeeId])->whereBetween('fingertime', [$startWorkshift, $endWorkshift])->get();        
 
         return view('hr.attendance_logfingers.detail_log')->with(['attendanceLogfinger' => $attendanceLogfinger, 'workshift' => $workshift]);
