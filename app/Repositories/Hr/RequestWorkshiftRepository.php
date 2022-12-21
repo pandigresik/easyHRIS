@@ -84,9 +84,12 @@ class RequestWorkshiftRepository extends BaseRepository
                 $workDay = Carbon::parse($workDate)->dayOfWeek;
                 return $q->where(['work_day' => $workDay]);
             }])->find($shiftmentId);
-                        
-            $input['start_hour'] = $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('start_hour');
-            $input['end_hour'] = $newShiftmentId->schedules->first()->getRawOriginal('start_hour') > $newShiftmentId->schedules->first()->getRawOriginal('end_hour') ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour') : $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour');
+            $selectedShiftmentHour = ['start_hour' => $newShiftmentId->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->getRawOriginal('end_hour')];
+            if($newShiftmentId->schedules){
+                $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];
+            }
+            $input['start_hour'] = $workDate.' '.$selectedShiftmentHour['start_hour'];
+            $input['end_hour'] = $selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour'] ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$selectedShiftmentHour['end_hour'] : $workDate.' '.$selectedShiftmentHour['end_hour'];
             $input['shiftment_id_origin'] = $shiftmentOrigin->shiftment_id;
             $model = parent::create($input);            
             if($model->getRawOriginal('status') == RequestWorkshift::APPROVE_STATE){
