@@ -103,33 +103,40 @@ class OvertimeDay{
             
             $ot->raw_calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
             $ot->calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;            
-            $this->result['overtimes'][] = $ot;            
+            $this->result['overtimes'][] = $ot;                        
         }
     }
 
     private function setStartEndHour(){
         $this->startHour = $this->workshift->getRawOriginal('start_hour');
-        $this->endHour = $this->workshift->getRawOriginal('end_hour');        
+        $this->endHour = $this->workshift->getRawOriginal('end_hour');  
+        
         foreach($this->overtimes as $ot){
             $ot->setValidOvertimeDate($this->workshift);
             $startOvertime = $ot->getRawStartHourDate();
             $endOvertime = $ot->getRawEndHourDate();
             
+            // case lembur hari libur
+            if($this->workshift->isOffShift()){
+                $this->startHour = $startOvertime;
+                $this->endHour = $endOvertime;
+            }
+
             if($startOvertime < $this->startHour){
                 $this->startHour = $startOvertime;
             }
 
             if($endOvertime > $this->endHour){
                 $this->endHour = $endOvertime;
-            }            
+            }
         }
 
         $this->startHour = Carbon::parse($this->startHour)->subMinutes($this->constraint['min'])->format('Y-m-d H:i:s');
         $this->endHour = Carbon::parse($this->endHour)->addMinutes($this->constraint['max'])->format('Y-m-d H:i:s');
     }
 
-    private function setCheckInOut(){
-        foreach($this->logFingers as $time){            
+    private function setCheckInOut(){        
+        foreach($this->logFingers as $time){                    
             if(is_null($this->result['checkin'])){
                 if($time->getRawOriginal('fingertime') >= $this->startHour){
                     if($time->getRawOriginal('fingertime') < $this->endHour){
@@ -144,7 +151,7 @@ class OvertimeDay{
                 }
             }
         }
-
+        
         $this->clearDataAttendance();
     }
 

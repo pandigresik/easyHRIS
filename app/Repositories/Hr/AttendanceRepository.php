@@ -79,6 +79,7 @@ class AttendanceRepository extends BaseRepository
 
     public function create($input)
     {
+        $this->model->getConnection()->beginTransaction();
         try {
             $period = generatePeriod($input['work_date_period']);
             $startDate = $period['startDate'];
@@ -89,8 +90,11 @@ class AttendanceRepository extends BaseRepository
             $this->setReasonAttendance();
             $this->processAttendance($startDate, $endDate, $shiftmentGroup, $employeeId);
             $this->model->newInstance()->flushCache();
+                        
+            $this->model->getConnection()->commit();
             return $this->model;
         } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
             return $e;
         } 
     }
