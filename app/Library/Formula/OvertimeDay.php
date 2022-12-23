@@ -34,7 +34,7 @@ class OvertimeDay{
         $startWorkshift = $this->workshift->getRawOriginal('start_hour');
         $endWorkshift = $this->workshift->getRawOriginal('end_hour');
         $checkInReal = $this->result['checkin'];
-        $checkOutReal = $this->result['checkout'];
+        $checkOutReal = $this->result['checkout'];        
         
         if(is_null($checkInReal) || is_null($checkOutReal)){
             foreach($this->overtimes as $ot){
@@ -49,22 +49,27 @@ class OvertimeDay{
             $startOvertime = $ot->getRawStartHourDate();
             $endOvertime = $ot->getRawEndHourDate();        
             $breakTime = $ot->getRawOriginal('breaktime_value');            
-            $finalCalculateValue = 0;
-            // lembur awal
-            if($checkInRealObj->lessThanOrEqualTo($startOvertime)){
-                if($startOvertime < $startWorkshift){
-                    if($endOvertime < $endWorkshift){                    
+            $ot->start_hour_real = null;
+            $ot->end_hour_real = null;
+            $ot->raw_value = null;
+            $ot->calculated_value = null;
+            $finalCalculateValue = 0;            
+            // lembur awal, ada kemungkinan karyawan datang terlambat
+            if($checkInRealObj->lessThanOrEqualTo($endOvertime)){
+                if($startOvertime < $startWorkshift){ 
+                    if($endOvertime < $endWorkshift){
                         $ot->start_hour_real = Carbon::parse($checkInReal)->format('H:i:s');
                         $ot->end_hour_real = $ot->getRawOriginal('end_hour');
-                        $calculateValue = Carbon::parse($startOvertime)->diffInMinutes($endOvertime);
+                        $pembandingAwal = $checkInReal > $startOvertime ? $checkInReal : $startOvertime;
+                        $calculateValue = Carbon::parse($pembandingAwal)->diffInMinutes($endOvertime);
                         $rawValue = $checkInRealObj->diffInMinutes($endOvertime);
                         $ot->raw_value = $rawValue;
-                        $finalCalculateValue = $calculateValue - $breakTime;                            
+                        $finalCalculateValue = $calculateValue - $breakTime;
                     }
                 }            
                 
                 // lembur tengah
-                if($startOvertime > $startWorkshift){
+                if($startOvertime > $startWorkshift){ 
                     if($endOvertime < $endWorkshift){
                         $ot->start_hour_real = $ot->getRawOriginal('start_hour');
                         if($checkOutRealObj->greaterThanOrEqualTo($endOvertime)){
@@ -80,7 +85,7 @@ class OvertimeDay{
                 }
             }
             
-            if($checkOutRealObj->greaterThanOrEqualTo($startOvertime)){                
+            if($checkOutRealObj->greaterThanOrEqualTo($startOvertime)){
                 // lembur akhir
                 if($endOvertime >= $endWorkshift){
                     $ot->start_hour_real = $ot->getRawOriginal('start_hour');
@@ -97,7 +102,7 @@ class OvertimeDay{
             }
             
             $ot->raw_calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
-            $ot->calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
+            $ot->calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;            
             $this->result['overtimes'][] = $ot;            
         }
     }
@@ -108,7 +113,8 @@ class OvertimeDay{
         foreach($this->overtimes as $ot){
             $ot->setValidOvertimeDate($this->workshift);
             $startOvertime = $ot->getRawStartHourDate();
-            $endOvertime = $ot->getRawEndHourDate();            
+            $endOvertime = $ot->getRawEndHourDate();
+            
             if($startOvertime < $this->startHour){
                 $this->startHour = $startOvertime;
             }

@@ -225,20 +225,27 @@ class Overtime extends Model
         return $validDate.' '.$this->attributes['end_hour'];
     }
     
-    public function setValidOvertimeDate(Workshift $workshift){
-        // contoh lembur jam 22:00 sd 00:00
+    public function setValidOvertimeDate(Workshift $workshift){        
+        // contoh lembur jam 22:00 sd 00:00 baik shift 2 (lembur akhir)  maupun shift 3 (lembur awal)
         if($this->attributes['start_hour'] > $this->attributes['end_hour']){
-            $this->endValidOvertimeDate = Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d');
-            // echo 'masuk sini';
+            $this->endValidOvertimeDate = Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d');            
         }
-
+        // jam kerja 00:00 sd 04:00
+        // contoh lembur 20:00 sd 23:00
+        // contoh lembur 04:00 sd 08:00
         // lembur akhir atau ditengah shift 3
-        if($workshift->isEndOverDay()){
-            // echo 'masuk sini overday';            
-            $this->endValidOvertimeDate = Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d');
+        if($workshift->isEndOverDay()){                                    
+            // contoh lembur 20:00 sd 23:00
+            // kemungkinan lembur akhir, maka overtime_date + 1
+            if($this->attributes['start_hour'] > '12:00'){
+                $this->endValidOvertimeDate = $this->attributes['overtime_date'];
+            }else{
+                $this->endValidOvertimeDate = Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d');
+            }
+            // kemungkinan lembur awal, maka overtime                
             if($this->attributes['start_hour'] < $this->attributes['end_hour']){
                 $this->startValidOvertimeDate = $this->endValidOvertimeDate;
-            }
+            }            
         }
     }
 }

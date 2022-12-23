@@ -222,7 +222,7 @@ class AttendanceRepository extends BaseRepository
             if(!empty($fingerClassification['overtimes'])){                
                 foreach($fingerClassification['overtimes'] as $ot){
                     $amountOvertime = $ot->benefit->getRawOriginal('benefit_value') ?? 0;                    
-                    // not use calculated_value because maybe calculated value formated not as number
+                    // not use calculated_value because maybe calculated value formated not as number                    
                     $ot->amount = (new SalaryComponentOvertime(minuteToHour($ot->raw_calculated_value) , $amountOvertime))->calculate();
                     unset($ot->raw_calculated_value);
                     $overtimeResult[] = $ot;
@@ -272,7 +272,7 @@ class AttendanceRepository extends BaseRepository
     }
 
     private function listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId){
-        $att = Overtime::select(['overtime_date', 'id', 'breaktime_value', 'employee_id','start_hour', 'end_hour', 'overday'])
+        $att = Overtime::select(['overtime_date', 'id', 'breaktime_value', 'employee_id','start_hour', 'end_hour', 'overday','start_hour_real', 'end_hour_real', 'raw_value', 'calculated_value'])
             ->with(['benefit'])
             ->whereBetween('overtime_date',[$startDate,$endDate]);        
         if(!empty($employeeId)){    
@@ -296,8 +296,8 @@ class AttendanceRepository extends BaseRepository
     }
 
     // cari absent berdasarkan jadwal kerja
-    private function getFingerTimeDate($schedule, $fingerLog, $overtime){
-        $overtime = new OvertimeDay($schedule, $fingerLog, $overtime, ['min' => $this->getMinCheckin(), 'max' => $this->getMaxCheckout()]);
+    private function getFingerTimeDate($schedule, $fingerLog, $overtimes){        
+        $overtime = new OvertimeDay($schedule, $fingerLog, $overtimes, ['min' => $this->getMinCheckin(), 'max' => $this->getMaxCheckout()]);
         return $overtime->getResult();
     }
 
