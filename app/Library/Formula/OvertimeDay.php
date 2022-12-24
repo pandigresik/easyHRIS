@@ -54,11 +54,7 @@ class OvertimeDay{
             $ot->raw_value = null;
             $ot->calculated_value = null;
             $finalCalculateValue = 0;            
-            // lembur awal, ada kemungkinan karyawan datang terlambat
-            \Log::error('$endOvertime '.$endOvertime);
-            \Log::error('$startOvertime '.$startOvertime);
-            \Log::error('$checkOutRealObj '.$checkOutRealObj);
-            \Log::error('$checkInRealObj '.$checkInRealObj);
+            // lembur awal, ada kemungkinan karyawan datang terlambat            
             if($checkInRealObj->lessThanOrEqualTo($endOvertime)){
                 if($startOvertime < $startWorkshift){ 
                     if($endOvertime < $endWorkshift){
@@ -101,8 +97,7 @@ class OvertimeDay{
                     }                                        
                     
                     $ot->raw_value = $rawValue;
-                    $finalCalculateValue = $calculateValue - $breakTime;
-                    \Log::error('$finalCalculateValue '.$finalCalculateValue);
+                    $finalCalculateValue = $calculateValue - $breakTime;                    
                 }
             }
             
