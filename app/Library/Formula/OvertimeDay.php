@@ -55,14 +55,18 @@ class OvertimeDay{
             $ot->calculated_value = null;
             $finalCalculateValue = 0;            
             // lembur awal, ada kemungkinan karyawan datang terlambat
+            \Log::error('$endOvertime '.$endOvertime);
+            \Log::error('$startOvertime '.$startOvertime);
+            \Log::error('$checkOutRealObj '.$checkOutRealObj);
+            \Log::error('$checkInRealObj '.$checkInRealObj);
             if($checkInRealObj->lessThanOrEqualTo($endOvertime)){
                 if($startOvertime < $startWorkshift){ 
                     if($endOvertime < $endWorkshift){
                         $ot->start_hour_real = Carbon::parse($checkInReal)->format('H:i:s');
                         $ot->end_hour_real = $ot->getRawOriginal('end_hour');
-                        $pembandingAwal = $checkInReal > $startOvertime ? $checkInReal : $startOvertime;
+                        $pembandingAwal = $checkInReal > $startOvertime ? $checkInReal : $startOvertime;                        
                         $calculateValue = Carbon::parse($pembandingAwal)->diffInMinutes($endOvertime);
-                        $rawValue = $checkInRealObj->diffInMinutes($endOvertime);
+                        $rawValue = $checkInRealObj->diffInMinutes($endOvertime);                        
                         $ot->raw_value = $rawValue;
                         $finalCalculateValue = $calculateValue - $breakTime;
                     }
@@ -98,12 +102,14 @@ class OvertimeDay{
                     
                     $ot->raw_value = $rawValue;
                     $finalCalculateValue = $calculateValue - $breakTime;
+                    \Log::error('$finalCalculateValue '.$finalCalculateValue);
                 }
             }
             
             $ot->raw_calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
             $ot->calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;            
-            $this->result['overtimes'][] = $ot;                        
+            $this->result['overtimes'][] = $ot;
+            
         }
     }
 

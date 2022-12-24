@@ -17,6 +17,7 @@ class OvertimeDataTable extends DataTable
         'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'overtime_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'amount' =>  \App\DataTables\FilterClass\BetweenKeyword::class,
         // 'shiftment_id' => \App\DataTables\FilterClass\InKeyword::class,        
     ];
     
@@ -136,7 +137,7 @@ class OvertimeDataTable extends DataTable
             'calculated_value' => new Column(['title' => __('models/overtimes.fields.calculated_value'),'name' => 'calculated_value', 'data' => 'calculated_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'holiday' => new Column(['title' => __('models/overtimes.fields.holiday'),'name' => 'holiday', 'data' => 'holiday', 'searchable' => false, 'elmsearch' => 'text']),
             'overday' => new Column(['title' => __('models/overtimes.fields.overday'),'name' => 'overday', 'data' => 'overday', 'searchable' => false, 'elmsearch' => 'text']),
-            'amount' => new Column(['title' => __('models/overtimes.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
+            'amount' => new Column(['title' => __('models/overtimes.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => true, 'elmsearch' => 'numberrange', 'className' => 'text-end']),
             // 'description' => new Column(['title' => __('models/overtimes.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
     }
