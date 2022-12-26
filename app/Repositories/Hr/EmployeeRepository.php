@@ -6,6 +6,8 @@ use App\Models\Hr\Attendance;
 use App\Models\Hr\Contract;
 use App\Models\Hr\Employee;
 use App\Models\Hr\Payroll;
+use App\Models\Hr\SalaryBenefit;
+use App\Models\Hr\SalaryGroupDetail;
 use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
 
@@ -78,7 +80,7 @@ class EmployeeRepository extends BaseRepository
             if($input['contract_id']){
                 $this->updateContract($input['contract_id']);
             }
-            
+            $this->createSalaryBenefit($model);
             $this->model->getConnection()->commit();
         } catch (\Exception $e) {            
             $this->model->getConnection()->rollBack();
@@ -95,28 +97,36 @@ class EmployeeRepository extends BaseRepository
 
         try {
             $query = $this->model->newQuery();
-            $oldContract = $query->find($id);            
+            $oldData = $query->find($id);            
             $model = parent::update($input, $id);
             
-            if($oldContract->getRawOriginal('resign_date') != $model->getRawOriginal('resign_date')){
+            if($oldData->getRawOriginal('resign_date') != $model->getRawOriginal('resign_date')){
                 // clean all transaction relation with this employee after resign date
                 if($model->getRawOriginal('resign_date')){
                     $this->clearRelationTransaction($model);
                 }                
             }
-                        
-            if($input['contract_id']){                     
-                if($oldContract->contract_id != $input['contract_id']){
+
+            if($oldData->getRawOriginal('salary_group_id') != $model->getRawOriginal('salary_group_id')){
+                // clean all transaction relation with this employee after resign date
+                if($model->getRawOriginal('salary_group_id')){
+                    $this->updateSalaryBenefit($model);
+                }
+            }
+            
+
+            if($input['contract_id']){
+                if($oldData->contract_id != $input['contract_id']){
                     // set unused old contract id
                     $this->updateContract($input['contract_id']);
-                    if(!empty($oldContract->contract_id)){
-                        $this->updateContract($oldContract->contract_id, 0);
+                    if(!empty($oldData->contract_id)){
+                        $this->updateContract($oldData->contract_id, 0);
                     }                    
                 }
             }else{
                 // set unused old contract id
-                if($oldContract->contract_id){
-                    $this->updateContract($oldContract->contract_id, 0);
+                if($oldData->contract_id){
+                    $this->updateContract($oldData->contract_id, 0);
                 }                
             }
             
@@ -152,5 +162,33 @@ class EmployeeRepository extends BaseRepository
             ->whereHas('payrollPeriod', function($q) use ($model) {
                 return $q->where('start_period','>=', $model->getRawOriginal('resign_date'));
         })->delete();
+    }
+
+    private function updateSalaryBenefit($model){
+        $oldBenefit = $model->salaryBenefits->keyBy('component_id');
+        $newBenefit = SalaryGroupDetail::where(['salary_group_id' => $model->getRawOriginal('salary_group_id')])->get()->keyBy('component_id');
+        $deletedKeys = array_diff($oldBenefit->keys()->toArray(),$newBenefit->keys()->toArray());  
+        $insertKeys = array_diff($newBenefit->keys()->toArray(),$oldBenefit->keys()->toArray());                
+        
+        if($deletedKeys){
+            SalaryBenefit::where(['employee_id' => $model->id])->whereIn('component_id', $deletedKeys)->forceDelete();            
+        }
+
+        if($insertKeys){
+            foreach($insertKeys as $key){                                
+                $insertBenefit = ['employee_id' => $model->id, 'component_id' => $key, 'benefit_value' => $newBenefit[$key]->component_value];
+                SalaryBenefit::create($insertBenefit);                
+            }
+        }
+    }
+
+    private function createSalaryBenefit($model){        
+        $newBenefit = SalaryGroupDetail::where(['salary_group_id' => $model->getRawOriginal('salary_group_id')])->get();
+        
+        foreach($newBenefit as $item){                                
+            $insertBenefit = ['employee_id' => $model->id, 'component_id' => $item->component_id, 'benefit_value' => $item->component_value];
+            SalaryBenefit::create($insertBenefit);                
+        }
+        
     }
 }

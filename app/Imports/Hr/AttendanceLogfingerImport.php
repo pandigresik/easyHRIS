@@ -26,7 +26,7 @@ class AttendanceLogfingerImport implements ToCollection, WithHeadingRow, WithBat
         $this->mapEmployee = Employee::select(['code','id'])->get()->pluck('id','code')->toArray();
     }
     public function collection(Collection $rows)    
-    {        
+    {
         foreach ($rows as $row) {
             if(isset($this->mapEmployee[$row[$this->mapColumn['employee_id']]])){
                 $raw = [
