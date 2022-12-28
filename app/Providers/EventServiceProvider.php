@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Base\Menus;
+use App\Models\Hr\Leaf;
+use App\Observers\LeafObserver;
+use App\Observers\MenusObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,5 +30,8 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
+        // register observer
+        Leaf::observe(LeafObserver::class);        
+        Menus::observe(MenusObserver::class);
     }
 }

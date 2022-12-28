@@ -44,4 +44,6 @@ return [
     'benefit_end_of_month' => ['TJ', 'PRHD'],
     // job level leader code
     'job_level_leader' => ['MGR','SPV', 'FRM'],
+    // annual leave code
+    'annual_leave_code' => 'CT',    
 ];

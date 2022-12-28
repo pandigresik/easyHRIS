@@ -52,9 +52,6 @@ class AppServiceProvider extends ServiceProvider
             }
             $menu = generateMenu($tree->toTree()->all())->withoutWrapperTag();
             $view->with(['menu' => $menu]);
-        });
-
-        // register observer
-        Menus::observe(MenusObserver::class);
+        });        
     }
 }

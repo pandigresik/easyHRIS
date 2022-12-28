@@ -92,4 +92,8 @@ class AbsentReason extends Model
     {
         return $this->hasMany(\App\Models\Hr\Leaf::class, 'reason_id');
     }
+
+    public function isAnnualLeave(){
+        return $this->attributes['code'] == 'CT';
+    }
 }

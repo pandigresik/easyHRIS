@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Hr\AbsentReason;
+use App\Models\Hr\Employee;
 use App\Models\Hr\Leaf;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
@@ -51,7 +53,7 @@ class LeafRepository extends BaseRepository
     public function create($input)
     {
         $this->model->getConnection()->beginTransaction();
-        try {               
+        try {
             $leaveEnd = Carbon::parse($input['leave_end']);
             $leaveStart = Carbon::parse($input['leave_start']);
             $input['amount'] = $leaveEnd->diffInDays($leaveStart) + 1;
@@ -62,9 +64,21 @@ class LeafRepository extends BaseRepository
             foreach(CarbonPeriod::create($leaveStart, $leaveEnd) as $date ){
                 $details[] = ['leave_date' => $date->format('Y-m-d')];
             }
+            $reason = AbsentReason::find($input['reason_id']);
+            $leaveBalance = [];
+            if($reason->isAnnualLeave()){
+                $leaveBalance = Employee::select(['id', 'code', 'full_name' ,'leave_balance'])->whereIn('id', $employees)->get()->keyBy('id');
+                $pendingBalance = Leaf::selectRaw('employee_id, count(*) as total')->whereIn('employee_id', $employees)->where(['reason_id' => $reason->id])->where('status', '<>',Leaf::APPROVE_STATE)->whereYear('leave_start',$leaveStart)->groupBy('employee_id')->get()->keyBy('employee_id');
+            }
             foreach($employees as $employee){
+                if($leaveBalance){
+                    $amountLeave = $input['amount'];
+                    $this->isAllowAnnualLeave($amountLeave, $leaveBalance[$employee] ?? null, $pendingBalance[$employee] ?? null);
+                }
+                
                 $input['employee_id'] = $employee;
-                $model = parent::create($input);                              
+                $model = parent::create($input);     
+                \Log::error($model);                         
                 $model->details()->sync($details);
             }
             
@@ -98,5 +112,14 @@ class LeafRepository extends BaseRepository
             $this->model->getConnection()->rollBack();
             return $e;
         }        
+    }
+
+    private function isAllowAnnualLeave($amountLeave, $leaveBalance, $pendingBalance){                
+        $pending = $pendingBalance ? $pendingBalance->total : 0;
+        $countLeave = $leaveBalance ? $leaveBalance->getRawOriginal('leave_balance') - $pending : 0;
+        $afterLeave = $countLeave - $amountLeave;
+        if($afterLeave <= 0){
+            throw new \Exception("Karyawan {$leaveBalance->codeName} Sisa cuti tahunan {$countLeave}, jumlah cuti yang akan diambil {$amountLeave} ");
+        }
     }
 }

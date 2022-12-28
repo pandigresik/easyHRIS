@@ -3,6 +3,7 @@
 namespace App\Models\Hr;
 
 use App\Models\Base as Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -162,5 +163,13 @@ class Leaf extends Model
 
     public function scopeApprove($query){
         return $query->whereStatus(self::APPROVE_STATE);
+    }
+
+    public function isAnnualLeave(){
+        return $this->reason->code == config('local.annual_leave_code');
+    }
+
+    public function isCurrentYear(){
+        return Carbon::parse($this->getOriginal('leave_start'))->format('Y') == Carbon::now()->format('Y');
     }
 }

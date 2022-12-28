@@ -57,7 +57,9 @@ class LeafController extends AppBaseController
 
         $leaf = $this->getRepositoryObj()->create($input);
         if($leaf instanceof Exception){
-            return redirect()->back()->withInput()->withErrors(['error', $leaf->getMessage()]);
+            $input['leave_start'] = localFormatDateTime($input['leave_start']);
+            $input['leave_end'] = localFormatDateTime($input['leave_end']);
+            return redirect()->back()->withInput($input)->withErrors(['error', $leaf->getMessage()]);
         }
         
         Flash::success(__('messages.saved', ['model' => __('models/leaves.singular')]));
