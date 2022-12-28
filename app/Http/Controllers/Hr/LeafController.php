@@ -8,7 +8,6 @@ use App\Http\Requests\Hr\CreateLeafRequest;
 use App\Http\Requests\Hr\UpdateLeafRequest;
 use App\Repositories\Hr\LeafRepository;
 use App\Repositories\Hr\AbsentReasonRepository;
-use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use Response;

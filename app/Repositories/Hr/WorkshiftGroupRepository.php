@@ -56,14 +56,14 @@ class WorkshiftGroupRepository extends BaseRepository
         /** cari urutan shift untuk grup tersebut */
         $shiftmentGroup = ShiftmentGroup::with(['shiftmentGroupDetails'])->find($data['shiftmentGroup']);
         $shiftmentGroupDetails = $shiftmentGroup->shiftmentGroupDetails;
-        /** cari shift terakhir sebelumya */
-        $lastShift = WorkshiftGroup::where(['shiftment_group_id' => $data['shiftmentGroup']])->where('work_date','<=', $startDate->format('Y-m-d'))->orderBy('work_date','desc')->first();
+        /** cari shift terakhir sebelumya yang bukan hari libur */
+        $lastShift = WorkshiftGroup::where(['shiftment_group_id' => $data['shiftmentGroup']])->whereNotIn('shiftment_id', config('local.shiftment_off'))->where('work_date','<=', $startDate->format('Y-m-d'))->orderBy('work_date','desc')->first();
         
         $currentShiftment = NULL;
         if($lastShift){
             $currentShiftment = $lastShift->shiftment_id;
         }
-        return [            
+        return [     
             'schedule' => $this->generateScheduleDay($startDate, $endDate, $shiftmentGroupDetails, $currentShiftment)
         ];
     }

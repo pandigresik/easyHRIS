@@ -55,7 +55,7 @@ class OvertimeDay{
             $ot->calculated_value = null;
             $finalCalculateValue = 0;            
             // lembur awal, ada kemungkinan karyawan datang terlambat            
-            if($checkInRealObj->lessThanOrEqualTo($endOvertime)){
+            if($checkInRealObj->lessThanOrEqualTo($endOvertime)){                
                 if($startOvertime < $startWorkshift){ 
                     if($endOvertime < $endWorkshift){
                         $ot->start_hour_real = Carbon::parse($checkInReal)->format('H:i:s');

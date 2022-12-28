@@ -244,6 +244,9 @@ class Overtime extends Model
             // kemungkinan lembur akhir, maka overtime_date + 1
             if($this->attributes['start_hour'] > '12:00'){
                 $this->endValidOvertimeDate = $this->attributes['overtime_date'];
+                if($this->attributes['start_hour'] > $this->attributes['end_hour']){
+                    $this->endValidOvertimeDate = Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d');
+                }
             }else{
                 $this->endValidOvertimeDate = Carbon::parse($this->attributes['overtime_date'])->addDay()->format('Y-m-d');
             }

@@ -62,12 +62,11 @@ class LeafRepository extends BaseRepository
             foreach(CarbonPeriod::create($leaveStart, $leaveEnd) as $date ){
                 $details[] = ['leave_date' => $date->format('Y-m-d')];
             }
-            //foreach($employees as $employee){
-                $input['employee_id'] = $employees[0];
-                $model = parent::create($input);
-                \Log::error($model);                
+            foreach($employees as $employee){
+                $input['employee_id'] = $employee;
+                $model = parent::create($input);                              
                 $model->details()->sync($details);
-            //}
+            }
             
             $this->model->getConnection()->commit();
             return $model;
