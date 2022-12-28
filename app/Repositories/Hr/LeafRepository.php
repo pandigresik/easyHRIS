@@ -77,8 +77,7 @@ class LeafRepository extends BaseRepository
                 }
                 
                 $input['employee_id'] = $employee;
-                $model = parent::create($input);     
-                \Log::error($model);                         
+                $model = parent::create($input);                                         
                 $model->details()->sync($details);
             }
             
@@ -99,6 +98,20 @@ class LeafRepository extends BaseRepository
             $leaveEnd = Carbon::parse($input['leave_end']);
             $leaveStart = Carbon::parse($input['leave_start']);
             $input['amount'] = $leaveEnd->diffInDays($leaveStart) + 1;
+
+            $reason = AbsentReason::find($input['reason_id']);
+            $leaveBalance = [];
+            $employee = $input['employee_id'];
+            if($reason->isAnnualLeave()){
+                $leaveBalance = Employee::select(['id', 'code', 'full_name' ,'leave_balance'])->where('id', $employee)->get()->keyBy('id');
+                $pendingBalance = Leaf::selectRaw('employee_id, count(*) as total')->where('employee_id', $employee)->where(['reason_id' => $reason->id])->where('status', '<>',Leaf::APPROVE_STATE)->whereYear('leave_start',$leaveStart)->groupBy('employee_id')->get()->keyBy('employee_id');
+
+                if($leaveBalance){
+                    $amountLeave = $input['amount'];
+                    $this->isAllowAnnualLeave($amountLeave, $leaveBalance[$employee] ?? null, $pendingBalance[$employee] ?? null);
+                }
+            }
+
             $model->fill($input);
             $model->save();
             $details = [];

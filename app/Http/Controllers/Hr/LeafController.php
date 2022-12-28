@@ -126,10 +126,12 @@ class LeafController extends AppBaseController
 
             return redirect(route('hr.leaves.index'));
         }
-
-        $leaf = $this->getRepositoryObj()->update($request->all(), $id);
+        $input = $request->all();
+        $leaf = $this->getRepositoryObj()->update($input, $id);
         if($leaf instanceof Exception){
-            return redirect()->back()->withInput()->withErrors(['error', $leaf->getMessage()]);
+            $input['leave_start'] = localFormatDateTime($input['leave_start']);
+            $input['leave_end'] = localFormatDateTime($input['leave_end']);
+            return redirect()->back()->withInput($input)->withErrors(['error', $leaf->getMessage()]);
         }
 
         Flash::success(__('messages.updated', ['model' => __('models/leaves.singular')]));
