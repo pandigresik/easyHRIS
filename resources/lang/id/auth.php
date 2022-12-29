@@ -26,7 +26,8 @@ return [
         'reset' => 'Reset',
         'reload' => 'Refresh',
         'download' => 'Download',
-        'chart' => 'Chart'
+        'chart' => 'Chart',
+        'setup' => 'Setup'
     ]
 
 ];

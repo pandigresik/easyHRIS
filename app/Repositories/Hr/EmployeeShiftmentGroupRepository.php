@@ -72,7 +72,7 @@ class EmployeeShiftmentGroupRepository extends BaseRepository
     {
         $columns[] = 'code';
         $search['column'][] = 'code';
-        $this->employeeDescendants();
+        
         $dataPaging = parent::paginate($perPage, $currentPage , $columns, $search);
         $dataPaging->getCollection()->map(function($item){
             return $item['text'] = $item['text'].' ( '.$item['code'].' )';
@@ -80,6 +80,11 @@ class EmployeeShiftmentGroupRepository extends BaseRepository
         return $dataPaging;
     }
 
+    public function allQuery($search = [], $skip = null, $limit = null){
+        $query = parent::allQuery($search, $skip, $limit);
+        $query->employeeDescendants('id');
+        return $query;
+    }
     private function employeeDescendants(){        
         $employee = \Auth::user()->employee;        
         $jobLevelLeader = config('local.job_level_leader');        

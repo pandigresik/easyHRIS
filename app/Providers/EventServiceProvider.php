@@ -32,6 +32,6 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
         // register observer
         Leaf::observe(LeafObserver::class);        
-        Menus::observe(MenusObserver::class);
+        // Menus::observe(MenusObserver::class);
     }
 }

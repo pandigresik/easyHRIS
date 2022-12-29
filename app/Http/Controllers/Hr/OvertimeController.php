@@ -56,7 +56,8 @@ class OvertimeController extends AppBaseController
 
         $overtime = $this->getRepositoryObj()->create($input);
         if($overtime instanceof Exception){
-            return redirect()->back()->withInput()->withErrors(['error', $overtime->getMessage()]);
+            $input['overtime_date'] = localFormatDate($input['overtime_date']);
+            return redirect()->back()->withInput($input)->withErrors(['error', $overtime->getMessage()]);
         }
         
         Flash::success(__('messages.saved', ['model' => __('models/overtimes.singular')]));
@@ -126,7 +127,8 @@ class OvertimeController extends AppBaseController
         $input = $request->all();        
         $overtime = $this->getRepositoryObj()->update($input, $id);
         if($overtime instanceof Exception){
-            return redirect()->back()->withInput()->withErrors(['error', $overtime->getMessage()]);
+            $input['overtime_date'] = localFormatDate($input['overtime_date']);
+            return redirect()->back()->withInput($input)->withErrors(['error', $overtime->getMessage()]);
         }
 
         Flash::success(__('messages.updated', ['model' => __('models/overtimes.singular')]));

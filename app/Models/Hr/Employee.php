@@ -216,6 +216,11 @@ class Employee extends Model
         return $this->belongsTo(\App\Models\Hr\JobTitle::class, 'jobtitle_id');
     }
 
+    public function supervisorEmployee()
+    {
+        return $this->belongsTo(\App\Models\Hr\Employee::class, 'supervisor_id', 'id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
@@ -404,6 +409,18 @@ class Employee extends Model
         return $this->hasMany(\App\Models\Hr\Workshift::class, 'employee_id');
     }
 
+    public function children()
+    {
+        return $this->hasMany(\App\Models\Hr\Employee::class, 'supervisor_id', 'id')->with(['jobLevel']);
+    }    
+
+    public function scopeSupervisor($query){        
+        // pakai cara ini, menggunakan subquery error 
+        $jobLevelLeader = config('local.job_level_leader');        
+        $joblevelId = JobLevel::select('id')->whereIn('code', $jobLevelLeader)->pluck('id');        
+        return $query->whereIn('joblevel_id',$joblevelId);
+    }
+
     public function scopeActive($query, $date = NULL){
         return $query->where(function($q) use ($date){
             if(empty($date)){
@@ -438,5 +455,30 @@ class Employee extends Model
     // jika sudah lebih dari waktu tertentu maka hari libur tetap dibayar
     public function isHolidayPay($minJoinDate){
         return $this->attributes['join_date'] <= $minJoinDate;
+    }
+
+    public function isParentNode(){
+        $jobLevelLeader = config('local.job_level_leader');
+        $jobLevelEmployee = $this->jobLevel;
+        return in_array($jobLevelEmployee->code, $jobLevelLeader);
+    }
+    
+    public function getAllDescendant(){        
+        $result = [$this->id];        
+        if($this->isParentNode()){            
+            $children = $this->children;
+            while(!$children->isEmpty()){
+                 $loopChildren = collect([]);
+                 foreach($children as $child){
+                     if($child->isParentNode()){
+                        $loopChildren = $loopChildren->merge($child->children);
+                     }else{
+                        $result[] = $child->id;
+                     }
+                 }
+                 $children = $loopChildren;
+            }            
+         }
+        return $result;
     }
 }

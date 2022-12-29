@@ -9,7 +9,7 @@
                     <div class="card-body">
                         <form method="post" action="{{ url('/login') }}">
                             @csrf                            
-                            <div class="image text-center">
+                            <div class="image text-center mb-2" style="background-color:#6cb2eb">
                                 <img src="vendor/images/logo-big.png">
                                 <p class="text-muted">Sign In to your account</p>
                             </div>

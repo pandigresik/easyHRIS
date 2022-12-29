@@ -206,7 +206,7 @@ class EmployeeController extends AppBaseController
             'cityOfBirthItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
             'joblevelItems' => ['' => __('crud.option.jobLevel_placeholder')] + $jobLevel->pluck(),
             'jobtitleItems' => ['' => __('crud.option.jobTitle_placeholder')] + $jobTitle->pluck(),
-            'supervisorItems' => ['' => __('crud.option.employee_placeholder')] + $employee->pluck(),
+            'supervisorItems' => ['' => __('crud.option.employee_placeholder')] + $employee->allQuery()->supervisor()->get()->pluck('code_name','id')->toArray(),
             'salaryGroupItems' => ['' => __('crud.option.salary_group_placeholder')] + $salaryGroup->pluck(),
             'shiftmentGroupItems' => ['' => __('crud.option.shiftment_group_placeholder')] + $shiftmentGroup->pluck(),
             'payrollPeriodGroupItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $payrollPeriodGroup->pluck(),
