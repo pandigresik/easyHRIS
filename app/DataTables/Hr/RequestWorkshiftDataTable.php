@@ -46,7 +46,7 @@ class RequestWorkshiftDataTable extends DataTable
      */
     public function query(RequestWorkshift $model)
     {
-        return $model->select([$model->getTable().'.*'])->with(['employee', 'shiftment'])->newQuery();
+        return $model->employeeDescendants()->select([$model->getTable().'.*'])->with(['employee', 'shiftment'])->newQuery();
     }
 
     /**

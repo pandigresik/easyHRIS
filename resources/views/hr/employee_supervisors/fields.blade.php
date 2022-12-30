@@ -3,7 +3,7 @@
     {!! Form::label('supervisor_id', __('models/employees.fields.supervisor_id').':', ['class' => 'col-md-3
     col-form-label']) !!}
     <div class="col-md-9">
-        {!! Form::select('supervisor_id', $supervisorItems, null, ['class' => 'form-control select2']) !!}
+        {!! Form::select('supervisor_id', $supervisorItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
     </div>
 </div>
 

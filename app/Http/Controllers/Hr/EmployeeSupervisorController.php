@@ -102,7 +102,7 @@ class EmployeeSupervisorController extends AppBaseController
             'businessUnitItems' => $businessUnit->pluck(),            
             'joblevelItems' =>  $jobLevel->pluck(),
             'jobtitleItems' =>  $jobTitle->pluck(),
-            'supervisorItems' => $employee->allQuery()->supervisor()->get()->pluck('code_name','id')->toArray()
+            'supervisorItems' => ['' => __('crud.option.supervisor_placeholder')] + $employee->allQuery()->supervisor()->get()->pluck('code_name','id')->toArray()
         ];
     }
 }

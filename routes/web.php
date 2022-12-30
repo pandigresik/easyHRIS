@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('contracts', Hr\ContractController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('employees', Hr\EmployeeController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);        
         Route::resource('employees.salaryBenefits', Hr\SalaryBenefitController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
-        Route::resource('employeeSupervisors', Hr\EmployeeSupervisorController::class, ["as" => 'hr'])->only(['index', 'create', 'store']);
+        Route::resource('employeeSupervisors', Hr\EmployeeSupervisorController::class, ["as" => 'hr', 'middleware' => ['easyauth']])->only(['index', 'create', 'store']);
         Route::post('employeeSupervisors/list', [\App\Http\Controllers\Hr\EmployeeSupervisorController::class, 'list'])->name('hr.employeeSupervisors.list');
         Route::resource('holidays', Hr\HolidayController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('jobLevels', Hr\JobLevelController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);

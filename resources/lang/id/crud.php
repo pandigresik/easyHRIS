@@ -36,5 +36,6 @@ return [
         'city_placeholder_destination' => 'Pilih kota tujuan',
         'product_categories_placeholder' => 'Pilih jenis produk',
         'trip_placeholder' => 'Pilih Trip',
+        'supervisor_placeholder' => 'Pilih Supervisor'
     ]
 ];
