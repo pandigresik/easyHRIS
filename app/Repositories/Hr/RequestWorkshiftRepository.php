@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Base\Setting;
 use App\Models\Hr\Employee;
 use App\Models\Hr\RequestWorkshift;
 use App\Models\Hr\Shiftment;
@@ -19,6 +20,7 @@ use Exception;
 
 class RequestWorkshiftRepository extends BaseRepository
 {
+    private $maxStepApproval = 0;
     /**
      * @var array
      */
@@ -53,10 +55,12 @@ class RequestWorkshiftRepository extends BaseRepository
     {
         $this->model->getConnection()->beginTransaction();
         try {
+            $setting = Setting::where(['type' => 'approval'])->get()->keyBy('name');
             $workDate = generatePeriod($input['work_date']);
             unset($input['work_date']);
             $employees = $input['employee_id'];
-            unset($input['employee_id']);
+            unset($input['employee_id']);            
+            $this->setMaxStepApproval(intval($setting['max_approval_request_workshift']->value ?? 0));
             foreach($employees as $employeeId){
                 foreach(CarbonPeriod::create($workDate['startDate'], $workDate['endDate']) as $date){
                     $model = $this->generateWorkshift($employeeId, $input, $date->format('Y-m-d'));
@@ -71,7 +75,7 @@ class RequestWorkshiftRepository extends BaseRepository
     }
 
     private function generateWorkshift($employeeId, $input, $workDate){
-        $input['status'] = RequestWorkshift::INITIAL_STATE;
+        //$input['status'] = RequestWorkshift::INITIAL_STATE;
         $input['work_date'] = $workDate;
         $input['employee_id'] = $employeeId;
             $shiftmentOrigin = Workshift::select(['shiftment_id'])->where(['work_date' => $workDate, 'employee_id' => $employeeId])->first();
@@ -91,8 +95,18 @@ class RequestWorkshiftRepository extends BaseRepository
             $input['start_hour'] = $workDate.' '.$selectedShiftmentHour['start_hour'];
             $input['end_hour'] = $selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour'] ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$selectedShiftmentHour['end_hour'] : $workDate.' '.$selectedShiftmentHour['end_hour'];
             $input['shiftment_id_origin'] = $shiftmentOrigin->shiftment_id;
-            $model = parent::create($input);            
-            if($model->getRawOriginal('status') == RequestWorkshift::APPROVE_STATE){
+            $model = $this->model->newInstance($input);//parent::create($input);
+            $approvalUsers = \Auth::user()->getApprovalUsers();
+            $maxStep = $this->getMaxStepApproval() < count($approvalUsers) ? $this->getMaxStepApproval() : count($approvalUsers);
+            $model->initializeApproval($approvalUsers);
+            $model->setMaxStep($maxStep);
+            $model->status = $model->getDefaultInitialState();
+            $model->step_approval = 1;
+            $model->amount_approval = $model->getMaxStep();
+            $model->save();            
+            $model->generateApproval();
+            
+            if($model->getRawOriginal('status') == $model->getFinalState()){
                 $this->updateWorkshift($model);
             }
         return $model;
@@ -133,15 +147,22 @@ class RequestWorkshiftRepository extends BaseRepository
                         $workDay = Carbon::parse($workDate)->dayOfWeek;
                         return $q->where(['work_day' => $workDay]);
                     }])->find($shiftmentId);
-                                
-                    $input['start_hour'] = $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('start_hour');
-                    $input['end_hour'] = $newShiftmentId->schedules->first()->getRawOriginal('start_hour') > $newShiftmentId->schedules->first()->getRawOriginal('end_hour') ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour') : $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour');
+                    $selectedShiftmentHour = ['start_hour' => $newShiftmentId->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->getRawOriginal('end_hour')];
+                    if($newShiftmentId->schedules){
+                        $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];
+                    }
+                    
+                    $input['start_hour'] = $workDate.' '.$selectedShiftmentHour['start_hour'];
+                    $input['end_hour'] = $selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour'] ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$selectedShiftmentHour['end_hour'] : $workDate.' '.$selectedShiftmentHour['end_hour'];
+                    
+                    //$input['start_hour'] = $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('start_hour');
+                    //$input['end_hour'] = $newShiftmentId->schedules->first()->getRawOriginal('start_hour') > $newShiftmentId->schedules->first()->getRawOriginal('end_hour') ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour') : $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour');
                 }
             }
                         
             $model->fill($input);            
             $model->save();
-            if($model->getRawOriginal('status') == RequestWorkshift::APPROVE_STATE){
+            if($model->getRawOriginal('status') == $model->getFinalState()){
                 $this->updateWorkshift($model);
             }
             $this->model->getConnection()->commit();
@@ -159,4 +180,24 @@ class RequestWorkshiftRepository extends BaseRepository
         $workshift->end_hour = $model->getRawOriginal('end_hour');
         $workshift->save();
     }
+
+    /**
+     * Get the value of maxStepApproval
+     */ 
+    public function getMaxStepApproval()
+    {
+        return $this->maxStepApproval;
+    }
+
+    /**
+     * Set the value of maxStepApproval
+     *
+     * @return  self
+     */ 
+    public function setMaxStepApproval($maxStepApproval)
+    {
+        $this->maxStepApproval = $maxStepApproval;
+
+        return $this;
+    }    
 }

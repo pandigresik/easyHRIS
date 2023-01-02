@@ -157,4 +157,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(\App\Models\Hr\Employee::class, 'employee_id');
     }
+    
+    public function getApprovalUsers()
+    {   
+        $approvalUsers = [];
+        $employee = $this->employee;
+        if($employee){
+            $approvalUsers = $employee->getAllSupervisor();
+        }
+        return $approvalUsers;
+    }
 }

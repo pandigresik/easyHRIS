@@ -84,8 +84,6 @@ class Leaf extends Model
 
     protected $dates = ['deleted_at'];
 
-
-
     public $fillable = [
         'employee_id',
         'reason_id',

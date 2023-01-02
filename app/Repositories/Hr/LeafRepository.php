@@ -77,7 +77,7 @@ class LeafRepository extends BaseRepository
                 }
                 
                 $input['employee_id'] = $employee;
-                $model = parent::create($input);                                         
+                $model = parent::create($input);                
                 $model->details()->sync($details);
             }
             

@@ -219,7 +219,7 @@ class Employee extends Model
     public function supervisorEmployee()
     {
         return $this->belongsTo(\App\Models\Hr\Employee::class, 'supervisor_id', 'id');
-    }
+    }    
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -481,4 +481,19 @@ class Employee extends Model
          }
         return $result;
     }
+
+    public function getAllSupervisor(){        
+        $result = [];        
+            $maxLoop = 15; // untuk mencegah infinite loop karena salah setting
+            $loop = 1;
+            $supervisor = $this->supervisorEmployee;
+            if($supervisor){
+                while($supervisor && $loop < $maxLoop){                    
+                    $result[] = $supervisor->id;
+                    $supervisor = $supervisor->supervisorEmployee;
+                    $loop++;
+               }
+            }
+        return $result;
+    }    
 }

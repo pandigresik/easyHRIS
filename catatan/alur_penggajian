@@ -1,0 +1,12 @@
+Alur proses penggajian:
+
+ Setting Hari Libur 
+ Generate  jadwal kerja berdasarkan group shift
+ Generate jadwal kerja karyawan
+ Update data karyawan ( misal ada karyawan resign, atau perubahan gaji )
+ Entry data lembur karyawan
+ Entry data ijin, sakit karyawan
+ Download data absensi dari mesin finger
+ Proses data absensi, dimana proses ini akan menentukan status absensi karyawan ( apakah masuk kategori terlambat, pulang cepat, invalid atau OK ) serta perhitungan lembur jika ada
+ Proses summary data absensi selama satu bulan, data ini sebagai salah satu dasar pemberian premi kehadiran
+ Proses perhitungan gaji secara otomatis dan menghasilkan laporan bentuk excel

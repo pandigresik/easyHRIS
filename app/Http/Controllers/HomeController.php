@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hr\JobLevel;
+use App\Models\Hr\RequestWorkshift;
 
 class HomeController extends Controller
 {
@@ -20,28 +21,29 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        // $widgets = [];
-        // \Widget::group('main')->position(3)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-danger']);
-        // \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-warning']);
-
-        // array_push($widgets, '<div class="row mb-3">'.\Widget::group('main')->wrap(function ($content, $index, $total) {
-        //     // $total is a total number of widgets in a group.
-        //     $width = intval(12 / $total);
-        //     $classWidth = $width <= 2 ? 'col-lg-3 col-sm-6' : 'col-lg-'.$width.' col-sm-'.($width * 2 > 12 ? 12 : $width * 2);
-
-        //     return "<div class='".$classWidth." widget-{$index}'>{$content}</div>";
-        // })->display().'</div>');
-        // array_push($widgets, \AsyncWidget::run('revenueWidget', ['bgcolor' => 'bg-gradient-danger']));
-        // array_push($widgets, \AsyncWidget::run('popularWidget', []));
-
-        // return view('home')->with(['widgets' => $widgets]);
-        return view('home');
+    {   
+        $needApproval = $this->generateApprovalData();
+        return view('home', ['needApproval' => $needApproval]);
     }
 
     public function tes(){
         
         $tes = (new JobLevel())->generateChartData(3);
         dd($tes);
+    }
+
+    private function generateApprovalData(){
+        $result = [];
+        $employee = \Auth::user()->employee;
+        $urlRequestWorkshiftApproval = route('hr.requestWorkshiftApproves.index');
+        if(!$employee) return $result;
+        $requestWorkshiftApproval = (new RequestWorkshift())->getNeedApproval($employee->id, $urlRequestWorkshiftApproval);
+        if($requestWorkshiftApproval){
+            $result[] = [
+                'title' => 'Request Ganti Shift',
+                'datas' => $requestWorkshiftApproval
+            ];
+        }
+        return $result;   
     }
 }

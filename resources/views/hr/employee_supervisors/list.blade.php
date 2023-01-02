@@ -6,6 +6,7 @@
             <th>Departement</th>
             <th>Level</th>
             <th>Jabatan</th>
+            <th>Supervisor</th>
             <th>Bisnis Unit</th>
         </tr>
     </thead>
@@ -17,6 +18,7 @@
                 <td>{{ $employee->department->name ?? '' }}</td>
                 <td>{{ $employee->jobLevel->name ?? '' }}</td>
                 <td>{{ $employee->jobTitle->name ?? '' }}</td>
+                <td>{{ $employee->supervisorEmployee->codeName ?? '' }}</td>
                 <td>{{ $employee->businessUnit->name ?? '' }}</td>
             </tr>
 

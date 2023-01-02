@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('businessUnits', Base\BusinessUnitController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         Route::resource('regions', Base\RegionController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
         Route::resource('settings', Base\SettingController::class, ["as" => 'base', 'middleware' => ['easyauth']]);
+
+        Route::resource('approvals', Base\ApprovalController::class, ["as" => 'base']);
     });
 
     Route::group(['prefix' => 'accounting'], function () {
@@ -107,6 +109,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('workshifts', Hr\WorkshiftController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);        
         Route::get('workshifts.generate', [App\Http\Controllers\Hr\WorkshiftController::class, 'generate'])->name('hr.workshifts.generate');
         Route::resource('requestWorkshifts', Hr\RequestWorkshiftController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('requestWorkshiftApproves', Hr\RequestWorkshiftApproveController::class, ["as" => 'hr'])->only(['index', 'update']);
         Route::resource('workshiftGroups', Hr\WorkshiftGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::get('workshiftGroups.generate', [App\Http\Controllers\Hr\WorkshiftGroupController::class, 'generate'])->name('hr.workshiftGroups.generate');
 
@@ -135,6 +138,3 @@ Route::group(['prefix' => 'artisan'], function () {
         Artisan::call('cache:clear');
     });
 });
-
-
-

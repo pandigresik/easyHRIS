@@ -93,7 +93,7 @@ class EmployeeSupervisorRepository extends BaseRepository
             }
         }
         
-        $query = (new Employee())->with(['joblevel', 'jobtitle', 'department', 'businessUnit'])->newQuery();
+        $query = (new Employee())->with(['joblevel', 'jobtitle', 'department', 'businessUnit', 'supervisorEmployee'])->newQuery();
         if($filterData){
             $query->where($filterData);
         }

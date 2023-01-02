@@ -3,6 +3,7 @@
 namespace App\Models\Hr;
 
 use App\Models\Base as Model;
+use App\Traits\ApprovalModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -55,8 +56,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class RequestWorkshift extends Model
 {
     use HasFactory;
-        use SoftDeletes;
-
+    use SoftDeletes;
+    use ApprovalModelTrait;
     public $table = 'request_workshifts';
     
     const CREATED_AT = 'created_at';
@@ -76,6 +77,8 @@ class RequestWorkshift extends Model
         'start_hour',
         'end_hour',
         'status',
+        'step_approval',
+        'amount_approval',
         'description'
     ];
 
@@ -93,6 +96,8 @@ class RequestWorkshift extends Model
         'start_hour' => 'datetime',
         'end_hour' => 'datetime',
         'status' => 'string',
+        'step_approval' => 'integer',
+        'amount_approval' => 'integer',
         'description' => 'string'
     ];
 
