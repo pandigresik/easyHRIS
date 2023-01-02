@@ -40,6 +40,13 @@ class RequestWorkshiftApproveDataTable extends DataTable
         $dataTable->editColumn('id', function($item){
             return '<input type="checkbox" name="reference[]" value="'.$item->id.'" />';
         })->escapeColumns([]);
+        // ->editColumn('step_approval', function($item){
+        //     $logs = $item->logApprovals->where('sequence','<',$item->getRawOriginal('step_approval'))->map(function($s){
+        //         return 'Diapprove pada '.$s->updatedBy->id.' pada '. $s->updated_at;
+        //     });
+        //     return $logs->flatten();
+        // })->escapeColumns([]);
+        
         return $dataTable;
     }
 
@@ -57,7 +64,9 @@ class RequestWorkshiftApproveDataTable extends DataTable
             $employeeId = $employee->id;            
         }
         return $model->select([$model->getTable().'.*'])
-            ->with(['employee', 'shiftment'])
+            ->with(['employee', 'shiftment', 'logApprovals' => function($q){
+                $q->with(['updatedBy']);
+            }])
             ->needApproval($employeeId, $this->getCreatedRequest())
             ->newQuery();
     }
@@ -104,6 +113,7 @@ class RequestWorkshiftApproveDataTable extends DataTable
             'start_hour' => new Column(['title' => __('models/workshifts.fields.start_hour'),'name' => 'start_hour', 'data' => 'start_hour', 'searchable' => false]),
             'end_hour' => new Column(['title' => __('models/workshifts.fields.end_hour'),'name' => 'end_hour', 'data' => 'end_hour', 'searchable' => false]),
             'status' => new Column(['title' => __('models/requestWorkshifts.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => false, 'elmsearch' => 'false']),
+            // 'log_approval' => new Column(['title' => 'Log', 'name' => 'step_approval', 'id' => 'step_approval' ,'data' => 'step_approval', 'searchable' => false, 'elmsearch' => 'false']),
             'description' => new Column(['title' => __('models/requestWorkshifts.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
     }

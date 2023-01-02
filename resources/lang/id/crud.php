@@ -12,7 +12,8 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-
+    'approve' => 'Approve',
+    'reject' => 'Reject',
     'save' => 'Simpan',
     'generate' => 'Generate',
     'calculate' => 'Hitung',

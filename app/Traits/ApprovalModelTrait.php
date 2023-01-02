@@ -8,6 +8,7 @@ trait ApprovalModelTrait
     private $finalState = 'A';
     private $initialState = 'N';
     private $rejectState = 'RJ';
+    private $approveState = 'RV';
     private $currentStep = 0;
     private $maxStep = 0;
     private $nextState;
@@ -42,9 +43,10 @@ trait ApprovalModelTrait
     
     /** change status to next status */
     public function approve(){
+        $this->setNextState($this->approveState);
         if($this->getCurrentStep() >= $this->getMaxStep()){
             $this->setNextState($this->finalState);
-        }
+        }        
     }
 
     public function reject(){
@@ -167,11 +169,20 @@ trait ApprovalModelTrait
             $q->on($this->getTable().'.id', '=', 'approvals.reference')
                 ->on($this->getTable().'.step_approval', '=', 'approvals.sequence')
                 ->where(['approvals.employee_id' => $employeeId])            
-                ->whereNotIn($this->getTable().'.status', [$this->finalState]);
+                ->whereNotIn($this->getTable().'.status', [$this->finalState, $this->rejectState]);
             if($createdBy){
                 $q->where('approvals.created_by', $createdBy);
             }
             return $q;
         });
+    }
+
+    public function approvals(){
+        $employee = \Auth::user()->employee;
+        return $this->hasMany(\App\Models\Base\Approval::class, 'reference', 'id')->where(['model' => __CLASS__, 'employee_id' => $employee->id]);
+    }
+
+    public function logApprovals(){        
+        return $this->hasMany(\App\Models\Base\Approval::class, 'reference', 'id')->where(['model' => __CLASS__]);
     }
 }

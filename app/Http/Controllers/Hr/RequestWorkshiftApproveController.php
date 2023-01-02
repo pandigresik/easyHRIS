@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\RequestWorkshiftApproveDataTable;
-use App\Http\Requests\Hr\UpdateRequestWorkshiftRequest;
+use App\Http\Requests\Hr\UpdateRequestWorkshiftApproveRequest;
 use App\Repositories\Hr\RequestWorkshiftRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use Response;
 use Exception;
-use Illuminate\Http\Request;
 
 class RequestWorkshiftApproveController extends AppBaseController
 {
@@ -37,20 +36,19 @@ class RequestWorkshiftApproveController extends AppBaseController
      * Update the specified RequestWorkshift in storage.
      *
      * @param  int              $id
-     * @param UpdateRequestWorkshiftRequest $request
+     * @param UpdateRequestWorkshiftApproveRequest $request
      *
      * @return Response
      */
-    public function update($id, Request $request)
+    public function update($id, UpdateRequestWorkshiftApproveRequest $request)
     {        
-
-        $requestWorkshift = $this->getRepositoryObj()->update($request->all(), $id);
+        $requestWorkshift = $this->getRepositoryObj()->approveReject($request->all());
         if($requestWorkshift instanceof Exception){
             return redirect()->back()->withInput()->withErrors(['error', $requestWorkshift->getMessage()]);
         }
 
         Flash::success(__('messages.updated', ['model' => __('models/requestWorkshifts.singular')]));
 
-        return redirect(route('hr.requestWorkshifts.index'));
-    }    
+        return redirect(route('home'));
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Models\Base\Approval;
 use App\Models\Base\Setting;
 use App\Models\Hr\Employee;
 use App\Models\Hr\RequestWorkshift;
@@ -181,6 +182,62 @@ class RequestWorkshiftRepository extends BaseRepository
         $workshift->save();
     }
 
+    public function approveReject($input){
+        $action = $input['action'];
+        $comment = $input['comment'] ?? null;
+        $reference = $input['reference'];
+        switch($action){
+            case 'RJ':
+                $this->reject($reference, $comment);
+                break;
+            default:
+            $this->approve($reference);
+        }        
+    }
+
+    private function reject($reference, $comment){
+        $requestWorkshift = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
+        $this->model->getConnection()->beginTransaction();
+        try {
+            foreach($requestWorkshift as $item){
+                $item->step_approval = $item->step_approval - 1;
+                $item->reject();
+                $item->status = $item->getNextState();
+                $item->save();
+
+                $item->approvals()->update(['comment' => $comment, 'status' => $item->getNextState(), 'updated_by' => \Auth::id()]);
+            }
+            $this->model->getConnection()->commit();
+            return $this->model;
+        } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }
+    }
+
+    private function approve($reference){
+        $requestWorkshift = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
+        $this->model->getConnection()->beginTransaction();
+        try {
+            foreach($requestWorkshift as $item){                
+                $item->setCurrentStep($item->getRawOriginal('step_approval'));
+                $item->setMaxStep($item->getRawOriginal('amount_approval'));
+                $item->approve();
+                $item->step_approval = $item->step_approval + 1;
+                $item->status = $item->getNextState();
+                $item->save();
+                $item->approvals()->update(['status' => $item->getNextState(), 'updated_by' => \Auth::id()]);
+                if($item->getRawOriginal('status') == $item->getFinalState()){
+                    $this->updateWorkshift($item);
+                }
+            }
+            $this->model->getConnection()->commit();
+            return $this->model;
+        } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }        
+    }
     /**
      * Get the value of maxStepApproval
      */ 
