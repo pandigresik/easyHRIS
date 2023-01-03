@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Hr;
 
-use App\Models\Base\Approval;
 use App\Models\Base\Setting;
 use App\Models\Hr\Employee;
 use App\Models\Hr\RequestWorkshift;
@@ -201,7 +200,7 @@ class RequestWorkshiftRepository extends BaseRepository
         try {
             foreach($requestWorkshift as $item){
                 $item->step_approval = $item->step_approval - 1;
-                $item->reject();
+                $item->rejectAction();
                 $item->status = $item->getNextState();
                 $item->save();
 
@@ -222,7 +221,7 @@ class RequestWorkshiftRepository extends BaseRepository
             foreach($requestWorkshift as $item){                
                 $item->setCurrentStep($item->getRawOriginal('step_approval'));
                 $item->setMaxStep($item->getRawOriginal('amount_approval'));
-                $item->approve();
+                $item->approveAction();
                 $item->step_approval = $item->step_approval + 1;
                 $item->status = $item->getNextState();
                 $item->save();

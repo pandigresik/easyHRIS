@@ -3,6 +3,7 @@
 namespace App\Repositories\Hr;
 
 use App\Library\SalaryComponent\Overtime as SalaryComponentOvertime;
+use App\Models\Base\Setting;
 use App\Models\Hr\Employee;
 use App\Models\Hr\Overtime;
 use App\Models\Hr\SalaryBenefit;
@@ -17,6 +18,7 @@ use Exception;
 
 class OvertimeRepository extends BaseRepository
 {
+    private $maxStepApproval = 0;
     /**
      * @var array
      */
@@ -66,16 +68,27 @@ class OvertimeRepository extends BaseRepository
         $this->model->getConnection()->beginTransaction();
 
         try {
+            $setting = Setting::where(['type' => 'approval'])->get()->keyBy('name');
             $employees = $input['employee_id'];
             unset($input['employee_id']);
+            $this->setMaxStepApproval(intval($setting['max_approval_overtime']->value ?? 0));
             if(is_null($input['breaktime_value'])){
                 $input['breaktime_value'] = 0;
             }
             foreach($employees as $employee){
                 $input['employee_id'] = $employee;
                 // pastikan tidak ada yang kembar data overtimenya
-                $this->isOvertimeExist($input);                
-                $model = parent::create($input);
+                $this->isOvertimeExist($input);    
+                $model = $this->model->newInstance($input);//parent::create($input);            
+                $approvalUsers = \Auth::user()->getApprovalUsers();
+                $maxStep = $this->getMaxStepApproval() < count($approvalUsers) ? $this->getMaxStepApproval() : count($approvalUsers);
+                $model->initializeApproval($approvalUsers);
+                $model->setMaxStep($maxStep);
+                $model->status = $model->getDefaultInitialState();
+                $model->step_approval = 1;
+                $model->amount_approval = $model->getMaxStep();
+                $model->save();            
+                $model->generateApproval();
             }
                         
             $this->model->getConnection()->commit();
@@ -116,5 +129,79 @@ class OvertimeRepository extends BaseRepository
             $employee = Employee::find($overtime['employee_id']);
             throw new Exception("Data overtime karyawan ".$employee->code_name. " tanggal ".$first->overtime_date." jam ".$first->start_hour." sudah ada");
         }
+    }
+
+    public function approveReject($input){
+        $action = $input['action'];
+        $comment = $input['comment'] ?? null;
+        $reference = $input['reference'];
+        switch($action){
+            case 'RJ':
+                $this->reject($reference, $comment);
+                break;
+            default:
+            $this->approve($reference);
+        }        
+    }
+
+    private function reject($reference, $comment){
+        $requestWorkshift = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
+        $this->model->getConnection()->beginTransaction();
+        try {
+            foreach($requestWorkshift as $item){
+                $item->step_approval = $item->step_approval - 1;
+                $item->rejectAction();
+                $item->status = $item->getNextState();
+                $item->save();
+
+                $item->approvals()->update(['comment' => $comment, 'status' => $item->getNextState(), 'updated_by' => \Auth::id()]);
+            }
+            $this->model->getConnection()->commit();
+            return $this->model;
+        } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }
+    }
+
+    private function approve($reference){
+        $requestWorkshift = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
+        $this->model->getConnection()->beginTransaction();
+        try {
+            foreach($requestWorkshift as $item){                
+                $item->setCurrentStep($item->getRawOriginal('step_approval'));
+                $item->setMaxStep($item->getRawOriginal('amount_approval'));
+                $item->approveAction();
+                $item->step_approval = $item->step_approval + 1;
+                $item->status = $item->getNextState();
+                $item->save();
+                $item->approvals()->update(['status' => $item->getNextState(), 'updated_by' => \Auth::id()]);                
+            }
+            $this->model->getConnection()->commit();
+            return $this->model;
+        } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }        
+    }
+
+    /**
+     * Get the value of maxStepApproval
+     */ 
+    public function getMaxStepApproval()
+    {
+        return $this->maxStepApproval;
+    }
+
+    /**
+     * Set the value of maxStepApproval
+     *
+     * @return  self
+     */ 
+    public function setMaxStepApproval($maxStepApproval)
+    {
+        $this->maxStepApproval = $maxStepApproval;
+
+        return $this;
     }
 }

@@ -3,6 +3,7 @@
 @section('content')
 <div class="container-fluid mt-3">
   <div class="animated fadeIn">
+    @include('flash::message')
     <div class="row">
       @forelse ($needApproval as $item)
       <div class="col">

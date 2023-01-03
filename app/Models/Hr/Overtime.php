@@ -3,6 +3,7 @@
 namespace App\Models\Hr;
 
 use App\Models\Base as Model;
+use App\Traits\ApprovalModelTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -105,6 +106,7 @@ class Overtime extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use ApprovalModelTrait;
 
     public $table = 'overtimes';
     protected $hidden = ['raw_calculated_value'];
@@ -129,6 +131,9 @@ class Overtime extends Model
         'calculated_value',
         'holiday',
         'overday',
+        'status',
+        'step_approval',
+        'amount_approval',
         'amount',
         'description'
     ];
@@ -148,6 +153,9 @@ class Overtime extends Model
         'calculated_value' => 'float',
         'holiday' => 'boolean',
         'overday' => 'boolean',
+        'status' => 'string',
+        'step_approval' => 'integer',
+        'amount_approval' => 'integer',
         'description' => 'string'
     ];
 

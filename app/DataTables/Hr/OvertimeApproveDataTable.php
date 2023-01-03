@@ -2,19 +2,24 @@
 
 namespace App\DataTables\Hr;
 
-use App\Models\Hr\RequestWorkshift;
+use App\Models\Hr\Overtime;
 use App\DataTables\BaseDataTable as DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class RequestWorkshiftApproveDataTable extends DataTable
-{    
-    private $createdRequest;   
+class OvertimeApproveDataTable extends DataTable
+{
+    protected $fastExcel = false;    
+    private $createdRequest; 
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'overtime_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'amount' =>  \App\DataTables\FilterClass\BetweenKeyword::class,
+        // 'shiftment_id' => \App\DataTables\FilterClass\InKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -39,36 +44,27 @@ class RequestWorkshiftApproveDataTable extends DataTable
         }
         $dataTable->editColumn('id', function($item){
             return '<input type="checkbox" name="reference[]" value="'.$item->id.'" />';
-        })->escapeColumns([]);
-        // ->editColumn('step_approval', function($item){
-        //     $logs = $item->logApprovals->where('sequence','<',$item->getRawOriginal('step_approval'))->map(function($s){
-        //         return 'Diapprove pada '.$s->updatedBy->id.' pada '. $s->updated_at;
-        //     });
-        //     return $logs->flatten();
-        // })->escapeColumns([]);
-        
+        })->escapeColumns([]);   
         return $dataTable;
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\RequestWorkshift $model
+     * @param \App\Models\Overtime $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(RequestWorkshift $model)
+    public function query(Overtime $model)
     {
+        // get own data user and all employee descendant                
         $employeeId = 0;
         $employee = \Auth::user()->employee;        
         if($employee){
             $employeeId = $employee->id;            
         }
-        return $model->select([$model->getTable().'.*'])
-            ->with(['employee', 'shiftment', 'logApprovals' => function($q){
-                $q->with(['updatedBy']);
-            }])
+        return $model->selectRaw($model->getTable().'.*')
             ->needApproval($employeeId, $this->getCreatedRequest())
-            ->newQuery();
+            ->with(['employee'])->newQuery();        
     }
 
     /**
@@ -77,7 +73,7 @@ class RequestWorkshiftApproveDataTable extends DataTable
      * @return \Yajra\DataTables\Html\Builder
      */
     public function html()
-    {        
+    {         
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
@@ -85,8 +81,7 @@ class RequestWorkshiftApproveDataTable extends DataTable
             ->parameters([
                 'dom'       => '<"row">rt',
                 'stateSave' => true,
-                'order'     => [[2, 'asc']],
-                // 'buttons'   => $buttons,
+                'order'     => [[0, 'desc']],                
                  'language' => [
                    'url' => url('vendor/datatables/i18n/en-gb.json'),
                  ],
@@ -102,19 +97,16 @@ class RequestWorkshiftApproveDataTable extends DataTable
      * @return array
      */
     protected function getColumns()
-    {
+    {        
         return [
             'id' => new Column(['title' => '<input type="checkbox" onclick="main.checkAll(this, \'table\')" />','name' => 'id', 'data' => 'id','searchable' => false, 'elmsearch' => 'text', 'orderable' => false]),
-            'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => false, 'elmsearch' => 'text']),
-            'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => false, 'elmsearch' => 'text']),
-            'shiftment_id' => new Column(['title' => __('models/requestWorkshifts.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => false, 'elmsearch' => 'text']),
-            // 'shiftment_id_origin' => new Column(['title' => __('models/requestWorkshifts.fields.shiftment_id_origin'),'name' => 'shiftment_id_origin', 'data' => 'shiftment_id_origin', 'searchable' => false, 'elmsearch' => 'text']),
-            'work_date' => new Column(['title' => __('models/requestWorkshifts.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => false, 'elmsearch' => 'text']),
-            'start_hour' => new Column(['title' => __('models/workshifts.fields.start_hour'),'name' => 'start_hour', 'data' => 'start_hour', 'searchable' => false]),
-            'end_hour' => new Column(['title' => __('models/workshifts.fields.end_hour'),'name' => 'end_hour', 'data' => 'end_hour', 'searchable' => false]),
+            'employee.full_name' => new Column(['title' => __('models/overtimes.fields.employee_full_name'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => false, 'elmsearch' => 'text']),
+            'employee.code' => new Column(['title' => __('models/overtimes.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => false, 'elmsearch' => 'text']),     
+            'overtime_date' => new Column(['title' => __('models/overtimes.fields.overtime_date'),'name' => 'overtime_date', 'data' => 'overtime_date', 'searchable' => false, 'elmsearch' => 'daterange']),
+            'start_hour' => new Column(['title' => __('models/overtimes.fields.start_hour'),'name' => 'start_hour', 'data' => 'start_hour', 'searchable' => false, 'elmsearch' => 'text']),
+            'end_hour' => new Column(['title' => __('models/overtimes.fields.end_hour'),'name' => 'end_hour', 'data' => 'end_hour', 'searchable' => false, 'elmsearch' => 'text']),
             'status' => new Column(['title' => __('models/requestWorkshifts.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => false, 'elmsearch' => 'false']),
-            // 'log_approval' => new Column(['title' => 'Log', 'name' => 'step_approval', 'id' => 'step_approval' ,'data' => 'step_approval', 'searchable' => false, 'elmsearch' => 'false']),
-            'description' => new Column(['title' => __('models/requestWorkshifts.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
+            'description' => new Column(['title' => __('models/overtimes.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
     }
 
@@ -125,7 +117,7 @@ class RequestWorkshiftApproveDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'request_workshifts_datatable_' . time();
+        return 'overtimes_datatable_' . time();
     }
 
     /**

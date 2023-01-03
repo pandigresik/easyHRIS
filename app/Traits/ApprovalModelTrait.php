@@ -42,14 +42,14 @@ trait ApprovalModelTrait
     }
     
     /** change status to next status */
-    public function approve(){
+    public function approveAction(){
         $this->setNextState($this->approveState);
         if($this->getCurrentStep() >= $this->getMaxStep()){
             $this->setNextState($this->finalState);
         }        
     }
 
-    public function reject(){
+    public function rejectAction(){
         $this->setNextState($this->rejectState);
     }
 
@@ -168,7 +168,7 @@ trait ApprovalModelTrait
         return $query->join('approvals', function($q) use ($employeeId, $createdBy){
             $q->on($this->getTable().'.id', '=', 'approvals.reference')
                 ->on($this->getTable().'.step_approval', '=', 'approvals.sequence')
-                ->where(['approvals.employee_id' => $employeeId])            
+                ->where(['model' => __CLASS__, 'approvals.employee_id' => $employeeId])
                 ->whereNotIn($this->getTable().'.status', [$this->finalState, $this->rejectState]);
             if($createdBy){
                 $q->where('approvals.created_by', $createdBy);
@@ -184,5 +184,9 @@ trait ApprovalModelTrait
 
     public function logApprovals(){        
         return $this->hasMany(\App\Models\Base\Approval::class, 'reference', 'id')->where(['model' => __CLASS__]);
+    }
+
+    public function scopeApprove($query){
+        return $query->whereStatus($this->finalState);
     }
 }

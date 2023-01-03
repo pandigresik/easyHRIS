@@ -23,5 +23,6 @@ return array (
     'overday' => 'Overday',
     'amount' => 'Amount',
     'description' => 'Description',
+    'status' => 'Status'
   ),
 );
