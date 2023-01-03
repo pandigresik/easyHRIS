@@ -7,6 +7,7 @@ use App\Traits\ApprovalModelTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\StatusTrait;
 
 /**
  * @SWG\Definition(
@@ -107,6 +108,7 @@ class Overtime extends Model
     use HasFactory;
     use SoftDeletes;
     use ApprovalModelTrait;
+    use StatusTrait;
 
     public $table = 'overtimes';
     protected $hidden = ['raw_calculated_value'];

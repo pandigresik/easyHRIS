@@ -5,11 +5,13 @@
             <svg class="icon icon-lg">
                 <use xlink:href="vendor/coreui/icons/svg/free.svg#cil-menu"></use>
             </svg>
-        </button><a class="header-brand d-md-none" href="#">
+        </button>
+        <!--
+        <a class="header-brand d-md-none" href="#">
             <div class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
                 <img src="vendor/images/logo.png">
         </a>
-
+        -->
         <ul class="header-nav ms-3">
             <li class="nav-item dropdown">
                 <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button"
