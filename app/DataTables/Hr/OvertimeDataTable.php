@@ -121,10 +121,11 @@ class OvertimeDataTable extends DataTable
      */
     protected function getColumns()
     {
-        // $shiftmentRepository = new ShiftmentRepository();        
+        // $shiftmentRepository = new ShiftmentRepository();
         // $shiftmentItem = convertArrayPairValueWithKey($shiftmentRepository->pluck());
         $statusItem = convertArrayPairValueWithKey(['N' => 'New','RV' => 'Review', 'A' => 'Approve', 'RJ' => 'Reject']);
-        return [
+
+        $columnDefault = [
             'employee.full_name' => new Column(['title' => __('models/overtimes.fields.employee_full_name'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'employee.code' => new Column(['title' => __('models/overtimes.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
             // 'shiftment_id' => new Column(['title' => __('models/overtimes.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'listItem' => $shiftmentItem, 'multiple' => 'multiple' ,'elmsearch' => 'dropdown']),
@@ -137,10 +138,13 @@ class OvertimeDataTable extends DataTable
             'status' => new Column(['title' => __('models/overtimes.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $statusItem, 'multiple' => 'multiple']),
             'calculated_value' => new Column(['title' => __('models/overtimes.fields.calculated_value'),'name' => 'calculated_value', 'data' => 'calculated_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             // 'holiday' => new Column(['title' => __('models/overtimes.fields.holiday'),'name' => 'holiday', 'data' => 'holiday', 'searchable' => false, 'elmsearch' => 'text']),
-            // 'overday' => new Column(['title' => __('models/overtimes.fields.overday'),'name' => 'overday', 'data' => 'overday', 'searchable' => false, 'elmsearch' => 'text']),
-            'amount' => new Column(['title' => __('models/overtimes.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'numberrange', 'className' => 'text-end']),
+            // 'overday' => new Column(['title' => __('models/overtimes.fields.overday'),'name' => 'overday', 'data' => 'overday', 'searchable' => false, 'elmsearch' => 'text']),            
             // 'description' => new Column(['title' => __('models/overtimes.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
+        if(\Auth::user()->can('overtimes-delete')){
+            $columnDefault['amount'] = new Column(['title' => __('models/overtimes.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'numberrange', 'className' => 'text-end']);
+        }
+        return $columnDefault;
     }
 
     /**
