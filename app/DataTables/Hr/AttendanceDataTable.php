@@ -66,22 +66,20 @@ class AttendanceDataTable extends DataTable
      */
     public function html()
     {
-        $buttons = [
-                    [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.process').''
-                    ],
+        $buttonCreate = [];
+        if(\Auth::user()->can('attendances-create')){
+            $buttonCreate[] =[
+                'extend' => 'create',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.process').''
+            ];
+        }
+        $buttonDefault = [                    
                     [
                        'extend' => 'export',
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
+                    ],                    
                     [
                        'extend' => 'print',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -98,7 +96,7 @@ class AttendanceDataTable extends DataTable
                        'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
                     ],
                 ];
-                
+        $buttons = array_merge($buttonCreate, $buttonDefault);
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
