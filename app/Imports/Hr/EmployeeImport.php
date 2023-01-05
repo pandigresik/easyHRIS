@@ -31,7 +31,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     private $salaryComponent;
     private $businessUnit;
     private $company;
-    private $joTitle;
+    private $jobTitle;
     private $payrollGroup;
     private $dateColumn = ['join_date', 'date_of_birth', 'resign_date'];
     public function __construct()
@@ -116,9 +116,9 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     private function createSalaryBenefit($employee, $salaryDetails, $dataBenefit){
         $userId = \Auth::id();
         if($salaryDetails){
-            foreach($salaryDetails as $detail){
+            foreach($salaryDetails as $detail){                
                 $insertBenefit = ['employee_id' => $employee->id, 'component_id' => $detail->component_id];
-                $salaryBenefit = SalaryBenefit::firstOrNew($insertBenefit);
+                $salaryBenefit = SalaryBenefit::firstOrCreate($insertBenefit);
                 
                 $componentId = $detail->getRawOriginal('component_id');
                 
@@ -129,7 +129,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
                 }else{
                     // jika belum ada maka buat, jika sudah ada maka biarkan saja
                     // bisa jadi memang diubah manual 
-                    $benefitValue = $detail->getRawOriginal('component_value');
+                    $benefitValue = $detail->getRawOriginal('component_value');                     
                     if($salaryBenefit->wasRecentlyCreated){
                         $salaryBenefit->benefit_value = $benefitValue;
                         $salaryBenefit->save();
