@@ -42,8 +42,8 @@ class UpdateLeafRequest extends FormRequest
      * @return array
     */
     public function all($keys = null){
-        $keys = (new Leaf)->fillable;
-        $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+        // $keys = (new Leaf)->fillable;
+        // $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         return parent::all($keys);
     }
 }

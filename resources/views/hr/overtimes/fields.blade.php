@@ -65,7 +65,7 @@
     </div>
 </div>
 
-@if (isset($overtime))
+@if (false)
 <!-- Start Hour Real Field -->
 <div class="form-group row mb-3">
     {!! Form::label('start_hour_real', __('models/overtimes.fields.start_hour_real').':', ['class' => 'col-md-3
@@ -120,6 +120,7 @@
             {!! Form::hidden('holiday', 0) !!}
             {!! Form::checkbox('holiday', '1', null) !!}
         </label>
+        <span class="text-danger"> Pilih jika hari libur</span>
     </div>
 </div>
 
@@ -131,7 +132,7 @@
         <label class="checkbox-inline">
             {!! Form::hidden('overday', 0) !!}
             {!! Form::checkbox('overday', '1', null) !!}
-        </label>
+        </label>        
     </div>
 </div>
 

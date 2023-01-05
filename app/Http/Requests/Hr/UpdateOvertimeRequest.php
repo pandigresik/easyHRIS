@@ -42,8 +42,8 @@ class UpdateOvertimeRequest extends FormRequest
      * @return array
     */
     public function all($keys = null){
-        $keys = (new Overtime)->fillable;
-        $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+        // $keys = (new Overtime)->fillable;
+        // $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         return parent::all($keys);
     }
 }

@@ -87,9 +87,9 @@ class RequestWorkshiftRepository extends BaseRepository
             $newShiftmentId = Shiftment::with(['schedules' => function($q) use($workDate){
                 $workDay = Carbon::parse($workDate)->dayOfWeek;
                 return $q->where(['work_day' => $workDay]);
-            }])->find($shiftmentId);
+            }])->disableModelCaching()->find($shiftmentId);
             $selectedShiftmentHour = ['start_hour' => $newShiftmentId->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->getRawOriginal('end_hour')];
-            if($newShiftmentId->schedules){
+            if(!$newShiftmentId->schedules->isEmpty()){
                 $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];
             }
             $input['start_hour'] = $workDate.' '.$selectedShiftmentHour['start_hour'];
@@ -122,6 +122,7 @@ class RequestWorkshiftRepository extends BaseRepository
             $shiftmentChange = false;
             if($model->getRawOriginal('work_date') != $input['work_date']){
                 $changeWorkshift = true;
+                $shiftmentChange = true;
             }
 
             if($model->getRawOriginal('shiftment_id') != $input['shiftment_id']){
@@ -144,12 +145,13 @@ class RequestWorkshiftRepository extends BaseRepository
                 if($shiftmentChange){
                     $shiftmentId = $input['shiftment_id'];
                     $newShiftmentId = Shiftment::with(['schedules' => function($q) use($workDate){
-                        $workDay = Carbon::parse($workDate)->dayOfWeek;
+                        $workDay = Carbon::parse($workDate)->dayOfWeek;                        
                         return $q->where(['work_day' => $workDay]);
-                    }])->find($shiftmentId);
-                    $selectedShiftmentHour = ['start_hour' => $newShiftmentId->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->getRawOriginal('end_hour')];
-                    if($newShiftmentId->schedules){
-                        $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];
+                    }])->disableModelCaching()->find($shiftmentId);
+                    $selectedShiftmentHour = ['start_hour' => $newShiftmentId->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->getRawOriginal('end_hour')];                    
+                    
+                    if(!$newShiftmentId->schedules->isEmpty()){                        
+                        $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];                        
                     }
                     
                     $input['start_hour'] = $workDate.' '.$selectedShiftmentHour['start_hour'];
