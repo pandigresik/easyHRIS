@@ -8,7 +8,7 @@ use App\Models\Hr\Employee;
 use App\Models\Hr\FingerprintDevice;
 use App\Repositories\Hr\FingerprintDeviceRepository;
 use Carbon\Carbon;
-use Laradevsbd\Zkteco\Http\Library\ZktecoLib;
+use Rats\Zkteco\Lib\ZKTeco;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -22,9 +22,12 @@ class DownloadLogfingerController extends AppBaseController
 
     // use http stream response
     public function download($fingerprintDeviceId){
-        set_time_limit(0);              // making maximum execution time unlimited
-        ob_implicit_flush(1);           // Send content immediately to the browser on every statement which produces output
-        ob_end_flush(); 
+        if(!app()->runningInConsole()){
+            set_time_limit(0);              // making maximum execution time unlimited
+            ob_implicit_flush(1);           // Send content immediately to the browser on every statement which produces output
+            ob_end_flush(); 
+        }
+        
         $fingerprintDevice = FingerprintDevice::find($fingerprintDeviceId);
         
         if (empty($fingerprintDevice)) {
@@ -41,11 +44,11 @@ class DownloadLogfingerController extends AppBaseController
             }
             
             (new AttendanceLogfinger())->flushCache();
-        }                
+        }
     }
 
     private function downloadPhp($fingerprintDevice){
-        $zk = new ZktecoLib($fingerprintDevice->ip, $fingerprintDevice->port);
+        $zk = new ZKTeco($fingerprintDevice->ip, $fingerprintDevice->port);
         $progress = ['message' => ''];
         $progress['message'] = 'Try to connecting device .....';
         echo json_encode($progress);
