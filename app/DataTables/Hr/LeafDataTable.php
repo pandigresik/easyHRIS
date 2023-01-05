@@ -18,7 +18,7 @@ class LeafDataTable extends DataTable
         'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'leave_start' => \App\DataTables\FilterClass\BetweenKeyword::class,
         'leave_end' => \App\DataTables\FilterClass\BetweenKeyword::class,
-        'updated_at' => \App\DataTables\FilterClass\BetweenDatetimeKeyword::class,
+        // 'updated_at' => \App\DataTables\FilterClass\BetweenDatetimeKeyword::class,
     ];
     
     private $mapColumnSearch = [

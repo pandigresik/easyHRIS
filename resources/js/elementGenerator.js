@@ -52,6 +52,10 @@ class ElementGenerator {
         _options.class = 'form-control datetime'
         _options['data-optiondate'] = JSON.stringify(localOption.daterange_search)
         break
+      case 'datetimerange':
+        _options.class = 'form-control datetime'
+        _options['data-optiondate'] = JSON.stringify(localOption.datetimerange_search)
+        break
       case 'datesingle':
         _options.class = 'form-control datetime'
         break

@@ -136,9 +136,7 @@ FUNC
         return [
             'fingertime' => new Column(['title' => __('models/attendanceLogfingers.fields.fingertime'),'name' => 'fingertime', 'data' => 'fingertime', 'searchable' => true, 'elmsearch' => 'daterange']),
             'employee.full_name' => new Column(['title' => __('models/attendanceLogfingers.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
-            'employee.code' => new Column(['title' => __('models/attendanceLogfingers.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'type_absen' => new Column(['title' => __('models/attendanceLogfingers.fields.type_absen'),'name' => 'type_absen', 'data' => 'type_absen', 'searchable' => true, 'elmsearch' => 'text']),
-            
+            'employee.code' => new Column(['title' => __('models/attendanceLogfingers.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),                        
             'fingerprint_device_id' => new Column(['title' => __('models/attendanceLogfingers.fields.fingerprint_device_id'),'name' => 'fingerprint_device_id', 'data' => 'fingerprint_device.display_name', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $fingerprintDeviceItems, 'multiple' => 'multiple'])
         ];
     }
