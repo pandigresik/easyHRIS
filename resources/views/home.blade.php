@@ -25,6 +25,7 @@
         </div>
       </div>
       @empty
+        @include('greeting')
       @endforelse
     </div>
   </div>

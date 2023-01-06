@@ -31,7 +31,7 @@ class HomeController extends Controller
         
         $tes = (new JobLevel())->generateChartData(3);
         dd($tes);
-    }
+    }    
 
     private function generateApprovalData(){
         $result = [];
