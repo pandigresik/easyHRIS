@@ -436,6 +436,12 @@ class Employee extends Model
         });
     }
 
+    public function scopeKernet($query){
+        return $query->where('jobtitle_id',function($q){
+            return $q->select(['id'])->from('job_titles')->where('name','like','%kernet');
+        });
+    }
+
     public function getJoinDateAttribute($value){
         return localFormatDate($value);
     }

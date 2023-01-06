@@ -10,6 +10,18 @@ use Yajra\DataTables\Html\Column;
 class OvertimeDataTable extends DataTable
 {
     protected $fastExcel = false;
+    protected $exportColumns = [
+        ['data' => 'employee.full_name', 'defaultContent' => '','title' => 'Name'],
+        ['data' => 'employee.code', 'defaultContent' => '','title' => 'NIK'],
+        ['data' => 'employee.department.name', 'defaultContent' => '','title' => 'Departement'],
+        ['data' => 'employee.jobtitle.name', 'defaultContent' => '','title' => 'Jabatan'],
+        ['data' => 'overtime_date', 'defaultContent' => '','title' => 'Overtime Date'],
+        ['data' => 'start_hour', 'defaultContent' => '','title' => 'Start Hour'],
+        ['data' => 'end_hour', 'defaultContent' => '','title' => 'End Hour'],
+        ['data' => 'start_hour_real', 'defaultContent' => '','title' => 'Start Hour Real'],
+        ['data' => 'end_hour_real', 'defaultContent' => '','title' => 'End Hour Real'],
+        ['data' => 'calculated_value', 'defaultContent' => '','title' => 'Calculated Value'],                
+    ];
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
@@ -53,7 +65,9 @@ class OvertimeDataTable extends DataTable
     public function query(Overtime $model)
     {
         // get own data user and all employee descendant        
-        return $model->employeeDescendants()->selectRaw($model->getTable().'.*')->with(['employee'])->newQuery();
+        return $model->employeeDescendants()->selectRaw($model->getTable().'.*')->with(['employee' => function($q){
+            $q->with(['jobtitle', 'department']);
+        }])->newQuery();
     }
 
     /**
