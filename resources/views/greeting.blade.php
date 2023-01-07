@@ -6,7 +6,7 @@
                 <img src="vendor/images/logo.png">    
             </div>
             <div class="p-2 flex-fill pt-3 pl-5">
-                <h2>Selamat Datang Aplikasi Payroll LJP</h2>
+                <h2>Selamat Datang di Aplikasi Payroll LJP</h2>
             </div> 
         </div>
         </div>
@@ -72,7 +72,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <div class="col-md-12 mt5"> Langgeng Jaya Group didirikan sejak tahun 2006. Hingga kini memiliki 2 anak perusahaan yaitu, PT Langgeng Jaya Plastindo dan PT Langgeng Jaya Fiberindo. Kami telah hadir melalui rangkaian produk seperti <b>Gilingan / Cacahan Poliester (PET), Peletan PP, LDPE, HDPE, Poliester (PET) Karung Woven &amp; FIBC / Jumbo Bag, PSF (Polyester Staple Fiber), Non-Woven Needle Punch, Padding &amp; High Density Padding, Spunbond, Tali Strapping Poliester (PET), PVD (Prefabricated Vertical Drain) dan Tas Belanja ramah lingkungan</b>. Didukung dua pabrik yang beroperasi di Gresik dan Tangerang, serta ribuan karyawan berpengalaman dan profesional. </div>
+            <div class="col-md-12 mt5">{{ env('GREETING_DASHBOARD', '') }}</div>
         </div>
     </div>    
 </div>

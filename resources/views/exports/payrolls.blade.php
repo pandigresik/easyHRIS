@@ -151,7 +151,7 @@
             <td>{{ $overtimeComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
             <td>{{ $sundayOvertimeComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
             <td>{{ $positionComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
-            <td>{{ $otherComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
+            <td>{{ $otherComponent ? $otherComponent->getRawOriginal('benefit_value') : 0 }}</td>
             <td>{{ $premiComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
             <td>{{ $km }}</td>
             <td>{{ $kmComponent ? ($kmComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
@@ -166,7 +166,7 @@
             <td>{{ round($dailySalary/7, 2) }}</td>
             <td>{{ round($dailySalary/7 * minuteToHour($lateEarly),2) }}</td>
             <td>{{ $absent }}</td>            
-            <td>{{ $potonganKehadiranComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
+            <td>{{ $potonganKehadiranComponent ? $potonganKehadiranComponent->getRawOriginal('benefit_value') : 0 }}</td>
             <td>{{ $potonganBpjsKesehatanComponent ? ($potonganBpjsKesehatanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
             <td>{{ $potonganBpjsJhtComponent ? ($potonganBpjsJhtComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
             <td>{{ $potonganBpjsTambahanComponent ? ($potonganBpjsTambahanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>

@@ -3,7 +3,11 @@
     {!! Form::label('shiftment_group_id', __('models/workshiftGroups.fields.shiftment_group_id').':', ['class' =>
     'col-md-2 col-form-label']) !!}
     <div class="col-md-10">
-        {!! Form::select('shiftment_group_id', $shiftmentGroupItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+        {!! Form::select('shiftment_group_id', $shiftmentGroupItems, null, ['class' => 'form-control select2', 'id' => 'shiftment_group_id', 'required' => 'required', 'multiple' => 'multiple']) !!}
+        <label class="checkbox-inline">                                            
+            {!! Form::checkbox('', '1', null,['onchange' => 'main.select2AllOption(this,\'#shiftment_group_id\')']) !!}
+            pilih semua
+        </label>
     </div>
 </div>
 

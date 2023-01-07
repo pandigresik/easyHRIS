@@ -51,7 +51,7 @@ class WorkshiftRepository extends BaseRepository
             return $result;
         } catch (\Exception $e) {
             return $e;
-        }        
+        }
     }
 
     private function deletePreviousData($input){

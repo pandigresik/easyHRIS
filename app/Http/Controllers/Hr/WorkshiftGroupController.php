@@ -173,10 +173,10 @@ class WorkshiftGroupController extends AppBaseController
      */
     private function getOptionItems(){        
         $shiftmentGroup = new ShiftmentGroupRepository();
-        $shiftment = new ShiftmentRepository();
+        // $shiftment = new ShiftmentRepository();
         return [
-            'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck(),
-            'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck()            
+            'shiftmentGroupItems' => $shiftmentGroup->pluck(),
+            // 'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck()            
         ];
     }
 
@@ -189,24 +189,35 @@ class WorkshiftGroupController extends AppBaseController
     {
         $period = generatePeriodFromString($request->get('work_date'));
         $shiftmentGroup = $request->get('shiftment_group_id');
+        $shiftmentGroupMap = (new ShiftmentGroupRepository())->pluck();
         $data = [
             'startDate' => $period['startDate'],
             'endDate' => $period['endDate'],
             'shiftmentGroup' => $shiftmentGroup
         ];
         $initialDate = $period['startDate'];
-        $workshift = $this->getRepositoryObj()->generateWorkshift($data);
+        $workshifts = $this->getRepositoryObj()->generateWorkshift($data);
         $events = [];
-        $dataInsert = [];
+        $dataInserts = [];
         $eventTimeFormat = [ // like '14:30:00'
             'hour' => '2-digit',
             'minute' =>'2-digit',
             'second' => '2-digit',
             'hour12' => false
         ];
-        \Log::error($workshift['schedule']);
+        
+        foreach($workshifts as $shiftmentGroup => $workshift){
+            $tmpDataInsert = $this->generateInsertData($workshift);
+            $dataInserts[$shiftmentGroup] = $tmpDataInsert['dataInsert'];
+            $events[$shiftmentGroup] = $tmpDataInsert['events'];
+        }
+        return view('hr.workshift_groups.calendar', compact('events', 'eventTimeFormat', 'initialDate', 'dataInserts', 'shiftmentGroupMap'));
+    }
+
+    private function generateInsertData($workshift){
+        $dataInsert = [];
+        $events = [];
         foreach($workshift['schedule'] as $date => $event){
-            
             $events[] = [
                 'title' => $event['code'].' ('.$event['start_hour'].'-'.$event['end_hour'].')',
                 'allDay' => true,
@@ -232,6 +243,6 @@ class WorkshiftGroupController extends AppBaseController
                 'end_hour' => $endHourShift,
             ];
         }
-        return view('hr.workshift_groups.calendar', compact('events', 'eventTimeFormat', 'initialDate', 'dataInsert'));
+        return ['dataInsert' => $dataInsert, 'events' => $events];
     }
 }

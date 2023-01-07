@@ -50,7 +50,7 @@ class WorkshiftGroupRepository extends BaseRepository
      * 'startDate' => $period['startDate'],
      * 'endDate' => $period['endDate'],
      * 'shiftmentGroup' => $shiftmentGroup */
-    public function generateWorkshift($data){
+    public function generateSingleWorkshift($data){
         $startDate = $data['startDate'];
         $endDate = $data['endDate'];
         /** cari urutan shift untuk grup tersebut */
@@ -67,6 +67,23 @@ class WorkshiftGroupRepository extends BaseRepository
             'schedule' => $this->generateScheduleDay($startDate, $endDate, $shiftmentGroupDetails, $currentShiftment)
         ];
     }
+
+    public function generateWorkshift($data){
+        $result = [];
+        $shiftmentGroups = $data['shiftmentGroup'];
+        $startDate = $data['startDate'];
+        $endDate = $data['endDate'];
+        foreach($shiftmentGroups as $shiftmentGroup){
+            $dataGroup = [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'shiftmentGroup' => $shiftmentGroup
+            ];
+            $result[$shiftmentGroup] = $this->generateSingleWorkshift($dataGroup);
+        }
+        return $result;
+    }
+
     /** return index shiftment */
     protected function getNextShiftment($shiftmentGroupDetails, $currentShiftment = NULL){        
         $shiftmentGroupDetailByShiftment = $shiftmentGroupDetails->pluck('sequence','shiftment_id');        
@@ -128,15 +145,18 @@ class WorkshiftGroupRepository extends BaseRepository
     public function generateSchedule($input)
     {
         try {
-            $workshiftDate = json_decode($input['work_date_shiftment'], 1);
-            $upsertData = [];
-            $userId = \Auth::id();
-            foreach($workshiftDate as $item){                
-                $item['shiftment_group_id'] = $input['shiftment_group_id'];
-                $item['created_by'] = $userId;
-                $upsertData[] = $item;
+            foreach($input['work_date_shiftment'] as $shiftmentGroup => $shiftmentWorkDate){
+                $workshiftDate = json_decode($shiftmentWorkDate, 1);
+                $upsertData = [];
+                $userId = \Auth::id();
+                foreach($workshiftDate as $item){                
+                    $item['shiftment_group_id'] = $shiftmentGroup;
+                    $item['created_by'] = $userId;
+                    $upsertData[] = $item;
+                }
+                $result = WorkshiftGroup::upsert($upsertData, ['shiftment_group_id', 'shiftment_id', 'work_date']);
             }
-            $result = WorkshiftGroup::upsert($upsertData, ['shiftment_group_id', 'shiftment_id', 'work_date']);            
+            
             $this->model->newInstance()->flushCache();
             return $result;
         } catch (\Exception $e) {
