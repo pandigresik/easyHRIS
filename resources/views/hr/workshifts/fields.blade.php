@@ -3,7 +3,11 @@
     {!! Form::label('shiftment_group_id', __('models/workshiftGroups.fields.shiftment_group_id').':', ['class' =>
     'col-md-2 col-form-label']) !!}
     <div class="col-md-10">
-        {!! Form::select('shiftment_group_id', $shiftmentGroupItems, null, ['class' => 'form-control select2', 'required' => 'required', 'onchange' => 'updateFilterEmployee(this)']) !!}
+        {!! Form::select('shiftment_group_id[]', $shiftmentGroupItems, null, ['class' => 'form-control select2', 'id' => 'shiftment_group_id', 'required' => 'required', 'onchange' => 'updateFilterEmployee(this)', 'multiple' => 'multiple']) !!}
+        <label class="checkbox-inline">                                            
+            {!! Form::checkbox('', '1', null,['onchange' => 'main.select2AllOption(this,\'#shiftment_group_id\')']) !!}
+            pilih semua
+        </label>
     </div>
 </div>
 
@@ -26,7 +30,7 @@
     </div>
 </div>
 
-<!-- Generate button -->
+<!-- Generate button 
 <div class="form-group row mb-3">
     <div class="col-md-10 offset-2">
         {!! Form::button(__('crud.generate'), ['class' => 'btn btn-danger', 'data-target' => '#list_workshift', 'data-url' => route('hr.workshifts.generate'), 'data-json' => '{}', 'data-ref' => 'input[name=work_date_period],select[name="shiftment_group_id"]' ,'onclick' => 'main.loadDetailPage(this,\'get\', function(){ main.initCalendar($(\'form\'));main.showLoading(false) })', 'type' => 'button']) !!}
@@ -35,7 +39,7 @@
 
     </div>
 </div>
-
+-->
 @push('scripts')
 <script>
     function updateFilterEmployee(elm){

@@ -172,7 +172,7 @@ class WorkshiftController extends AppBaseController
     {
         $shiftmentGroup = new ShiftmentGroupRepository();
         return [
-            'shiftmentGroupItems' => ['' => __('crud.option.shiftmentGroup_placeholder')] + $shiftmentGroup->pluck(),
+            'shiftmentGroupItems' => $shiftmentGroup->pluck(),
         ];
     }
 

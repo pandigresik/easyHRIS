@@ -44,18 +44,28 @@ class WorkshiftRepository extends BaseRepository
 
     public function generateSchedule($input)
     {
+        $this->model->getConnection()->beginTransaction();
         try {
             $this->deletePreviousData($input);
-            $result = $this->massInsert($input);
+            $shiftmentGroups = $input['shiftment_group_id'];
+
+            foreach($shiftmentGroups as $shiftmentGroup){
+                $inputInsert = $input;
+                $inputInsert['shiftment_group_id'] = $shiftmentGroup;
+                $result = $this->massInsert($inputInsert);
+            }
+            
             $this->model->newInstance()->flushCache();
+            $this->model->getConnection()->commit();
             return $result;
         } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
             return $e;
         }
-    }
+    }    
 
     private function deletePreviousData($input){
-        $employeeId = $input['employee_id'];
+        $employeeId = $input['employee_id'] ?? '';
         $shiftmentGroup = $input['shiftment_group_id'];
         $workDate = $input['work_date_period'];
         $period = generatePeriod($workDate);
@@ -65,13 +75,13 @@ class WorkshiftRepository extends BaseRepository
             $this->model->whereIn('employee_id', $employeeId)->whereBetween('work_date',[$startDate, $endDate])->forceDelete();
         }else{
             $this->model->whereIn('employee_id', function($q) use($shiftmentGroup){
-                $q->select('id')->from('employees')->where(['shiftment_group_id' => $shiftmentGroup]);
+                $q->select('id')->from('employees')->whereIn('shiftment_group_id', $shiftmentGroup);
             })->whereBetween('work_date',[$startDate, $endDate])->forceDelete();
-        }        
+        }
     }
 
     private function massInsert($input){
-        $employeeId = $input['employee_id'];
+        $employeeId = $input['employee_id'] ?? '';
         $shiftmentGroup = $input['shiftment_group_id'];
         $workDate = $input['work_date_period'];
         $period = generatePeriod($workDate);
@@ -81,6 +91,7 @@ class WorkshiftRepository extends BaseRepository
         if($employeeId){
             $filterEmployee = ' and e.id in ('.implode(',',$employeeId).')';
         }
+        
         $sqlMassInsert = <<<SQL
         insert into workshifts (employee_id , shiftment_id , work_date , start_hour , end_hour , created_by , created_at , updated_at)
         select e.id as employee_id, wg.shiftment_id , wg.work_date , wg.start_hour , wg.end_hour, 1, now(), now() from workshift_groups wg
