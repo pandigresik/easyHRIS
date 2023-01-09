@@ -2,12 +2,14 @@
 
 namespace App\Repositories\Hr;
 
+use App\Jobs\AttendanceProcess;
 use App\Library\SalaryComponent\Overtime as SalaryComponentOvertime;
 use App\Models\Base\Setting;
 use App\Models\Hr\Employee;
 use App\Models\Hr\Overtime;
 use App\Models\Hr\SalaryBenefit;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 use Exception;
 
 /**
@@ -145,10 +147,10 @@ class OvertimeRepository extends BaseRepository
     }
 
     private function reject($reference, $comment){
-        $requestWorkshift = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
+        $requestOvertime = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
         $this->model->getConnection()->beginTransaction();
         try {
-            foreach($requestWorkshift as $item){
+            foreach($requestOvertime as $item){
                 $item->step_approval = $item->step_approval - 1;
                 $item->rejectAction();
                 $item->status = $item->getNextState();
@@ -165,17 +167,22 @@ class OvertimeRepository extends BaseRepository
     }
 
     private function approve($reference){
-        $requestWorkshift = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
+        $requestOvertime = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
         $this->model->getConnection()->beginTransaction();
         try {
-            foreach($requestWorkshift as $item){                
+            foreach($requestOvertime as $item){                
                 $item->setCurrentStep($item->getRawOriginal('step_approval'));
                 $item->setMaxStep($item->getRawOriginal('amount_approval'));
                 $item->approveAction();
                 $item->step_approval = $item->step_approval + 1;
                 $item->status = $item->getNextState();
                 $item->save();
-                $item->approvals()->update(['status' => $item->getNextState(), 'updated_by' => \Auth::id()]);                
+                $item->approvals()->update(['status' => $item->getNextState(), 'updated_by' => \Auth::id()]);
+                // execute job attendance process after 30 seconds
+                if($item->getRawOriginal('overtime_date') < Carbon::now()->format('Y-m-d')){
+                    AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('overtime_date'), $item->getRawOriginal('overtime_date'))->delay(now()->addSeconds(30));
+                }
+                
             }
             $this->model->getConnection()->commit();
             return $this->model;

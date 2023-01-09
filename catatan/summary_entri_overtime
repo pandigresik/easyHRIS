@@ -1,7 +1,7 @@
 select count(*), o.overtime_date ,u.name
 from overtimes o 
 join users u on u.id = o.created_by
-where o.overtime_date >= '2023-01-03' and status = 'N' and o.deleted_at is null
+where o.overtime_date >= '2023-01-03' and o.deleted_at is null
 group by created_by, overtime_date  
 
 select count(*), o.work_date ,u.name
