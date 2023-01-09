@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Hr;
 
+use App\Jobs\AttendanceProcess;
 use App\Models\Base\Setting;
 use App\Models\Hr\Employee;
 use App\Models\Hr\RequestWorkshift;
@@ -230,6 +231,10 @@ class RequestWorkshiftRepository extends BaseRepository
                 $item->approvals()->update(['status' => $item->getNextState(), 'updated_by' => \Auth::id()]);
                 if($item->getRawOriginal('status') == $item->getFinalState()){
                     $this->updateWorkshift($item);
+                    // execute job attendance process after 30 seconds
+                    if($item->getRawOriginal('work_date') < Carbon::now()->format('Y-m-d')){
+                        AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('work_date'), $item->getRawOriginal('work_date'))->delay(now()->addSeconds(30));
+                    }
                 }
             }
             $this->model->getConnection()->commit();
