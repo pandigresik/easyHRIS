@@ -109,6 +109,8 @@ class RequestWorkshiftRepository extends BaseRepository
             
             if($model->getRawOriginal('status') == $model->getFinalState()){
                 $this->updateWorkshift($model);
+                // execute job attendance process after 30 seconds
+                $this->generateJob($model);
             }
         return $model;
     }
@@ -167,6 +169,8 @@ class RequestWorkshiftRepository extends BaseRepository
             $model->save();
             if($model->getRawOriginal('status') == $model->getFinalState()){
                 $this->updateWorkshift($model);
+                // execute job attendance process after 30 seconds
+                $this->generateJob($model);
             }
             $this->model->getConnection()->commit();
             return $model;
@@ -181,7 +185,7 @@ class RequestWorkshiftRepository extends BaseRepository
         $workshift->shiftment_id = $model->shiftment_id;
         $workshift->start_hour = $model->getRawOriginal('start_hour');
         $workshift->end_hour = $model->getRawOriginal('end_hour');
-        $workshift->save();
+        $workshift->save();        
     }
 
     public function approveReject($input){
@@ -232,9 +236,7 @@ class RequestWorkshiftRepository extends BaseRepository
                 if($item->getRawOriginal('status') == $item->getFinalState()){
                     $this->updateWorkshift($item);
                     // execute job attendance process after 30 seconds
-                    if($item->getRawOriginal('work_date') < Carbon::now()->format('Y-m-d')){
-                        AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('work_date'), $item->getRawOriginal('work_date'))->delay(now()->addSeconds(30));
-                    }
+                    $this->generateJob($item);
                 }
             }
             $this->model->getConnection()->commit();
@@ -263,4 +265,14 @@ class RequestWorkshiftRepository extends BaseRepository
 
         return $this;
     }    
+
+    private function generateJob($item){
+        // execute job attendance process after 30 seconds                
+        if($item->getRawOriginal('status') == $item->getFinalState()){
+            if($item->getRawOriginal('work_date') < Carbon::now()->format('Y-m-d')){
+                AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('work_date'), $item->getRawOriginal('work_date'))->delay(now()->addSeconds(30));
+            }                    
+        }
+        
+    }
 }

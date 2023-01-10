@@ -39,7 +39,7 @@ class ProcessAttendance extends Command
     {
         // login as administrator
         \Auth::loginUsingId(1);
-        $period = $this->argument('period');        
+        $period = $this->argument('period');  
         $shiftmentGroup = $this->argument('shiftmentGroup');
         $employeeId = $this->option('employeeId');
         $repo = app()->make('App\Repositories\Hr\AttendanceRepository');

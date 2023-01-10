@@ -91,6 +91,8 @@ class OvertimeRepository extends BaseRepository
                 $model->amount_approval = $model->getMaxStep();
                 $model->save();            
                 $model->generateApproval();
+                // execute job attendance process after 30 seconds                
+                $this->generateJob($model);
             }
                         
             $this->model->getConnection()->commit();
@@ -118,6 +120,8 @@ class OvertimeRepository extends BaseRepository
             $model->amount = (new  SalaryComponentOvertime(minuteToHour($model->calculated_value) , $amountOvertime))->calculate();
             $model->save();
             $this->model->getConnection()->commit();
+            // execute job attendance process after 30 seconds                
+            $this->generateJob($model);
             return $model;
         } catch (\Exception $e) {
             $this->model->getConnection()->rollBack();
@@ -179,12 +183,7 @@ class OvertimeRepository extends BaseRepository
                 $item->save();
                 $item->approvals()->update(['status' => $item->getNextState(), 'updated_by' => \Auth::id()]);
                 // execute job attendance process after 30 seconds                
-                if($item->getRawOriginal('status') == $item->getFinalState()){
-                    if($item->getRawOriginal('overtime_date') < Carbon::now()->format('Y-m-d')){
-                        AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('overtime_date'), $item->getRawOriginal('overtime_date'))->delay(now()->addSeconds(30));
-                    }                    
-                }
-                
+                $this->generateJob($item);                
             }
             $this->model->getConnection()->commit();
             return $this->model;
@@ -212,5 +211,14 @@ class OvertimeRepository extends BaseRepository
         $this->maxStepApproval = $maxStepApproval;
 
         return $this;
+    }
+
+    private function generateJob($item){
+        // execute job attendance process after 30 seconds                
+        if($item->getRawOriginal('status') == $item->getFinalState()){
+            if($item->getRawOriginal('overtime_date') < Carbon::now()->format('Y-m-d')){
+                AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('overtime_date'), $item->getRawOriginal('overtime_date'))->delay(now()->addSeconds(30));
+            }                    
+        }
     }
 }
