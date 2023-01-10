@@ -224,3 +224,10 @@ if (!function_exists('isWorkshiftOff')) {
     }
 }
 
+if (!function_exists('getDateString')) {
+    function getDateString($date)
+    {
+        return explode(' ',$date)[0];
+    }
+}
+

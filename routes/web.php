@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('employeeShiftments', Hr\EmployeeShiftmentController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('fingerprintDevices', Hr\FingerprintDeviceController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('leaves', Hr\LeafController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+        Route::resource('leaveApproves', Hr\LeaveApproveController::class, ["as" => 'hr'])->only(['index', 'update']);
         Route::resource('overtimes', Hr\OvertimeController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('overtimeApproves', Hr\OvertimeApproveController::class, ["as" => 'hr'])->only(['index', 'update']);
         Route::resource('ritaseDrivers', Hr\RitaseDriverController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);

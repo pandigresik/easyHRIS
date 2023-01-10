@@ -7,6 +7,7 @@ return array (
   array (
     'id' => 'Id',
     'employee_id' => 'Employee Id',
+    'employee_full_name' => 'Name',
     'employee_code' => 'NIK',
     'reason_id' => 'Reason Id',
     'leave_start' => 'Leave Start',

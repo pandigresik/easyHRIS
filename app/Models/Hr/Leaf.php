@@ -3,6 +3,8 @@
 namespace App\Models\Hr;
 
 use App\Models\Base as Model;
+use App\Traits\ApprovalModelTrait;
+use App\Traits\StatusTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -72,8 +74,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Leaf extends Model
 {
     use HasFactory;
-        use SoftDeletes;
-
+    use SoftDeletes;
+    use ApprovalModelTrait;
+    use StatusTrait;
+    
     public $table = 'leaves';
     
     const INITIAL_STATE = 'A';

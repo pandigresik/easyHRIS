@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hr\JobLevel;
+use App\Models\Hr\Leaf;
 use App\Models\Hr\Overtime;
 use App\Models\Hr\RequestWorkshift;
 
@@ -52,6 +53,15 @@ class HomeController extends Controller
             $result[] = [
                 'title' => 'Request Overtime',
                 'datas' => $overtimeApproval
+            ];
+        }
+
+        $urlLeafApproval = route('hr.leaveApproves.index');
+        $leafApproval = (new Leaf())->getNeedApproval($employee->id, $urlLeafApproval);
+        if($leafApproval){
+            $result[] = [
+                'title' => 'Request Leave',
+                'datas' => $leafApproval
             ];
         }
         return $result;   
