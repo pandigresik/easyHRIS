@@ -280,8 +280,7 @@ class RequestWorkshiftRepository extends BaseRepository
         if($item->getRawOriginal('status') == $item->getFinalState()){
             if($item->getRawOriginal('work_date') < Carbon::now()->format('Y-m-d')){
                 AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('work_date'), $item->getRawOriginal('work_date'))->delay(now()->addSeconds(30));
-            }                    
-        }
-        
+            }
+        }        
     }
 }

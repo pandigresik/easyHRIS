@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Hr;
 
+use App\Jobs\AttendanceProcess;
 use App\Models\Hr\AttendanceLogfinger;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 
 /**
  * Class AttendanceLogfingerRepository
@@ -39,5 +41,50 @@ class AttendanceLogfingerRepository extends BaseRepository
     public function model()
     {
         return AttendanceLogfinger::class;
+    }
+
+    /**
+     * Create model record.
+     *
+     * @param array $input
+     *
+     * @return Model
+     */
+    public function create($input)
+    {
+        try {
+            $model = parent::create($input);
+            $this->generateJob($model);                     
+            return $model;
+        } catch (\Exception $e) {
+            return $e;
+        }        
+    }
+
+    /**
+     * Update model record for given id.
+     *
+     * @param array $input
+     * @param int   $id
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
+     */
+    public function update($input, $id)
+    {
+        try{
+            $model = parent::update($input, $id);
+            $this->generateJob($model);
+            return $model;
+        } catch (\Exception $e) {
+            return $e;
+        }
+    }
+
+    private function generateJob($item){
+        // execute job attendance process after 30 seconds                        
+        if($item->fingerDate < Carbon::now()->format('Y-m-d')){
+            AttendanceProcess::dispatch($item->employee_id, $item->fingerDate, $item->fingerDate)->delay(now()->addSeconds(20));
+        }
+                
     }
 }

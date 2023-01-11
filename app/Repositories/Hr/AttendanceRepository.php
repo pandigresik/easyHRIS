@@ -295,9 +295,9 @@ class AttendanceRepository extends BaseRepository
 
     private function listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId){
         if(!empty($employeeId)){
-            return LeaveDetails::select(['leave_date', 'employee_id', 'reason_id'])->whereBetween('leave_date',[$startDate,$endDate])->employeeApprove($employeeId)->get()->groupBy('employee_id');
+            return LeaveDetails::select(['leave_date', 'employee_id', 'reason_id'])->whereBetween('leave_date',[$startDate,$endDate])->employeeApprove($employeeId)->disableModelCaching()->get()->groupBy('employee_id');
         }
-        return LeaveDetails::select(['leave_date', 'employee_id', 'reason_id'])->whereBetween('leave_date',[$startDate,$endDate])->shiftmentGroupApprove($shiftmentGroup)->get()->groupBy('employee_id');
+        return LeaveDetails::select(['leave_date', 'employee_id', 'reason_id'])->whereBetween('leave_date',[$startDate,$endDate])->shiftmentGroupApprove($shiftmentGroup)->disableModelCaching()->get()->groupBy('employee_id');
     }
 
     // cari absent berdasarkan jadwal kerja
