@@ -154,11 +154,20 @@ class RequestWorkshiftRepository extends BaseRepository
                     $selectedShiftmentHour = ['start_hour' => $newShiftmentId->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->getRawOriginal('end_hour')];                    
                     
                     if(!$newShiftmentId->schedules->isEmpty()){                        
-                        $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];                        
+                        $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];
                     }
                     
                     $input['start_hour'] = $workDate.' '.$selectedShiftmentHour['start_hour'];
-                    $input['end_hour'] = $selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour'] ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$selectedShiftmentHour['end_hour'] : $workDate.' '.$selectedShiftmentHour['end_hour'];
+                    $workDateEnd = $workDate;
+                    if($selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour']){
+                        $workDateEnd = Carbon::parse($workDate)->addDay()->format('Y-m-d');
+                    }
+
+                    if(substr($selectedShiftmentHour['start_hour'], 0 , 2) == '00'){
+                        $workDateEnd = Carbon::parse($workDate)->addDay()->format('Y-m-d');
+                    }
+
+                    $input['end_hour'] =  $workDateEnd.' '.$selectedShiftmentHour['end_hour'];
                     
                     //$input['start_hour'] = $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('start_hour');
                     //$input['end_hour'] = $newShiftmentId->schedules->first()->getRawOriginal('start_hour') > $newShiftmentId->schedules->first()->getRawOriginal('end_hour') ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour') : $workDate.' '.$newShiftmentId->schedules->first()->getRawOriginal('end_hour');
