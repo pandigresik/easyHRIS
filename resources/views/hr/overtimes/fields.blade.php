@@ -38,7 +38,7 @@
     {!! Form::label('start_hour', __('models/overtimes.fields.start_hour').':', ['class' => 'col-md-3 col-form-label'])
     !!}
     <div class="col-md-9">
-        {!! Form::text('start_hour', null, ['class' => 'form-control inputmask', 'data-optionmask' =>
+        {!! Form::text('start_hour', null, ['class' => 'form-control inputmask', 'onchange' => 'updateInfoOvertime(this)', 'data-optionmask' =>
         json_encode(config('local.textmask.time-minute')), 'required' => 'required']) !!}
     </div>
 </div>
@@ -47,7 +47,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('end_hour', __('models/overtimes.fields.end_hour').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        {!! Form::text('end_hour', null, ['class' => 'form-control inputmask', 'data-optionmask' =>
+        {!! Form::text('end_hour', null, ['class' => 'form-control inputmask', 'onchange' => 'updateInfoOvertime(this)', 'data-optionmask' =>
         json_encode(config('local.textmask.time-minute')), 'required' => 'required']) !!}
     </div>
 </div>
@@ -58,9 +58,12 @@
     col-form-label']) !!}
     <div class="col-md-9">
         <div class="input-group">
-            {!! Form::text('breaktime_value', null, ['class' => 'form-control inputmask','data-optionmask' =>
+            {!! Form::text('breaktime_value', null, ['class' => 'form-control inputmask', 'onchange' => 'updateInfoOvertime(this)', 'data-optionmask' =>
             json_encode(config('local.number.integer'))]) !!}
             <span class="input-group-text">Minute</span>
+        </div>
+        <div class="form-text text-danger" id="overtime-info">
+            
         </div>
     </div>
 </div>
@@ -146,3 +149,27 @@
         => 255, 'required' => 'required']) !!}
     </div>
 </div>
+
+@push('scripts')
+    <script type="text/javascript">
+    function updateInfoOvertime(elm){
+        let _date = main.getValueDateSQL($('#overtime_date'))
+        let _startHour = $('#start_hour').val()
+        let _endHour = $('#end_hour').val()
+        let _breaktime = $('#breaktime_value').val() || 0
+        let _startDate, _endDate, _diffMinutes, _diffHours
+        $('#overtime-info').html('Total overtime : -')
+        if(!_.isEmpty(_date) && !_.isEmpty(_startHour) && !_.isEmpty(_endHour)){
+            _startDate = moment(_date+' '+_startHour)
+            _endDate = moment(_date+' '+_endHour)
+            if(_startHour > _endHour){
+                _endDate.add(1, 'day')
+            }
+            _endDate.subtract(_breaktime, 'minutes')
+            _diffMinutes = _endDate.diff(_startDate, 'minutes')
+            _diffHours = _endDate.diff(_startDate, 'hours', true)
+            $('#overtime-info').html(`Total overtime : ${_diffHours} jam ( ${_diffMinutes} menit )`)
+        }        
+    }
+    </script>
+@endpush
