@@ -56,7 +56,9 @@ class AttendanceDataTable extends DataTable
      */
     public function query(Attendance $model)
     {
-        return $model->employeeDescendants()->selectRaw($model->getTable().'.*, attendance_date as raw_attendance_date')->with(['employee', 'shiftment','reason'])->newQuery();
+        return $model->employeeDescendants()->selectRaw($model->getTable().'.*, attendance_date as raw_attendance_date')->with(['employee' => function($q){
+            $q->with(['jobtitle']);
+        }, 'shiftment','reason'])->newQuery();
     }
 
     /**
@@ -127,6 +129,7 @@ class AttendanceDataTable extends DataTable
             'attendance_date' => new Column(['title' => __('models/attendances.fields.attendance_date'),'name' => 'attendance_date', 'data' => 'attendance_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
+            'employee_jobtitle' => new Column(['title' => __('models/attendances.fields.employee_jobtitle'),'name' => 'employee.jobtitle.name', 'data' => 'employee.jobtitle.name', 'searchable' => false, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/attendances.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'elmsearch' => 'text']),
             'reason_id' => new Column(['title' => __('models/attendances.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),            
             //'description' => new Column(['title' => __('models/attendances.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
@@ -134,10 +137,10 @@ class AttendanceDataTable extends DataTable
             'check_out_schedule' => new Column(['title' => __('models/attendances.fields.check_out_schedule'),'name' => 'check_out_schedule', 'data' => 'check_out_schedule', 'searchable' => false, 'elmsearch' => 'text']),
             'check_in' => new Column(['title' => __('models/attendances.fields.check_in'),'name' => 'check_in', 'data' => 'check_in', 'searchable' => false, 'elmsearch' => 'text']),
             'check_out' => new Column(['title' => __('models/attendances.fields.check_out'),'name' => 'check_out', 'data' => 'check_out', 'searchable' => false, 'elmsearch' => 'text']),
-            'early_in' => new Column(['title' => __('models/attendances.fields.early_in').' (minutes)','name' => 'early_in', 'data' => 'early_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
+            // 'early_in' => new Column(['title' => __('models/attendances.fields.early_in').' (minutes)','name' => 'early_in', 'data' => 'early_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'early_out' => new Column(['title' => __('models/attendances.fields.early_out').' (minutes)','name' => 'early_out', 'data' => 'early_out', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'late_in' => new Column(['title' => __('models/attendances.fields.late_in').' (minutes)','name' => 'late_in', 'data' => 'late_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
-            'late_out' => new Column(['title' => __('models/attendances.fields.late_out').' (minutes)','name' => 'late_out', 'data' => 'late_out', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
+            // 'late_out' => new Column(['title' => __('models/attendances.fields.late_out').' (minutes)','name' => 'late_out', 'data' => 'late_out', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             // 'absent' => new Column(['title' => __('models/attendances.fields.absent'),'name' => 'absent', 'data' => 'absent', 'searchable' => true, 'elmsearch' => 'text']),
             'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple'])
         ];

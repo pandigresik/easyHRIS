@@ -26,7 +26,7 @@ port = int(sys.argv[2])
 start_fingertime = (datetime.now() + timedelta(days = int(connect_db.config['DEFAULT_START_LOGFINGERTIME'])))
 
 conn = None
-zk = ZK(ip_address, port)
+zk = ZK(ip_address, port, 600)
 attendance_updates = []
 try:
     conn = zk.connect()
@@ -63,7 +63,7 @@ try:
         connect_db.insert_logfinger(attendance_updates)        
 
 except Exception as e:
-    logging.error("Exception occurred", exc_info=True)
+    logger.error("Exception occurred", exc_info=True)
 finally:
     logger.info("{} data created or updated".format(len(attendance_updates)))
     print(str(len(attendance_updates))+" data created or updated")

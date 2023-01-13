@@ -8,6 +8,7 @@ return array (
     'id' => 'Id',
     'employee_id' => 'Karyawan',
     'employee_code' => 'NIP',
+    'employee_jobtitle' => 'Jobtitle',
     'shiftment_id' => 'Shift',
     'reason_id' => 'Reason Id',
     'attendance_date' => 'Attendance Date',
