@@ -1,0 +1,4 @@
+update workshifts w
+join request_workshifts rw on rw.employee_id = w.employee_id and rw.work_date = w.work_date  
+set w.shiftment_id = rw.shiftment_id , w.start_hour = rw.start_hour , w.end_hour = rw.end_hour 
+where rw.work_date >= '2023-01-01'

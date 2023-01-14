@@ -26,7 +26,7 @@ port = int(sys.argv[2])
 start_fingertime = (datetime.now() + timedelta(days = int(connect_db.config['DEFAULT_START_LOGFINGERTIME'])))
 
 conn = None
-zk = ZK(ip_address, port, 600)
+zk = ZK(ip_address, port, 60)
 attendance_updates = []
 try:
     conn = zk.connect()

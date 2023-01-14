@@ -129,7 +129,7 @@ class AttendanceDataTable extends DataTable
             'attendance_date' => new Column(['title' => __('models/attendances.fields.attendance_date'),'name' => 'attendance_date', 'data' => 'attendance_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
-            'employee_jobtitle' => new Column(['title' => __('models/attendances.fields.employee_jobtitle'),'name' => 'employee.jobtitle.name', 'data' => 'employee.jobtitle.name', 'searchable' => false, 'elmsearch' => 'text']),
+            'employee_jobtitle' => new Column(['title' => __('models/attendances.fields.employee_jobtitle'),'name' => 'employee.jobtitle.name', 'data' => 'employee.jobtitle.name', 'defaultContent' => '-', 'searchable' => false, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/attendances.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'elmsearch' => 'text']),
             'reason_id' => new Column(['title' => __('models/attendances.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),            
             //'description' => new Column(['title' => __('models/attendances.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
