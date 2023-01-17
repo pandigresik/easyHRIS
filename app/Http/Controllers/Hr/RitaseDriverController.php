@@ -170,9 +170,10 @@ class RitaseDriverController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $employee = Employee::driver()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id')->merge(Employee::kernet()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id'));
+        $employee = Employee::driver()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id');
+        $kernet = Employee::kernet()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id');
         return [
-            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->toArray()
+            'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->toArray() + $kernet->toArray()
         ];
     }
 }
