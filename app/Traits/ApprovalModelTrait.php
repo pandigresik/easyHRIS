@@ -189,4 +189,8 @@ trait ApprovalModelTrait
     public function scopeApprove($query){
         return $query->whereStatus($this->finalState);
     }
+
+    public function isApprove(){
+        return $this->getRawOriginal('status') == $this->finalState;
+    }
 }

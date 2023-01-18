@@ -110,6 +110,8 @@ class OvertimeRepository extends BaseRepository
     {
         $this->model->getConnection()->beginTransaction();
         try{
+            // pastikan tidak ada yang kembar data overtimenya
+            $this->isOvertimeExist($input);
             $query = $this->model->newQuery();
             $model = $query->findOrFail($id);
             $model->fill($input);

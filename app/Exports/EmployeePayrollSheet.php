@@ -17,6 +17,7 @@ class EmployeePayrollSheet implements FromView, WithColumnFormatting, WithTitle,
     private $salaryComponent;
     private $sheetName;    
     private $payrollPeriod;
+    private  $collection;
     public function __construct(Collection $collection, $salaryComponent, $sheetName, $payrollPeriod)
     {
         $this->collection = $collection;
@@ -49,6 +50,7 @@ class EmployeePayrollSheet implements FromView, WithColumnFormatting, WithTitle,
     public function columnFormats(): array
     {   
         $formatNumber = "#,##0";
+        $formatNumberDecimal = "#,##0.00";        
         return [
             'H' => $formatNumber,
             'I' => $formatNumber,
@@ -69,7 +71,7 @@ class EmployeePayrollSheet implements FromView, WithColumnFormatting, WithTitle,
             'X' => $formatNumber,
             'Y' => $formatNumber,
             'Z' => $formatNumber,
-            'AA' => $formatNumber,
+            'AA' => $formatNumberDecimal,
             'AB' => $formatNumber,
             'AC' => $formatNumber,
             'AD' => $formatNumber,

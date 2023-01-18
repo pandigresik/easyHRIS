@@ -1,6 +1,5 @@
 {!! Form::open(['route' => ['hr.overtimes.destroy', $id], 'method' => 'delete']) !!}
-<div class='btn-group'>
-    
+<div class='btn-group'>    
     <a href="{{ route('hr.overtimes.edit', $id) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>

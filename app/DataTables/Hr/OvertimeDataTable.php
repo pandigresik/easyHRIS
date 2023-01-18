@@ -55,7 +55,14 @@ class OvertimeDataTable extends DataTable
         $dataTable->editColumn('calculated_value', function($item){
             return localNumberFormat(minuteToHour($item->calculated_value), 1);
         });
-        return $dataTable->addColumn('action', 'hr.overtimes.datatables_actions');
+
+        return $dataTable->addColumn('action', function($item){
+            if($item->isApprove()){
+                return '';    
+            }
+            return view('hr.overtimes.datatables_actions', $item->toArray());
+        });
+        // return $dataTable->addColumn('action', 'hr.overtimes.datatables_actions');
     }
 
     /**
@@ -118,8 +125,8 @@ class OvertimeDataTable extends DataTable
             ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
                 'dom'       => '<"row" <"col-md-6"B><"col-md-6 text-end"l>>rtip',
-                'stateSave' => true,
-                'order'     => [[0, 'desc']],
+                'stateSave' => false,
+                'order'     => [[2, 'desc'],[1, 'asc'] ],
                 'buttons'   => $buttons,
                  'language' => [
                    'url' => url('vendor/datatables/i18n/en-gb.json'),

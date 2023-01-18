@@ -58,7 +58,8 @@ class RitaseDriverController extends AppBaseController
 
         $ritaseDriver = $this->getRepositoryObj()->create($input);
         if($ritaseDriver instanceof Exception){
-            return redirect()->back()->withInput()->withErrors(['error', $ritaseDriver->getMessage()]);
+            $input['work_date'] = localFormatDate($input['work_date']);
+            return redirect()->back()->withInput($input)->withErrors(['error', $ritaseDriver->getMessage()]);
         }
         
         Flash::success(__('messages.saved', ['model' => __('models/ritaseDrivers.singular')]));
@@ -126,7 +127,9 @@ class RitaseDriverController extends AppBaseController
 
         $ritaseDriver = $this->getRepositoryObj()->update($request->all(), $id);
         if($ritaseDriver instanceof Exception){
-            return redirect()->back()->withInput()->withErrors(['error', $ritaseDriver->getMessage()]);
+            $input = $request->all();
+            $input['work_date'] = localFormatDate($input['work_date']);
+            return redirect()->back()->withInput($input)->withErrors(['error', $ritaseDriver->getMessage()]);
         }
 
         Flash::success(__('messages.updated', ['model' => __('models/ritaseDrivers.singular')]));

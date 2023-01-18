@@ -95,8 +95,8 @@ class RequestWorkshiftDataTable extends DataTable
             ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
                 'dom'       => '<"row" <"col-md-6"B><"col-md-6 text-end"l>>rtip',
-                'stateSave' => true,
-                'order'     => [[0, 'desc']],
+                'stateSave' => false,
+                'order'     => [[3, 'desc'], [1, 'asc']],
                 'buttons'   => $buttons,
                  'language' => [
                    'url' => url('vendor/datatables/i18n/en-gb.json'),
