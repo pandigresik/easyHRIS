@@ -54,6 +54,8 @@ class OvertimeDataTable extends DataTable
         }
         $dataTable->editColumn('calculated_value', function($item){
             return localNumberFormat(minuteToHour($item->calculated_value), 1);
+        })->editColumn('breaktime_value', function($item){
+            return localNumberFormat(minuteToHour($item->breaktime_value), 1);
         });
 
         return $dataTable->addColumn('action', function($item){
@@ -158,7 +160,8 @@ class OvertimeDataTable extends DataTable
             'end_hour' => new Column(['title' => __('models/overtimes.fields.end_hour'),'name' => 'end_hour', 'data' => 'end_hour', 'searchable' => true, 'elmsearch' => 'text']),
             'start_hour_real' => new Column(['title' => __('models/overtimes.fields.start_hour_real'),'name' => 'start_hour_real', 'data' => 'start_hour_real', 'searchable' => true, 'elmsearch' => 'text']),
             'end_hour_real' => new Column(['title' => __('models/overtimes.fields.end_hour_real'),'name' => 'end_hour_real', 'data' => 'end_hour_real', 'searchable' => true, 'elmsearch' => 'text']),
-            'status' => new Column(['title' => __('models/overtimes.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $statusItem, 'multiple' => 'multiple']),
+            'status' => new Column(['title' => __('models/overtimes.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $statusItem, 'multiple' => 'multiple']),            
+            'breaktime_value' => new Column(['title' => __('models/overtimes.fields.breaktime_value').'<br>( Hour ) ','name' => 'calculated_value', 'data' => 'breaktime_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'calculated_value' => new Column(['title' => __('models/overtimes.fields.calculated_value').'<br>( Hour ) ','name' => 'calculated_value', 'data' => 'calculated_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             // 'holiday' => new Column(['title' => __('models/overtimes.fields.holiday'),'name' => 'holiday', 'data' => 'holiday', 'searchable' => false, 'elmsearch' => 'text']),
             // 'overday' => new Column(['title' => __('models/overtimes.fields.overday'),'name' => 'overday', 'data' => 'overday', 'searchable' => false, 'elmsearch' => 'text']),            

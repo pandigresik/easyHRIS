@@ -93,30 +93,30 @@ class CalculateOvertimeTest extends TestCase
 
     public function test_lemburakhir_lengkap()
     {
-        $workshift = new Workshift(['start_hour' => '2022-10-10 08:00:59', 'end_hour' => '2022-10-10 15:59:59', 'work_date' => '2022-10-10']);
+        $workshift = new Workshift(['start_hour' => '2022-10-10 08:00:59', 'end_hour' => '2022-10-10 12:59:59', 'work_date' => '2022-10-10']);
         $workshift->syncOriginal();
         $logFingers = [
             (new AttendanceLogfinger(['fingertime' => '2022-10-10 06:50:00']))->syncOriginal(),
-            (new AttendanceLogfinger(['fingertime' => '2022-10-10 20:10:45']))->syncOriginal()
+            (new AttendanceLogfinger(['fingertime' => '2022-10-10 14:00:45']))->syncOriginal()
         ];
         $overtimes = [
-            (new Overtime(['start_hour' => '16:00:00', 'end_hour' => '19:30:00', 'breaktime_value' => 0, 'overtime_date' => '2022-10-10', 'overday' => 0]))->syncOriginal()
+            (new Overtime(['start_hour' => '13:00:00', 'end_hour' => '14:00:00', 'breaktime_value' => 0, 'overtime_date' => '2022-10-10', 'overday' => 0]))->syncOriginal()
         ];
         
         $expected = [
             'checkin' => '2022-10-10 06:50:00',
-            'checkout' => '2022-10-10 20:10:45',
+            'checkout' => '2022-10-10 14:00:45',
             'overtimes' => [
                 (new Overtime([
-                    'start_hour' => '16:00:00', 
-                    'end_hour' => '19:30:00', 
+                    'start_hour' => '13:00:00', 
+                    'end_hour' => '14:00:00', 
                     'breaktime_value' => 0, 
                     'overtime_date' => '2022-10-10', 
                     'overday' => 0,
-                    'start_hour_real' => '16:00:00',
-                    'end_hour_real' => '20:10:45',
-                    'raw_value' => 250,
-                    'calculated_value' => 210
+                    'start_hour_real' => '13:00:00',
+                    'end_hour_real' => '14:00:45',
+                    'raw_value' => 60,
+                    'calculated_value' => 60
                 ]))->toArray()
             ]
         ];
