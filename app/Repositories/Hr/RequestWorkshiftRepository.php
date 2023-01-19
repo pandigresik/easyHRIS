@@ -93,7 +93,19 @@ class RequestWorkshiftRepository extends BaseRepository
             if(!$newShiftmentId->schedules->isEmpty()){
                 $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];
             }
+            
             $input['start_hour'] = $workDate.' '.$selectedShiftmentHour['start_hour'];
+            $workDateEnd = $workDate;
+            // case awal shift jam 22.00 misalnya
+            if($selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour']){
+                $workDateEnd = Carbon::parse($workDate)->addDay()->format('Y-m-d');
+            }
+            // case shift 3
+            if(substr($selectedShiftmentHour['start_hour'], 0 , 2) == '00'){
+                $workDateEnd = Carbon::parse($workDate)->addDay()->format('Y-m-d');   
+                $input['start_hour'] = $workDateEnd.' '.$selectedShiftmentHour['start_hour'];
+            }
+            
             $input['end_hour'] = $selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour'] ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$selectedShiftmentHour['end_hour'] : $workDate.' '.$selectedShiftmentHour['end_hour'];
             $input['shiftment_id_origin'] = $shiftmentOrigin->shiftment_id;
             $model = $this->model->newInstance($input);//parent::create($input);
@@ -148,7 +160,7 @@ class RequestWorkshiftRepository extends BaseRepository
                 if($shiftmentChange){
                     $shiftmentId = $input['shiftment_id'];
                     $newShiftmentId = Shiftment::with(['schedules' => function($q) use($workDate){
-                        $workDay = Carbon::parse($workDate)->dayOfWeek;                        
+                        $workDay = Carbon::parse($workDate)->dayOfWeek;
                         return $q->where(['work_day' => $workDay]);
                     }])->disableModelCaching()->find($shiftmentId);
                     $selectedShiftmentHour = ['start_hour' => $newShiftmentId->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->getRawOriginal('end_hour')];                    
@@ -164,7 +176,8 @@ class RequestWorkshiftRepository extends BaseRepository
                     }
 
                     if(substr($selectedShiftmentHour['start_hour'], 0 , 2) == '00'){
-                        $workDateEnd = Carbon::parse($workDate)->addDay()->format('Y-m-d');
+                        $workDateEnd = Carbon::parse($workDate)->addDay()->format('Y-m-d');   
+                        $input['start_hour'] = $workDateEnd.' '.$selectedShiftmentHour['start_hour'];
                     }
 
                     $input['end_hour'] =  $workDateEnd.' '.$selectedShiftmentHour['end_hour'];
