@@ -63,6 +63,7 @@ class OvertimeApproveDataTable extends DataTable
             $employeeId = $employee->id;            
         }
         return $model->selectRaw($model->getTable().'.*')
+            ->disableModelCaching()
             ->needApproval($employeeId, $this->getCreatedRequest())
             ->with(['employee'])->newQuery();        
     }

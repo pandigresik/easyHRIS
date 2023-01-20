@@ -67,6 +67,7 @@ class RequestWorkshiftApproveDataTable extends DataTable
             ->with(['employee', 'shiftment', 'logApprovals' => function($q){
                 $q->with(['updatedBy']);
             }])
+            ->disableModelCaching()
             ->needApproval($employeeId, $this->getCreatedRequest())
             ->newQuery();
     }

@@ -62,6 +62,7 @@ class LeafApproveDataTable extends DataTable
             $employeeId = $employee->id;            
         }
         return $model->selectRaw($model->getTable().'.*')
+            ->disableModelCaching()
             ->needApproval($employeeId, $this->getCreatedRequest())
             ->with(['employee', 'reason'])->newQuery();        
     }
