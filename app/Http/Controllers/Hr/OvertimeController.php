@@ -9,6 +9,7 @@ use App\Http\Requests\Hr\UpdateOvertimeRequest;
 use App\Repositories\Hr\OvertimeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Carbon\Carbon;
 use Response;
 use Exception;
 
@@ -40,7 +41,8 @@ class OvertimeController extends AppBaseController
      */
     public function create()
     {
-        return view('hr.overtimes.create')->with($this->getOptionItems());
+        $minDate = localFormatDate(Carbon::now()->subDays(14)->format('Y-m-d'));
+        return view('hr.overtimes.create')->with($this->getOptionItems())->with('minDate', $minDate);
     }
 
     /**

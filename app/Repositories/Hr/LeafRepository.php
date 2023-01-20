@@ -221,6 +221,18 @@ class LeafRepository extends BaseRepository
         }        
     }
 
+    public function delete($id)
+    {
+        try{
+            $query = $this->model->newQuery();
+            $model = $query->findOrFail($id);
+            $this->generateJob($model);
+            return $model->delete();
+        } catch (\Exception $e) {
+            return $e;
+        }
+    }
+
     private function generateJob($item){
         // execute job attendance process after 30 seconds                
         if($item->getRawOriginal('status') == $item->getFinalState()){       

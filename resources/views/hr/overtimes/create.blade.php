@@ -22,7 +22,7 @@
                             </div>
                             <div class="card-body">                                
 
-                                   @include('hr.overtimes.fields')
+                                   @include('hr.overtimes.fields', ['minDate' => $minDate])
                                 
                             </div>
                             <div class="card-footer">

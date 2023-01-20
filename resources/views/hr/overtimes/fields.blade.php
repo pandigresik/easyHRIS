@@ -28,8 +28,8 @@
     col-form-label']) !!}
     <div class="col-md-9">
         {!! Form::text('overtime_date', null, ['class' => 'form-control datetime', 'required' => 'required'
-        ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript')
-        ]]),'id'=>'overtime_date']) !!}
+        , 'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript')
+    ], 'minDate' => $minDate ?? 0]),'id'=>'overtime_date']) !!}
     </div>
 </div>
 

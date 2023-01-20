@@ -59,8 +59,8 @@ class OvertimeDataTable extends DataTable
         });
 
         return $dataTable->addColumn('action', function($item){
-            if($item->isApprove()){
-                return '';    
+            if($item->isApprove() && ! \Auth::user()->can('user-hr') ){
+                return '';
             }
             return view('hr.overtimes.datatables_actions', $item->toArray());
         });

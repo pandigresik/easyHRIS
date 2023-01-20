@@ -168,6 +168,7 @@ class AttendanceRepository extends BaseRepository
                 'late_out' => 0, 
                 'check_in' => NULL,
                 'check_out' => NULL,
+                'deleted_at' => NULL,
                 'state' => $schedule->isOffShift() ? 'OK' : 'INVALID',
                 'created_by' => \Auth::id()
             ];

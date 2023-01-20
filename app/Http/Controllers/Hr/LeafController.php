@@ -10,6 +10,8 @@ use App\Repositories\Hr\LeafRepository;
 use App\Repositories\Hr\AbsentReasonRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Base\Setting;
+use App\Models\Hr\AbsentReason;
 use Response;
 use Exception;
 
@@ -174,11 +176,17 @@ class LeafController extends AppBaseController
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        $absentReason = new AbsentReasonRepository();
+    private function getOptionItems(){                
+        if(!\Auth::user()->can('user-hr')){
+            $setting = Setting::where(['type' => 'leave'])->get()->keyBy('name');
+            $allowLeaveCode = $setting['self_leave_code']->value;
+            $absentReason = AbsentReason::whereIn('code', explode(',',$allowLeaveCode))->pluck('name', 'id')->toArray();
+        }else{
+            $absentReason = AbsentReason::pluck('name', 'id')->toArray();
+        }
         
         return [
-            'reasonItems' => ['' => __('crud.option.absentReason_placeholder')] + $absentReason->pluck(),
+            'reasonItems' => ['' => __('crud.option.absentReason_placeholder')] + $absentReason,
             'employeeItems' => []
         ];
     }
