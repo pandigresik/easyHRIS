@@ -13,7 +13,7 @@ class RequestWorkshiftDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'work_date' => \App\DataTables\FilterClass\BetweenKeyword::class   
     ];
     
     private $mapColumnSearch = [
@@ -119,7 +119,7 @@ class RequestWorkshiftDataTable extends DataTable
             'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
             'shiftment_id' => new Column(['title' => __('models/requestWorkshifts.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'elmsearch' => 'text']),
             // 'shiftment_id_origin' => new Column(['title' => __('models/requestWorkshifts.fields.shiftment_id_origin'),'name' => 'shiftment_id_origin', 'data' => 'shiftment_id_origin', 'searchable' => true, 'elmsearch' => 'text']),
-            'work_date' => new Column(['title' => __('models/requestWorkshifts.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'text']),
+            'work_date' => new Column(['title' => __('models/requestWorkshifts.fields.work_date'),'name' => 'work_date', 'data' => 'work_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'start_hour' => new Column(['title' => __('models/workshifts.fields.start_hour'),'name' => 'start_hour', 'data' => 'start_hour', 'searchable' => false]),
             'end_hour' => new Column(['title' => __('models/workshifts.fields.end_hour'),'name' => 'end_hour', 'data' => 'end_hour', 'searchable' => false]),
             'status' => new Column(['title' => __('models/requestWorkshifts.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => true, 'elmsearch' => 'false']),
