@@ -165,8 +165,8 @@
             <td>{{ round(minuteToHour($lateEarly),2) }}</td>
             <td>{{ round($dailySalary/7, 2) }}</td>
             <td>{{ round($dailySalary/7 * minuteToHour($lateEarly),2) }}</td>
-            <td>{{ $absent }}</td>            
-            <td>{{ $potonganKehadiranComponent ? $potonganKehadiranComponent->getRawOriginal('benefit_value') : 0 }}</td>
+            <td>{{ $absent }}</td>
+            <td>{{ $absent * $dailySalary }}</td>            
             <td>{{ $potonganBpjsKesehatanComponent ? ($potonganBpjsKesehatanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
             <td>{{ $potonganBpjsJhtComponent ? ($potonganBpjsJhtComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
             <td>{{ $potonganBpjsTambahanComponent ? ($potonganBpjsTambahanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>

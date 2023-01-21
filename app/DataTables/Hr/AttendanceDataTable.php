@@ -5,6 +5,7 @@ namespace App\DataTables\Hr;
 use App\Models\Hr\Attendance;
 use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Hr\AbsentReason;
+use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -18,7 +19,8 @@ class AttendanceDataTable extends DataTable
         'state' => \App\DataTables\FilterClass\InKeyword::class,
         'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'employee.code' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
-        'attendance_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'employee.payroll_period_group_id' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
+        'attendance_date' => \App\DataTables\FilterClass\BetweenKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -41,6 +43,7 @@ class AttendanceDataTable extends DataTable
             }
         }
         $dataTable->editColumn('check_out_schedule', function($item){
+            \Log::error($item->employee);
             return localFormatDateTime($item->check_out_schedule);
         })->editColumn('check_in_schedule', function($item){
             return localFormatDateTime($item->check_in_schedule);
@@ -57,7 +60,12 @@ class AttendanceDataTable extends DataTable
     public function query(Attendance $model)
     {
         return $model->employeeDescendants()->selectRaw($model->getTable().'.*, attendance_date as raw_attendance_date')->with(['employee' => function($q){
-            $q->with(['jobtitle']);
+            
+            if(\Auth::user()->can('user-hr')){
+                $q->with(['jobtitle', 'payrollPeriodGroup']);
+            }else{
+                $q->with(['jobtitle']);
+            }
         }, 'shiftment','reason'])->newQuery();
     }
 
@@ -125,11 +133,11 @@ class AttendanceDataTable extends DataTable
     protected function getColumns()
     {
         $stateItem = convertArrayPairValueWithKey(Attendance::STATE + AbsentReason::pluck('code', 'code')->toArray());
-        return [
+        $columnDefault = [
             'attendance_date' => new Column(['title' => __('models/attendances.fields.attendance_date'),'name' => 'attendance_date', 'data' => 'attendance_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
-            'employee_jobtitle' => new Column(['title' => __('models/attendances.fields.employee_jobtitle'),'name' => 'employee.jobtitle.name', 'data' => 'employee.jobtitle.name', 'defaultContent' => '-', 'searchable' => false, 'elmsearch' => 'text']),
+            'employee_jobtitle' => new Column(['title' => __('models/attendances.fields.employee_jobtitle'),'name' => 'employee.jobtitle.name', 'data' => 'employee.jobtitle.name', 'defaultContent' => '-', 'searchable' => false, 'elmsearch' => 'text']),            
             'shiftment_id' => new Column(['title' => __('models/attendances.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'elmsearch' => 'text']),
             'reason_id' => new Column(['title' => __('models/attendances.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),            
             //'description' => new Column(['title' => __('models/attendances.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
@@ -144,6 +152,12 @@ class AttendanceDataTable extends DataTable
             // 'absent' => new Column(['title' => __('models/attendances.fields.absent'),'name' => 'absent', 'data' => 'absent', 'searchable' => true, 'elmsearch' => 'text']),
             'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple'])
         ];
+        if(\Auth::user()->can('user-hr')){                         
+            $payrollGroupRepository = new PayrollPeriodGroupRepository();            
+            $payrollGroupItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupRepository->pluck()));
+            $columnDefault['employee.payroll_period_group_id'] = new Column(['title' => __('models/attendances.fields.employee_payroll'),'name' => 'employee.payroll_period_group_id', 'data' => 'employee.payroll_period_group.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupItem]);
+        }
+        return $columnDefault;
     }
 
     /**

@@ -113,7 +113,7 @@ class AttendanceRepository extends BaseRepository
             $processResult = $this->processEmployeeAttendance($log, $workshift, $overtime, $leave);
             if(!empty($processResult['attendance'])){
                 Attendance::upsert($processResult['attendance'], ['employee_id', 'attendance_date']);
-            }            
+            }
             
             if(!empty($processResult['overtime'])){
                 foreach($processResult['overtime'] as $ot){                    
