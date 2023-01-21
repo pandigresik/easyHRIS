@@ -180,7 +180,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         $amountLateMinute = $this->getAbsentLateEmployee($employee->id)->sum(function($item){
             return $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out');
         });
-        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->where('state','ABSENT')->count();
+        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->whereIn('state',['ABSENT','OFF'])->count();
         $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
         $payroll->additional_info = [
             'workday' => $workDayCount,

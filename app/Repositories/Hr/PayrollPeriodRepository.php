@@ -107,7 +107,7 @@ class PayrollPeriodRepository extends BaseRepository
                 $amountMinute = $this->getAbsentLateEmployee($employeeId)->sum(function($item){
                     return $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out');
                 });
-                $amountDay = $this->getAbsentLateEmployee($employeeId)->where('state','ABSENT')->count();
+                $amountDay = $this->getAbsentLateEmployee($employeeId)->whereIn('state',['ABSENT', 'OFF'])->count();
                 $componentObj = new PotonganKehadiran(minuteToHour($amountMinute), $amountDay, $value);
                 break;
             case 'PRHD':
