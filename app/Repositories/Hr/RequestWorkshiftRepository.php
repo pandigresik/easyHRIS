@@ -106,7 +106,8 @@ class RequestWorkshiftRepository extends BaseRepository
                 $input['start_hour'] = $workDateEnd.' '.$selectedShiftmentHour['start_hour'];
             }
             
-            $input['end_hour'] = $selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour'] ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$selectedShiftmentHour['end_hour'] : $workDate.' '.$selectedShiftmentHour['end_hour'];
+            // $input['end_hour'] = $selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour'] ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$selectedShiftmentHour['end_hour'] : $workDate.' '.$selectedShiftmentHour['end_hour'];
+            $input['end_hour'] =  $workDateEnd.' '.$selectedShiftmentHour['end_hour'];
             $input['shiftment_id_origin'] = $shiftmentOrigin->shiftment_id;
             $model = $this->model->newInstance($input);//parent::create($input);
             $approvalUsers = \Auth::user()->getApprovalUsers();
