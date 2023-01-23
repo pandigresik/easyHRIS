@@ -79,3 +79,8 @@ Route::group(['prefix' => 'hr'], function () {
     Route::resource('grouping_payroll_entities', Hr\GroupingPayrollEntityAPIController::class);
     Route::resource('grouping_payroll_employee_reports', Hr\GroupingPayrollEmployeeReportAPIController::class);
 });
+
+Route::group(['prefix' => 'utility'], function () {
+    Route::resource('jobs', Utility\JobAPIController::class);
+    Route::resource('failed_jobs', Utility\FailedJobAPIController::class);
+});

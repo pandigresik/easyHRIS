@@ -152,6 +152,9 @@
 
 @push('scripts')
     <script type="text/javascript">
+    $(function(){
+        updateInfoOvertime($('#breaktime_value'))
+    })
     function updateInfoOvertime(elm){
         let _date = main.getValueDateSQL($('#overtime_date'))
         let _startHour = $('#start_hour').val()

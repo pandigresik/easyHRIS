@@ -109,11 +109,11 @@ class OvertimeRepository extends BaseRepository
     public function update($input, $id)
     {
         $this->model->getConnection()->beginTransaction();
-        try{
-            // pastikan tidak ada yang kembar data overtimenya
-            $this->isOvertimeExist($input);
+        try{            
             $query = $this->model->newQuery();
             $model = $query->findOrFail($id);
+            // pastikan tidak ada yang kembar data overtimenya
+            $this->isOvertimeExist($input, $model);
             $model->fill($input);
             $salaryBenefit = SalaryBenefit::where(['employee_id' => $model->employee_id])->where('component_id', function($q){
                 return $q->select(['id'])->from('salary_components')->where(['code' => 'OT']);
@@ -131,9 +131,19 @@ class OvertimeRepository extends BaseRepository
         }
     }
 
-    private function isOvertimeExist($overtime){
+    private function isOvertimeExist($overtime, $model = NULL){
         $first = Overtime::where(['employee_id' => $overtime['employee_id'], 'start_hour' => $overtime['start_hour'], 'overtime_date' => $overtime['overtime_date']])->first();
         if($first){
+            if($model){                
+                if($model->id == $first->id){                    
+                    // allow update data except overtime_date and start_hour 
+                    if($model->getRawOriginal('overtime_date') == $first->getRawOriginal('overtime_date')){
+                        if($model->getRawOriginal('start_hour') == $first->getRawOriginal('start_hour')){
+                            return;
+                        }
+                    }
+                }                
+            }         
             $employee = Employee::find($overtime['employee_id']);
             throw new Exception("Data overtime karyawan ".$employee->code_name. " tanggal ".$first->overtime_date." jam ".$first->start_hour." sudah ada");
         }

@@ -49,6 +49,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('approvals', Base\ApprovalController::class, ["as" => 'base']);
     });
 
+    Route::group(['middleware' => ['can:user-administrator'],'prefix' => 'utility'], function () {
+        Route::resource('jobs', Utility\JobController::class, ["as" => 'utility'])->only(['index']);
+        Route::resource('failedJobs', Utility\FailedJobController::class, ["as" => 'utility']);
+    });
+
     Route::group(['prefix' => 'accounting'], function () {
         Route::resource('taxes', Accounting\TaxController::class, ["as" => 'accounting', 'middleware' => ['easyauth']]);
         Route::resource('taxGroupHistories', Accounting\TaxGroupHistoryController::class, ["as" => 'accounting', 'middleware' => ['easyauth']]);
