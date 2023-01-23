@@ -231,3 +231,10 @@ if (!function_exists('getDateString')) {
     }
 }
 
+if (!function_exists('getTimeString')) {
+    function getTimeString($date)
+    {
+        return explode(' ',$date)[1];
+    }
+}
+

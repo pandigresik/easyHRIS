@@ -60,7 +60,7 @@ class OvertimeDay{
                     if($endOvertime < $endWorkshift){
                         $ot->start_hour_real = Carbon::parse($checkInReal)->format('H:i:s');
                         $ot->end_hour_real = $ot->getRawOriginal('end_hour');
-                        $pembandingAwal = $checkInReal > $startOvertime ? $checkInReal : $startOvertime;                        
+                        $pembandingAwal = $checkInReal > $startOvertime ? $checkInReal : $startOvertime;
                         $calculateValue = Carbon::parse($pembandingAwal)->diffInMinutes($endOvertime);
                         $rawValue = $checkInRealObj->diffInMinutes($endOvertime);                        
                         $ot->raw_value = $rawValue;
@@ -90,6 +90,13 @@ class OvertimeDay{
                 if($endOvertime >= $endWorkshift){
                     $ot->start_hour_real = $ot->getRawOriginal('start_hour');
                     $ot->end_hour_real = $checkOutRealObj->format('H:i:s');
+                    // case hari libur
+                    if($this->workshift->isOffShift()){
+                        $pembandingAwal = $checkInReal > $startOvertime ? $checkInReal : $startOvertime;
+                        $ot->start_hour_real = getTimeString($pembandingAwal);
+                        $startOvertime = $pembandingAwal;
+                    }
+
                     $rawValue = Carbon::parse($startOvertime)->diffInMinutes($checkOutRealObj);
                     $calculateValue = $rawValue;
                     if($checkOutRealObj->greaterThanOrEqualTo($endOvertime)){
@@ -97,7 +104,7 @@ class OvertimeDay{
                     }                                        
                     
                     $ot->raw_value = $rawValue;
-                    $finalCalculateValue = $calculateValue - $breakTime;                    
+                    $finalCalculateValue = $calculateValue - $breakTime;
                 }
             }
             

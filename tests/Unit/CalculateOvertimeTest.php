@@ -348,4 +348,41 @@ class CalculateOvertimeTest extends TestCase
         })->toArray();
         $this->assertEquals($expected, $result);
     }
+
+    public function test_lembur_harilibur()
+    {
+        $workshift = new Workshift(['start_hour' => '2022-10-10 00:00:00', 'end_hour' => '2022-10-10 00:00:00', 'work_date' => '2022-10-10']);
+        $workshift->syncOriginal();
+        $logFingers = [
+            (new AttendanceLogfinger(['fingertime' => '2022-10-10 08:15:00']))->syncOriginal(),
+            (new AttendanceLogfinger(['fingertime' => '2022-10-10 15:45:00']))->syncOriginal(),            
+        ];
+        $overtimes = [
+            (new Overtime(['start_hour' => '08:00:00', 'end_hour' => '16:00:00', 'breaktime_value' => 60, 'overtime_date' => '2022-10-10', 'overday' => 0]))->syncOriginal()
+        ];
+        
+        $expected = [
+            'checkin' => '2022-10-10 08:15:00',
+            'checkout' => '2022-10-10 15:45:00',
+            'overtimes' => [
+                (new Overtime([
+                    'start_hour' => '08:00:00', 
+                    'end_hour' => '16:00:00', 
+                    'breaktime_value' => 60, 
+                    'overtime_date' => '2022-10-10', 
+                    'overday' => 0,
+                    'start_hour_real' => '08:15:00',
+                    'end_hour_real' => '15:45:00',
+                    'raw_value' => 450,
+                    'calculated_value' => 390 
+                ]))->toArray()
+            ]
+        ];
+        $overday = new OvertimeDay($workshift, $logFingers, $overtimes, $this->constraint);
+        $result = $overday->getResult();
+        $result['overtimes'] = collect($result['overtimes'])->map(function($item){
+            return $item->toArray();
+        })->toArray();
+        $this->assertEquals($expected, $result);
+    }
 }

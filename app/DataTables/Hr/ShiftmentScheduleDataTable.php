@@ -10,6 +10,7 @@ use Yajra\DataTables\Html\Column;
 
 class ShiftmentScheduleDataTable extends DataTable
 {
+    protected $fastExcel = false;
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
