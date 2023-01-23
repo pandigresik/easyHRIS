@@ -47,4 +47,5 @@ return [
     'job_level_leader' => ['MGR','SPV', 'FRM'],
     // annual leave code
     'annual_leave_code' => 'CT',    
+    'absent_code_not_pay' => ['ABSENT', 'OFF', 'ABS']
 ];
