@@ -41,7 +41,7 @@ class OvertimeController extends AppBaseController
      */
     public function create()
     {
-        $minDate = localFormatDate(Carbon::now()->subDays(14)->format('Y-m-d'));
+        $minDate = localFormatDate(Carbon::now()->subDays(30)->format('Y-m-d'));
         return view('hr.overtimes.create')->with($this->getOptionItems())->with('minDate', $minDate);
     }
 
