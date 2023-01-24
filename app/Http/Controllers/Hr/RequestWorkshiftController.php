@@ -57,8 +57,8 @@ class RequestWorkshiftController extends AppBaseController
 
         $requestWorkshift = $this->getRepositoryObj()->create($input);
         if($requestWorkshift instanceof Exception){
-            $workDate = explode(' - ',$input['work_date']);            
-            $input['work_date'] = localFormatDate($workDate[0]).' - '.localFormatDate($workDate[1]);            
+            $workDate = explode('__',$input['work_date']);
+            $input['work_date'] = localFormatDate($workDate[0]).' - '.localFormatDate($workDate[1]);
             return redirect()->back()->withInput($input)->withErrors(['error', $requestWorkshift->getMessage()]);
         }
         

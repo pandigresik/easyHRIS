@@ -22,7 +22,7 @@ class WorkshiftGroupRepository extends BaseRepository
      * @var array
      */
     private $shiftmentMovement = Carbon::MONDAY;
-    private $shiftmentOff = 2; // index shift libur    
+    private $shiftmentOff; // index shift libur    
     protected $fieldSearchable = [
         'shiftment_group_id',
         'shiftment_id',
@@ -51,6 +51,7 @@ class WorkshiftGroupRepository extends BaseRepository
      * 'endDate' => $period['endDate'],
      * 'shiftmentGroup' => $shiftmentGroup */
     public function generateSingleWorkshift($data){
+        $this->shiftmentOff = config('local.default_shiftment_off_id');
         $startDate = $data['startDate'];
         $endDate = $data['endDate'];
         /** cari urutan shift untuk grup tersebut */

@@ -39,6 +39,7 @@ return [
     'reason_code_not_absent' => ['OFF', 'LK', 'DL'],
     // id untuk shiftment yang libur
     'shiftment_off' => [2],
+    'default_shiftment_off_id' => 2,
     // untuk perhitungan premi
     'leave_code' => ['PC', 'DT'],
     // untuk tunjangan yang diberikan di akhir bulan saja

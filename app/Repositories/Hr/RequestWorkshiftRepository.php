@@ -93,7 +93,7 @@ class RequestWorkshiftRepository extends BaseRepository
             if(!$newShiftmentId->schedules->isEmpty()){
                 $selectedShiftmentHour = ['start_hour' => $newShiftmentId->schedules->first()->getRawOriginal('start_hour'), 'end_hour' => $newShiftmentId->schedules->first()->getRawOriginal('end_hour')];
             }
-            
+                        
             $input['start_hour'] = $workDate.' '.$selectedShiftmentHour['start_hour'];
             $workDateEnd = $workDate;
             // case awal shift jam 22.00 misalnya
@@ -106,7 +106,11 @@ class RequestWorkshiftRepository extends BaseRepository
                 $input['start_hour'] = $workDateEnd.' '.$selectedShiftmentHour['start_hour'];
             }
             
-            // $input['end_hour'] = $selectedShiftmentHour['start_hour'] > $selectedShiftmentHour['end_hour'] ? Carbon::parse($workDate)->addDay()->format('Y-m-d').' '.$selectedShiftmentHour['end_hour'] : $workDate.' '.$selectedShiftmentHour['end_hour'];
+            // jika start_hour = end_hour maka set sebagai hari libur
+            if($selectedShiftmentHour['start_hour'] == $selectedShiftmentHour['end_hour']){
+                $input['shiftment_id'] = config('local.default_shiftment_off_id');
+            }
+            
             $input['end_hour'] =  $workDateEnd.' '.$selectedShiftmentHour['end_hour'];
             $input['shiftment_id_origin'] = $shiftmentOrigin->shiftment_id;
             $model = $this->model->newInstance($input);//parent::create($input);
