@@ -48,6 +48,7 @@ class FailedJob extends Model
 {
     use HasFactory;        
 
+    protected $isCachable = false;
     public $table = 'failed_jobs';
     
     const CREATED_AT = 'created_at';

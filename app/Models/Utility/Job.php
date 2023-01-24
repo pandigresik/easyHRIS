@@ -48,6 +48,7 @@ class Job extends Model
 {
     use HasFactory;        
 
+    protected $isCachable = false;
     public $table = 'jobs';
     
     const CREATED_AT = 'created_at';
