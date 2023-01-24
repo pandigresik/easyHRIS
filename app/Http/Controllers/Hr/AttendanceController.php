@@ -13,6 +13,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\Hr\ShiftmentGroupRepository;
 use Response;
 use Exception;
+use Illuminate\Http\Request;
 
 class AttendanceController extends AppBaseController
 {
@@ -132,6 +133,24 @@ class AttendanceController extends AppBaseController
         Flash::success(__('messages.updated', ['model' => __('models/attendances.singular')]));
 
         return redirect(route('hr.attendances.index'));
+    }
+
+    /**
+     * Update the specified Attendance in storage.
+     *
+     * @param  int              $id
+     * @param UpdateAttendanceRequest $request
+     *
+     * @return Response
+     */
+    public function updateDescription($id, Request $request)
+    {
+        $attendance = $this->getRepositoryObj()->update(['description' => $request->get('description')], $id);
+        if($attendance instanceof Exception){
+            return $this->sendError('description updated failed '.$attendance->getMessage());
+        }        
+
+        return $this->sendSuccess('description updated success');
     }
 
     /**

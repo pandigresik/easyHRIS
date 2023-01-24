@@ -42,12 +42,13 @@ class AttendanceDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        $dataTable->editColumn('check_out_schedule', function($item){
-            \Log::error($item->employee);
+        $dataTable->editColumn('check_out_schedule', function($item){            
             return localFormatDateTime($item->check_out_schedule);
         })->editColumn('check_in_schedule', function($item){
             return localFormatDateTime($item->check_in_schedule);
-        });
+        })->editColumn('state', function($item){
+            return '<div>'.$item->state.'</div><div class="note">'.$item->description.'</div>  <i class="fa fa-pencil" data-url="'.route('attendances.updateDescription', $item->id).'" onclick="updateDescription(this)" ></i>';
+        })->escapeColumns([]);
         return $dataTable->addColumn('action', 'hr.attendances.datatables_actions');
     }
 

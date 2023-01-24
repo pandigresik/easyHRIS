@@ -80,7 +80,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('downloadLogFingers/download/{fingerprintDeviceId}', [App\Http\Controllers\Hr\DownloadLogfingerController::class, 'download']);
         Route::resource('attendanceSummaries', Hr\AttendanceSummaryController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('attendances', Hr\AttendanceController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
-        
+        Route::post('attendances/updateDescription/{id}', [App\Http\Controllers\Hr\AttendanceController::class, 'updateDescription'])->name('attendances.updateDescription');
+
         Route::resource('careerHistories', Hr\CareerHistoryController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('employeeShiftments', Hr\EmployeeShiftmentController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('fingerprintDevices', Hr\FingerprintDeviceController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
