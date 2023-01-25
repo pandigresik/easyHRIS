@@ -227,10 +227,10 @@ class OvertimeRepository extends BaseRepository
 
     private function generateJob($item){
         // execute job attendance process after 30 seconds                
-        if($item->getRawOriginal('status') == $item->getFinalState()){
+        // if($item->getRawOriginal('status') == $item->getFinalState()){
             if($item->getRawOriginal('overtime_date') < Carbon::now()->format('Y-m-d')){
                 AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('overtime_date'), $item->getRawOriginal('overtime_date'))->delay(now()->addSeconds(30));
             }                    
-        }
+        // }
     }
 }
