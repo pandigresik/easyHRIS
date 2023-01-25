@@ -97,7 +97,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
         }
         
         $this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
-        $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
+        $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->approve()->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         $this->setAbsentLateEmployee(Attendance::absentLeaveLate()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         
         foreach($employees as $employee){

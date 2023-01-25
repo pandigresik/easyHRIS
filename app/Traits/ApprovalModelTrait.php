@@ -190,6 +190,10 @@ trait ApprovalModelTrait
         return $query->whereStatus($this->finalState);
     }
 
+    public function scopeNotReject($query){
+        return $query->where('status','!=', $this->rejectState);
+    }
+
     public function isApprove(){
         return $this->getRawOriginal('status') == $this->finalState;
     }
