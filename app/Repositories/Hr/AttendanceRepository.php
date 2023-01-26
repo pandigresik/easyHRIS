@@ -272,13 +272,13 @@ class AttendanceRepository extends BaseRepository
                 return $q->select(['id'])->from('employees')->whereRaw('shiftment_group_id in ('. $shiftmentGroupString.')');     
             });
         }
-        return $att->get()->groupBy('employee_id');
+        return $att->disableModelCaching()->get()->groupBy('employee_id');
     }
 
     private function listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId){
         $att = Overtime::select(['overtime_date', 'id', 'breaktime_value', 'employee_id','start_hour', 'end_hour', 'overday','start_hour_real', 'end_hour_real', 'raw_value', 'calculated_value'])
             ->with(['benefit'])
-            ->notReject()
+            ->notReject()            
             ->whereBetween('overtime_date',[$startDate,$endDate]);        
         if(!empty($employeeId)){    
             $att->whereIn('employee_id', $employeeId);         
@@ -290,7 +290,7 @@ class AttendanceRepository extends BaseRepository
                 return $q->select(['id'])->from('employees')->whereRaw('shiftment_group_id in ('. $shiftmentGroupString.')');
             });
         }
-        return $att->get()->groupBy('employee_id');
+        return $att->disableModelCaching()->get()->groupBy('employee_id');
     }
 
     private function listLeaves($startDate, $endDate, $shiftmentGroup, $employeeId){

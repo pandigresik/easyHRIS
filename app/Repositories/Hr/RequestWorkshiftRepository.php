@@ -263,7 +263,7 @@ class RequestWorkshiftRepository extends BaseRepository
                 if($item->getRawOriginal('status') == $item->getFinalState()){
                     $this->updateWorkshift($item);
                     // execute job attendance process after 30 seconds
-                    $this->generateJob($item);
+                    $this->generateJob($item, 30);
                 }
             }
             $this->model->getConnection()->commit();
@@ -293,11 +293,11 @@ class RequestWorkshiftRepository extends BaseRepository
         return $this;
     }    
 
-    private function generateJob($item){
+    private function generateJob($item, $delay = 2){
         // execute job attendance process after 30 seconds                
         if($item->getRawOriginal('status') == $item->getFinalState()){
             if($item->getRawOriginal('work_date') < Carbon::now()->format('Y-m-d')){
-                AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('work_date'), $item->getRawOriginal('work_date'))->delay(now()->addSeconds(30));
+                AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('work_date'), $item->getRawOriginal('work_date'))->delay(now()->addSeconds($delay));
             }
         }        
     }
