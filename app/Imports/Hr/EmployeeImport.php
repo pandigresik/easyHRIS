@@ -41,7 +41,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $this->jobTitle = JobTitle::select(['id', 'name'])->get()->keyBy('name');  
         $this->salaryGroup = SalaryGroup::select(['id', 'name'])->with('salaryGroupDetails')->get()->keyBy('name');
         $this->shiftmentGroup = ShiftmentGroup::select(['id', 'name'])->get()->keyBy('name');
-        $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ','TUMLM', 'UM', 'PRHD'])->get()->keyBy('code');
+        $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ','TUMLM', 'UM', 'PRHD', 'PTHD'])->get()->keyBy('code');
         $this->businessUnit = BusinessUnit::select(['id', 'name'])->get()->keyBy('name');
         $this->company = Company::select(['id', 'name'])->get()->keyBy('name');
         $this->payrollGroup = PayrollPeriodGroup::get()->keyBy('name');
