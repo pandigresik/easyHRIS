@@ -54,7 +54,8 @@ class DownloadLogfingerController extends AppBaseController
         $userIdTelegram = Setting::where(['type' => 'notification', 'name' => 'id_telegram'])->first();
         if($userIdTelegram){
             if(!empty($userIdTelegram->value)){
-                Notification::send(\Auth::user(), new AlertNotification(new AlertMessage($messageJob, $userIdTelegram->value)));
+                Notification::route('telegram', 'easyhhris - LJP')->notify(new AlertNotification(new AlertMessage($messageJob, $userIdTelegram->value)));
+                // Notification::send(\Auth::user(), new AlertNotification(new AlertMessage($messageJob, $userIdTelegram->value)));
             }            
         }
     }
