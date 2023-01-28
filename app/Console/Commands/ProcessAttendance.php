@@ -3,6 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\AlertMessage;
+use App\Models\Base\Setting;
+use App\Notifications\AlertNotification;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
+
 
 class ProcessAttendance extends Command
 {
@@ -48,5 +54,13 @@ class ProcessAttendance extends Command
             $params['employee_id'] = explode(',',$employeeId);
         }
         app()->call([$repo, 'create'], ['input' => $params]);
+
+        $messageJob = '*EasyHRIS - LJP* '.PHP_EOL.'Attendance *'.$period.'* processed success'.PHP_EOL. Carbon::now()->format('j M Y H:i:s') ;
+        $userIdTelegram = Setting::where(['type' => 'notification', 'name' => 'id_telegram'])->first();
+        if($userIdTelegram){
+            if(!empty($userIdTelegram->value)){
+                Notification::send(\Auth::user(), new AlertNotification(new AlertMessage($messageJob, $userIdTelegram->value)));
+            }            
+        }
     }
 }

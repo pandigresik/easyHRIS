@@ -47,6 +47,6 @@ class ProcessAttendanceDaily extends Command
         $this->call('attendance:process', [
             'period' => implode('__',[$date, $date]),
             'shiftmentGroup' => $hiftment
-        ]);
+        ]);                
     }
 }

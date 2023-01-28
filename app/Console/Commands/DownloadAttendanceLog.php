@@ -42,6 +42,6 @@ class DownloadAttendanceLog extends Command
         Auth::loginUsingId(1);
         $deviceId = $this->argument('deviceId');
         $controller = app()->make('App\Http\Controllers\Hr\DownloadLogfingerController');
-        app()->call([$controller, 'download'], ['fingerprintDeviceId' => $deviceId]);
+        app()->call([$controller, 'download'], ['fingerprintDeviceId' => $deviceId]);                
     }
 }

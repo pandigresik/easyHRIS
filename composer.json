@@ -29,6 +29,7 @@
         "kalnoy/nestedset": "^6.0",
         "korridor/laravel-has-many-sync": "^1.2",
         "kronthto/laravel-oauth2-login": "^1.12",
+        "laravel-notification-channels/telegram": "*",
         "laravel/framework": "^8",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.0",
