@@ -25,10 +25,10 @@ class WebhookIclockController extends Controller
             foreach($employee as $emp){
                 $logs = $collect->get($emp->code);
                 $raw = [];
-                foreach($logs as $log){
+                foreach($logs as $log){                    
                     $raw[] = [
                         'employee_id' => $emp->id, 
-                        'fingertime' => $log[1],
+                        'fingertime' => $log[1].' '.$log[2],
                         'fingerprint_device_id' => $deviceId
                     ];
                 }
