@@ -50,7 +50,7 @@ class DownloadLogfingerController extends AppBaseController
             (new AttendanceLogfinger())->flushCache();
         }
 
-        $messageJob = '*EasyHRIS - LJP* '.PHP_EOL.'Download AttendanceLog processed success'.PHP_EOL.$this->downloadMessage.PHP_EOL. Carbon::now()->format('j M Y H:i:s') ;
+        $messageJob = '*EasyHRIS - LJP* '.PHP_EOL.'Download Log *'.$fingerprintDevice->display_name.'*'.PHP_EOL.$this->downloadMessage.PHP_EOL. Carbon::now()->format('j M Y H:i:s') ;
         $userIdTelegram = Setting::where(['type' => 'notification', 'name' => 'id_telegram'])->first();
         if($userIdTelegram){
             if(!empty($userIdTelegram->value)){
