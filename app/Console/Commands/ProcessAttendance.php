@@ -54,14 +54,17 @@ class ProcessAttendance extends Command
             $params['employee_id'] = explode(',',$employeeId);
         }
         app()->call([$repo, 'create'], ['input' => $params]);
-
-        $messageJob = '*EasyHRIS - LJP* '.PHP_EOL.'Attendance *'.$period.'* processed success'.PHP_EOL. Carbon::now()->format('j M Y H:i:s') ;
-        $userIdTelegram = Setting::where(['type' => 'notification', 'name' => 'id_telegram'])->first();
-        if($userIdTelegram){
-            if(!empty($userIdTelegram->value)){
-                Notification::route('telegram', 'easyhhris - LJP')->notify(new AlertNotification(new AlertMessage($messageJob, $userIdTelegram->value)));
-                // Notification::send(\Auth::user(), new AlertNotification(new AlertMessage($messageJob, $userIdTelegram->value)));
-            }            
+        // send notification when process attendance for all employee
+        if(empty($employeeId)){
+            $messageJob = '*EasyHRIS - LJP* '.PHP_EOL.'Attendance *'.$period.'* processed success'.PHP_EOL. Carbon::now()->format('j M Y H:i:s') ;
+            $userIdTelegram = Setting::where(['type' => 'notification', 'name' => 'id_telegram'])->first();
+            if($userIdTelegram){
+                if(!empty($userIdTelegram->value)){
+                    Notification::route('telegram', 'easyhhris - LJP')->notify(new AlertNotification(new AlertMessage($messageJob, $userIdTelegram->value)));
+                    // Notification::send(\Auth::user(), new AlertNotification(new AlertMessage($messageJob, $userIdTelegram->value)));
+                }            
+            }
         }
+        
     }
 }
