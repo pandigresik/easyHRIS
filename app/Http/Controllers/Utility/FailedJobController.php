@@ -12,6 +12,7 @@ use Flash;
 use App\Http\Controllers\AppBaseController;
 use Response;
 use Exception;
+use Illuminate\Support\Facades\Artisan;
 
 class FailedJobController extends AppBaseController
 {
@@ -101,8 +102,10 @@ class FailedJobController extends AppBaseController
 
             return redirect(route('utility.failedJobs.index'));
         }
-        
-        return view('utility.failed_jobs.edit')->with('failedJob', $failedJob)->with($this->getOptionItems());
+
+        Artisan::call('queue:retry '.$id);
+        return redirect(route('utility.failedJobs.index'));
+        // return view('utility.failed_jobs.edit')->with('failedJob', $failedJob)->with($this->getOptionItems());
     }
 
     /**
