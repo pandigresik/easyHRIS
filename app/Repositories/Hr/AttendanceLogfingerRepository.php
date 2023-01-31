@@ -83,7 +83,7 @@ class AttendanceLogfingerRepository extends BaseRepository
     private function generateJob($item){
         // execute job attendance process after 30 seconds                        
         if($item->fingerDate < Carbon::now()->format('Y-m-d')){
-            AttendanceProcess::dispatch($item->employee_id, $item->fingerDate, $item->fingerDate)->delay(now()->addSeconds(20));
+            AttendanceProcess::dispatch($item->employee_id, $item->fingerDate, $item->fingerDate)->delay(now()->addSeconds(5));
         }
                 
     }

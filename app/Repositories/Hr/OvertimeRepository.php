@@ -186,7 +186,7 @@ class OvertimeRepository extends BaseRepository
         $requestOvertime = $this->model->whereIn('id', $reference)->with(['approvals'])->get();
         $this->model->getConnection()->beginTransaction();
         try {
-            foreach($requestOvertime as $item){                
+            foreach($requestOvertime as $item){
                 $item->setCurrentStep($item->getRawOriginal('step_approval'));
                 $item->setMaxStep($item->getRawOriginal('amount_approval'));
                 $item->approveAction();

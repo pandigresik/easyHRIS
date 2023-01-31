@@ -209,7 +209,7 @@ class LeafRepository extends BaseRepository
                 
                 if($item->getRawOriginal('status') == $item->getFinalState()){
                     // execute job attendance process after 30 seconds                
-                    $this->generateJob($item);
+                    $this->generateJob($item, 30);
                 }
                 
             }
@@ -233,14 +233,14 @@ class LeafRepository extends BaseRepository
         }
     }
 
-    private function generateJob($item){
+    private function generateJob($item, $delay = 2){
         // execute job attendance process after 30 seconds                
         if($item->getRawOriginal('status') == $item->getFinalState()){       
             $nowDate = Carbon::now()->format('Y-m-d');     
             if(getDateString($item->getRawOriginal('leave_start')) < $nowDate){
                 foreach($item->details as $dayDate){
                     if($dayDate->getRawOriginal('leave_date') < $nowDate){
-                        AttendanceProcess::dispatch($item->employee_id, $dayDate->getRawOriginal('leave_date'), $dayDate->getRawOriginal('leave_date'))->delay(now()->addSeconds(30));
+                        AttendanceProcess::dispatch($item->employee_id, $dayDate->getRawOriginal('leave_date'), $dayDate->getRawOriginal('leave_date'))->delay(now()->addSeconds($delay));
                     }
                 }
             }

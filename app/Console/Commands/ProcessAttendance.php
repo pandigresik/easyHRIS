@@ -48,6 +48,7 @@ class ProcessAttendance extends Command
         $period = $this->argument('period');  
         $shiftmentGroup = $this->argument('shiftmentGroup');
         $employeeId = $this->option('employeeId');
+        
         $repo = app()->make('App\Repositories\Hr\AttendanceRepository');
         $params = ['work_date_period' => $period, 'shiftment_group_id' => explode(',',$shiftmentGroup) ];
         if($employeeId){
@@ -55,6 +56,7 @@ class ProcessAttendance extends Command
         }
         app()->call([$repo, 'create'], ['input' => $params]);
         // send notification when process attendance for all employee
+        
         if(empty($employeeId)){
             $messageJob = '*EasyHRIS - LJP* '.PHP_EOL.'Attendance *'.$period.'* processed success'.PHP_EOL. Carbon::now()->format('j M Y H:i:s') ;
             $userIdTelegram = Setting::where(['type' => 'notification', 'name' => 'id_telegram'])->first();
