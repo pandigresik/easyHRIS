@@ -97,7 +97,8 @@ class Leaf extends Model
         'status',
         'step_approval',
         'amount_approval',
-        'description'
+        'description',
+        'path_file'
     ];
 
     /**

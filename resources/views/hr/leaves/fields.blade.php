@@ -41,3 +41,16 @@
     {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 3,'maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
 </div>
 </div>
+
+<!-- Name Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('file_upload', __('models/leaves.fields.file_upload').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9">
+    @if (isset($leaf) && !empty($leaf->path_file))
+    <div>
+        <a href="{{ Storage::url('').'?path='.$leaf->path_file }}"  target="_blank" rel="noopener noreferrer">file attachment</a>
+    </div>    
+    @endif     
+    {!! Form::file('file_upload') !!}    
+</div>
+</div>

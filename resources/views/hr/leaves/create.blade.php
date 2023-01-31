@@ -14,7 +14,7 @@
                 @include('common.errors')
                 <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['route' => 'hr.leaves.store']) !!}
+                        {!! Form::open(['route' => 'hr.leaves.store', 'enctype' => 'multipart/form-data']) !!}
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>

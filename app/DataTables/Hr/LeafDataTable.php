@@ -5,6 +5,7 @@ namespace App\DataTables\Hr;
 use App\Models\Hr\Leaf;
 use App\DataTables\BaseDataTable as DataTable;
 use App\Repositories\Hr\AbsentReasonRepository;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -45,6 +46,15 @@ class LeafDataTable extends DataTable
         // })->editColumn('leave_end', function($item){
         //     return localFormatDateTime($item->leave_end);
         // });
+        $dataTable->editColumn('description', function($item){
+            // return '<div>'.$item->description.'</div>'. $item->path_file ?? '<a href="'.Storage::url('').'?path='.$item->path_file.'"  target="_blank" rel="noopener noreferrer">file</a>';
+            $result = $item->description;
+            if($item->path_file){
+                $result .= '<br><a href="'.Storage::url('').'?path='.$item->path_file.'" target="_blank">file</a>';
+            }
+            
+            return $result;
+        })->escapeColumns([]);
         return $dataTable->addColumn('action', 'hr.leaves.datatables_actions');
     }
 

@@ -12,17 +12,20 @@ use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Base\Setting;
 use App\Models\Hr\AbsentReason;
+use App\Traits\UploadedFile;
 use Response;
 use Exception;
 
 class LeafController extends AppBaseController
 {
+    use UploadedFile;
     /** @var  LeafRepository */
     protected $repository;
 
     public function __construct()
     {
         $this->repository = LeafRepository::class;
+        $this->pathFolder .= '/leaves';
     }
 
     /**
@@ -55,7 +58,10 @@ class LeafController extends AppBaseController
      */
     public function store(CreateLeafRequest $request)
     {
-        $input = $request->all();
+        $input = $request->all();        
+        if($request->file('file_upload')){
+            $input['path_file'] = $this->uploadFile($request, 'file_upload');
+        }
 
         $leaf = $this->getRepositoryObj()->create($input);
         if($leaf instanceof Exception){
@@ -129,6 +135,9 @@ class LeafController extends AppBaseController
             return redirect(route('hr.leaves.index'));
         }
         $input = $request->all();
+        if($request->file('file_upload')){            
+            $input['path_file'] = $this->uploadFile($request, 'file_upload');
+        }
         $leaf = $this->getRepositoryObj()->update($input, $id);
         if($leaf instanceof Exception){
             $input['leave_start'] = localFormatDateTime($input['leave_start']);

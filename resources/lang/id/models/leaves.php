@@ -17,5 +17,6 @@ return array (
     'step_approval' => 'Step Approval',
     'amount_approval' => 'Amount Approval',
     'description' => 'Description',
+    'file_upload' => 'Attachment',
   ),
 );

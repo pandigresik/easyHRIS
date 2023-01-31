@@ -14,7 +14,7 @@
              @include('common.errors')
              <div class="row">
                  <div class="col-lg-12">
-                    {!! Form::model($leaf, ['route' => ['hr.leaves.update', $leaf->id], 'method' => 'patch']) !!}  
+                    {!! Form::model($leaf, ['route' => ['hr.leaves.update', $leaf->id], 'method' => 'patch', 'enctype' => 'multipart/form-data']) !!} 
                       <div class="card">                          
                           <div class="card-header">
                               <i class="fa fa-edit fa-lg"></i>

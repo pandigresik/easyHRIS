@@ -60,7 +60,7 @@
 <div class="col-md-9">
     @if (isset($contract) && !empty($contract->path_file))
     <div>
-        <a href="{{ Storage::url('').'?path='.$contract->path_file }}"  target="_blank" rel="noopener noreferrer">file attachment</a>    
+        <a href="{{ Storage::url('').'?path='.$contract->path_file }}"  target="_blank" rel="noopener noreferrer">file attachment</a>
     </div>    
     @endif     
     {!! Form::file('file_upload') !!}    
