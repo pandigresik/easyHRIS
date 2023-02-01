@@ -177,7 +177,9 @@ class AttendanceLogfingerController extends AppBaseController
         return [
             'employeeItems' => [],
             'absentTypeItems' => self::ABSEN_TYPE,
-            'fingerprintDeviceItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $fingerprintDevice->pluck()
+            'fingerprintDeviceItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $fingerprintDevice->pluck(),
+            'reasonItems' => config('local.reason_log_finger'),
+
         ];
     }
 

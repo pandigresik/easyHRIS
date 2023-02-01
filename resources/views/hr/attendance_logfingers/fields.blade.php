@@ -2,7 +2,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('employee_id', __('models/attendanceLogfingers.fields.employee_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('employee_id', $employeeItems, null, array_merge(['class' => 'form-control select2','data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository' ], config('local.select2.ajax')) ) !!}    
+    {!! Form::select('employee_id[]', $employeeItems, null, array_merge(['class' => 'form-control select2','data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple' ], config('local.select2.ajax')) ) !!}
 </div>
 </div>
 
@@ -27,5 +27,13 @@
     {!! Form::label('fingerprint_device_id', __('models/attendanceLogfingers.fields.fingerprint_device_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
     {!! Form::select('fingerprint_device_id', $fingerprintDeviceItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+</div>
+</div>
+
+<!-- Fingerprint Reason Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('reason', __('models/attendanceLogfingers.fields.reason').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    {!! Form::select('reason', $reasonItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>

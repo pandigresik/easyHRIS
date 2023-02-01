@@ -48,5 +48,6 @@ return [
     'job_level_leader' => ['MGR','SPV', 'FRM'],
     // annual leave code
     'annual_leave_code' => 'CT',    
-    'absent_code_not_pay' => ['ABSENT', 'OFF', 'ABS']
+    'absent_code_not_pay' => ['ABSENT', 'OFF', 'ABS'],
+    'reason_log_finger' => ['Lupa Finger' => 'Lupa Finger', 'Absent Manual' => 'Absent Manual', 'Mesin Bermasalah' => 'Mesin Bermasalah', 'Finger Tidak Terbaca' => 'Finger Tidak Terbaca', 'Listrik Mati' => 'Listrik Mati']
 ];

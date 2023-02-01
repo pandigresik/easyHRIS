@@ -11,5 +11,6 @@ return array (
     'type_absen' => 'Type Absen',
     'fingertime' => 'Fingertime',
     'fingerprint_device_id' => 'Fingerprint Device Id',
+    'reason' => 'Reason'
   ),
 );

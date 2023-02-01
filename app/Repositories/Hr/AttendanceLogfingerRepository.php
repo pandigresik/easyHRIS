@@ -52,11 +52,19 @@ class AttendanceLogfingerRepository extends BaseRepository
      */
     public function create($input)
     {
-        try {
-            $model = parent::create($input);
-            $this->generateJob($model);                     
+        $this->model->getConnection()->beginTransaction();
+        try {            
+            $employees = $input['employee_id'];
+            foreach($employees as $employee){
+                $input['employee_id'] = $employee;
+                $model = parent::create($input);
+                $this->generateJob($model);
+            }
+            
+            $this->model->getConnection()->commit();  
             return $model;
         } catch (\Exception $e) {
+            $this->model->getConnection()->rollBack();
             return $e;
         }        
     }

@@ -54,7 +54,8 @@ class AttendanceLogfinger extends Model
         'employee_id',
         'type_absen',
         'fingertime',
-        'fingerprint_device_id'
+        'fingerprint_device_id',
+        'reason'
     ];
 
     /**
@@ -67,7 +68,8 @@ class AttendanceLogfinger extends Model
         'employee_id' => 'integer',
         'type_absen' => 'string',
         'fingertime' => 'datetime',
-        'fingerprint_device_id' => 'integer'
+        'fingerprint_device_id' => 'integer',
+        'reason' => 'string'
     ];
 
     /**
