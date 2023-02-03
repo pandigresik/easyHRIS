@@ -109,7 +109,7 @@ class OvertimeDay{
             }
             
             $ot->raw_calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
-            $ot->calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;            
+            $ot->calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
             $this->result['overtimes'][] = $ot;
             
         }

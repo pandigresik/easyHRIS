@@ -123,6 +123,9 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('groupingPayrollEntities', Hr\GroupingPayrollEntityController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('groupingPayrollEmployeeReports', Hr\GroupingPayrollEmployeeReportController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
+
+        Route::resource('attendanceReports', Hr\AttendanceReportController::class, ["as" => 'hr'])->only('index');
+
     });
 
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
