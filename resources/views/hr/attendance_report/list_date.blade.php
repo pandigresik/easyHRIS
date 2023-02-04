@@ -20,14 +20,36 @@
         } , true)->map(function($item){
             return $item->keyBy('state');
         });        
+        $totalState = [];
+        foreach($absentReason as $ar){
+            $totalState[$ar] = 0;
+        }
     @endphp
     @foreach ($period as $date)
         <tr>
             <td>{{ localFormatDate($date) }}</td>
             @foreach ($absentReason as $ar)
-                <td>{{ $dataDate[$date->format('Y-m-d')][$ar]['total'] ?? 0  }}</td>
+            @php
+                $tdClass = '';
+                $total = $dataDate[$date->format('Y-m-d')][$ar]['total'] ?? 0;
+                if($ar != 'OK'){
+                    if($total > 0){
+                        $tdClass = 'text-white bg-danger';
+                    }
+                }
+                $totalState[$ar] += $total;
+            @endphp                
+                <td class="{{ $tdClass }}">{{ $total }}</td>                
             @endforeach
         </tr>
     @endforeach
-    </tbody>    
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            @foreach ($absentReason as $ar)            
+                <th>{{ $totalState[$ar] }}</th>
+            @endforeach
+        </tr>
+    </tfoot>
 </table>
