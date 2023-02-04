@@ -43,8 +43,8 @@ class AttendanceReportRepository extends BaseRepository
     public function list($startDate, $endDate, $grouping){
         $datas = Attendance::employeeDescendants()->disableModelCaching()->whereBetween('attendance_date', [$startDate, $endDate])->groupBy('state')->newQuery(); 
         switch($grouping){
-            case 'employee':                
-                $datas->selectRaw('count(*) as total, state, employee_id')->with(['employee'])->groupBy('employee_id');
+            case 'employee':
+                $datas->selectRaw('count(*) as total, state, employee_id')->groupBy('employee_id');
                 break;
             case 'date':
                 $datas->selectRaw('count(*) as total, state, attendance_date')->groupBy('attendance_date');

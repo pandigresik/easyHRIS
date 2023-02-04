@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Hr;
 use App\Repositories\Hr\AttendanceReportRepository;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\Employee;
 use Illuminate\Http\Request;
 
 class AttendanceReportController extends AppBaseController
@@ -39,13 +40,21 @@ class AttendanceReportController extends AppBaseController
             $startDate = $period['startDate'];
             $endDate = $period['endDate'];
             $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $grouping);
-            $view = 'list_employee';
-            if($grouping == 'date'){
-                $view = 'list_date';
+            $view = 'list_date';
+            $employees = [];
+            if($grouping == 'employee'){
+                $view = 'list_employee';
+                $employees = Employee::select(['code','id','full_name'])->whereIn('id', $datas->pluck('employee_id'))->get()->keyBy('id');
             }            
 
             return view('hr.attendance_report.'.$view)
-                ->with(['datas' => $datas, 'startDate' => $startDate->format('Y-m-d'), 'endDate' => $endDate->format('Y-m-d'), 'absentReason' => $absentReason]);
+                ->with([
+                    'datas' => $datas, 
+                    'startDate' => $startDate->format('Y-m-d'), 
+                    'endDate' => $endDate->format('Y-m-d'), 
+                    'absentReason' => $absentReason,
+                    'employees' => $employees
+                ]);
         }
 
         $downloadXls = $request->get('download_xls');
@@ -55,16 +64,19 @@ class AttendanceReportController extends AppBaseController
             $startDate = $period['startDate'];
             $endDate = $period['endDate'];
             $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $grouping);
-            $view = 'hr.attendance_report.list_employee';
-            if($grouping == 'date'){
-                $view = 'hr.attendance_report.list_date';
+            $view = 'hr.attendance_report.list_date';
+            $employees = [];
+            if($grouping == 'employee'){
+                $view = 'hr.attendance_report.list_employee';
+                $employees = Employee::select(['code','id','full_name'])->whereIn('id', $datas->pluck('employee_id'))->get()->keyBy('id');
             }
             $dataExcel = [
                 'datas' => $datas,
                 'view' => $view,
                 'absentReason' => $absentReason,
                 'startDate' => $startDate->format('Y-m-d'), 
-                'endDate' => $endDate->format('Y-m-d')
+                'endDate' => $endDate->format('Y-m-d'),
+                'employees' => $employees
             ];
             return $this->exportExcel($dataExcel);
         }
@@ -79,6 +91,7 @@ class AttendanceReportController extends AppBaseController
         $view = $data['view'];
         $startDate = $data['startDate'];
         $endDate = $data['endDate'];
+        $employees = $data['employees'];
         $absentReason = $data['absentReason'];
 
         $modelEksport = '\\App\Exports\\Hr\\AttendanceReportExport';
@@ -87,7 +100,8 @@ class AttendanceReportController extends AppBaseController
         return (new $modelEksport($collection))
             ->setView($view)
             ->setStartDate($startDate)
-            ->setEndDate($endDate)            
+            ->setEndDate($endDate)
+            ->setEmployees($employees)
             ->setAbsentReason($absentReason)->download($fileName.'.xls');
     }
 

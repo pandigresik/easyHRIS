@@ -6,7 +6,7 @@
 <table class="table table-bordered text-center">
     <thead>        
         <tr>
-            <th>Tanggal</th>
+            <th>Nama</th>
         @foreach ($absentReason as $ar)
             <th>{{ $ar }}</th>
         @endforeach
@@ -19,9 +19,9 @@
             return $item->keyBy('state');
         });        
     @endphp
-    @foreach ($dataEmployees as $emp)
+    @foreach ($dataEmployees as $empid => $emp)
         <tr>
-            <td class="text-start">{{ $emp['OK']->employee->code_name ?? '-' }}</td>
+            <td class="text-start">{{ $employees[$empid]->code_name ?? '-' }}</td>
             @foreach ($absentReason as $ar)
                 <td>{{ $emp[$ar]['total'] ?? 0  }}</td>
             @endforeach

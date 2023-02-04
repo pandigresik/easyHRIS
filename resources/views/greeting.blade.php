@@ -68,6 +68,17 @@
                             </div>
                         </div>        
                     </div>
+                    <div class="col-md-4 col-sm-12 mb-2">
+                        <div class="card border-warning" style="cursor:pointer">
+                            <div class="card-header"><h4>Attendance Report</h4></div> 
+                            <div class="card-body bg-warning">
+                                <div class="card-text text-danger">
+                                    Rekapitulasi absensi karyawan
+                                </div>
+                                <a href="{{ route('hr.attendanceReports.index') }}" class="btn btn-success">Go </a>
+                            </div>
+                        </div>        
+                    </div>
                 </div>                                
             </div>
         </div>

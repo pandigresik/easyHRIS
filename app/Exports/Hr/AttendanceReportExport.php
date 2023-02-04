@@ -19,6 +19,7 @@ class AttendanceReportExport implements FromView
     private $view;
     private $startDate;
     private $endDate;
+    private $employees;
 
     public function __construct(Collection $collection)
     {
@@ -32,6 +33,7 @@ class AttendanceReportExport implements FromView
             'absentReason' => $this->getAbsentReason(),
             'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate(),
+            'employees' => $this->getEmployees()
         ]);
     }
 
@@ -111,6 +113,26 @@ class AttendanceReportExport implements FromView
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of employees
+     */ 
+    public function getEmployees()
+    {
+        return $this->employees;
+    }
+
+    /**
+     * Set the value of employees
+     *
+     * @return  self
+     */ 
+    public function setEmployees($employees)
+    {
+        $this->employees = $employees;
 
         return $this;
     }
