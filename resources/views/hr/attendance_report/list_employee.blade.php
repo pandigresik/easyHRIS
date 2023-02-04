@@ -19,23 +19,23 @@
             return $item->keyBy('state');
         });
         $totalState = [];
-        foreach($absentReason as $ar){
-            $totalState[$ar] = 0;
+        foreach($absentReason as $k => $ar){
+            $totalState[$k] = 0;
         }
     @endphp
     @foreach ($dataEmployees as $empid => $emp)
         <tr>
             <td class="text-start">{{ $employees[$empid]->code_name ?? '-' }}</td>
-            @foreach ($absentReason as $ar)
+            @foreach ($absentReason as $k => $ar)
                 @php
                     $tdClass = '';
-                    $total = $emp[$ar]['total'] ?? 0;
+                    $total = $emp[$k]['total'] ?? 0;
                     if($ar != 'OK'){
                         if($total > 0){
                             $tdClass = 'text-white bg-danger';
                         }
                     }
-                    $totalState[$ar] += $total;
+                    $totalState[$k] += $total;
                 @endphp                
                 <td class="{{ $tdClass }}">{{ $total }}</td>
             @endforeach
@@ -46,7 +46,7 @@
         <tr>
             <th></th>
             @foreach ($absentReason as $ar)
-                <th>{{ $totalState[$ar] }}</th>
+                <th>{{ $totalState[$k] }}</th>
             @endforeach
         </tr>
     </tfoot>
