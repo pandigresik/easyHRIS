@@ -30,7 +30,7 @@
                 @php
                     $tdClass = '';
                     $total = $emp[$k]['total'] ?? 0;
-                    if($ar != 'OK'){
+                    if($k != 'OK'){
                         if($total > 0){
                             $tdClass = 'text-white bg-danger';
                         }
@@ -45,7 +45,7 @@
     <tfoot>
         <tr>
             <th></th>
-            @foreach ($absentReason as $ar)
+            @foreach ($absentReason as $k => $ar)
                 <th>{{ $totalState[$k] }}</th>
             @endforeach
         </tr>
