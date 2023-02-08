@@ -39,7 +39,7 @@ try:
     if last_fingertime is None:
         logger.info("fingertime tidak ada")
     else:
-        start_fingertime = last_fingertime[0]
+        # start_fingertime = last_fingertime[0]
         fingerprint_device_id = last_fingertime[1]
         
     employees = connect_db.get_employee()
