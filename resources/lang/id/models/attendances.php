@@ -25,6 +25,7 @@ return array (
     'absent' => 'Absent',
     'state' => 'Status',
     'period' => 'Periode',
-    'grouping' => 'Grouping'
+    'grouping' => 'Grouping',
+    'payroll_entity' => 'Payroll Report'
   ),
 );

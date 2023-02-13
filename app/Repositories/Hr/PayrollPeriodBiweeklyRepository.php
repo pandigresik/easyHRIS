@@ -189,7 +189,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             'kmSalary' => $kmSalary,
             'overtimeSalary' => $overtimeSalary,            
             'overtime' => $this->getOvertimeEmployee($employee->id)->sum(function($item){                    
-                        return $item->getRawOriginal('calculated_value');
+                        return $item->getRawOriginal('payroll_calculated_value');
                     }),
             'late_early'=> $amountLateMinute,
             'absent' => $amountAbsentDay

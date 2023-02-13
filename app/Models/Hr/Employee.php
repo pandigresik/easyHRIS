@@ -414,6 +414,10 @@ class Employee extends Model
         return $this->hasMany(\App\Models\Hr\Employee::class, 'supervisor_id', 'id')->with(['jobLevel']);
     }    
 
+    public function payrollEntity(){
+        return $this->hasOneThrough(\App\Models\Hr\GroupingPayrollEntity::class, \App\Models\Hr\GroupingPayrollEmployeeReport::class, 'employee_id', 'id', 'id', 'grouping_payroll_entity_id');
+    }
+
     public function scopeSupervisor($query){        
         // pakai cara ini, menggunakan subquery error 
         $jobLevelLeader = config('local.job_level_leader');        

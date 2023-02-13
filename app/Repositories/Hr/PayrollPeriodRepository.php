@@ -99,7 +99,7 @@ class PayrollPeriodRepository extends BaseRepository
             case 'OT':
                 $overtimes = $this->getOvertimeEmployee($employeeId)->map(function($item){
                     return $item->getRawOriginal('amount');
-                })->toArray();         
+                })->toArray();
                 $componentObj = new SummaryOvertime($overtimes);
                 break;
             // berdasarkan data absensi 

@@ -237,4 +237,24 @@ if (!function_exists('getTimeString')) {
         return explode(' ',$date)[1];
     }
 }
+/**
+ * 0 sd 24 ==> 0
+ * 25 sd  54 ==> 30
+ * >= 55 ==>  60
+ */
+if (!function_exists('payrollCalculatedOvertimeValue')) {
+    function payrollCalculatedOvertimeValue($value)
+    {
+        $hour = intval($value / 60);
+        $mod = $value % 60;
+        $calculatedMod = 0;
+        if($mod >= 55){
+            $calculatedMod = 60;
+        }else if($mod >= 25){
+            $calculatedMod = 30;
+        }
+        
+        return ($hour * 60) + $calculatedMod;
+    }
+}
 

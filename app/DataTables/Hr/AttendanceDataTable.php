@@ -5,6 +5,7 @@ namespace App\DataTables\Hr;
 use App\Models\Hr\Attendance;
 use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Hr\AbsentReason;
+use App\Repositories\Hr\GroupingPayrollEntityRepository;
 use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
@@ -20,6 +21,7 @@ class AttendanceDataTable extends DataTable
         'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'employee.code' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
         'employee.payroll_period_group_id' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
+        'employee.payroll_entity' =>  \App\DataTables\FilterClass\PayrollEntityGroupKeyword::class,
         'attendance_date' => \App\DataTables\FilterClass\BetweenKeyword::class,        
     ];
     
@@ -59,11 +61,10 @@ class AttendanceDataTable extends DataTable
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(Attendance $model)
-    {
-        return $model->employeeDescendants()->selectRaw($model->getTable().'.*, attendance_date as raw_attendance_date')->with(['employee' => function($q){
-            
-            if(\Auth::user()->can('user-hr')){
-                $q->with(['jobtitle', 'payrollPeriodGroup']);
+    {           
+        return $model->employeeDescendants()->selectRaw($model->getTable().'.*, attendance_date as raw_attendance_date')->with(['employee' => function($q) {            
+            if(\Auth::user()->can('user-hr')){                                
+                $q->with(['jobtitle', 'payrollPeriodGroup', 'payrollEntity']);                
             }else{
                 $q->with(['jobtitle']);
             }
@@ -154,9 +155,12 @@ class AttendanceDataTable extends DataTable
             'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple'])
         ];
         if(\Auth::user()->can('user-hr')){                         
-            $payrollGroupRepository = new PayrollPeriodGroupRepository();            
+            $payrollGroupRepository = new PayrollPeriodGroupRepository();
+            $payrollGroupReportRepository = new GroupingPayrollEntityRepository ();
             $payrollGroupItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupRepository->pluck()));
+            $payrollGroupReportItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupReportRepository->pluck()));
             $columnDefault['employee.payroll_period_group_id'] = new Column(['title' => __('models/attendances.fields.employee_payroll'),'name' => 'employee.payroll_period_group_id', 'data' => 'employee.payroll_period_group.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupItem]);
+            $columnDefault['employee.payroll_entity'] = new Column(['title' => __('models/attendances.fields.payroll_entity'),'name' => 'employee.payroll_entity', 'data' => 'employee.payroll_entity.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupReportItem, 'multiple' => 'multiple']);
         }
         return $columnDefault;
     }
