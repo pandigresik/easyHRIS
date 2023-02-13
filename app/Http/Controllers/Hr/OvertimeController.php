@@ -9,6 +9,7 @@ use App\Http\Requests\Hr\UpdateOvertimeRequest;
 use App\Repositories\Hr\OvertimeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Base\Setting;
 use Carbon\Carbon;
 use Response;
 use Exception;
@@ -40,8 +41,13 @@ class OvertimeController extends AppBaseController
      * @return Response
      */
     public function create()
-    {
-        $minDate = localFormatDate(Carbon::now()->subDays(30)->format('Y-m-d'));
+    {   
+        $timeline = Setting::where(['type' => 'timeline', 'name' => 'max_entry_overtime'])->first();
+        $maxEntry = $timeline->value ?? 5;
+        if(\Auth::user()->can('user-hr')){  
+            $maxEntry = 45;
+        }
+        $minDate = localFormatDate(Carbon::now()->subDays($maxEntry)->format('Y-m-d'));
         return view('hr.overtimes.create')->with($this->getOptionItems())->with('minDate', $minDate);
     }
 
