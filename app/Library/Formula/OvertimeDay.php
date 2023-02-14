@@ -108,9 +108,9 @@ class OvertimeDay{
                 }
             }
             
-            // $ot->raw_calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
+            $ot->raw_calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
             $ot->calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
-            $ot->payroll_calculated_value = payrollCalculatedOvertimeValue($ot->calculated_value);
+            $ot->payroll_calculated_value = payrollCalculatedOvertimeValue($ot->raw_calculated_value);
             $this->result['overtimes'][] = $ot;            
         }
     }

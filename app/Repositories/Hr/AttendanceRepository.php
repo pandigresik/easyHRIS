@@ -225,7 +225,7 @@ class AttendanceRepository extends BaseRepository
             $attendanceResult[] = $tmp;
             if(!empty($fingerClassification['overtimes'])){                
                 foreach($fingerClassification['overtimes'] as $ot){
-                    $amountOvertime = $ot->benefit->getRawOriginal('benefit_value') ?? 0;                    
+                    $amountOvertime = $ot->benefit->getRawOriginal('benefit_value') ?? 0;
                     // not use calculated_value because maybe calculated value formated not as number                    
                     $ot->amount = (new SalaryComponentOvertime(minuteToHour($ot->payroll_calculated_value) , $amountOvertime))->calculate();
                     // unset($ot->raw_calculated_value);
