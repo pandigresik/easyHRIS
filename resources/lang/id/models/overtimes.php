@@ -23,6 +23,7 @@ return array (
     'overday' => 'Overday',
     'amount' => 'Amount',
     'description' => 'Description',
-    'status' => 'Status'
+    'status' => 'Status',
+    'payroll_calculated_value' => 'Payroll Calculate'
   ),
 );

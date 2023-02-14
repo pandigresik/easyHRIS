@@ -55,6 +55,8 @@ class OvertimeDataTable extends DataTable
         }
         $dataTable->editColumn('calculated_value', function($item){
             return localNumberFormat(minuteToHour($item->calculated_value), 1);
+        })->editColumn('payroll_calculated_value', function($item){
+            return localNumberFormat(minuteToHour($item->payroll_calculated_value), 1);
         })->editColumn('breaktime_value', function($item){
             return localNumberFormat(minuteToHour($item->breaktime_value), 1);
         });
