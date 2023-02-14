@@ -276,7 +276,7 @@ class AttendanceRepository extends BaseRepository
     }
 
     private function listOvertime($startDate, $endDate, $shiftmentGroup, $employeeId){
-        $att = Overtime::select(['overtime_date', 'id', 'breaktime_value', 'employee_id','start_hour', 'end_hour', 'overday','start_hour_real', 'end_hour_real', 'raw_value', 'calculated_value'])
+        $att = Overtime::select(['overtime_date', 'id', 'breaktime_value', 'employee_id','start_hour', 'end_hour', 'overday','start_hour_real', 'end_hour_real', 'raw_value', 'calculated_value', 'payroll_calculated_value'])
             ->with(['benefit'])
             ->notReject()            
             ->whereBetween('overtime_date',[$startDate,$endDate]);        
