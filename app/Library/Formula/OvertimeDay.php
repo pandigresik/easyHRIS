@@ -178,6 +178,14 @@ class OvertimeDay{
                 }
             }
         }        
+
+        // case when off day and don't have overtime
+        if($this->workshift->isOffShift()){
+            if(empty($this->overtimes)){
+                $this->result['checkout'] = NULL;
+                $this->result['checkin'] = NULL;
+            }
+        }
     }
 
     /**
