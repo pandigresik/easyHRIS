@@ -20,7 +20,8 @@ class OvertimeDataTable extends DataTable
         ['data' => 'end_hour', 'defaultContent' => '','title' => 'End Hour'],
         ['data' => 'start_hour_real', 'defaultContent' => '','title' => 'Start Hour Real'],
         ['data' => 'end_hour_real', 'defaultContent' => '','title' => 'End Hour Real'],
-        ['data' => 'calculated_value', 'defaultContent' => '','title' => 'Calculated Value'],                
+        ['data' => 'calculated_value', 'defaultContent' => '','title' => 'Calculated Value'],
+        ['data' => 'payroll_calculated_value', 'defaultContent' => '','title' => 'Payroll Calculated Value'],                
     ];
     /**
     * example mapping filter column to search by keyword, default use %keyword%
@@ -168,6 +169,7 @@ class OvertimeDataTable extends DataTable
             // 'description' => new Column(['title' => __('models/overtimes.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
         if(\Auth::user()->can('overtimes-view-amount')){
+            $columnDefault['payroll_calculated_value'] = new Column(['title' => __('models/overtimes.fields.payroll_calculated_value'),'name' => 'payroll_calculated_value', 'data' => 'payroll_calculated_value', 'searchable' => false, 'elmsearch' => 'numberrange', 'className' => 'text-end']);
             $columnDefault['amount'] = new Column(['title' => __('models/overtimes.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'numberrange', 'className' => 'text-end']);
         }
         return $columnDefault;

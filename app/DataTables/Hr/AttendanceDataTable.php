@@ -6,6 +6,7 @@ use App\Models\Hr\Attendance;
 use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Hr\AbsentReason;
 use App\Repositories\Hr\GroupingPayrollEntityRepository;
+use App\Repositories\Hr\JobTitleRepository;
 use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
@@ -23,6 +24,7 @@ class AttendanceDataTable extends DataTable
         'employee.payroll_period_group_id' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
         'employee.payroll_entity' =>  \App\DataTables\FilterClass\PayrollEntityGroupKeyword::class,
         'attendance_date' => \App\DataTables\FilterClass\BetweenKeyword::class,        
+        'employee.jobtitle_id' => \App\DataTables\FilterClass\RelationInKeyword::class
     ];
     
     private $mapColumnSearch = [
@@ -135,11 +137,13 @@ class AttendanceDataTable extends DataTable
     protected function getColumns()
     {
         $stateItem = convertArrayPairValueWithKey(Attendance::STATE + AbsentReason::pluck('code', 'code')->toArray());
+        $jobTitleRepository = new JobTitleRepository();
+        $jobTitleItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($jobTitleRepository->pluck()));
         $columnDefault = [
             'attendance_date' => new Column(['title' => __('models/attendances.fields.attendance_date'),'name' => 'attendance_date', 'data' => 'attendance_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
             'employee_code' => new Column(['title' => __('models/attendances.fields.employee_code'),'name' => 'employee.code', 'data' => 'employee.code', 'searchable' => true, 'elmsearch' => 'text']),
-            'employee_jobtitle' => new Column(['title' => __('models/attendances.fields.employee_jobtitle'),'name' => 'employee.jobtitle.name', 'data' => 'employee.jobtitle.name', 'defaultContent' => '-', 'searchable' => false, 'elmsearch' => 'text']),            
+            'employee.jobtitle_id' => new Column(['title' => __('models/attendances.fields.employee_jobtitle'),'name' => 'employee.jobtitle_id', 'data' => 'employee.jobtitle.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $jobTitleItem, 'multiple' => 'multiple']),
             'shiftment_id' => new Column(['title' => __('models/attendances.fields.shiftment_id'),'name' => 'shiftment_id', 'data' => 'shiftment.name', 'searchable' => true, 'elmsearch' => 'text']),
             'reason_id' => new Column(['title' => __('models/attendances.fields.reason_id'),'name' => 'reason_id', 'data' => 'reason.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),            
             //'description' => new Column(['title' => __('models/attendances.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
