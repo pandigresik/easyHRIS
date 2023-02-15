@@ -202,7 +202,10 @@ if (!function_exists('generatePeriod')) {
 if (!function_exists('diffMinute')) {
     function diffMinute($start, $end)
     {
-        return Carbon::parse($start)->diffInMinutes($end);
+        // hitung sampai menit saja
+        $startMinute = substr($start,0,5);
+        $endMinute = substr($end,0,5);
+        return Carbon::parse($startMinute)->diffInMinutes($endMinute);
     }
 }
 
