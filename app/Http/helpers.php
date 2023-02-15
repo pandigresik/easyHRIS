@@ -204,7 +204,7 @@ if (!function_exists('diffMinute')) {
     {
         // hitung sampai menit saja
         $startMinute = substr($start,0,-3);
-        $endMinute = substr($start,0,-3);
+        $endMinute = substr($end,0,-3);
         return Carbon::parse($startMinute)->diffInMinutes($endMinute);
     }
 }
