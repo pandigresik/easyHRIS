@@ -192,8 +192,10 @@ class AttendanceRepository extends BaseRepository
                 }
                 // dihitung keterlambatan jika bukan hari libur
                 if(!is_null($tmp['check_out']) && !isWorkshiftOff($tmp) ){
-                    $tmp['early_out'] = $tmp['check_out_schedule'] > $tmp['check_out'] ? diffMinute($tmp['check_out'], $tmp['check_out_schedule']): 0; 
-                    $tmp['late_out'] = $tmp['check_out'] > $tmp['check_out_schedule'] ? diffMinute($tmp['check_out'], $tmp['check_out_schedule']): 0;
+                    // tambahkan 1 detik agar lebih valid perhitungan early_out karena acuannya menit
+                    $tmpCheckOutSchedule = Carbon::parse($tmp['check_out_schedule'])->addSecond()->format('Y-m-d H:i:s');
+                    $tmp['early_out'] = $tmp['check_out_schedule'] > $tmp['check_out'] ? diffMinute($tmp['check_out'], $tmpCheckOutSchedule): 0; 
+                    $tmp['late_out'] = $tmp['check_out'] > $tmp['check_out_schedule'] ? diffMinute($tmp['check_out'], $tmpCheckOutSchedule): 0;
                 }
 
                 if(!is_null($tmp['check_out']) && !is_null($tmp['check_in']) ){                    
