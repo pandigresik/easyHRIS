@@ -43,8 +43,8 @@ class ProcessAttendance extends Command
      */
     public function handle()
     {
-        // login as administrator
-        \Auth::loginUsingId(1);
+        // login as administrator, sepertinya menyebabkan session kacau. Dimatikan dulu
+        // \Auth::loginUsingId(1);
         $period = $this->argument('period');  
         $shiftmentGroup = $this->argument('shiftmentGroup');
         $employeeId = $this->option('employeeId');

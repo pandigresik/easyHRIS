@@ -85,7 +85,7 @@ class DownloadLogfingerController extends AppBaseController
 
     private function insertLogFinger($attendances, $fingerprintDevice){
         $updateData = [];
-        $userId = \Auth::id();
+        $userId = \Auth::id() ?? 1;
         $startTime = Carbon::now()->subWeek()->format('Y-m-d H:i:s');
         $employeeList = Employee::where(function($q){
             return $q->whereNull('resign_date')->orWhere('resign_date', '>=', Carbon::now()->subMonth(1));

@@ -38,8 +38,8 @@ class DownloadAttendanceLog extends Command
      */
     public function handle()
     {
-        // login as administrator
-        Auth::loginUsingId(1);
+        // login as administrator, sepertinya menyebabkan session kacau. Dimatikan dulu
+        // Auth::loginUsingId(1);
         $deviceId = $this->argument('deviceId');
         $controller = app()->make('App\Http\Controllers\Hr\DownloadLogfingerController');
         app()->call([$controller, 'download'], ['fingerprintDeviceId' => $deviceId]);                

@@ -78,7 +78,7 @@ class AttendanceRepository extends BaseRepository
     }
 
     public function create($input)
-    {
+    {        
         $this->model->getConnection()->beginTransaction();
         try {
             $period = generatePeriod($input['work_date_period']);
@@ -169,7 +169,7 @@ class AttendanceRepository extends BaseRepository
                 'check_out' => NULL,
                 'deleted_at' => NULL,
                 'state' => $schedule->isOffShift() ? 'OK' : 'INVALID',
-                'created_by' => \Auth::id()
+                'created_by' => \Auth::id() ?? 1
             ];
 
             if(!empty($tmp['reason_id'])){
