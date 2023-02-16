@@ -97,7 +97,7 @@ class OvertimeRepository extends BaseRepository
                         
             $this->model->getConnection()->commit();
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            // \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
 
             return $e;
