@@ -53,20 +53,27 @@ class AttendanceLogfingerRepository extends BaseRepository
     public function create($input)
     {
         $this->model->getConnection()->beginTransaction();
+        $jobs = [];
         try {            
             $employees = $input['employee_id'];
             foreach($employees as $employee){
                 $input['employee_id'] = $employee;
                 $model = parent::create($input);
-                $this->generateJob($model);
+                $jobs[] = $model;                
             }
             
             $this->model->getConnection()->commit();  
+            // kita keluarkan dari blok transaction, karena job akan membaca table attendance_log
+            // jadi job diinsert setelah commit saja
+            if($jobs){
+                $this->generateJob($jobs);
+            }
             return $model;
         } catch (\Exception $e) {
             $this->model->getConnection()->rollBack();
             return $e;
-        }        
+        }
+
     }
 
     /**
@@ -81,18 +88,19 @@ class AttendanceLogfingerRepository extends BaseRepository
     {
         try{
             $model = parent::update($input, $id);
-            $this->generateJob($model);
+            $this->generateJob([$model]);
             return $model;
         } catch (\Exception $e) {
             return $e;
         }
     }
 
-    private function generateJob($item){
-        // execute job attendance process after 30 seconds                        
-        if($item->fingerDate < Carbon::now()->format('Y-m-d')){
-            AttendanceProcess::dispatch($item->employee_id, $item->fingerDate, $item->fingerDate)->delay(now()->addSeconds(5));
-        }
-                
+    private function generateJob($jobs){
+        foreach($jobs as $item){
+            // execute job attendance process after 30 seconds                        
+            if($item->fingerDate < Carbon::now()->format('Y-m-d')){
+                AttendanceProcess::dispatch($item->employee_id, $item->fingerDate, $item->fingerDate)->delay(now()->addSeconds(5));
+            }
+        }                
     }
 }
