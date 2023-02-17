@@ -186,7 +186,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('resign_date', __('models/employees.fields.resign_date').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('resign_date', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode( config('local.datesingle_empty')) ,'id'=>'resign_date']) !!}
+    {!! Form::text('resign_date', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode(['minDate' => $minDate ?? 0] + config('local.datesingle_empty')) ,'id'=>'resign_date']) !!}
 </div>
 </div>
 

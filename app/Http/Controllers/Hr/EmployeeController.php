@@ -16,10 +16,12 @@ use App\Repositories\Hr\JobLevelRepository;
 use App\Repositories\Hr\JobTitleRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Base\Setting;
 use App\Repositories\Base\BusinessUnitRepository;
 use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use App\Repositories\Hr\SalaryGroupRepository;
 use App\Repositories\Hr\ShiftmentGroupRepository;
+use Carbon\Carbon;
 use Response;
 use Exception;
 
@@ -104,18 +106,22 @@ class EmployeeController extends AppBaseController
      */
     public function edit($id)
     {
-        $employee = $this->getRepositoryObj()->with(['contract'])->find($id);
+        $employee = $this->getRepositoryObj()->with(['contract'])->find($id);        
 
         if (empty($employee)) {
             Flash::error(__('messages.not_found', ['model' => __('models/employees.singular')]));
 
             return redirect(route('hr.employees.index'));
         }
+
+        $timeline = Setting::where(['type' => 'timeline', 'name' => 'max_entry_resign_date'])->first();
+        $maxEntry = $timeline->value ?? 30;
+        $minDate = localFormatDate(Carbon::now()->subDays($maxEntry)->format('Y-m-d'));
         $optionItems = $this->getOptionItems();
         if($employee->contract_id){
             $optionItems['contractItems'] += [$employee->contract_id => $employee->contract->letter_number];
         }
-        return view('hr.employees.edit')->with('employee', $employee)->with($optionItems);
+        return view('hr.employees.edit')->with('employee', $employee)->with($optionItems)->with('minDate', $minDate);;
     }
 
     /**
