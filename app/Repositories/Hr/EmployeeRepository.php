@@ -104,7 +104,11 @@ class EmployeeRepository extends BaseRepository
                 // clean all transaction relation with this employee after resign date
                 if($model->getRawOriginal('resign_date')){
                     $this->clearRelationTransaction($model);
-                }                
+                }
+                // tidak jadi resign
+                if(empty($model->getRawOriginal('resign_date'))){
+                    $this->restoreRelationTransaction($model);
+                }
             }
 
             if($oldData->getRawOriginal('salary_group_id') != $model->getRawOriginal('salary_group_id')){
@@ -162,6 +166,20 @@ class EmployeeRepository extends BaseRepository
             ->whereHas('payrollPeriod', function($q) use ($model) {
                 return $q->where('start_period','>=', $model->getRawOriginal('resign_date'));
         })->delete();
+    }
+
+    private function restoreRelationTransaction($model){
+        Attendance::where(['employee_id' => $model->id])
+            // ->where('attendance_date','>=', $model->getRawOriginal('resign_date'))
+            ->restore();
+        Workshift::where(['employee_id' => $model->id])
+            // ->where('work_date','>=', $model->getRawOriginal('resign_date'))
+            ->restore();
+        Payroll::where(['employee_id' => $model->id])
+            // ->whereHas('payrollPeriod', function($q) use ($model) {
+            //     return $q->where('start_period','>=', $model->getRawOriginal('resign_date'));
+            // })
+            ->restore();
     }
 
     private function updateSalaryBenefit($model){
