@@ -22,7 +22,7 @@ class CreateSalaryGroupDetailsTable extends Migration
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
-            $table->unique(['component_id', 'salary_group_id'], 'uq_salary_group_detail_1');
+            $table->unique(['component_id', 'salary_group_id', 'deleted_at'], 'uq_salary_group_detail_1');
             $table->foreign('salary_group_id', 'fk_salary_group_details_1')->references('id')->on('salary_groups')->onDelete('restrict')->onUpdate('restrict');
             $table->foreign('component_id', 'fk_salary_group_details_2')->references('id')->on('salary_components');
         });

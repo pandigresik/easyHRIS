@@ -41,7 +41,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $this->jobTitle = JobTitle::select(['id', 'name'])->get()->keyBy('name');  
         $this->salaryGroup = SalaryGroup::select(['id', 'name'])->with('salaryGroupDetails')->get()->keyBy('name');
         $this->shiftmentGroup = ShiftmentGroup::select(['id', 'name'])->get()->keyBy('name');
-        $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ','TUMLM', 'UM', 'PRHD', 'PTHD'])->get()->keyBy('code');
+        $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ','TUMLM', 'UM', 'PRHD', 'PTHD', 'TMHL', 'UML'])->get()->keyBy('code');
         $this->businessUnit = BusinessUnit::select(['id', 'name'])->get()->keyBy('name');
         $this->company = Company::select(['id', 'name'])->get()->keyBy('name');
         $this->payrollGroup = PayrollPeriodGroup::get()->keyBy('name');
@@ -66,6 +66,8 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $bpjsFeeJp = $row['bpjs_jp'];
         $premiKehadiran = $row['premi_kehadiran'];
         $uangMakan = $row['uang_makan'];
+        $uangMakanLembur = $row['uang_makan_lembur'];
+        $tunjanganMasukHariLibur = $row['tunjangan_masuk_hari_libur'];
         $tunjanganMinggu = $row['tunjangan_minggu'];
         unset($row['overtime']);
         unset($row['salary']);
@@ -76,6 +78,8 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         unset($row['tunjangan_minggu']);
         unset($row['premi_kehadiran']);
         unset($row['uang_makan']);
+        unset($row['uang_makan_lembur']);
+        unset($row['tunjangan_masuk_hari_libur']);
         $company = $row['company_id'];
         $row['company_id'] = $this->company[$company]->id ?? NULL;
         $businessUnit = $row['business_unit_id'];
@@ -93,6 +97,8 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $payrollGroup = $row['payroll_period_group_id'];
         $row['payroll_period_group_id'] = $this->payrollGroup[$payrollGroup]->id ?? NULL;
         $row['created_by'] = $userId;
+        // jika bulanan maka, potongan hadir gaji dibagi 25
+        $salaryDay = $this->payrollGroup[$payrollGroup]->type_period == 'monthly' ? ($salary / 25) : $salary;
         Employee::upsert($row->toArray(), ['code']);
         (new Employee())->flushCache();  
         $employee = Employee::whereCode($row['code'])->first();
@@ -101,11 +107,13 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
             $this->salaryComponent['OT']->id => $overtime, 
             $this->salaryComponent['GPH']->id => $salary, 
             $this->salaryComponent['GP']->id => $salary,
-            $this->salaryComponent['PTHD']->id => $salary,
+            $this->salaryComponent['PTHD']->id => $salaryDay,
             $this->salaryComponent['JPM']->id => $bpjsFeeJp, 
             $this->salaryComponent['JHTM']->id => $bpjsFeeJht,
             $this->salaryComponent['PJKNM']->id => $bpjsFeeJkn,
             $this->salaryComponent['UM']->id => $uangMakan,
+            $this->salaryComponent['UML']->id => $uangMakanLembur,
+            $this->salaryComponent['TMHL']->id => $tunjanganMasukHariLibur,
             $this->salaryComponent['PRHD']->id => $premiKehadiran,
             $this->salaryComponent['TJ']->id => $positionAllowance,
             $this->salaryComponent['TUMLM']->id => $tunjanganMinggu
