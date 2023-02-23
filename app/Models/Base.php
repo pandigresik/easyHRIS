@@ -71,7 +71,7 @@ class Base extends Model
     protected function scopeEmployeeDescendants($query, $column = 'employee_id'){
         $employee = \Auth::user()->employee;        
         if($employee){
-            $allDescendants = $employee->getAllDescendant();
+            $allDescendants = $employee->getAllDescendant();            
             return $query->whereIn($column, $allDescendants);
         }
         return $query;

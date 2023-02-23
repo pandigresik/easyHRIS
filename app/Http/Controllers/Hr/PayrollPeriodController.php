@@ -218,7 +218,8 @@ class PayrollPeriodController extends AppBaseController
                 $tmpPeriod->addDays(13);
                 break;
             case 'monthly':
-                $tmpPeriod->endOfMonth();
+                // $tmpPeriod->endOfMonth();
+                $tmpPeriod->addMonth();
                 break;
         }
         $endPeriod = $tmpPeriod->format('Y-m-d');

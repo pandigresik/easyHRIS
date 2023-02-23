@@ -224,6 +224,14 @@ class Overtime extends Model
         return Carbon::parse($this->attributes['overtime_date'])->dayOfWeek == Carbon::SUNDAY;
     }
 
+    public function isSaturdayOvertime(){
+        return Carbon::parse($this->attributes['overtime_date'])->dayOfWeek == Carbon::SATURDAY;
+    }
+
+    public function isHolidayOvertime(){
+        return $this->attributes['holiday'];
+    }
+
     public function getRawStartHourDate(){
         $validDate = $this->startValidOvertimeDate ?? $this->attributes['overtime_date'];
         return $validDate.' '.$this->attributes['start_hour'];

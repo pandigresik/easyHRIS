@@ -11,7 +11,9 @@ use App\Library\SalaryComponent\SummaryOvertime;
 use App\Library\SalaryComponent\PotonganKehadiran;
 use App\Library\SalaryComponent\PremiKehadiran;
 use App\Library\SalaryComponent\TunjanganJabatanHarian;
+use App\Library\SalaryComponent\TunjanganMasukHariLibur;
 use App\Library\SalaryComponent\UangMakan;
+use App\Library\SalaryComponent\UangMakanLembur;
 use App\Library\SalaryComponent\UangMakanLemburMinggu;
 use App\Library\SalaryComponent\UangMakanLuarKota;
 use App\Models\Hr\Holiday;
@@ -112,12 +114,12 @@ class PayrollPeriodRepository extends BaseRepository
                 break;
             case 'PRHD':
                 $joinDate = $employee->getRawOriginal('join_date');
-                $resignDate = $employee->getRawOriginal('resign_date');
+                $resignDate = $employee->getRawOriginal('resign_date');                
                 $absentMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_absent');
-                $workDayMonthCount = 25; // dalam satu bulan default 25 hari
-                if($joinDate > $this->getStartPremiPeriod()){
+                $workDayMonthCount = 25; // dalam satu bulan default 25 hari                
+                if($joinDate > $this->getStartPremiPeriod()){                    
                     $workDayMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_workday');
-                }
+                }                
                 if($resignDate){
                     if($resignDate <= $this->getEndPremiPeriod()){
                         $workDayMonthCount = 0;
@@ -129,6 +131,14 @@ class PayrollPeriodRepository extends BaseRepository
                 break;
             case 'UM':  
                 $componentObj = new UangMakan($workDayCount, $value);
+                break;
+            case 'UML':
+                $overtimes = $this->getOvertimeEmployee($employeeId);
+                $componentObj = new UangMakanLembur($overtimes, $value);
+                break;
+            case 'TMHL':
+                $overtimes = $this->getOvertimeEmployee($employeeId);
+                $componentObj = new TunjanganMasukHariLibur($overtimes, $value);
                 break;
             case 'TUMLM':
                 $overtimes = $this->getOvertimeSundayEmployee($employeeId);                              

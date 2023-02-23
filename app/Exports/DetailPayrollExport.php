@@ -29,12 +29,20 @@ class DetailPayrollExport implements WithMultipleSheets
     {
         $sheets = [];
         $payrollEntity = GroupingPayrollEntity::pluck('name', 'id');
+        $typePayrollPeriod = $this->payrollPeriod->payrollPeriodGroup->type_period ?? 'biweekly';
         foreach ($payrollEntity as $id => $entityName) {
             $data = $this->collection[$id] ?? collect([]);
             if ($data->isEmpty()) {
                 continue;
             }
-            $sheets[] = new EmployeePayrollSheet($data, $this->salaryComponent, $entityName, $this->payrollPeriod);
+            switch($typePayrollPeriod){
+                case 'monthly':
+                    $sheets[] = new EmployeePayrollMonthlySheet($data, $this->salaryComponent, $entityName, $this->payrollPeriod);
+                    break;
+                default:
+                    $sheets[] = new EmployeePayrollSheet($data, $this->salaryComponent, $entityName, $this->payrollPeriod);
+            }
+            
         }
         $sheets[] = new TransferSalarySheet($this->collection, $payrollEntity, 'REKAP DAFTAR TRANSFER', $this->payrollPeriod);
         return $sheets;

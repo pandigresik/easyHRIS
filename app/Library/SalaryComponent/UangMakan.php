@@ -1,6 +1,7 @@
 <?php
 namespace App\Library\SalaryComponent; 
 class UangMakan extends Component{
+    /** mendapatkan uang makan dengan syarat minimal kerja 4 jam */
     protected $code = 'UM';
     private $amount;
     private $value;

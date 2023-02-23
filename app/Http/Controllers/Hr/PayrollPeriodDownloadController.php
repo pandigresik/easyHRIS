@@ -19,7 +19,7 @@ class PayrollPeriodDownloadController extends AppBaseController
         }])->where(['payroll_period_id' => $id])->get()->groupBy('employee.groupPayrollEmployeeReport.grouping_payroll_entity_id');
         
         $salaryComponent = SalaryComponent::pluck('id','code');        
-        $payrollPeriod = PayrollPeriod::find($id);
+        $payrollPeriod = PayrollPeriod::with(['payrollPeriodGroup'])->find($id);
         $fileName = $payrollPeriod->name;
         // return view('exports.payrolls',['payrolls' => $collection, 'component' => $salaryComponent]);
         return (new DetailPayrollExport($collection, $salaryComponent, $payrollPeriod))->download($fileName.'.xlsx');

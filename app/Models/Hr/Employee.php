@@ -479,16 +479,16 @@ class Employee extends Model
             $children = $this->children;
             while(!$children->isEmpty()){
                  $loopChildren = collect([]);
-                 foreach($children as $child){
+                 foreach($children as $child){                    
+                     $result[] = $child->id;
+                     
                      if($child->isParentNode()){
-                        $loopChildren = $loopChildren->merge($child->children);
-                     }else{
-                        $result[] = $child->id;
+                        $loopChildren = $loopChildren->merge($child->children);                        
                      }
                  }
                  $children = $loopChildren;
             }            
-         }
+         }         
         return $result;
     }
 

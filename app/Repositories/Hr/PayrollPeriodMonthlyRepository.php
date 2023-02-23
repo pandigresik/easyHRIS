@@ -21,6 +21,7 @@ use Carbon\Carbon;
 
 class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
 {
+    private $defaultHariKerja = 25;
     /**
      * Create model record.
      *
@@ -50,7 +51,7 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
     }
 
     protected function calculatePayroll($companyId, $period, $payrollPeriod, $employeeId = []){
-        // create payrollPeriod if not exists
+        // create payrollPeriod if not exists        
         $startDateObj = Carbon::parse($period['start_period']);
         $period['company_id'] = $companyId;
         $period['payroll_period_group_id'] = $payrollPeriod;
@@ -78,12 +79,12 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
                 ->pluck('workday', 'employee_id')->toArray();
                         
         $this->setSummaryAttendanceEmployee([]);
+        $this->setPremiPeriod($periodPayroll->getRawOriginal('year').'-'.$periodPayroll->getRawOriginal('month'));
         
-        if($periodPayroll->isEndOfMonth()){
-            $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => intval($startDateObj->format('m'))])->whereIn('employee_id', $listEmployees)->get()->groupBy('employee_id'));
-        }
+        $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => intval($startDateObj->format('m'))])->whereIn('employee_id', $listEmployees)->get()->groupBy('employee_id'));
         
-        $this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
+        
+        //$this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         $this->setAbsentLateEmployee(Attendance::absentLeaveLate()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         
@@ -98,22 +99,15 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         $details = [];
         $takeHomePay = 0;
         $overtimeSalary = 0;
-        $dailySalary = 0;
-        $kmSalary = 0;
-        $doubleRitSalary = 0;
+        $dailySalary = 0;        
         foreach($employee->salaryBenefits as $benefit){
             if($benefit->component->getRawOriginal('code') == 'GP'){
-                $dailySalary = $benefit->getRawOriginal('benefit_value');
+                $dailySalary = $benefit->getRawOriginal('benefit_value') / $this->defaultHariKerja;
             }
             if($benefit->component->getRawOriginal('code') == 'OT'){
                 $overtimeSalary = $benefit->getRawOriginal('benefit_value');
             }
-            if($benefit->component->getRawOriginal('code') == 'TDKM'){
-                $kmSalary = $benefit->getRawOriginal('benefit_value');
-            }
-            if($benefit->component->getRawOriginal('code') == 'TDDRT'){
-                $doubleRitSalary = $benefit->getRawOriginal('benefit_value');
-            }
+            
             $tmp = [
                 'component_id' => $benefit->component_id,
                 'sign_value' => $benefit->component->getRawOriginal('state') == 'p' ? 1 : -1, 
@@ -122,15 +116,9 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
             
             if($benefit->component->fixed){
                 $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');                
-            }else{
-                $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);                
-            }
-            /** untuk tunjangan jabatan hanya diberikan di akhir bulan saja */
-            if(in_array($benefit->component->getRawOriginal('code') , config('local.benefit_end_of_month'))){
-                if(!$periodPayroll->isEndOfMonth()){
-                    $tmp['benefit_value'] = 0;
-                }                
-            }
+            }else{                
+                $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);
+            }            
 
             $takeHomePay += ($tmp['sign_value'] * $tmp['benefit_value']);
             $details[] = $tmp;            
@@ -147,9 +135,7 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
         $payroll->additional_info = [
             'workday' => $workDayCount,
-            'dailySalary' => $dailySalary,
-            'doubleRitSalary' => $doubleRitSalary,
-            'kmSalary' => $kmSalary,
+            'dailySalary' => $dailySalary,                        
             'overtimeSalary' => $overtimeSalary,            
             'overtime' => $this->getOvertimeEmployee($employee->id)->sum(function($item){                    
                         return $item->getRawOriginal('calculated_value');
