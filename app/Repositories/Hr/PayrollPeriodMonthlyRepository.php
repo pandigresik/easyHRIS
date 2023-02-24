@@ -70,14 +70,17 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         }
 
         $employees = $employeeOjb->get();
+        
         $listEmployees = $employees->pluck('id')->toArray();
-        $workDayEmployee = Workshift::selectRaw('employee_id, count(*) as workday')
+        $workDayEmployee = Attendance::selectRaw('employee_id, count(*) as workday')
                 ->whereIn('employee_id', $listEmployees)
-                ->whereBetween('work_date', [$period['start_period'], $period['end_period']])
+                ->whereBetween('attendance_date', [$period['start_period'], $period['end_period']])
+                ->whereNotIn('shiftment_id', config('local.shiftment_off'))
+                ->whereNotIn('state', config('local.exclude_meal_allowance'))                
                 ->groupBy('employee_id')
                 ->get()
                 ->pluck('workday', 'employee_id')->toArray();
-                        
+        
         $this->setSummaryAttendanceEmployee([]);
         $this->setPremiPeriod($periodPayroll->getRawOriginal('year').'-'.$periodPayroll->getRawOriginal('month'));
         
@@ -85,7 +88,7 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         
         
         //$this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
-        $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
+        $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->approve()->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         $this->setAbsentLateEmployee(Attendance::absentLeaveLate()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         
         foreach($employees as $employee){
@@ -128,17 +131,19 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
             'payroll_period_id' => $periodPayroll->id,
             'employee_id' => $employee->id
         ]);
+        
         $amountLateMinute = $this->getAbsentLateEmployee($employee->id)->sum(function($item){
             return $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out');
         });
-        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->sum('absent');
+        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->whereIn('state', config('local.absent_code_not_pay'))->count();
+        
         $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
         $payroll->additional_info = [
             'workday' => $workDayCount,
             'dailySalary' => $dailySalary,                        
             'overtimeSalary' => $overtimeSalary,            
             'overtime' => $this->getOvertimeEmployee($employee->id)->sum(function($item){                    
-                        return $item->getRawOriginal('calculated_value');
+                        return $item->getRawOriginal('payroll_calculated_value');
                     }),
             'late_early'=> $amountLateMinute,
             'absent' => $amountAbsentDay

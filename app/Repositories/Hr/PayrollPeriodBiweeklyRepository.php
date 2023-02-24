@@ -225,7 +225,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
     private function actualWorkday($employee, $periodPayroll){
         return Workshift::where('employee_id', $employee->id)
         ->whereBetween('work_date', [$employee->getRawOriginal('join_date'), $periodPayroll->getRawOriginal('end_period')])
-        ->whereNotIn('shiftment_id', config('local.shiftment_off'))        
+        ->whereNotIn('shiftment_id', config('local.shiftment_off'))
         ->count();
     }
 }

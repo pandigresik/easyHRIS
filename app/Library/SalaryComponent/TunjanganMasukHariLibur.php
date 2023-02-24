@@ -4,6 +4,7 @@ class TunjanganMasukHariLibur extends Component{
     protected $code = 'TMHL';
     private $dataOvertime;
     private $value;
+    private $minimumOvertime = 8;
 
     function __construct($dataOvertime, $value)
     {
@@ -22,7 +23,10 @@ class TunjanganMasukHariLibur extends Component{
             }            
             
             if($isHoliday){
-                $result += $this->value;
+                $calculated = minuteToHour($ot->getRawOriginal('payroll_calculated_value'));
+                if($calculated >= $this->minimumOvertime){
+                    $result += $this->value;
+                }                
             }
         }
         return $result;

@@ -67,7 +67,9 @@ class PayrollPeriodController extends AppBaseController
         $input = $request->all();        
         $payrollPeriod = $this->getRepositoryObj()->setPayrollPeriod($this->type)->create($input);
         if($payrollPeriod instanceof Exception){
-            return redirect()->back()->withInput()->withErrors(['error', $payrollPeriod->getMessage()]);
+            $workDate = explode('__',$input['range_period']);
+            $input['range_period'] = localFormatDate($workDate[0]).' - '.localFormatDate($workDate[1]);
+            return redirect()->back()->withInput($input)->withErrors(['error', $payrollPeriod->getMessage()]);
         }
         
         Flash::success(__('messages.saved', ['model' => __('models/payrollPeriods.singular')]));
@@ -219,7 +221,7 @@ class PayrollPeriodController extends AppBaseController
                 break;
             case 'monthly':
                 // $tmpPeriod->endOfMonth();
-                $tmpPeriod->addMonth();
+                $tmpPeriod->addWeeks(2)->endOfMonth()->subDays(2);
                 break;
         }
         $endPeriod = $tmpPeriod->format('Y-m-d');

@@ -130,7 +130,12 @@ class PayrollPeriodRepository extends BaseRepository
                 $componentObj = new PremiKehadiran($workDayMonthCount, $value, $absentMonthCount, $offMonthCount);
                 break;
             case 'UM':  
-                $componentObj = new UangMakan($workDayCount, $value);
+                /** uang makan dibayarkan minimal kerja 4 jam, cek yang statusnya PC atau DT */
+                $amountDay = $this->getAbsentLateEmployee($employeeId)->whereIn('state', config('local.leave_code'))->sum(function($item){
+                    $workingTime = diffMinute($item->getRawOriginal('check_in_schedule'), $item->getRawOriginal('check_out_schedule'));
+                    return ($workingTime - ( $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out') )) >= 240 ? 1 : 0;
+                });
+                $componentObj = new UangMakan(($workDayCount + $amountDay), $value);
                 break;
             case 'UML':
                 $overtimes = $this->getOvertimeEmployee($employeeId);
@@ -144,7 +149,7 @@ class PayrollPeriodRepository extends BaseRepository
                 $overtimes = $this->getOvertimeSundayEmployee($employeeId);                              
                 $componentObj = new UangMakanLemburMinggu($overtimes, $value);
                 break;
-            case 'TDUM':                
+            case 'TDUM':      
                 $luarKotaCount = $this->getLuarKotaEmployee($employeeId)->count();
                 $componentObj = new UangMakanLuarKota($luarKotaCount, $value);
                 break;

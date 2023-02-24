@@ -37,6 +37,7 @@ return [
     'digit_decimal' => 2,    
     'bpjs_fee' => [6, 10, 21, 28],
     'reason_code_not_absent' => ['OFF', 'LK', 'DL'],
+    'exclude_meal_allowance' => ['ABSENT', 'OFF', 'ABS', 'INVALID', 'CK', 'CT'],
     // id untuk shiftment yang libur
     'shiftment_off' => [2],
     'default_shiftment_off_id' => 2,
