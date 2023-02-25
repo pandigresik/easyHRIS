@@ -114,8 +114,8 @@ class EmployeeController extends AppBaseController
             return redirect(route('hr.employees.index'));
         }
 
-        $timeline = Setting::where(['type' => 'timeline', 'name' => 'max_entry_resign_date'])->first();
-        $maxEntry = $timeline->value ?? 30;
+        $timeline = Setting::where(['type' => 'timeline', 'name' => 'max_entry_resign_date'])->first();        
+        $maxEntry = $timeline->value ?? 30;        
         $minDate = localFormatDate(Carbon::now()->subDays($maxEntry)->format('Y-m-d'));
         $optionItems = $this->getOptionItems();
         if($employee->contract_id){

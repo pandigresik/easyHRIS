@@ -61,7 +61,7 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
         // $setting = Setting::where(['type' => 'payroll'])->get()->keyBy('name');
         // get list employee
-        $employeeOjb = Employee::select(['id', 'code'])->with(['salaryBenefits' => function($q){
+        $employeeOjb = Employee::select(['id', 'code', 'join_date', 'resign_date'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
         }])->where(['payroll_period_group_id' => $payrollPeriod]);
 
@@ -118,8 +118,34 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
             ];
             
             if($benefit->component->fixed){
-                $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');                
-            }else{                
+                $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');
+                
+                if($employee->getRawOriginal('join_date') > $periodPayroll->getRawOriginal('start_period')){                    
+                    if(in_array($benefit->component->code, ['GP'])){
+                        /** khusus untuk GP, jika join date > start_date maka, GP / 25 * hari kerja */
+                        /** uang makan dibayarkan minimal kerja 4 jam, cek yang statusnya PC atau DT */
+                        $startOfMonthPeriod = Carbon::parse($periodPayroll->getRawOriginal('end_period'))->startOfMonth();
+                        $endOfMonthPeriod = Carbon::parse($periodPayroll->getRawOriginal('end_period'))->endOfMonth();
+                        $startPeriodObj = Carbon::parse($employee->getRawOriginal('join_date'));
+                        // jika masuk tgl 01 maka gajinya utuh
+                        if($startPeriodObj > $startOfMonthPeriod){
+                            $workDayCount = $startPeriodObj->diffInDays($endOfMonthPeriod) + 1;
+                            $sundayDay = $startPeriodObj->diffInDaysFiltered(function (Carbon $date){
+                                return $date->dayOfWeek == Carbon::SUNDAY;         
+                            }, $endOfMonthPeriod->addDay());
+                            
+                            $workDayCount -= $sundayDay;                                                    
+                                if($workDayCount < 25){
+                                    $tmp['benefit_value'] = ($benefit->getRawOriginal('benefit_value') / 25) * $workDayCount;
+                                }                            
+                            
+                        }
+                    }
+                    
+                    
+                }
+                
+            }else{                                
                 $tmp['benefit_value'] = $this->calculateComponent($workDayCount, $employee, $benefit->getRawOriginal('benefit_value'), $benefit->component->code);
             }            
 

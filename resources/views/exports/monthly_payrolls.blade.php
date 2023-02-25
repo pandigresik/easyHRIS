@@ -12,7 +12,7 @@
             <th rowspan="2">BISNIS UNIT</th>
             <th rowspan="2">DEPARTEMEN</th>
             <th rowspan="2">Jabatan / Divisi</th>            
-            <td colspan=8>PENERIMAAN</td>
+            <td colspan=9>PENERIMAAN</td>
             <td colspan=8>POTONGAN</td>            
             <td rowspan="2">NETTO</td>
         </tr>
@@ -45,7 +45,7 @@
         @endphp
         @foreach($payrolls->groupBy('employee.joblevel_id') as $keyLevel =>  $payrollLevels)
             <tr>
-                <td colspan="24">Level Jabatan {{ $keyLevel }}</td>
+                <td colspan="24">Level Jabatan {{ $jobLevel[$keyLevel] ?? '' }}</td>
             </tr>
             <tr>
                 <td colspan="24"></td>
@@ -122,11 +122,10 @@
                 <td>{{ $totalPenerimaan }}</td>            
                 <td>{{ $absent * $dailySalary }}</td>  
                 <td>{{ round($dailySalary/7 * minuteToHour($lateEarly),2) }}</td>          
-                <td>{{ $potonganBpjsKesehatanComponent ? ($potonganBpjsKesehatanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
                 <td>{{ $potonganBpjsJhtComponent ? ($potonganBpjsJhtComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
-                <td>{{ $potonganBpjsTambahanComponent ? ($potonganBpjsTambahanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
-                <td>{{ $potonganBpjsJpComponent ? ($potonganBpjsJpComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>            
-                <td>0</td>
+                <td>{{ $potonganBpjsJpComponent ? ($potonganBpjsJpComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>  
+                <td>{{ $potonganBpjsKesehatanComponent ? ($potonganBpjsKesehatanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>                
+                <td>{{ $potonganBpjsTambahanComponent ? ($potonganBpjsTambahanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>                                          
                 <td>{{ $potonganLainComponent ? ($potonganLainComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>            
                 <td>{{ $totalPotongan }}</td>
                 <td>{{ $totalPenerimaan - $totalPotongan }}</td>
@@ -156,7 +155,6 @@
             <td>=sum(V{{ $awalBarisData + $awalBarisKosong }}:V{{ $no + $barisKosong + $awalBarisData }})</td>
             <td>=sum(W{{ $awalBarisData + $awalBarisKosong }}:W{{ $no + $barisKosong + $awalBarisData }})</td>
             <td>=sum(X{{ $awalBarisData + $awalBarisKosong }}:X{{ $no + $barisKosong + $awalBarisData }})</td>
-            <td>=sum(Y{{ $awalBarisData + $awalBarisKosong }}:Y{{ $no + $barisKosong + $awalBarisData }})</td>            
         </tr>
     </tbody>
 </table>

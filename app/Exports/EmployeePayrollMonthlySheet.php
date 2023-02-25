@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Repositories\Hr\JobLevelRepository;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -17,7 +18,7 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
     private $salaryComponent;
     private $sheetName;    
     private $payrollPeriod;
-    private  $collection;
+    private $collection;    
     public function __construct(Collection $collection, $salaryComponent, $sheetName, $payrollPeriod)
     {
         $this->collection = $collection;
@@ -32,6 +33,7 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
     public function view(): View
     {
         return view('exports.monthly_payrolls', [
+            'jobLevel' => (new JobLevelRepository())->pluck(),
             'payrolls' => $this->collection,
             'component' => $this->salaryComponent,
             'periodTitle' => $this->payrollPeriod->range_period,
@@ -69,8 +71,7 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
             'U' => $formatNumber,
             'V' => $formatNumber,
             'W' => $formatNumber,
-            'X' => $formatNumber,
-            'Y' => $formatNumber            
+            'X' => $formatNumber                   
         ];
     }
 
@@ -78,10 +79,10 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
     {
         return [
             AfterSheet::class => function(AfterSheet $event){
-                $headerCellRange = 'A4:Y5';                
+                $headerCellRange = 'A4:X5';                
                 $worksheet = $event->sheet->getDelegate();
                 $lastRow = $worksheet->getHighestDataRow();
-                $tableRange = 'A4:Y'.$lastRow;
+                $tableRange = 'A4:X'.$lastRow;
                 $worksheet->freezePane('A6');
                 $worksheet->getStyle($headerCellRange)->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
