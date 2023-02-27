@@ -16,6 +16,8 @@ use App\Library\SalaryComponent\UangMakan;
 use App\Library\SalaryComponent\UangMakanLembur;
 use App\Library\SalaryComponent\UangMakanLemburMinggu;
 use App\Library\SalaryComponent\UangMakanLuarKota;
+use App\Models\Hr\Attendance;
+use App\Models\Hr\Employee;
 use App\Models\Hr\Holiday;
 use App\Models\Hr\PayrollPeriod;
 use App\Repositories\BaseRepository;
@@ -38,6 +40,7 @@ class PayrollPeriodRepository extends BaseRepository
     protected $absentLateEmployee; // untuk hitung potongan kehadiran
     private $premiPeriod; // untuk hitung premi kehadiran
     private $startPeriodPayroll;
+    private $endPeriodPayroll;
     /**
      * @var array
      */
@@ -129,13 +132,21 @@ class PayrollPeriodRepository extends BaseRepository
                 $offMonthCount = $this->getSummaryAttendanceEmployee($employeeId)->sum('total_off');                
                 $componentObj = new PremiKehadiran($workDayMonthCount, $value, $absentMonthCount, $offMonthCount);
                 break;
-            case 'UM':  
-                /** uang makan dibayarkan minimal kerja 4 jam, cek yang statusnya PC atau DT */
-                $amountDay = $this->getAbsentLateEmployee($employeeId)->whereIn('state', config('local.leave_code'))->sum(function($item){
-                    $workingTime = diffMinute($item->getRawOriginal('check_in_schedule'), $item->getRawOriginal('check_out_schedule'));
-                    return ($workingTime - ( $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out') )) >= 240 ? 1 : 0;
-                });
-                $componentObj = new UangMakan(($workDayCount + $amountDay), $value);
+            case 'UM':
+                if($employee->getHasMealAllowance()){
+                    /** uang makan dibayarkan minimal kerja 4 jam, cek yang statusnya PC atau DT */
+                    $amountDay = $this->getAbsentLateEmployee($employeeId)->whereIn('state', config('local.leave_code'))->sum(function($item){
+                        $workingTime = diffMinute($item->getRawOriginal('check_in_schedule'), $item->getRawOriginal('check_out_schedule'));
+                        return ($workingTime - ( $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out') )) >= 240 ? 1 : 0;
+                    });
+                    $workDayCount += $amountDay;
+                }else{
+                    $workDayCount = 0;                    
+                    if($employee->getHasPartialMealAllowance()){
+                        $workDayCount = $this->getPartialMealAllowance($employee);
+                    }                    
+                }
+                $componentObj = new UangMakan($workDayCount, $value);
                 break;
             case 'UML':
                 $overtimes = $this->getOvertimeEmployee($employeeId);
@@ -174,6 +185,24 @@ class PayrollPeriodRepository extends BaseRepository
         return $result;
     }
 
+    protected function getPartialMealAllowance(Employee $employee){
+        $result = 0;
+        $startGetMealAllowance = $employee->getMinDateGetMealAllowance();
+        $attendance = Attendance::whereEmployeeId($employee->id)
+            ->whereBetween('attendance_date', [$startGetMealAllowance, $this->getEndPeriodPayroll()])
+            ->whereNotIn('shiftment_id', config('local.shiftment_off'))
+            ->whereNotIn('state', config('local.exclude_meal_allowance'))                
+            ->get()
+            ->sum(function($item){
+                if(in_array($item->getRawOriginal('state'), config('local.leave_code'))){
+                    $workingTime = diffMinute($item->getRawOriginal('check_in_schedule'), $item->getRawOriginal('check_out_schedule'));
+                    return ($workingTime - ( $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out') )) >= 240 ? 1 : 0;
+                }else{
+                    return 1;
+                }
+            });                
+        return $result;
+    }
     /**
      * Get the value of payrollPeriod
      */ 
@@ -363,6 +392,26 @@ class PayrollPeriodRepository extends BaseRepository
     public function setStartPeriodPayroll($startPeriodPayroll)
     {
         $this->startPeriodPayroll = $startPeriodPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of endPeriodPayroll
+     */ 
+    public function getEndPeriodPayroll()
+    {
+        return $this->endPeriodPayroll;
+    }
+
+    /**
+     * Set the value of endPeriodPayroll
+     *
+     * @return  self
+     */ 
+    public function setEndPeriodPayroll($endPeriodPayroll)
+    {
+        $this->endPeriodPayroll = $endPeriodPayroll;
 
         return $this;
     }

@@ -39,6 +39,8 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
             $period = generatePeriod($input['range_period']);
             $period['start_period'] = $period['startDate'];
             $period['end_period'] = $period['endDate'];
+            $this->setStartPeriodPayroll($period['start_period']);
+            $this->setEndPeriodPayroll($period['end_period']);
             unset($period['startDate']);
             unset($period['endDate']);
             $this->calculatePayroll($input['company_id'], $period, $payrollPeriodGroupId, $employeeId);
@@ -59,7 +61,10 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         $period['month'] = $startDateObj->format('m'); 
         $period['name'] = 'Periode gaji '. localFormatDate($period['start_period']).' sd '.localFormatDate($period['end_period']);
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
-        // $setting = Setting::where(['type' => 'payroll'])->get()->keyBy('name');
+        $setting = Setting::where(['type' => 'payroll'])->get()->keyBy('name');
+        $minMonthGetMealAllowance = $setting['get_meal_allowance_month'] ?? 3;
+        $minJoinDateMealAllowance = Carbon::parse($period['start_period'])->subMonth($minMonthGetMealAllowance)->format('Y-m-d');
+        $maxJoinDateMealAllowance = Carbon::parse($period['end_period'])->subMonth($minMonthGetMealAllowance)->format('Y-m-d');
         // get list employee
         $employeeOjb = Employee::select(['id', 'code', 'join_date', 'resign_date'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
@@ -85,14 +90,14 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         $this->setPremiPeriod($periodPayroll->getRawOriginal('year').'-'.$periodPayroll->getRawOriginal('month'));
         
         $this->setSummaryAttendanceEmployee(AttendanceSummary::where(['year' => $startDateObj->format('Y'), 'month' => intval($startDateObj->format('m'))])->whereIn('employee_id', $listEmployees)->get()->groupBy('employee_id'));
-        
-        
+                
         //$this->setLuarKotaEmployee(Attendance::luarKota()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         $this->setOvertimeEmployee(HrOvertime::whereIn('employee_id', $listEmployees)->approve()->whereBetween('overtime_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         $this->setAbsentLateEmployee(Attendance::absentLeaveLate()->whereIn('employee_id', $listEmployees)->whereBetween('attendance_date',[$period['start_period'], $period['end_period']])->get()->groupBy('employee_id'));
         
         foreach($employees as $employee){
-            $workDayCount = $workDayEmployee[$employee->id] ?? 0;            
+            $workDayCount = $workDayEmployee[$employee->id] ?? 0;
+            $employee->checkMealAllowance($minJoinDateMealAllowance, $maxJoinDateMealAllowance, $minMonthGetMealAllowance);
             $this->calculateEmployeePayroll($workDayCount, $employee, $periodPayroll);
         }
         (new PayrollDetail())->flushCache();

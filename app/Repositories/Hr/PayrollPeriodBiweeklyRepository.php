@@ -105,6 +105,7 @@ class PayrollPeriodBiweeklyRepository extends PayrollPeriodRepository
             if(in_array($this->getPayrollPeriod(), ['weekly', 'biweekly'])){
                 if(!empty($holidayNotSunday)){
                     foreach($holidayNotSunday as $holiday){
+                        // hari libur tetap dibayar jika sudah kerja >= 3 bulan
                         $minJoinDate = Carbon::parse($holiday)->subMonth($setting['min_joindate_month'])->format('Y-m-d');
                         if($employee->isHolidayPay($minJoinDate)){
                             $workDayCount += 1;

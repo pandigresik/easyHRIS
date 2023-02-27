@@ -47,6 +47,7 @@ try:
     if employees is None:
         exit
     employee_dict = { employee[1]:employee[0] for employee in employees}
+    logger.info("getting data attandance from fingerprint ip {} port {}".format(ip_address, port))
     attendances = conn.get_attendance()
     logger.info("total data attendance in device is {}".format(len(attendances)))
     for attendance in attendances:

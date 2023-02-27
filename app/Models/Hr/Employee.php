@@ -3,6 +3,7 @@
 namespace App\Models\Hr;
 
 use App\Models\Base as Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,17 +37,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Employee extends Model
 {
     use HasFactory;
-        use SoftDeletes;
+    use SoftDeletes;
     
     public $table = 'employees';
-    
+    private $hasMealAllowance = 0;
+    private $hasPartialMealAllowance = 0;
+    private $minDateGetMealAllowance;
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
 
     protected $dates = ['deleted_at'];
     protected $showColumnOption = 'full_name';
-
 
     public $fillable = [
         'contract_id',
@@ -505,5 +508,65 @@ class Employee extends Model
                }
             }
         return $result;
+    }
+
+    /**
+     * Get the value of hasMealAllowance
+     */ 
+    public function checkMealAllowance($minJoinDate, $maxJoinDate, $minMonthGetMealAllowance)
+    {
+        $this->setMinDateGetMealAllowance(Carbon::parse($this->attributes['join_date'])->addMonths($minMonthGetMealAllowance)->format('Y-m-d'));
+        if($this->attributes['join_date'] <= $minJoinDate){
+            $this->hasMealAllowance = 1;
+        }else{
+            if($this->attributes['join_date'] <= $maxJoinDate){
+                $this->hasPartialMealAllowance = 1;
+            }
+        }        
     }    
+    
+    public function getHasPartialMealAllowance()
+    {
+        return $this->hasPartialMealAllowance;
+    }
+
+    /**
+     * Get the value of minDateGetMealAllowance
+     */ 
+    public function getMinDateGetMealAllowance()
+    {
+        return $this->minDateGetMealAllowance;
+    }
+
+    /**
+     * Set the value of minDateGetMealAllowance
+     *
+     * @return  self
+     */ 
+    public function setMinDateGetMealAllowance($minDateGetMealAllowance)
+    {
+        $this->minDateGetMealAllowance = $minDateGetMealAllowance;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of hasMealAllowance
+     */ 
+    public function getHasMealAllowance()
+    {
+        return $this->hasMealAllowance;
+    }
+
+    /**
+     * Set the value of hasMealAllowance
+     *
+     * @return  self
+     */ 
+    public function setHasMealAllowance($hasMealAllowance)
+    {
+        $this->hasMealAllowance = $hasMealAllowance;
+
+        return $this;
+    }
 }
