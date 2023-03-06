@@ -121,7 +121,8 @@ class ShiftmentGroupDataTable extends DataTable
         return [
             'code' => new Column(['title' => __('models/shiftmentGroups.fields.code'),'name' => 'code', 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
             'company_id' => new Column(['title' => __('models/shiftmentGroups.fields.company_id'),'name' => 'company_id', 'data' => 'company.name', 'defaultContent' => '', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $companyItem, 'multiple' => 'multiple', 'width' => '200px']),
-            'name' => new Column(['title' => __('models/shiftmentGroups.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text'])
+            'name' => new Column(['title' => __('models/shiftmentGroups.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
+            'pattern' => new Column(['title' => __('models/shiftmentGroups.fields.pattern'),'name' => 'pattern', 'data' => 'pattern', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

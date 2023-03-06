@@ -9,5 +9,6 @@ return array (
     'code' => 'Code',
     'company_id' => 'Company',
     'name' => 'Name',
+    'pattern' => 'Pattern'
   ),
 );

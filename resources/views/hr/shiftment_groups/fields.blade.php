@@ -21,3 +21,11 @@
     {!! Form::text('name', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255, 'required' => 'required']) !!}
 </div>
 </div>
+
+<!-- Name Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('pattern', __('models/shiftmentGroups.fields.pattern').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    {!! Form::text('pattern', null, ['class' => 'form-control','maxlength' => 255]) !!}
+</div>
+</div>

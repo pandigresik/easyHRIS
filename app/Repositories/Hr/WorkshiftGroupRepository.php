@@ -55,17 +55,23 @@ class WorkshiftGroupRepository extends BaseRepository
         $startDate = $data['startDate'];
         $endDate = $data['endDate'];
         /** cari urutan shift untuk grup tersebut */
-        $shiftmentGroup = ShiftmentGroup::with(['shiftmentGroupDetails'])->find($data['shiftmentGroup']);
-        $shiftmentGroupDetails = $shiftmentGroup->shiftmentGroupDetails;
+        $shiftmentGroup = ShiftmentGroup::with(['shiftmentGroupDetails'])->find($data['shiftmentGroup']);        
+
         /** cari shift terakhir sebelumya yang bukan hari libur */
         $lastShift = WorkshiftGroup::where(['shiftment_group_id' => $data['shiftmentGroup']])->whereNotIn('shiftment_id', config('local.shiftment_off'))->where('work_date','<=', $startDate->format('Y-m-d'))->orderBy('work_date','desc')->first();
-        
+            
         $currentShiftment = NULL;
         if($lastShift){
             $currentShiftment = $lastShift->shiftment_id;
         }
+        if(!$shiftmentGroup->pattern){            
+            $scheduleResult = $this->generateScheduleDay($startDate, $endDate, $shiftmentGroup, $currentShiftment);
+        }else{            
+            $scheduleResult = $this->generatePatternScheduleDay($startDate, $endDate, $shiftmentGroup, $currentShiftment);
+        }
+        
         return [     
-            'schedule' => $this->generateScheduleDay($startDate, $endDate, $shiftmentGroupDetails, $currentShiftment)
+            'schedule' => $scheduleResult
         ];
     }
 
@@ -106,11 +112,12 @@ class WorkshiftGroupRepository extends BaseRepository
         return $nextShiftment;
     }
 
-    private function generateScheduleDay($startDate, $endDate, $shiftmentGroupDetails, $firstShiftment = NULL){
+    private function generateScheduleDay($startDate, $endDate, $shiftmentGroup, $firstShiftment = NULL){
         $result = [];
         $period = CarbonPeriod::create($startDate, $endDate);
         
         $shifment = Shiftment::with(['schedules'])->get()->keyBy('id');
+        $shiftmentGroupDetails = $shiftmentGroup->shiftmentGroupDetails;
         $currentShiftment = $firstShiftment ?? $this->getNextShiftment($shiftmentGroupDetails, $firstShiftment);
         /** cari hari libur di range tanggal tersebut */
         $holiday = Holiday::select(['holiday_date'])->whereBetween('holiday_date',[$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])->get()->pluck('raw_holiday_date','raw_holiday_date');
@@ -139,6 +146,75 @@ class WorkshiftGroupRepository extends BaseRepository
                 $holidayShiftment = ['id' => $shifment[$this->shiftmentOff]->id, 'code' => $shifment[$this->shiftmentOff]->code, 'name' => $shifment[$this->shiftmentOff]->name, 'next_day' => false, 'start_hour' => $shifment[$this->shiftmentOff]->start_hour, 'end_hour' => $shifment[$this->shiftmentOff]->end_hour ];
                 $result[$date->format('Y-m-d')] = $holidayShiftment;
             }
+        }
+        return $result;
+    }
+
+    /** libur berdasarkan pola tertentu, misalkan 6ON2OFF */
+    private function generatePatternScheduleDay($startDate, $endDate, $shiftmentGroup, $firstShiftment = NULL){        
+        $result = [];
+        $period = CarbonPeriod::create($startDate, $endDate);
+        
+        $shifment = Shiftment::with(['schedules'])->get()->keyBy('id');
+        $shiftmentGroupDetails = $shiftmentGroup->shiftmentGroupDetails;        
+        $currentShiftment = $firstShiftment ?? $this->getNextShiftment($shiftmentGroupDetails, $firstShiftment);        
+        
+        $patternSchedule = $shiftmentGroup->getExtractPattern();
+        $offDay = $patternSchedule['OFF'];
+        $onDay = $patternSchedule['ON'];
+        $stepDayOff = 0;
+        $stepDayOn = 0;
+        $currentStep = 'ON';
+        // get last date off        
+        if($firstShiftment){
+            /** cari shift terakhir sebelumya yang bukan hari libur */
+            $lastShiftOn = WorkshiftGroup::where(['shiftment_group_id' => $shiftmentGroup->id])->whereNotIn('shiftment_id', config('local.shiftment_off'))->where('work_date','<=', $startDate->format('Y-m-d'))->orderBy('work_date','desc')->first();
+            $cutOffDays = Carbon::parse($startDate)->subDays($onDay + 1);
+            /** cari shift terakhir sebelumya yang bukan hari libur */
+            $lastShiftOff = WorkshiftGroup::where(['shiftment_group_id' => $shiftmentGroup->id])->whereIn('shiftment_id', config('local.shiftment_off'))->where('work_date','>=', $cutOffDays->format('Y-m-d'))->orderBy('work_date','asc')->first();
+            if($lastShiftOff){
+                $diffDay = $lastShiftOn->work_date->diffInDays($lastShiftOff->work_date);
+                if($diffDay){
+                    $stepDayOn = $onDay - $stepDayOn;
+                }else{
+                    $currentStep = 'OFF';
+                }
+            }         
+        }
+        $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
+        
+        foreach($period as $date){
+            if($currentStep == 'ON'){                
+                if($stepDayOn == 0){
+                    $currentShiftment = $this->getNextShiftment($shiftmentGroupDetails, $currentShiftment);
+                    $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');                    
+                }
+
+                $selectedShiftment = ['id' => $shifment[$currentShiftment]->id, 'code' => $shifment[$currentShiftment]->code, 'name' => $shifment[$currentShiftment]->name ];
+                $selectedShiftment['start_hour'] = $currentScheduleShiftment[$date->dayOfWeek]->start_hour;
+                $selectedShiftment['end_hour'] = $currentScheduleShiftment[$date->dayOfWeek]->end_hour;
+                $selectedShiftment['next_day'] = $currentScheduleShiftment[$date->dayOfWeek]->next_day;
+                
+                $result[$date->format('Y-m-d')] = $selectedShiftment;                
+
+                $stepDayOn++;
+                if($stepDayOn > $onDay){
+                    $currentStep = 'OFF';
+                    $stepDayOff = 0;
+                }
+            }
+
+            if($currentStep == 'OFF'){                
+                $holidayShiftment = ['id' => $shifment[$this->shiftmentOff]->id, 'code' => $shifment[$this->shiftmentOff]->code, 'name' => $shifment[$this->shiftmentOff]->name, 'next_day' => false, 'start_hour' => $shifment[$this->shiftmentOff]->start_hour, 'end_hour' => $shifment[$this->shiftmentOff]->end_hour ];
+                $result[$date->format('Y-m-d')] = $holidayShiftment;
+
+                $stepDayOff++;
+                if($stepDayOff >= $offDay){                    
+                    $currentStep = 'ON';
+                    $stepDayOn = 0;
+                }
+                              
+            }                                                                                                    
         }
         return $result;
     }

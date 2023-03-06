@@ -62,9 +62,9 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         $period['name'] = 'Periode gaji '. localFormatDate($period['start_period']).' sd '.localFormatDate($period['end_period']);
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
         $setting = Setting::where(['type' => 'payroll'])->get()->keyBy('name');
-        $minMonthGetMealAllowance = $setting['get_meal_allowance_month'] ?? 3;
-        $minJoinDateMealAllowance = Carbon::parse($period['start_period'])->subMonth($minMonthGetMealAllowance)->format('Y-m-d');
-        $maxJoinDateMealAllowance = Carbon::parse($period['end_period'])->subMonth($minMonthGetMealAllowance)->format('Y-m-d');
+        $minMonthGetMealAllowance = $setting['get_meal_allowance_month']->value ?? 3;
+        $minJoinDateMealAllowance = Carbon::parse($period['start_period'])->subMonths($minMonthGetMealAllowance)->format('Y-m-d');
+        $maxJoinDateMealAllowance = Carbon::parse($period['end_period'])->subMonths($minMonthGetMealAllowance)->format('Y-m-d');
         // get list employee
         $employeeOjb = Employee::select(['id', 'code', 'join_date', 'resign_date'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);

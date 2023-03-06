@@ -9,7 +9,6 @@
         'class' => 'btn btn-ghost-danger',
         'onclick' => "return confirm('Are you sure?')"
     ]) !!}    
-    @endcan
-    
+    @endcan    
 </div>
 {!! Form::close() !!}

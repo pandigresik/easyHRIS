@@ -18,6 +18,7 @@ class CreateShiftmentGroupsTable extends Migration
             $table->string('code', 7);
             $table->unsignedBigInteger('company_id');            
             $table->string('name');
+            $table->string('pattern')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

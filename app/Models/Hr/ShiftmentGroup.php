@@ -40,19 +40,17 @@ class ShiftmentGroup extends Model
         use SoftDeletes;
 
     public $table = 'shiftment_groups';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
     protected $dates = ['deleted_at'];
-
-
 
     public $fillable = [
         'code',
         'company_id',
-        'name'
+        'name',
+        'pattern'
     ];
 
     /**
@@ -64,7 +62,8 @@ class ShiftmentGroup extends Model
         'id' => 'integer',
         'code' => 'string',
         'company_id' => 'integer',
-        'name' => 'string'
+        'name' => 'string',
+        'pattern' => 'string'
     ];
 
     /**
@@ -100,5 +99,9 @@ class ShiftmentGroup extends Model
     public function shiftmentGroupDetails()
     {
         return $this->hasMany(\App\Models\Hr\ShiftmentGroupDetail::class, 'shiftment_group_id');
+    }
+
+    public function getExtractPattern(){
+        return ['ON' => 6, 'OFF' => 2];
     }
 }

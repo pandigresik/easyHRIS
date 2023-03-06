@@ -88,7 +88,7 @@ class DownloadLogfingerController extends AppBaseController
         $userId = \Auth::id() ?? 1;
         $startTime = Carbon::now()->subWeek()->format('Y-m-d H:i:s');
         $employeeList = Employee::where(function($q){
-            return $q->whereNull('resign_date')->orWhere('resign_date', '>=', Carbon::now()->subMonth(1));
+            return $q->whereNull('resign_date')->orWhere('resign_date', '>=', Carbon::now()->subMonths(1));
         })->pluck('id', 'code')->toArray();
         $lastFingerTime = AttendanceLogfinger::where('fingerprint_device_id', $fingerprintDevice->id)->orderBy('fingertime', 'desc')->first();
         if($lastFingerTime){
