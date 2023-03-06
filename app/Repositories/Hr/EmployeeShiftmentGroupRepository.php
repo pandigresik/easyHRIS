@@ -81,8 +81,9 @@ class EmployeeShiftmentGroupRepository extends BaseRepository
     }
 
     public function allQuery($search = [], $skip = null, $limit = null){
-        $query = parent::allQuery($search, $skip, $limit);
-        $query->employeeDescendants('id');
+        $query = parent::allQuery($search, $skip, $limit);        
+        $query->active()->employeeDescendants('id');
+        // $query->employeeDescendants('id');
         return $query;
     }
     private function employeeDescendants(){        
