@@ -27,5 +27,6 @@
     {!! Form::label('pattern', __('models/shiftmentGroups.fields.pattern').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
     {!! Form::text('pattern', null, ['class' => 'form-control','maxlength' => 255]) !!}
+    <span class="text-danger">Contoh : 4ON2OFF (4 hari masuk 2 hari libur), biarkan kosong jika selalu libur hari tertentu misalkan hari minggu</span>
 </div>
 </div>

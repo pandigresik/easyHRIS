@@ -14,7 +14,7 @@ class AddUniqueKeyWorksfhitGroups extends Migration
     public function up()
     {
         Schema::table('workshift_groups', function (Blueprint $table) {
-            $table->unique(['shiftment_group_id','shiftment_id', 'work_date'], 'uq_workshift_groups_1');
+            $table->unique(['shiftment_group_id', 'work_date'], 'uq_workshift_groups_1');
         });
     }
 

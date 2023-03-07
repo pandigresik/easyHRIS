@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Hr;
 
-use Acaronlex\LaravelCalendar\Calendar;
 use App\DataTables\Hr\WorkshiftGroupDataTable;
 use App\Http\Requests\Hr\CreateWorkshiftGroupRequest;
 use App\Http\Requests\Hr\UpdateWorkshiftGroupRequest;
 use App\Repositories\Hr\WorkshiftGroupRepository;
 use App\Repositories\Hr\ShiftmentGroupRepository;
-use App\Repositories\Hr\ShiftmentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use Carbon\Carbon;

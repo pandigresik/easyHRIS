@@ -102,6 +102,15 @@ class ShiftmentGroup extends Model
     }
 
     public function getExtractPattern(){
-        return ['ON' => 6, 'OFF' => 2];
+        $result = ['ON' => 0, 'OFF' => 0];
+        $pattern = $this->attributes['pattern'];
+        if($pattern){
+            $tmpOn = explode('ON', $pattern);
+            $result['ON'] = $tmpOn[0];
+            $tmpOff = explode('OFF', $tmpOn[1]);
+            $result['OFF'] = $tmpOff[0];            
+        }
+        
+        return $result;
     }
 }

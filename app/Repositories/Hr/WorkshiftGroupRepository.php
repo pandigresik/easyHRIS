@@ -162,7 +162,7 @@ class WorkshiftGroupRepository extends BaseRepository
         $patternSchedule = $shiftmentGroup->getExtractPattern();
         $offDay = $patternSchedule['OFF'];
         $onDay = $patternSchedule['ON'];
-        $stepDayOff = 0;
+        $stepDayOff = 1;
         $stepDayOn = 0;
         $currentStep = 'ON';
         // get last date off        
@@ -170,17 +170,31 @@ class WorkshiftGroupRepository extends BaseRepository
             /** cari shift terakhir sebelumya yang bukan hari libur */
             $lastShiftOn = WorkshiftGroup::where(['shiftment_group_id' => $shiftmentGroup->id])->whereNotIn('shiftment_id', config('local.shiftment_off'))->where('work_date','<=', $startDate->format('Y-m-d'))->orderBy('work_date','desc')->first();
             $cutOffDays = Carbon::parse($startDate)->subDays($onDay + 1);
-            /** cari shift terakhir sebelumya yang bukan hari libur */
-            $lastShiftOff = WorkshiftGroup::where(['shiftment_group_id' => $shiftmentGroup->id])->whereIn('shiftment_id', config('local.shiftment_off'))->where('work_date','>=', $cutOffDays->format('Y-m-d'))->orderBy('work_date','asc')->first();
+            /** cari shift terakhir sebelumya yang hari libur */
+            $lastShiftOff = WorkshiftGroup::where(['shiftment_group_id' => $shiftmentGroup->id])->whereIn('shiftment_id', config('local.shiftment_off'))->where('work_date','>=', $cutOffDays->format('Y-m-d'))->orderBy('work_date','asc')->first();            
             if($lastShiftOff){
-                $diffDay = $lastShiftOn->work_date->diffInDays($lastShiftOff->work_date);
-                if($diffDay){
-                    $stepDayOn = $onDay - $stepDayOn;
+                $diffDay = Carbon::parse($lastShiftOn->getRawOriginal('work_date'))->diffInDays($lastShiftOff->work_date);                
+                if($diffDay){                    
+                    if($lastShiftOn->getRawOriginal('work_date') < $lastShiftOff->getRawOriginal('work_date')){
+                        if($diffDay < $offDay){
+                            $currentStep = 'OFF';
+                            $stepDayOff += $diffDay;                
+                        }                        
+                    }else{
+                        if($diffDay < $onDay){
+                            $currentStep = 'ON';
+                            $stepDayOn += ($diffDay - 1);
+                        }else{
+                            $currentStep = 'OFF';
+                            $stepDayOff += $diffDay;
+                        }                        
+                    }                                        
                 }else{
-                    $currentStep = 'OFF';
+                    $currentStep = 'ON';
                 }
-            }         
+            }
         }
+        
         $currentScheduleShiftment = $shifment[$currentShiftment]->schedules->keyBy('work_day');
         
         foreach($period as $date){
@@ -200,20 +214,19 @@ class WorkshiftGroupRepository extends BaseRepository
                 $stepDayOn++;
                 if($stepDayOn > $onDay){
                     $currentStep = 'OFF';
-                    $stepDayOff = 0;
+                    $stepDayOff = 1;
                 }
             }
 
             if($currentStep == 'OFF'){                
                 $holidayShiftment = ['id' => $shifment[$this->shiftmentOff]->id, 'code' => $shifment[$this->shiftmentOff]->code, 'name' => $shifment[$this->shiftmentOff]->name, 'next_day' => false, 'start_hour' => $shifment[$this->shiftmentOff]->start_hour, 'end_hour' => $shifment[$this->shiftmentOff]->end_hour ];
                 $result[$date->format('Y-m-d')] = $holidayShiftment;
-
+                
                 $stepDayOff++;
                 if($stepDayOff >= $offDay){                    
                     $currentStep = 'ON';
                     $stepDayOn = 0;
-                }
-                              
+                }                              
             }                                                                                                    
         }
         return $result;
