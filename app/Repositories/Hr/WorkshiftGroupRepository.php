@@ -162,7 +162,8 @@ class WorkshiftGroupRepository extends BaseRepository
         $patternSchedule = $shiftmentGroup->getExtractPattern();
         $offDay = $patternSchedule['OFF'];
         $onDay = $patternSchedule['ON'];
-        $stepDayOff = 1;
+        
+        $stepDayOff = 0;
         $stepDayOn = 0;
         $currentStep = 'ON';
         // get last date off        
@@ -214,7 +215,7 @@ class WorkshiftGroupRepository extends BaseRepository
                 $stepDayOn++;
                 if($stepDayOn > $onDay){
                     $currentStep = 'OFF';
-                    $stepDayOff = 1;
+                    $stepDayOff = 0;
                 }
             }
 
