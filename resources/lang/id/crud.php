@@ -19,6 +19,7 @@ return [
     'generate' => 'Generate',
     'calculate' => 'Hitung',
     'download' => 'Download',
+    'summary' => 'Summary',
     'edit' => 'Edit',
     'sync' => 'Sinkron',
     'detail' => 'Detail',

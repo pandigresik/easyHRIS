@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('leaveApproves', Hr\LeaveApproveController::class, ["as" => 'hr'])->only(['index', 'update']);
         Route::resource('overtimes', Hr\OvertimeController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('overtimeApproves', Hr\OvertimeApproveController::class, ["as" => 'hr'])->only(['index', 'update']);
+        Route::resource('overtimeReports', Hr\OvertimeReportController::class, ["as" => 'hr'])->only('index');
         Route::resource('ritaseDrivers', Hr\RitaseDriverController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
 
         Route::resource('payrollPeriodGroups', Hr\PayrollPeriodGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);

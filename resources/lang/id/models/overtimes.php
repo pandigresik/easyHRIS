@@ -24,6 +24,7 @@ return array (
     'amount' => 'Amount',
     'description' => 'Description',
     'status' => 'Status',
-    'payroll_calculated_value' => 'Payroll Calculate'
+    'payroll_calculated_value' => 'Payroll Calculate',
+    'period' => 'Periode'
   ),
 );

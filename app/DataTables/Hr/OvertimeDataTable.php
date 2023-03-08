@@ -101,12 +101,7 @@ class OvertimeDataTable extends DataTable
                        'extend' => 'export',
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    // [
-                    //    'extend' => 'import',
-                    //    'className' => 'btn btn-default btn-sm no-corner',
-                    //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    // ],
+                    ],                    
                     [
                        'extend' => 'print',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -121,6 +116,19 @@ class OvertimeDataTable extends DataTable
                        'extend' => 'reload',
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
+                    ],
+                    [
+                        'extend' => 'create',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-list"></i> ' .__('auth.app.summary').'',
+                        'action' => <<<FUNC
+                            function(e, dt, button, config){
+                                button.data('url', 'hr/overtimeReports')
+                                button.data('target', '_parent')
+                                button.data('tipe', 'get')
+                                main.redirectUrl(button)
+                            }
+FUNC
                     ],
                 ];
                 
