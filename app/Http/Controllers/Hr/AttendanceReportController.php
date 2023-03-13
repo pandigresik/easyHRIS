@@ -23,7 +23,7 @@ class AttendanceReportController extends AppBaseController
     {
         $absentReason = [
             'OK' => 'OK',
-            // 'ABS' => 'ABSENT (PENGAJUAN HRD)',
+            'ABS' => 'ABSENT (PENGAJUAN HRD)',
             'ABSENT' => 'ABSENT',
             'INVALID' => 'INVALID',
             'LATEIN' => 'TERLAMBAT',
