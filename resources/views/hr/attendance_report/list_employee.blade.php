@@ -7,6 +7,7 @@
     <thead>        
         <tr>
             <th>Nama</th>
+            <th>NIK</th>
         @foreach ($absentReason as $ar)
             <th>{{ $ar }}</th>
         @endforeach
@@ -15,9 +16,15 @@
     <tbody>
     @php
         $period = \Carbon\CarbonPeriod::create($startDate, $endDate);
-        $dataEmployees = $datas->groupBy('employee_id' , true)->map(function($item){
+        
+        $dataEmployees = $datas->sortBy('code')->groupBy('employee_id' , true)->map(function($item){
             return $item->keyBy('state');
         });
+        
+        // $dataEmployees = $datas->groupBy('employee_id' , true)->map(function($item){
+        //     return $item->keyBy('state');
+        // });
+        
         $totalState = [];
         foreach($absentReason as $k => $ar){
             $totalState[$k] = 0;
@@ -25,7 +32,8 @@
     @endphp
     @foreach ($dataEmployees as $empid => $emp)
         <tr>
-            <td class="text-start">{{ $employees[$empid]->code_name ?? '-' }}</td>
+            <td class="text-start">{{ $employees[$empid]->full_name ?? '-' }}</td>
+            <td class="text-start">{{ $employees[$empid]->code ?? '-' }}</td>
             @foreach ($absentReason as $k => $ar)
                 @php
                     $tdClass = '';

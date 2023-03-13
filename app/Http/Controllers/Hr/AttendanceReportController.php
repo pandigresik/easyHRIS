@@ -6,6 +6,7 @@ use App\Repositories\Hr\AttendanceReportRepository;
 
 use App\Http\Controllers\AppBaseController;
 use App\Models\Hr\Employee;
+use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use Illuminate\Http\Request;
 
 class AttendanceReportController extends AppBaseController
@@ -39,7 +40,8 @@ class AttendanceReportController extends AppBaseController
             $grouping = $request->get('grouping');
             $startDate = $period['startDate'];
             $endDate = $period['endDate'];
-            $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $grouping);
+            $payrollGroup = $request->get('payroll_group_period_id');
+            $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $grouping, $payrollGroup);
             $view = 'list_date';
             $employees = [];
             if($grouping == 'employee'){
@@ -53,7 +55,8 @@ class AttendanceReportController extends AppBaseController
                     'startDate' => $startDate->format('Y-m-d'), 
                     'endDate' => $endDate->format('Y-m-d'), 
                     'absentReason' => $absentReason,
-                    'employees' => $employees
+                    'employees' => $employees,
+                    'payrollGroup' => $payrollGroup
                 ]);
         }
 
@@ -63,7 +66,8 @@ class AttendanceReportController extends AppBaseController
             $grouping = $request->get('grouping');
             $startDate = $period['startDate'];
             $endDate = $period['endDate'];
-            $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $grouping);
+            $payrollGroup = $request->get('payroll_group_period_id');
+            $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $grouping, $payrollGroup);
             $view = 'hr.attendance_report.list_date';
             $employees = [];
             if($grouping == 'employee'){
@@ -76,7 +80,8 @@ class AttendanceReportController extends AppBaseController
                 'absentReason' => $absentReason,
                 'startDate' => $startDate->format('Y-m-d'), 
                 'endDate' => $endDate->format('Y-m-d'),
-                'employees' => $employees
+                'employees' => $employees,
+                'payrollGroup' => $payrollGroup
             ];
             return $this->exportExcel($dataExcel);
         }
@@ -93,7 +98,7 @@ class AttendanceReportController extends AppBaseController
         $endDate = $data['endDate'];
         $employees = $data['employees'];
         $absentReason = $data['absentReason'];
-
+        $payrollGroup = $data['payrollGroup'];
         $modelEksport = '\\App\Exports\\Hr\\AttendanceReportExport';
         $fileName = 'rekap_absent_'.$startDate.'_'.$endDate;
 
@@ -102,11 +107,15 @@ class AttendanceReportController extends AppBaseController
             ->setStartDate($startDate)
             ->setEndDate($endDate)
             ->setEmployees($employees)
+            ->setPayrollGroup($payrollGroup)
             ->setAbsentReason($absentReason)->download($fileName.'.xls');
     }
 
     private function getOptionItems()
     {        
-        return [];
+        $payrollGroup = new PayrollPeriodGroupRepository();
+        return [
+            'payrollGroupItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $payrollGroup->pluck(),            
+        ];
     }
 }

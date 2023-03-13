@@ -36,10 +36,17 @@
                                 {!! Form::select('grouping',['employee' => 'employee', 'date' => 'date'], null, ['class' => 'form-control']) !!}
                             </div>
                         </div>
+                        <!-- Fingerprint Device Id Field -->
+                        <div class="form-group row mb-3">
+                            {!! Form::label('payroll_group_period', __('models/payrollPeriods.fields.payroll_period_group_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+                            <div class="col-md-9"> 
+                                {!! Form::select('payroll_group_period_id', $payrollGroupItems, null, ['class' => 'form-control select2']) !!}
+                            </div>
+                        </div>
                         <!-- Submit Field -->
                         <div class="form-group row mb-3">
                             <div class="col-md-9 offset-3">
-                                {!! Form::button(__('crud.search'), ['class' => 'btn btn-primary','value'=> 1, 'data-url' => route('hr.attendanceReports.index'), 'data-target' => '#list-attendance-report', 'data-ref' => 'select[name=grouping],input[name=period]' ,'onclick' => 'main.loadDetailPage(this, \'get\')']) !!}
+                                {!! Form::button(__('crud.search'), ['class' => 'btn btn-primary','value'=> 1, 'data-url' => route('hr.attendanceReports.index'), 'data-target' => '#list-attendance-report', 'data-ref' => 'select[name=grouping],input[name=period],select[name=payroll_group_period_id]' ,'onclick' => 'main.loadDetailPage(this, \'get\')']) !!}
                                 {!! Form::button(__('crud.download'), ['class' => 'btn btn-danger', 'type' => 'button', 'onclick' => 'downloadXls(this)']) !!}
                             </div>
                             
@@ -61,8 +68,8 @@
 <script type="text/javascript">
     function downloadXls(elm) {
         const _form = $(elm).closest('form')
-        const _url = _form.attr('action')
-        const _json = {'download_xls' : 1, 'v': moment.now(), 'grouping' : _form.find('select[name=grouping]').val(),'period': _form.find('input[name=period]').val()}
+        const _url = _form.attr('action')        
+        const _json = {'download_xls' : 1, 'v': moment.now(), 'grouping' : _form.find('select[name=grouping]').val(),'period': _form.find('input[name=period]').val(), 'payroll_group_period_id': _form.find('select[name=payroll_group_period_id]').val()}
         
         $.redirect(
             _url, 

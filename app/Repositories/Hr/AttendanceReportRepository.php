@@ -40,15 +40,26 @@ class AttendanceReportRepository extends BaseRepository
         return Attendance::class;
     }
 
-    public function list($startDate, $endDate, $grouping){
+    public function list($startDate, $endDate, $grouping, $payrollGroup = NULL){
+
         $datas = Attendance::employeeDescendants()->disableModelCaching()->whereBetween('attendance_date', [$startDate, $endDate])->groupBy('state')->newQuery(); 
         switch($grouping){
             case 'employee':
-                $datas->selectRaw('count(*) as total, state, employee_id')->groupBy('employee_id');
+                $datas->selectRaw('count(*) as total, state, employee_id, employees.code')
+                    ->join('employees', 'employees.id','=','attendances.employee_id')
+                    // ->orderBy('cast(employees.code as unsigned)')
+                    ->groupBy('employee_id')
+                    ->groupBy('employees.code');
                 break;
             case 'date':
                 $datas->selectRaw('count(*) as total, state, attendance_date')->groupBy('attendance_date');
                 break;
+        }
+        
+        if($payrollGroup){
+            $datas = $datas->whereIn('employee_id', function($q) use ($payrollGroup){
+                return $q->select(['id'])->from('employees')->where(['payroll_period_group_id' => $payrollGroup]);
+            })->newQuery();
         }
         return $datas->get();
     }
