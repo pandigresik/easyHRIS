@@ -64,11 +64,10 @@ class AttendanceDataTable extends DataTable
      */
     public function query(Attendance $model)
     {           
-        return $model->employeeDescendants()->selectRaw($model->getTable().'.*, attendance_date as raw_attendance_date')->with(['employee' => function($q) {            
+        return $model->employeeDescendants()->selectRaw($model->getTable().'.*, attendance_date as raw_attendance_date')->with(['employee' => function($q) {
+            $q->with(['jobtitle', 'payrollPeriodGroup']);
             if(\Auth::user()->can('user-hr')){                                
-                $q->with(['jobtitle', 'payrollPeriodGroup', 'payrollEntity']);                
-            }else{
-                $q->with(['jobtitle']);
+                $q->with(['payrollEntity']);                
             }
         }, 'shiftment','reason'])->newQuery();
     }
