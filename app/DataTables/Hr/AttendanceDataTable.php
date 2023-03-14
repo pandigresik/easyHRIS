@@ -136,9 +136,11 @@ class AttendanceDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $payrollGroupRepository = new PayrollPeriodGroupRepository();
         $stateItem = convertArrayPairValueWithKey(Attendance::STATE + AbsentReason::pluck('code', 'code')->toArray());
         $jobTitleRepository = new JobTitleRepository();
         $jobTitleItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($jobTitleRepository->pluck()));
+        $payrollGroupItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupRepository->pluck()));
         $columnDefault = [
             'attendance_date' => new Column(['title' => __('models/attendances.fields.attendance_date'),'name' => 'attendance_date', 'data' => 'attendance_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'employee_id' => new Column(['title' => __('models/attendances.fields.employee_id'),'name' => 'employee.full_name', 'data' => 'employee.full_name', 'searchable' => true, 'elmsearch' => 'text']),
@@ -156,14 +158,12 @@ class AttendanceDataTable extends DataTable
             'late_in' => new Column(['title' => __('models/attendances.fields.late_in').' (minutes)','name' => 'late_in', 'data' => 'late_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             // 'late_out' => new Column(['title' => __('models/attendances.fields.late_out').' (minutes)','name' => 'late_out', 'data' => 'late_out', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             // 'absent' => new Column(['title' => __('models/attendances.fields.absent'),'name' => 'absent', 'data' => 'absent', 'searchable' => true, 'elmsearch' => 'text']),
-            'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple'])
+            'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple']),
+            'employee.payroll_period_group_id' => new Column(['title' => __('models/attendances.fields.employee_payroll'),'name' => 'employee.payroll_period_group_id', 'data' => 'employee.payroll_period_group.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupItem])
         ];
-        if(\Auth::user()->can('user-hr')){                         
-            $payrollGroupRepository = new PayrollPeriodGroupRepository();
-            $payrollGroupReportRepository = new GroupingPayrollEntityRepository ();
-            $payrollGroupItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupRepository->pluck()));
-            $payrollGroupReportItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupReportRepository->pluck()));
-            $columnDefault['employee.payroll_period_group_id'] = new Column(['title' => __('models/attendances.fields.employee_payroll'),'name' => 'employee.payroll_period_group_id', 'data' => 'employee.payroll_period_group.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupItem]);
+        if(\Auth::user()->can('user-hr')){                                     
+            $payrollGroupReportRepository = new GroupingPayrollEntityRepository ();            
+            $payrollGroupReportItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupReportRepository->pluck()));            
             $columnDefault['employee.payroll_entity'] = new Column(['title' => __('models/attendances.fields.payroll_entity'),'name' => 'employee.payroll_entity', 'data' => 'employee.payroll_entity.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupReportItem, 'multiple' => 'multiple']);
         }
         return $columnDefault;
