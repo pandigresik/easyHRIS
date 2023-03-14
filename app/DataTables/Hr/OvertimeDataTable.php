@@ -22,6 +22,7 @@ class OvertimeDataTable extends DataTable
         ['data' => 'end_hour_real', 'defaultContent' => '','title' => 'End Hour Real'],
         ['data' => 'calculated_value', 'defaultContent' => '','title' => 'Calculated Value'],
         ['data' => 'payroll_calculated_value', 'defaultContent' => '','title' => 'Payroll Calculated Value'],                
+        ['data' => 'description', 'defaultContent' => '','title' => 'Description'],
     ];
     /**
     * example mapping filter column to search by keyword, default use %keyword%
@@ -59,7 +60,7 @@ class OvertimeDataTable extends DataTable
             return localNumberFormat(minuteToHour($item->payroll_calculated_value), 2);
         })->editColumn('breaktime_value', function($item){
             return localNumberFormat(minuteToHour($item->breaktime_value), 1);
-        });
+        });        
 
         return $dataTable->addColumn('action', function($item){
             if($item->isApprove() && ! \Auth::user()->can('user-hr') ){
@@ -182,6 +183,7 @@ FUNC
             $columnDefault['payroll_calculated_value'] = new Column(['title' => __('models/overtimes.fields.payroll_calculated_value'),'name' => 'payroll_calculated_value', 'data' => 'payroll_calculated_value', 'searchable' => false, 'elmsearch' => 'numberrange', 'className' => 'text-end']);
             $columnDefault['amount'] = new Column(['title' => __('models/overtimes.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'numberrange', 'className' => 'text-end']);
         }
+        
         return $columnDefault;
     }
 
