@@ -39,7 +39,7 @@ class CreateWorkshiftRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new Workshift())->fillable;
-        $keys = array_merge($keys, ['shiftment_group_id','work_date_period']);
+        $keys = array_merge($keys, ['shiftment_group_id','work_date_period', 'workshift', 'manual_save']);
         return parent::all($keys);
     }
 }

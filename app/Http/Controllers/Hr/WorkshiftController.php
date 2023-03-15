@@ -8,7 +8,13 @@ use App\Http\Requests\Hr\UpdateWorkshiftRequest;
 use App\Repositories\Hr\WorkshiftRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Hr\Employee;
+use App\Models\Hr\ShiftmentGroup;
+use App\Models\Hr\ShiftmentGroupDetail;
+use App\Models\Hr\Workshift;
 use App\Repositories\Hr\ShiftmentGroupRepository;
+use App\Repositories\Hr\ShiftmentRepository;
+use Carbon\CarbonPeriod;
 use Response;
 use Exception;
 use Illuminate\Http\Request;
@@ -41,7 +47,12 @@ class WorkshiftController extends AppBaseController
      */
     public function create()
     {
-        return view('hr.workshifts.create')->with($this->getOptionItems());
+        $optionItems = $this->getOptionItems();
+        $dataTabs = [
+            'generate' => ['text' => 'Generate', 'json' => [], 'url' => 'fdfd', 'defaultContent' => view('hr.workshifts.create')->with($optionItems), 'class' => 'active'],
+            'manual' => ['text' => 'Manual', 'json' => [], 'url' => '', 'defaultContent' => view('hr.workshifts.create_manual')->with($optionItems), 'class' => ''],
+        ];        
+        return view('hr.workshifts.create_tabs')->with('dataTabs', $dataTabs);
     }
 
     /**
@@ -53,9 +64,13 @@ class WorkshiftController extends AppBaseController
      */
     public function store(CreateWorkshiftRequest $request)
     {
-        $input = $request->all();
-
-        $workshift = $this->getRepositoryObj()->generateSchedule($input);
+        $input = $request->all();                
+        if($input['workshift']){            
+            $workshift = $this->getRepositoryObj()->generateManualSchedule($input);
+        }else{
+            $workshift = $this->getRepositoryObj()->generateSchedule($input);
+        }
+        
         if ($workshift instanceof Exception) {
             return redirect()->back()->withInput()->withErrors(['error', $workshift->getMessage()]);
         }
@@ -214,5 +229,43 @@ class WorkshiftController extends AppBaseController
             return '<div class="row col-12"><div class="text-center text-danger">Jadwal shift grup belum digenerate</div></div>';
         }
         
+    }
+
+    /**
+     * Generate manual schedule workshift
+     *
+     * @return Response
+     */
+    public function manual(Request $request)
+    {        
+        $period = generatePeriodFromString($request->get('work_date_period'));
+        $shiftmentGroup = $request->get('shiftment_group_id');
+        $emp = $request->get('employee_id');
+        if(!empty($emp)){
+            $employees = Employee::select(['id', 'code', 'full_name'])->whereIn('id', $emp)->orderBy('code')->get();
+        }else{
+            $employees = Employee::select(['id', 'code', 'full_name'])->whereIn('shiftment_group_id', $shiftmentGroup)->orderBy('code')->get();
+        }
+        $workshiftEmployee = Workshift::select(['employee_id', 'shiftment_id', 'work_date'])
+            ->whereIn('employee_id', $employees->pluck('id'))
+            ->whereBetween('work_date', [$period['startDate']->format('Y-m-d'), $period['endDate']->format('Y-m-d')])
+            ->get()->groupBy('employee_id')->map(function($item){
+                return $item->keyBy(function($q){ return $q->getRawOriginal('work_date'); });
+        });
+        
+        $shiftmentGroupObj = ShiftmentGroupDetail::whereIn('shiftment_group_id', $shiftmentGroup)->get()->pluck('shiftment_id')->toArray();
+        $listShiftment = array_merge($shiftmentGroupObj, config('local.shiftment_off'));        
+        $shiftment = (new ShiftmentRepository())->allQuery()->whereIn('id', $listShiftment)->get();
+        $data = [
+            'startDate' => $period['startDate'],
+            'endDate' => $period['endDate'],
+            'periodRange' => CarbonPeriod::create($period['startDate'], $period['endDate']),
+            'shiftmentGroup' => $shiftmentGroup,
+            'employees' => $employees,
+            'workshiftEmployee' => $workshiftEmployee,
+            'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck('name', 'id')->toArray()
+        ];
+        
+        return view('hr.workshifts.manual_schedule', $data);
     }
 }

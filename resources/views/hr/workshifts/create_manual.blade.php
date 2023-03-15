@@ -7,15 +7,15 @@
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>Generate @lang('models/workshifts.singular')</strong>
+                                <strong>Create @lang('models/workshifts.singular') Manual</strong>
                             </div>
                             <div class="card-body">                                
-                                   @include('hr.workshifts.fields')                                
+                                   @include('hr.workshifts.manual_fields')                                
                             </div>
                             <div class="card-footer">
                                 <!-- Submit Field -->
-                                <div class="form-group col-sm-12 mt-2">
-                                    {!! Form::submit(__('crud.save'), ['class' => 'btn btn-primary']) !!}
+                                <div class="form-group col-sm-12 mt-2">                                    
+                                    {!! Form::button (__('crud.save'), ['class' => 'btn btn-primary', 'value' => 'manual_save', 'type' => 'submit']) !!}
                                     <a href="{{ route('hr.workshifts.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
                                 </div>
                             </div>
