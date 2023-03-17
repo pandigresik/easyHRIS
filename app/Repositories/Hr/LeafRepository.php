@@ -275,6 +275,7 @@ class LeafRepository extends BaseRepository
         $exists = LeaveDetails::whereBetween('leave_date', [$leaf['leave_start'], $leaf['leave_end']])
                 ->join('leaves', function($q) use ($leaf) {
                     return $q->on('leaves.id','leave_details.leave_id')
+                            ->whereNull('deleted_at')
                             ->whereEmployeeId($leaf['employee_id']);
                 })
                 ->get();
