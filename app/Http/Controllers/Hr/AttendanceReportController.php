@@ -6,6 +6,7 @@ use App\Repositories\Hr\AttendanceReportRepository;
 
 use App\Http\Controllers\AppBaseController;
 use App\Models\Hr\Employee;
+use App\Repositories\Hr\GroupingPayrollEntityRepository;
 use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use Illuminate\Http\Request;
 
@@ -40,8 +41,18 @@ class AttendanceReportController extends AppBaseController
             $grouping = $request->get('grouping');
             $startDate = $period['startDate'];
             $endDate = $period['endDate'];
+            $groupingPayrollReport = $request->get('grouping_payroll_entity_id');
+            $employeeFilter =  $request->get('employee_id');
             $payrollGroup = $request->get('payroll_group_period_id');
-            $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $grouping, $payrollGroup);
+            $filterData = [
+                'startDate' => $startDate->format('Y-m-d'), 
+                'endDate' => $endDate->format('Y-m-d'),                 
+                'employeeFilter' => $employeeFilter,
+                'payrollGroup' => $payrollGroup,
+                'grouping' => $grouping,
+                'groupingPayrollReport' => $groupingPayrollReport
+            ];
+            $datas = $this->getRepositoryObj()->list($filterData);
             $view = 'list_date';
             $employees = [];
             if($grouping == 'employee'){
@@ -56,7 +67,7 @@ class AttendanceReportController extends AppBaseController
                     'endDate' => $endDate->format('Y-m-d'), 
                     'absentReason' => $absentReason,
                     'employees' => $employees,
-                    'payrollGroup' => $payrollGroup
+                    'payrollGroup' => $payrollGroup                                        
                 ]);
         }
 
@@ -66,8 +77,19 @@ class AttendanceReportController extends AppBaseController
             $grouping = $request->get('grouping');
             $startDate = $period['startDate'];
             $endDate = $period['endDate'];
+            $groupingPayrollReport = $request->get('grouping_payroll_entity_id');
+            $employeeFilter =  $request->get('employee_id');
             $payrollGroup = $request->get('payroll_group_period_id');
-            $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $grouping, $payrollGroup);
+
+            $filterData = [
+                'startDate' => $startDate->format('Y-m-d'), 
+                'endDate' => $endDate->format('Y-m-d'),                 
+                'employeeFilter' => $employeeFilter,
+                'payrollGroup' => $payrollGroup,
+                'grouping' => $grouping,
+                'groupingPayrollReport' => $groupingPayrollReport
+            ];
+            $datas = $this->getRepositoryObj()->list($filterData);            
             $view = 'hr.attendance_report.list_date';
             $employees = [];
             if($grouping == 'employee'){
@@ -114,8 +136,10 @@ class AttendanceReportController extends AppBaseController
     private function getOptionItems()
     {        
         $payrollGroup = new PayrollPeriodGroupRepository();
+        $groupingPayrollEntity = new GroupingPayrollEntityRepository();
         return [
             'payrollGroupItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $payrollGroup->pluck(),            
+            'groupingPayrollEntityItems' => $groupingPayrollEntity->pluck(),
         ];
     }
 }

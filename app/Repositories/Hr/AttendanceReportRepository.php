@@ -40,8 +40,13 @@ class AttendanceReportRepository extends BaseRepository
         return Attendance::class;
     }
 
-    public function list($startDate, $endDate, $grouping, $payrollGroup = NULL){
-
+    public function list($filterData = []){
+        $startDate = $filterData['startDate'];
+        $endDate = $filterData['endDate'];
+        $employeeFilter = $filterData['employeeFilter'];
+        $payrollGroup = $filterData['payrollGroup'];
+        $groupingPayrollReport = $filterData['groupingPayrollReport'];
+        $grouping = $filterData['grouping'];
         $datas = Attendance::employeeDescendants()->disableModelCaching()->whereBetween('attendance_date', [$startDate, $endDate])->groupBy('state')->newQuery(); 
         switch($grouping){
             case 'employee':
@@ -56,10 +61,20 @@ class AttendanceReportRepository extends BaseRepository
                 break;
         }
         
+        if($groupingPayrollReport){
+            $datas = $datas->whereIn('employee_id', function($q) use ($groupingPayrollReport){
+                return $q->select(['employee_id'])->from('grouping_payroll_employee_report')->where(['grouping_payroll_entity_id' => $groupingPayrollReport]);
+            });
+        }
+
+        if($employeeFilter){
+            $datas->whereIn('employee_id', $employeeFilter);
+        }
+
         if($payrollGroup){
             $datas = $datas->whereIn('employee_id', function($q) use ($payrollGroup){
                 return $q->select(['id'])->from('employees')->where(['payroll_period_group_id' => $payrollGroup]);
-            })->newQuery();
+            });
         }
         return $datas->get();
     }
