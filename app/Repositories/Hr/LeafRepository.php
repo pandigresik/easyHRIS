@@ -7,9 +7,11 @@ use App\Models\Base\Setting;
 use App\Models\Hr\AbsentReason;
 use App\Models\Hr\Employee;
 use App\Models\Hr\Leaf;
+use App\Models\Hr\LeaveDetails;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Exception;
 
 /**
  * Class LeafRepository
@@ -83,6 +85,8 @@ class LeafRepository extends BaseRepository
                 }
                 
                 $input['employee_id'] = $employee;
+                // pastikan tidak ada yang kembar data overtimenya
+                $this->isLeaveExist($input);
                 $model = $this->model->newInstance($input);//parent::create($input);
                 $approvalUsers = \Auth::user()->getApprovalUsers();
                 $maxStep = $this->getMaxStepApproval() < count($approvalUsers) ? $this->getMaxStepApproval() : count($approvalUsers);
@@ -265,5 +269,29 @@ class LeafRepository extends BaseRepository
         $this->maxStepApproval = $maxStepApproval;
 
         return $this;
+    }
+
+    private function isLeaveExist($leaf, $model = NULL){
+        $exists = LeaveDetails::whereBetween('leave_date', [$leaf['leave_start'], $leaf['leave_end']])
+                ->join('leaves', function($q) use ($leaf) {
+                    return $q->on('leaves.id','leave_details.leave_id')
+                            ->whereEmployeeId($leaf['employee_id']);
+                })
+                ->get();
+        
+        if($exists){
+            // if($model){                
+            //     if($model->id == $first->id){                    
+            //         // allow update data except overtime_date and start_hour 
+            //         if($model->getRawOriginal('overtime_date') == $first->getRawOriginal('overtime_date')){
+            //             if($model->getRawOriginal('start_hour') == $first->getRawOriginal('start_hour')){
+            //                 return;
+            //             }
+            //         }
+            //     }                
+            // }
+            $employee = Employee::find($leaf['employee_id']);
+            throw new Exception("Data pengajuan karyawan ".$employee->code_name. " pada tanggal ".implode(', ',$exists->map(function($item){ return localFormatDate($item->leave_date); })->toArray())." sudah ada");
+        }
     }
 }

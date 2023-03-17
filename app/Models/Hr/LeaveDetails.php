@@ -108,5 +108,5 @@ class LeaveDetails extends Model
                     return $q->select(['id'])->from('employees')->whereIn('shiftment_group_id', $shiftmentGroup);
                 });
         });
-    }
+    }    
 }
