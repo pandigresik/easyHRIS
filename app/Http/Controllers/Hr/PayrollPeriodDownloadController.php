@@ -17,7 +17,9 @@ class PayrollPeriodDownloadController extends AppBaseController
             return $q->select(['id', 'code', 'full_name', 'account_bank','employee_status','department_id', 'jobtitle_id', 'business_unit_id', 'joblevel_id'])
                 ->with(['jobtitle', 'department', 'businessUnit','groupPayrollEmployeeReport']);
         }])->where(['payroll_period_id' => $id])        
-        ->get()->sortBy('employee.code')->groupBy('employee.groupPayrollEmployeeReport.grouping_payroll_entity_id');
+            ->get()
+            // ->sortBy('employee.code')
+            ->groupBy('employee.groupPayrollEmployeeReport.grouping_payroll_entity_id');
         
         $salaryComponent = SalaryComponent::pluck('id','code');        
         $payrollPeriod = PayrollPeriod::with(['payrollPeriodGroup'])->find($id);
