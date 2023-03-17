@@ -120,6 +120,9 @@ class LeafRepository extends BaseRepository
         try{
             $query = $this->model->newQuery();
             $model = $query->findOrFail($id);
+            $oldQuery = $this->model->newQuery();
+            $oldModel = $oldQuery->with(['details'])->findOrFail($id);
+            
             $leaveEnd = Carbon::parse($input['leave_end']);
             $leaveStart = Carbon::parse($input['leave_start']);
             $input['amount'] = $leaveEnd->diffInDays($leaveStart) + 1;
@@ -145,7 +148,19 @@ class LeafRepository extends BaseRepository
             }
             $model->details()->sync($details);
             if($model->getRawOriginal('status') == $model->getFinalState()){
+                $dateChanged = 0;
+                if($model->getRawOriginal('leave_start') != $oldModel->getRawOriginal('leave_start')){
+                    $dateChanged = 1;
+                }
+
+                if($model->getRawOriginal('leave_end') != $oldModel->getRawOriginal('leave_end')){
+                    $dateChanged = 1;
+                }
+                
                 // execute job attendance process after 30 seconds                
+                if($dateChanged){                    
+                    $this->generateJob($oldModel);    
+                }
                 $this->generateJob($model);
             }
             $this->model->getConnection()->commit();
@@ -239,7 +254,7 @@ class LeafRepository extends BaseRepository
 
     private function generateJob($item, $delay = 2){
         // execute job attendance process after 30 seconds                
-        if($item->getRawOriginal('status') == $item->getFinalState()){       
+        if($item->getRawOriginal('status') == $item->getFinalState()){
             $nowDate = Carbon::now()->format('Y-m-d');     
             if(getDateString($item->getRawOriginal('leave_start')) < $nowDate){
                 foreach($item->details as $dayDate){
