@@ -46,6 +46,7 @@
                             </div>
                         </div>
 
+                        @can('user-hr')
                         <!-- Grouping Payroll Entity Id Field -->
                         <div class="form-group row mb-3">
                             {!! Form::label('grouping_payroll_entity_id', __('models/groupingPayrollEmployeeReports.fields.grouping_payroll_entity_id').':', ['class' => 'col-md-3 col-form-label']) !!}
@@ -53,6 +54,7 @@
                             {!! Form::select('grouping_payroll_entity_id', $groupingPayrollEntityItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
                         </div>
                         </div>
+                        @endcan                        
 
 
                         <!-- Fingerprint Device Id Field -->
