@@ -295,7 +295,7 @@ class LeafRepository extends BaseRepository
                 })
                 ->get();
         
-        if($exists){
+        if(!$exists->isEmpty()){
             // if($model){                
             //     if($model->id == $first->id){                    
             //         // allow update data except overtime_date and start_hour 
