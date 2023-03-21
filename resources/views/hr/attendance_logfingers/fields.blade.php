@@ -1,8 +1,21 @@
+@can('user-hr')
+<!-- Employee Supervisor Id Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('supervisor_id', __('models/employees.fields.supervisor_id').':', ['class' => 'col-md-3 col-form-label'])
+    !!}
+    <div class="col-md-9">
+        {!! Form::select('supervisor_id', $supervisorItems, null, ['class' => 'form-control select2', 'onchange' =>
+        'updateFilterEmployee(this)'] ) !!}
+    </div>
+</div>
+@endcan
+
+
 <!-- Employee Id Field -->
 <div class="form-group row mb-3">
     {!! Form::label('employee_id', __('models/attendanceLogfingers.fields.employee_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('employee_id[]', $employeeItems, null, array_merge(['class' => 'form-control select2','data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple' ], config('local.select2.ajax')) ) !!}
+    {!! Form::select('employee_id[]', $employeeItems, null, array_merge(['class' => 'form-control select2','id' => 'employee_id', 'data-filter' => json_encode([]), 'data-url' => route('selectAjax'), 'data-repository' => 'Hr\\EmployeeShiftmentGroupRepository', 'multiple' => 'multiple' ], config('local.select2.ajax')) ) !!}
 </div>
 </div>
 
@@ -37,3 +50,16 @@
     {!! Form::select('reason', $reasonItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>
+
+@push('scripts')
+<script>
+    function updateFilterEmployee(elm) {
+        $('#employee_id').data('filter', {})
+        if (!_.isEmpty($(elm).val())) {
+            $('#employee_id').data('filter', {
+                supervisor_id: $(elm).val()
+            })
+        }
+    }
+</script>
+@endpush

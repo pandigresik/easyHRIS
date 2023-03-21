@@ -12,6 +12,7 @@ use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Base\Setting;
 use App\Models\Hr\AbsentReason;
+use App\Repositories\Hr\EmployeeSupervisorRepository;
 use App\Traits\UploadedFile;
 use Response;
 use Exception;
@@ -186,6 +187,7 @@ class LeafController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){                
+        $employeeSupervisor = new EmployeeSupervisorRepository();
         if(!\Auth::user()->can('user-hr')){
             $setting = Setting::where(['type' => 'leave'])->get()->keyBy('name');
             $allowLeaveCode = $setting['self_leave_code']->value;
@@ -196,6 +198,7 @@ class LeafController extends AppBaseController
         
         return [
             'reasonItems' => ['' => __('crud.option.absentReason_placeholder')] + $absentReason,
+            'supervisorItems' => ['' => __('crud.option.supervisor_placeholder')] + $employeeSupervisor->allQuery()->supervisor()->get()->pluck('code_name','id')->toArray(),
             'employeeItems' => []
         ];
     }

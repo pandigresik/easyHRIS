@@ -10,6 +10,7 @@ use App\Repositories\Hr\FingerprintDeviceRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Hr\Workshift;
+use App\Repositories\Hr\EmployeeSupervisorRepository;
 use Carbon\Carbon;
 use Response;
 use Exception;
@@ -173,12 +174,14 @@ class AttendanceLogfingerController extends AppBaseController
      */
     private function getOptionItems()
     {        
+        $employeeSupervisor = new EmployeeSupervisorRepository();
         $fingerprintDevice = new FingerprintDeviceRepository();
         return [
             'employeeItems' => [],
             'absentTypeItems' => self::ABSEN_TYPE,
             'fingerprintDeviceItems' => ['' => __('crud.option.fingerprintDevice_placeholder')] + $fingerprintDevice->pluck(),
             'reasonItems' => config('local.reason_log_finger'),
+            'supervisorItems' => ['' => __('crud.option.supervisor_placeholder')] + $employeeSupervisor->allQuery()->supervisor()->get()->pluck('code_name','id')->toArray(),
 
         ];
     }
