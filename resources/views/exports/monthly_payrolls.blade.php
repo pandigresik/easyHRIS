@@ -128,7 +128,7 @@
                 <td>{{ $potonganBpjsTambahanComponent ? ($potonganBpjsTambahanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>                                          
                 <td>{{ $potonganLainComponent ? ($potonganLainComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>            
                 <td>{{ $totalPotongan }}</td>
-                <td>{{ $totalPenerimaan - $totalPotongan }}</td>
+                <td>=round({{ $totalPenerimaan - $totalPotongan }},0)</td>
             </tr>
             @endforeach        
         @endforeach

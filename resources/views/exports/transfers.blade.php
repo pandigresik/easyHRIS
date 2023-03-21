@@ -41,7 +41,7 @@
                 <td>{{ $payroll->employee->jobtitle->name ?? '' }}</td>
                 <td>{{ $payroll->getRawOriginal('take_home_pay') }}</td>
                 <td>{{ $payroll->getRawOriginal('take_home_pay') }}</td>
-                <td>{{ $payroll->getRawOriginal('take_home_pay') }}</td>
+                <td>=round({{ $payroll->getRawOriginal('take_home_pay') }},0)</td>
                 <td>{{ $payroll->employee->account_bank }}</td>
                 <td>{{ $payroll->employee->full_name }}</td>
             </tr>
