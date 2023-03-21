@@ -102,8 +102,10 @@ class RequestWorkshiftRepository extends BaseRepository
             }
             // case shift 3
             if(substr($selectedShiftmentHour['start_hour'], 0 , 2) == '00'){
-                $workDateEnd = Carbon::parse($workDate)->addDay()->format('Y-m-d');   
-                $input['start_hour'] = $workDateEnd.' '.$selectedShiftmentHour['start_hour'];
+                if($selectedShiftmentHour['start_hour'] != $selectedShiftmentHour['end_hour']){
+                    $workDateEnd = Carbon::parse($workDate)->addDay()->format('Y-m-d');
+                    $input['start_hour'] = $workDateEnd.' '.$selectedShiftmentHour['start_hour'];
+                }                
             }
             
             // jika start_hour = end_hour maka set sebagai hari libur
