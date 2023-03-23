@@ -46,7 +46,7 @@ class Employee extends Model
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const GRADE = ['NON-STAFF', 'STAFF'];
 
     protected $dates = ['deleted_at'];
     protected $showColumnOption = 'full_name';
@@ -82,7 +82,8 @@ class Employee extends Model
         'profile_size',
         'salary_group_id',
         'shiftment_group_id',        
-        'payroll_period_group_id'
+        'payroll_period_group_id',
+        'grade'
     ];
 
     /**

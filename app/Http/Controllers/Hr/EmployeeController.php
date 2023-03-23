@@ -17,6 +17,7 @@ use App\Repositories\Hr\JobTitleRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Base\Setting;
+use App\Models\Hr\Employee;
 use App\Repositories\Base\BusinessUnitRepository;
 use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use App\Repositories\Hr\SalaryGroupRepository;
@@ -216,6 +217,7 @@ class EmployeeController extends AppBaseController
             'salaryGroupItems' => ['' => __('crud.option.salary_group_placeholder')] + $salaryGroup->pluck(),
             'shiftmentGroupItems' => ['' => __('crud.option.shiftment_group_placeholder')] + $shiftmentGroup->pluck(),
             'payrollPeriodGroupItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $payrollPeriodGroup->pluck(),
+            'gradeItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + array_combine(Employee::GRADE, Employee::GRADE),
         ];
     }
 }

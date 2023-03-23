@@ -54,6 +54,15 @@
 </div>
 </div>
 
+<!-- Supervisor Id Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('grade', __('models/employees.fields.grade').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    {!! Form::select('grade', $gradeItems, null, ['class' => 'form-control select2']) !!}
+</div>
+</div>
+
+
 <!-- Region Of Birth Id Field -->
 <div class="form-group row mb-3">
     {!! Form::label('region_of_birth_id', __('models/employees.fields.region_of_birth_id').':', ['class' => 'col-md-3 col-form-label']) !!}

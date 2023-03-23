@@ -166,7 +166,12 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         $amountLateMinute = $this->getAbsentLateEmployee($employee->id)->sum(function($item){
             return $item->getRawOriginal('late_in') + $item->getRawOriginal('early_out');
         });
-        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->whereIn('state', config('local.absent_code_not_pay'))->count();
+        $absentCodeNotPay = config('local.absent_code_not_pay');
+        // jika non staff maka sakit dengan surat dokter tetap dipotong
+        if($employee->grade == 'NON-STAFF'){
+            $absentCodeNotPay[] = 'SKT';
+        }
+        $amountAbsentDay = $this->getAbsentLateEmployee($employee->id)->whereIn('state', $absentCodeNotPay)->count();
         
         $payroll->take_home_pay = $takeHomePay < 0 ? 0 : $takeHomePay;
         $payroll->additional_info = [

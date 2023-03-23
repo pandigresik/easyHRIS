@@ -135,7 +135,8 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'leave_balance',                                
             'salary_group_id',
             'shiftment_group_id',
-            'payroll_period_group_id'
+            'payroll_period_group_id',
+            'grade'
         ];
     }
 }

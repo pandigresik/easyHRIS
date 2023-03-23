@@ -36,6 +36,7 @@ return array (
     'profile_size' => 'Profile Size',
     'salary_group_id' => 'Salary Group Id',
     'shiftment_group_id' => 'Shiftment Group Id',
-    'payroll_period_group_id' => 'Payroll Period'
+    'payroll_period_group_id' => 'Payroll Period',
+    'grade' => 'Grade'
   ),
 );
