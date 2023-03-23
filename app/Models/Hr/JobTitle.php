@@ -124,4 +124,8 @@ class JobTitle extends Model
     {
         return $this->hasMany(\App\Models\Hr\JobPlacement::class, 'jobtitle_id');
     }
+
+    public function isContainTitle($title){
+        return \Str::contains(strtolower($this->attributes['name']), strtolower($title));
+    }
 }

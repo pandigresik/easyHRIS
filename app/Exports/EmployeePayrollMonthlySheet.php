@@ -32,6 +32,15 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
     */
     public function view(): View
     {
+        if($this->sheetName == 'LJP Non Staff'){
+            return view('exports.monthly_non_staff_payrolls', [
+                'jobLevel' => (new JobLevelRepository())->pluck(),
+                'payrolls' => $this->collection,
+                'component' => $this->salaryComponent,
+                'periodTitle' => $this->payrollPeriod->range_period,
+                'periodMonth' => Carbon::parse($this->payrollPeriod->getRawOriginal('start_period'))->format('F Y')
+            ]);    
+        }
         return view('exports.monthly_payrolls', [
             'jobLevel' => (new JobLevelRepository())->pluck(),
             'payrolls' => $this->collection,
