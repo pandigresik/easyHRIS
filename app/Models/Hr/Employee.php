@@ -474,7 +474,8 @@ class Employee extends Model
     public function isParentNode(){
         $jobLevelLeader = config('local.job_level_leader');
         $jobLevelEmployee = $this->jobLevel;
-        return in_array($jobLevelEmployee->code, $jobLevelLeader);
+        
+        return in_array($jobLevelEmployee->code ?? NULL , $jobLevelLeader);
     }
     
     public function getAllDescendant(){        
