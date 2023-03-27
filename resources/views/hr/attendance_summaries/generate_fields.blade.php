@@ -11,6 +11,14 @@
     </div>
 </div>
 
+<!-- Payroll Group Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('payroll_group_period_id', __('models/payrollPeriods.fields.payroll_period_group_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9"> 
+        {!! Form::select('payroll_group_period_id[]', $payrollGroupItems, null, ['class' => 'form-control select2', 'multiple' => 'multiple']) !!}
+    </div>
+</div>
+
 <!-- Start Period Field -->
 <div class="form-group row mb-3">
     {!! Form::label('employee_id', __('models/attendanceSummaries.fields.employee_id').':', ['class' => 'col-md-3

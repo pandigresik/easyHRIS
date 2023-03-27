@@ -40,7 +40,7 @@ class CreateAttendanceSummaryRequest extends FormRequest
     */
     public function all($keys = null)
     {
-        $keys = ['company_id', 'employee_id', 'range_period'];
+        $keys = ['company_id', 'employee_id', 'range_period', 'payroll_group_period_id'];
         return parent::all($keys);
     }
 }

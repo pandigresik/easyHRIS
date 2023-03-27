@@ -58,15 +58,25 @@ class AttendanceSummaryRepository extends BaseRepository
             $startDate = $period['startDate'];            
             $endDate = $period['endDate'];
             $employeeId = $input['employee_id'] ?? [];
+            $payrollGroupPeriodId = $input['payroll_group_period_id'] ?? [];
             
             // pastikan attendance sudah tidak ada yang berstatus INVALID
-            $invalidAttendance = Attendance::whereBetween('attendance_date', [$startDate, $endDate])->invalid()->count();
+            $invalidAttendance = Attendance::whereBetween('attendance_date', [$startDate, $endDate])
+                    ->whereIn('employee_id', function($q) use ($payrollGroupPeriodId) {
+                        $q->select('id')->from('employees');
+                        if($payrollGroupPeriodId){
+                            // kalau pakai whereIn dengan parameter array menyebabkan error
+                            $q->whereRaw('payroll_period_group_id in ('.implode(',',$payrollGroupPeriodId).')');
+                        }
+                    })
+                    ->invalid()->count();
             if($invalidAttendance > 0){
                 throw(new \Exception('Masih ada '.$invalidAttendance.' data invalid <a href="'.route('hr.attendances.index').'">proses absensi</a>'));
             }
-            $summaries = $this->summary($startDate, $endDate, $employeeId);
+            $summaries = $this->summary($startDate, $endDate, $employeeId, $payrollGroupPeriodId);
             $userId = \Auth::id();
             $startDateObj = Carbon::parse($startDate);
+            $dataInsertAll = [];
             if(!$summaries->isEmpty()){
                 foreach($summaries as $summary){
                     $dataInsert = $summary->toArray();
@@ -75,9 +85,12 @@ class AttendanceSummaryRepository extends BaseRepository
                     $dataInsert['total_overtime'] = 0;
                     $dataInsert['year'] = $startDateObj->format('Y');
                     $dataInsert['month'] = $startDateObj->format('m');
-                    $dataInsert['created_by'] = $userId;
-                    AttendanceSummary::upsert($dataInsert,['employee_id', 'year', 'month']);
+                    $dataInsert['created_by'] = $userId;                    
+
+                    $dataInsertAll[] = $dataInsert;
                 }
+
+                AttendanceSummary::upsert($dataInsertAll,['employee_id', 'year', 'month']);
             }
             $this->model->getConnection()->commit();            
             $this->model->newInstance()->flushCache();
@@ -88,7 +101,7 @@ class AttendanceSummaryRepository extends BaseRepository
         }        
     }
 
-    private function summary($startDate, $endDate, $employeeId = []){
+    private function summary($startDate, $endDate, $employeeId = [], $payrollGroupPeriodId = []){
         $toleranceLate = Setting::select(['value'])->where(['name' => 'latein_tolerance', 'type' => 'attendance'])->first();
         $shiftmentOff = config('local.shiftment_off');
         $leaveCode = implode("','",config('local.leave_code'));
@@ -103,6 +116,17 @@ class AttendanceSummaryRepository extends BaseRepository
         if(!empty($employeeId)){
             $summary->whereIn('employee_id', $employeeId);
         }
+
+        if(!empty($payrollGroupPeriodId)){
+            $summary->whereIn('employee_id', function($q) use ($payrollGroupPeriodId) {
+                $q->select('id')->from('employees');
+                if($payrollGroupPeriodId){
+                    // kalau pakai whereIn dengan parameter array menyebabkan error
+                    $q->whereRaw('payroll_period_group_id in ('.implode(',',$payrollGroupPeriodId).')');
+                }
+            });
+        }
+
         return $summary->groupBy('employee_id')->get();
     }
 }

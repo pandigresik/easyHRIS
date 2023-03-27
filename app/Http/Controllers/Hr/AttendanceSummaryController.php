@@ -11,6 +11,7 @@ use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Base\CompanyRepository;
+use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use Carbon\Carbon;
 use Response;
 use Exception;
@@ -179,8 +180,10 @@ class AttendanceSummaryController extends AppBaseController
     private function getOptionItems()
     {
         $company = new CompanyRepository();
+        $payrollGroup = new PayrollPeriodGroupRepository();
         return [
             'companyItems' => $company->pluck(),
+            'payrollGroupItems' => $payrollGroup->pluck(),
         ];        
     }
 }
