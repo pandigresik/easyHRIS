@@ -85,7 +85,8 @@ class LeaveDetails extends Model
         $approveState = Leaf::APPROVE_STATE;
         return $query->join('leaves', function($q) use ($approveState) {
             $q->on('leave_details.leave_id','=','leaves.id')
-                ->where('status', $approveState);
+                ->where('status', $approveState)
+                ->whereNull('deleted_at');
         });
     }
 
@@ -94,6 +95,7 @@ class LeaveDetails extends Model
         return $query->join('leaves', function($q) use ($approveState, $employee) {
             $q->on('leave_details.leave_id','=','leaves.id')
                 ->where('status', $approveState)
+                ->whereNull('deleted_at')
                 ->whereIn('employee_id', $employee);
         });
     }
@@ -104,6 +106,7 @@ class LeaveDetails extends Model
         return $query->join('leaves', function($q) use ($approveState, $shiftmentGroup) {
             $q->on('leave_details.leave_id','=','leaves.id')
                 ->where('status', $approveState)
+                ->whereNull('deleted_at')
                 ->whereIn('employee_id', function($q) use ($shiftmentGroup){
                     return $q->select(['id'])->from('employees')->whereIn('shiftment_group_id', $shiftmentGroup);
                 });
