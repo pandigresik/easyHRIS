@@ -16,7 +16,7 @@
                 {!! Form::open(['route' => 'hr.overtimeReports.index']) !!}
                 <div class="card">
                     <div class="card-header">
-                        <strong>Report @lang('models/overtimes.singular') Status Sudah Diapprove</strong>
+                        <strong>Report @lang('models/overtimes.singular')</strong>
                     </div>
                     <div class="card-body">
                         <!-- Period Field -->
@@ -42,12 +42,21 @@
                                 config('local.select2.ajax')) ) !!}
                             </div>
                         </div>
+
+                        <!-- Status Field -->
+                        <div class="form-group row mb-3">
+                            {!! Form::label('status', __('models/menus.fields.status').':', ['class' => 'col-md-3 col-form-label']) !!}    
+                            <div class="col-md-9">
+                            {!! Form::select('status', $statusItems, null, ['class' => 'form-control select2', 'required' => 'required', 'placeholder' =>  __('models/menus.option.menu_status_placeholder')]) !!}
+                            </div>
+                        </div>
+                        
                         <!-- Submit Field -->
                         <div class="form-group row mb-3">
                             <div class="col-md-9 offset-3">
                                 {!! Form::button(__('crud.search'), ['class' => 'btn btn-primary','value'=> 1,
                                 'data-url' => route('hr.overtimeReports.index'), 'data-target' =>
-                                '#list-overtime-report', 'data-ref' => 'select[name^=employee_id],input[name=period]'
+                                '#list-overtime-report', 'data-ref' => 'select[name^=employee_id],input[name=period],select[name=status]'
                                 ,'onclick' => 'main.loadDetailPage(this, \'get\')']) !!}
                                 {!! Form::button(__('crud.download'), ['class' => 'btn btn-danger', 'type' => 'button',
                                 'onclick' => 'downloadXls(this)']) !!}
@@ -76,7 +85,8 @@
             'download_xls': 1,
             'v': moment.now(),
             'employee_id': _form.find('select[name^=employee_id]').val(),
-            'period': _form.find('input[name=period]').val()
+            'period': _form.find('input[name=period]').val(),
+            'status': _form.find('select[name=status]').val(),
         }
 
         $.redirect(

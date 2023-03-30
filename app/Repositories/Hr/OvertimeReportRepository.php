@@ -40,9 +40,12 @@ class OvertimeReportRepository extends BaseRepository
         return Overtime::class;
     }
 
-    public function list($startDate, $endDate, $filterEmployee){
-        $result = ['datas' => [], 'employees' => []];        
-        $datas = Overtime::employeeDescendants()->disableModelCaching()->whereStatus('A')->whereBetween('overtime_date', [$startDate, $endDate])->newQuery(); 
+    public function list($startDate, $endDate, $filterEmployee, $status){
+        $result = ['datas' => [], 'employees' => [], 'status' => $status ? ($status == 'A' ? 'Approve' : 'Belum Approve') : '' ];        
+        $datas = Overtime::employeeDescendants()->disableModelCaching()->whereBetween('overtime_date', [$startDate, $endDate])->newQuery(); 
+        if($status){
+            $datas->whereStatus($status);
+        }
         if($filterEmployee){
             $datas->whereIn('employee_id', $filterEmployee);
         }

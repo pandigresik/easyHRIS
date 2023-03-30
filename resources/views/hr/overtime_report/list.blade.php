@@ -1,6 +1,8 @@
 <div>
     <div class="text-center">
-        <h4>Rekapitulasi Data Lembur Karyawan <br> {{ localFormatDate($startDate) }} sd {{ localFormatDate($endDate) }}</h4>
+        <h4>Rekapitulasi Data Lembur Karyawan {{ $status }}                    
+            <br> {{ localFormatDate($startDate) }} sd {{ localFormatDate($endDate) }}
+        </h4>
     </div>
     
     <table class="table table-bordered">

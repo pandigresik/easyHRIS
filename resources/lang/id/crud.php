@@ -28,6 +28,8 @@ return [
     'action' => 'Aksi',
     'state_active' => 'Aktif',
     'state_nonactive' => 'Non Aktif',
+    'state_approve' => 'Approve',
+    'state_nonapprove' => 'Belum Approve',
     'workday' => 'Hari kerja',
     'choose' => 'Pilih', 
     'updated_at' => 'Updated At',

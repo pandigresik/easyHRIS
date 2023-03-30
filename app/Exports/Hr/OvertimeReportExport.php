@@ -20,6 +20,7 @@ class OvertimeReportExport implements FromView
     private $startDate;
     private $endDate;
     private $employees;
+    private $status;
 
     public function __construct(Collection $collection)
     {
@@ -34,6 +35,7 @@ class OvertimeReportExport implements FromView
             'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate(),
             'employees' => $this->getEmployees(),
+            'status' => $this->getStatus(),
             'excel' => true
         ]);
     }
@@ -134,6 +136,26 @@ class OvertimeReportExport implements FromView
     public function setEmployees($employees)
     {
         $this->employees = $employees;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of status
+     */ 
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the value of status
+     *
+     * @return  self
+     */ 
+    public function setStatus($status)
+    {
+        $this->status = $status;
 
         return $this;
     }
