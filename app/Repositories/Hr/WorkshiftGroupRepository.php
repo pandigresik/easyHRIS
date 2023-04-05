@@ -174,7 +174,7 @@ class WorkshiftGroupRepository extends BaseRepository
             /** cari shift terakhir sebelumya yang hari libur */
             $lastShiftOff = WorkshiftGroup::where(['shiftment_group_id' => $shiftmentGroup->id])->whereIn('shiftment_id', config('local.shiftment_off'))->where('work_date','>=', $cutOffDays->format('Y-m-d'))->orderBy('work_date','asc')->first();            
             if($lastShiftOff){
-                $diffDay = Carbon::parse($lastShiftOn->getRawOriginal('work_date'))->diffInDays($lastShiftOff->work_date);                
+                $diffDay = Carbon::parse($lastShiftOn->getRawOriginal('work_date'))->diffInDays($lastShiftOff->getRawOriginal('work_date'));
                 if($diffDay){                    
                     if($lastShiftOn->getRawOriginal('work_date') < $lastShiftOff->getRawOriginal('work_date')){
                         if($diffDay < $offDay){
