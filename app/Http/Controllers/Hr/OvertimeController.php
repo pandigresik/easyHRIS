@@ -43,12 +43,15 @@ class OvertimeController extends AppBaseController
     public function create()
     {   
         $timeline = Setting::where(['type' => 'timeline', 'name' => 'max_entry_overtime'])->first();
+        $maxEndOvertime = Setting::where(['type' => 'timeline', 'name' => 'max_end_overtime'])->first();
         $maxEntry = $timeline->value ?? 5;
+        $endOvertime = $maxEndOvertime->value ?? 7;
         if(\Auth::user()->can('user-hr')){  
             $maxEntry = 45;
         }
         $minDate = localFormatDate(Carbon::now()->subDays($maxEntry)->format('Y-m-d'));
-        return view('hr.overtimes.create')->with($this->getOptionItems())->with('minDate', $minDate);
+        $maxDate = localFormatDate(Carbon::now()->addDays($endOvertime)->format('Y-m-d'));
+        return view('hr.overtimes.create')->with($this->getOptionItems())->with(['minDate' => $minDate, 'maxDate' => $maxDate]);
     }
 
     /**
@@ -109,10 +112,22 @@ class OvertimeController extends AppBaseController
 
             return redirect(route('hr.overtimes.index'));
         }
+        $timeline = Setting::where(['type' => 'timeline', 'name' => 'max_entry_overtime'])->first();
+        $maxEndOvertime = Setting::where(['type' => 'timeline', 'name' => 'max_end_overtime'])->first();
+        $maxEntry = $timeline->value ?? 5;
+        $endOvertime = $maxEndOvertime->value ?? 7;
+
+        if(\Auth::user()->can('user-hr')){  
+            $maxEntry = 45;
+            $endOvertime = 30;
+        }
+        $minDate = localFormatDate(Carbon::parse($overtime->getRawOriginal('created_at'))->subDays($maxEntry)->format('Y-m-d'));
+        $maxDate = localFormatDate(Carbon::parse($overtime->getRawOriginal('created_at'))->addDays($endOvertime)->format('Y-m-d'));
+
         $optionItems = $this->getOptionItems();
          
         $optionItems['employeeItems'] = [$overtime->employee_id => $overtime->employee->full_name .'('.$overtime->employee->code.')']; 
-        return view('hr.overtimes.edit')->with('overtime', $overtime)->with($optionItems);
+        return view('hr.overtimes.edit')->with('overtime', $overtime)->with($optionItems)->with(['minDate' => $minDate, 'maxDate' => $maxDate]);;
     }
 
     /**
