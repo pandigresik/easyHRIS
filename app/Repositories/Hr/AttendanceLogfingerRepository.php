@@ -86,8 +86,8 @@ class AttendanceLogfingerRepository extends BaseRepository
      */
     public function update($input, $id)
     {
-        try{
-            $model = parent::update($input, $id);
+        try{            
+            $model = parent::update($input, $id);            
             $this->generateJob([$model]);
             return $model;
         } catch (\Exception $e) {
