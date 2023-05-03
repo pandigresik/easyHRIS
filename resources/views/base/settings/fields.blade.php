@@ -21,3 +21,11 @@
     {!! Form::text('value', null, ['class' => 'form-control','maxlength' => 50,'maxlength' => 50, 'required' => 'required']) !!}
 </div>
 </div>
+
+<!-- Description Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('description', __('models/settings.fields.description').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    {!! Form::textarea('description', null, ['class' => 'form-control','rows' => 4,'maxlength' => 255, 'required' => 'required']) !!}
+</div>
+</div>

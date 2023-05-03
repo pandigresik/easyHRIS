@@ -26,36 +26,29 @@ EasyHRIS belum dapat digunakan untuk produksi dan sedang dalam proses pengembang
 - [x] Support Penempatan Karyawan
 - [x] Manajemen Kontrak Kerja
 - [x] Manajemen Kontrak Perusahaan dengan Rekanan/Klien
-- [x] Karir History
-- [x] Promosi, Mutasi, dan Demosi
 - [x] Manajemen Shift Kerja
 - [x] Manajemen Jadwal Kerja
 - [x] Manajemen Absensi
 - [x] Manajemen Hari Libur
 - [x] Manajemen dan Perhitungan Lembur
-- [x] Manajemen BPJS Kesehatan
-- [x] Manajemen dan Perhitungan BPJS
-- [x] Pajak PPH21
 - [x] Gaji
 - [x] Laporan Penggajian
-- [x] Laporan Beban Gaji Perusahaan
-- [x] Historikal Data Karyawan (Jenjang Karir, Gaji, Tunjangan, dan Pajak)
 - [x] Backend Site
 - [x] Soft Delete (data tidak benar-benar dihapus)
-- [x] Restore Deleted Record
 - [x] Log Activity User untuk proses transaksi
 
 ## Cara Install (Manual)
 
 - [x] Clone/Download repository `git clone https://github.com/pandigresik/EasyHRIS.git` dan pindah ke folder `EasyHRIS`
 - [x] Jalankan [Composer](https://getcomposer.org/download) Install/Update `composer install`
-- [x] Buat database misal easyhris lalu import db dari file `db_example.sql` contoh dari command line `mysql -u ahmad -h localhost -p easyhris < db_example.sql` atau bisa juga dari phpmyadmin atau lainnya
-- [x] Rename config/database.example.php menjadi config/database.php
-- [x] Rename config/config.example.php menjadi config/config.php
-- [x] Setup koneksi database pada config/database.php
-- [x] Jalankan perintah `php -S <HOST>:<PORT>` untuk mengaktifkan web server local ( kebutuhan development )
+- [x] Buat database misal easyhris 
+- [x] Buat file .env, copy saja dari file .env.example
+- [x] Jalankan perintah `php artisan key:generate`
+- [x] Setup koneksi database di file .env
+- [x] Jalankan perintah `php artisan migrate --seed`
+- [x] Jalankan perintah `php artisan serve` untuk mengaktifkan web server local ( kebutuhan development )
 - [x] Buka halaman `<HOST>:<PORT>/`
-- [x] Login using username: `admin` password:`admin`
+- [x] Login using username: `admin@admin.com` password:`admin@admin.com`
 
 ## Kontributor
 

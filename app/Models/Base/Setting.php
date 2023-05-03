@@ -51,7 +51,8 @@ class Setting extends Model
     public $fillable = [
         'name',
         'type',
-        'value'
+        'value',
+        'description'
     ];
 
     /**
@@ -63,7 +64,8 @@ class Setting extends Model
         'id' => 'integer',
         'name' => 'string',
         'type' => 'string',
-        'value' => 'string'
+        'value' => 'string',
+        'description' => 'string'
     ];
 
     /**

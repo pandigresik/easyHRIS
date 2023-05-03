@@ -9,7 +9,7 @@
         <!--
         <a class="header-brand d-md-none" href="#">
             <div class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
-                <img src="vendor/images/logo.png">
+                <img src="{{ getLogoApp() }}">
         </a>
         -->
         <ul class="header-nav ms-3">

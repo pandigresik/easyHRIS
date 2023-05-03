@@ -1,9 +1,9 @@
 <div class="sidebar sidebar-dark sidebar-fixed hide" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
         <div class="sidebar-brand-full p-2" width="118" height="46" alt="CoreUI Logo">
-            <img src="vendor/images/logo.png"> </div>
+            <img src="{{ getLogoApp() }}"> </div>
         <div class="sidebar-brand-narrow p-2" width="46" height="46" alt="CoreUI Logo">
-            <img src="vendor/images/logo.png"> 
+            <img src="{{ getLogoApp() }}"> 
         </div>                
     </div>
     <div class="sidebar-brand text-center">

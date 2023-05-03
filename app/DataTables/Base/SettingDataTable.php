@@ -117,7 +117,8 @@ class SettingDataTable extends DataTable
         return [
             'name' => new Column(['title' => __('models/settings.fields.name'),'name' => 'name', 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
             'type' => new Column(['title' => __('models/settings.fields.type'),'name' => 'type', 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
-            'value' => new Column(['title' => __('models/settings.fields.value'),'name' => 'value', 'data' => 'value', 'searchable' => true, 'elmsearch' => 'text'])
+            'value' => new Column(['title' => __('models/settings.fields.value'),'name' => 'value', 'data' => 'value', 'searchable' => true, 'elmsearch' => 'text']),
+            'description' => new Column(['title' => __('models/settings.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
     }
 

@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="d-flex align-items-center">
             <div class="bg-primary p-1">
-                <img src="vendor/images/logo.png">    
+                <img src="{{ getLogoApp() }}">    
             </div>
             <div class="p-2 flex-fill pt-3 pl-5">
                 <h2>Selamat Datang di Aplikasi Payroll LJP</h2>

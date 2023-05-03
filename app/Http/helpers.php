@@ -261,3 +261,16 @@ if (!function_exists('payrollCalculatedOvertimeValue')) {
     }
 }
 
+if (!function_exists('getLogoApp')) {
+    function getLogoApp()
+    {
+        return env('APP_PATH_LOGO', './vendor/images/logo.png');
+    }
+}
+
+if (!function_exists('getBigLogoApp')) {
+    function getBigLogoApp()
+    {
+        return env('APP_PATH_BIG_LOGO', './vendor/images/logo-big.png');
+    }
+}

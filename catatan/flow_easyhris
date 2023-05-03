@@ -4,19 +4,22 @@ Master Data :
     - shiftment
     - shiftment_group
     - employee
+    - salary_component
+    - salary_group
 
 Aktivitas Bulanan :
+    - set hari libur
     - generate jadwal untuk shiftment_group setiap bulan
     - generate jadwal employee berdasarkan data jadwal shiftment_group
 
 Aktivias Harian :
-    - Pull data attendance ( tergantung metode yang digunakan ( tarik data melalui soap, upload excel atau metode lainnya ) )    
-    - Proses summary attendance harian ( menentukan apakah pegawai sudah melakukan absent sesuai ketentuan atau tidak )
-    - Proses rekap summary attendance berdasarkan data summary attendance harian
+    - Pull data attendance ( sudah dilakukan secara otomatis melalui scheduler windows tiap jam 09.00 sd 09.20)
+    - Proses status attendance harian untuk menentukan apakah pegawai sudah melakukan absent sesuai ketentuan atau tidak ( sudah dilakukan secara otomatis melalui scheduler windows, tiap jam 09.25)    
 
 Aktivias Mingguan / Bulanan :    
     - Proses rekap summary attendance berdasarkan data summary attendance harian
-    - Perhitungan gaji berdasarkan data rekap summary attendance
+    - Data summary attendance hanya mempengaruhi nilai premi kehadiran yang diterima karyawan
+    - Perhitungan gaji berdasarkan data attendance
 
 Questions:
     - Kapan proses pergantian shift dilakukan
@@ -30,8 +33,8 @@ Todo:
     - Proses pengajuan ijin, cuti dll (done)
     - Proses pindah shift pegawai (done)   
     - Proses absensi harian, keterlambatan serta overtime (done)
-    - Perhitungan premi bulanan 
-    - Proses perhitungan gaji berdasarkan data absensi
+    - Perhitungan premi bulanan (done)
+    - Proses perhitungan gaji berdasarkan data absensi (done)
 
 Ketika import employee set juga component salary untuk pegawai tersebut
 
@@ -42,3 +45,9 @@ Besaran Tunjangan & UM Lembur Minggu adalah 25000, diberikan dengan ketentuan sb
 - < 5 jam mendapatkan 0%
 - 5 sd 6 jam mendapatkan 50%
 - >= 7 jam mendapatkan 100%
+
+component gaji
+- data attendance periode gaji
+- data ijin / luar kota / dinas luar / sakit dll periode gaji
+- data overtime periode gaji
+- data salary component karyawan

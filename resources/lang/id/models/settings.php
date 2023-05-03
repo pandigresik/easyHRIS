@@ -9,5 +9,6 @@ return array (
     'name' => 'Name',
     'type' => 'Type',
     'value' => 'Value',
+    'description' => 'Description'
   ),
 );

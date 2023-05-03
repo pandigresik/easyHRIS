@@ -190,7 +190,7 @@ class PayrollController extends AppBaseController
         }, 'payrollPeriod', 'payrollDetails' => function($r){
             return $r->with(['component']);
         }])->find($id);
-        $path = './vendor/images/logo.png';
+        $path = getLogoApp();
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
