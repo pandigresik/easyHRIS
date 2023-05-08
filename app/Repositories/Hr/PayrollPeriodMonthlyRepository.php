@@ -55,10 +55,11 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
     protected function calculatePayroll($companyId, $period, $payrollPeriod, $employeeId = []){
         // create payrollPeriod if not exists        
         $startDateObj = Carbon::parse($period['start_period']);
+        $endDateObj = Carbon::parse($period['end_period']);
         $period['company_id'] = $companyId;
         $period['payroll_period_group_id'] = $payrollPeriod;
-        $period['year'] = $startDateObj->format('Y');
-        $period['month'] = $startDateObj->format('m'); 
+        $period['year'] = $endDateObj->format('Y');
+        $period['month'] = $endDateObj->format('m'); 
         $period['name'] = 'Periode gaji '. localFormatDate($period['start_period']).' sd '.localFormatDate($period['end_period']);
         $periodPayroll = PayrollPeriod::firstOrCreate($period);
         $setting = Setting::where(['type' => 'payroll'])->get()->keyBy('name');
@@ -68,7 +69,9 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         // get list employee
         $employeeOjb = Employee::select(['id', 'code', 'join_date', 'resign_date'])->with(['salaryBenefits' => function($q){
             $q->with(['component']);
-        }])->where(['payroll_period_group_id' => $payrollPeriod]);
+        }])->where(function($q) use ($startDateObj) {
+            return $q->whereNull('resign_date')->orWhere('resign_date', '>=', $startDateObj);
+        })->where(['payroll_period_group_id' => $payrollPeriod]);
 
         if(!empty($employeeId)){
             $employeeOjb->whereIn('id', $employeeId);
@@ -124,9 +127,8 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
             
             if($benefit->component->fixed){
                 $tmp['benefit_value'] = $benefit->getRawOriginal('benefit_value');
-                
-                if($employee->getRawOriginal('join_date') > $periodPayroll->getRawOriginal('start_period')){                    
-                    if(in_array($benefit->component->code, ['GP'])){
+                if(in_array($benefit->component->code, ['GP'])){
+                    if($employee->getRawOriginal('join_date') > $periodPayroll->getRawOriginal('start_period')){                    
                         /** khusus untuk GP, jika join date > start_date maka, GP / 25 * hari kerja */
                         /** uang makan dibayarkan minimal kerja 4 jam, cek yang statusnya PC atau DT */
                         $startOfMonthPeriod = Carbon::parse($periodPayroll->getRawOriginal('end_period'))->startOfMonth();
@@ -143,11 +145,12 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
                                 if($workDayCount < 25){
                                     $tmp['benefit_value'] = ($benefit->getRawOriginal('benefit_value') / 25) * $workDayCount;
                                 }                            
-                            
                         }
+                    }   
+
+                    if($workDayCount <= 0){
+                        $tmp['benefit_value'] = 0;
                     }
-                    
-                    
                 }
                 
             }else{                                

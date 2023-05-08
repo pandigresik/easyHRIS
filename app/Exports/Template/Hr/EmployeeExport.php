@@ -28,12 +28,16 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
         if ($this->isTemplate) {            
             return Employee::whereNotNUll(['jobtitle_id', 'department_id', 'business_unit_id', 'joblevel_id'])->with(['joblevel', 'jobtitle', 'company', 'department','regionOfBirth', 'businessUnit', 'shiftmentGroup', 'salaryGroup', 'payrollPeriodGroup', 'salaryBenefits' => function($q){
                 return $q->with(['component']);
+            }, 'supervisorEmployee' => function($r){
+                return $r->selectRaw('code as name ,id');
             }])->limit(1)->get();
         }
 
         return Employee::with(['joblevel', 'jobtitle', 'company', 'department','regionOfBirth', 'businessUnit', 'shiftmentGroup', 'salaryGroup', 'salaryBenefits'  => function($q){
             return $q->with(['component']);
-        }])->all();
+        }, 'supervisorEmployee' => function($r){
+            return $r->selectRaw('code as name ,id');
+        } ])->all();
     }
 
     /**
@@ -54,7 +58,8 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'city_of_birth_id' => 'cityOfBirth',
             'salary_group_id' => 'salaryGroup',
             'shiftment_group_id' => 'shiftmentGroup',
-            'payroll_period_group_id' => 'payrollPeriodGroup'
+            'payroll_period_group_id' => 'payrollPeriodGroup',
+            'supervisor_id' => 'supervisorEmployee'
         ];        
         $mapRelationBenefit = [
             'overtime' => 'OT',

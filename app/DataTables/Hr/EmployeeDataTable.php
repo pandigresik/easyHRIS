@@ -30,6 +30,8 @@ class EmployeeDataTable extends DataTable
         ['data' => 'bpjs_jp', 'defaultContent' => '','title' => 'bpjs_jp'], 
         ['data' => 'premi_kehadiran', 'defaultContent' => '','title' => 'premi_kehadiran'], 
         ['data' => 'uang_makan', 'defaultContent' => '','title' => 'uang_makan'],
+        ['data' => 'uang_makan_lembur', 'defaultContent' => '','title' => 'uang_makan_lembur'],
+        ['data' => 'tunjangan_masuk_hari_libur', 'defaultContent' => '','title' => 'tunjangan_masuk_hari_libur'],
         ['data' => 'tunjangan_minggu', 'defaultContent' => '','title' => 'tunjangan_minggu'],
         ['data' => 'joblevel.name', 'defaultContent' => '','title' => 'joblevel_id'],
         ['data' => 'supervisor_id', 'defaultContent' => '','title' => 'supervisor_id'],        
@@ -49,7 +51,8 @@ class EmployeeDataTable extends DataTable
         ['data' => 'leave_balance', 'defaultContent' => '','title' => 'leave_balance'],                                
         ['data' => 'salary_group.name', 'defaultContent' => '','title' => 'salary_group_id'],
         ['data' => 'shiftment_group.name', 'defaultContent' => '','title' => 'shiftment_group_id'],
-        ['data' => 'payroll_period_group.name', 'defaultContent' => '','title' => 'payroll_period_group_id']        
+        ['data' => 'payroll_period_group.name', 'defaultContent' => '','title' => 'payroll_period_group_id'],
+        ['data' => 'grade', 'defaultContent' => '','title' => 'grade'],        
     ];
     /**
     * example mapping filter column to search by keyword, default use %keyword%
@@ -100,6 +103,14 @@ class EmployeeDataTable extends DataTable
             }
             return $data->resign_date;
         });
+
+        $dataTable->editColumn('supervisor_id', function($data){
+            if($this->request()->get('action') == 'excel'){
+                return $data->supervisorEmployee ? $data->supervisorEmployee->code : '' ;
+            }
+            return ;
+        });
+        
         $dataTable->editColumn('overtime', function ($data) {
             $item = $data->salaryBenefits->where('component.code', 'OT')->first();
             return $item ? $item->getRawOriginal('benefit_value') : NULL;
@@ -128,10 +139,22 @@ class EmployeeDataTable extends DataTable
             $item = $data->salaryBenefits->where('component.code', 'UM')->first();
             return $item ? $item->getRawOriginal('benefit_value') : NULL;
         });
+
+        $dataTable->editColumn('uang_makan_lembur', function ($data) {
+            $item = $data->salaryBenefits->where('component.code', 'UML')->first();
+            return $item ? $item->getRawOriginal('benefit_value') : NULL;
+        });
+
         $dataTable->editColumn('premi_kehadiran', function ($data) {
             $item = $data->salaryBenefits->where('component.code', 'PRHD')->first();
             return $item ? $item->getRawOriginal('benefit_value') : NULL;
         });
+        
+        $dataTable->editColumn('tunjangan_masuk_hari_libur', function ($data) {
+            $item = $data->salaryBenefits->where('component.code', 'TMHL')->first();
+            return $item ? $item->getRawOriginal('benefit_value') : NULL;
+        });
+
         $dataTable->editColumn('tunjangan_minggu', function ($data) {
             $item = $data->salaryBenefits->where('component.code', 'TUMLM')->first();
             return $item ? $item->getRawOriginal('benefit_value') : NULL;
@@ -149,6 +172,8 @@ class EmployeeDataTable extends DataTable
     {
         return $model->with(['joblevel', 'jobtitle', 'company', 'department','regionOfBirth', 'businessUnit', 'shiftmentGroup', 'salaryGroup', 'payrollPeriodGroup', 'salaryBenefits' => function($q){
             return $q->with(['component']);
+        }, 'supervisorEmployee' => function($r){
+            return $r->selectRaw('code ,id');
         }])->newQuery();
     }
 

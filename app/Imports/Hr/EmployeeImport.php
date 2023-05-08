@@ -33,6 +33,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
     private $company;
     private $jobTitle;
     private $payrollGroup;
+    private $supervisor = [];
     private $dateColumn = ['join_date', 'date_of_birth', 'resign_date'];
     public function __construct()
     {
@@ -44,7 +45,7 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $this->salaryComponent = SalaryComponent::whereIn('code',['GP', 'GPH', 'OT', 'JPM', 'JHTM', 'PJKNM', 'TJ','TUMLM', 'UM', 'PRHD', 'PTHD', 'TMHL', 'UML'])->get()->keyBy('code');
         $this->businessUnit = BusinessUnit::select(['id', 'name'])->get()->keyBy('name');
         $this->company = Company::select(['id', 'name'])->get()->keyBy('name');
-        $this->payrollGroup = PayrollPeriodGroup::get()->keyBy('name');
+        $this->payrollGroup = PayrollPeriodGroup::get()->keyBy('name');        
     }
     public function collection(Collection $rows)
     {      
@@ -96,6 +97,19 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $row['shiftment_group_id'] = $this->shiftmentGroup[$shiftmentGroup]->id ?? NULL;
         $payrollGroup = $row['payroll_period_group_id'];
         $row['payroll_period_group_id'] = $this->payrollGroup[$payrollGroup]->id ?? NULL;
+        
+        if(!empty($row['supervisor_id'])){
+            if(isset($this->supervisor[$row['supervisor_id']])){
+                $row['supervisor_id'] = $this->supervisor[$row['supervisor_id']];
+            }else{
+                $supervisor = Employee::select(['id', 'code'])->whereCode($row['supervisor_id'])->first();
+                if($supervisor){
+                    $this->supervisor[$supervisor->code] = $supervisor->id;
+                    $row['supervisor_id'] = $this->supervisor[$row['supervisor_id']];
+                }
+            }
+        }
+        
         $row['created_by'] = $userId;
         // jika bulanan maka, potongan hadir gaji dibagi 25
         $salaryDay = $this->payrollGroup[$payrollGroup]->type_period == 'monthly' ? ($salary / 25) : $salary;

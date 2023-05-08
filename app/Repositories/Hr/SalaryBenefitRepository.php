@@ -53,7 +53,9 @@ class SalaryBenefitRepository extends BaseRepository
                 // update Potongan Kehadiran
                 $componentPthd = SalaryComponent::whereCode('PTHD')->first();
                 $pthd = SalaryBenefit::where(['employee_id' => $model->employee_id, 'component_id' => $componentPthd->id])->first();
-                $pthd->benefit_value = $model->getRawOriginal('benefit_value');
+                // jika bulanan component code GP maka bagi dulu dengan 25
+                $potonganHarian = $component->code == 'GPH' ? $model->getRawOriginal('benefit_value') : $model->getRawOriginal('benefit_value') / 25 ;
+                $pthd->benefit_value = $potonganHarian;
                 $pthd->save();
             }
             $this->model->getConnection()->commit();
