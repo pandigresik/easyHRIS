@@ -13,6 +13,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Models\Base\Setting;
 use App\Models\Hr\AbsentReason;
 use App\Repositories\Hr\EmployeeSupervisorRepository;
+use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use App\Traits\UploadedFile;
 use Response;
 use Exception;
@@ -188,17 +189,22 @@ class LeafController extends AppBaseController
      */
     private function getOptionItems(){                
         $employeeSupervisor = new EmployeeSupervisorRepository();
+        $payrollPeriodGroupItem = []; 
+
         if(!\Auth::user()->can('user-hr')){
             $setting = Setting::where(['type' => 'leave'])->get()->keyBy('name');
             $allowLeaveCode = $setting['self_leave_code']->value;
-            $absentReason = AbsentReason::whereIn('code', explode(',',$allowLeaveCode))->pluck('name', 'id')->toArray();
+            $absentReason = AbsentReason::whereIn('code', explode(',',$allowLeaveCode))->pluck('name', 'id')->toArray();            
         }else{
             $absentReason = AbsentReason::pluck('name', 'id')->toArray();
+            $payrollPeriodGroup = new PayrollPeriodGroupRepository();
+            $payrollPeriodGroupItem = $payrollPeriodGroup->pluck();
         }
         
         return [
             'reasonItems' => ['' => __('crud.option.absentReason_placeholder')] + $absentReason,
             'supervisorItems' => ['' => __('crud.option.supervisor_placeholder')] + $employeeSupervisor->allQuery()->supervisor()->get()->pluck('code_name','id')->toArray(),
+            'payrollPeriodGroupItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $payrollPeriodGroupItem,
             'employeeItems' => []
         ];
     }

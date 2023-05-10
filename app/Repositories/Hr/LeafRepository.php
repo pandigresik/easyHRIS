@@ -245,8 +245,9 @@ class LeafRepository extends BaseRepository
         try{
             $query = $this->model->newQuery();
             $model = $query->findOrFail($id);
+            $delete = $model->delete();
             $this->generateJob($model);
-            return $model->delete();
+            return $delete;
         } catch (\Exception $e) {
             return $e;
         }

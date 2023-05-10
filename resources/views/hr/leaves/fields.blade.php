@@ -8,6 +8,21 @@
         'updateFilterEmployee(this)'] ) !!}
     </div>
 </div>
+
+<!-- Payroll Period Group Id Field -->
+<div class="form-group row mb-3">
+    {!! Form::label('payroll_period_group_id', __('models/employees.fields.payroll_period_group_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9"> 
+        {!! Form::select('payroll_period_group_id', $payrollPeriodGroupItems, null, ['class' => 'form-control select2', 'onchange' =>
+        'updateFilterEmployee(this)'] ) !!}
+    </div>
+</div>
+
+<div class="form-group row mb-3">    
+    <div class="col-md-9 offset-3"> 
+        <button type="button" class="btn btn-warning" onclick="loadEmployeeFiltered(this)">Select All Employee (Filtered)</button>
+    </div>
+</div>
 @endcan
 
 <!-- Employee Id Field -->
@@ -82,11 +97,56 @@
 <script>
     function updateFilterEmployee(elm) {
         $('#employee_id').data('filter', {})
-        if (!_.isEmpty($(elm).val())) {
-            $('#employee_id').data('filter', {
-                supervisor_id: $(elm).val()
-            })
+        $('#employee_id').val('').trigger('change')
+        let _filter = {}
+        let _payrollPeriod = $('select[name=payroll_period_group_id]').val()
+        let _supervisor = $('select[name=supervisor_id]').val()
+        if(!_.isEmpty(_payrollPeriod)){
+            _filter['payroll_period_group_id'] = _payrollPeriod
         }
+        if(!_.isEmpty(_supervisor)){
+            _filter['supervisor_id'] = _supervisor
+        }
+
+        if (!_.isEmpty(_filter)) {
+            $('#employee_id').data('filter', _filter)
+        }
+    }
+
+    function loadEmployeeFiltered(elm){
+        let _filter = $('#employee_id').data('filter')
+        let _url = $('#employee_id').data('url')
+        let _repository = $('#employee_id').data('repository')
+
+        $.ajax({
+            url: _url,
+            type: 'get',
+            dataType: 'json',
+            delay: 500,
+            data: {                
+                repository: _repository,
+                filter: _filter,
+                limit: 1000000 // set unlimited
+            },
+            beforeSend: function(){
+                main.showLoading(true)
+            },
+            success: function(data){
+                main.showLoading(false)
+                let _employees = data.data                                
+                for(let i in _employees){
+                    var newOption = new Option(_employees[i].text, _employees[i].id, true, true)
+                    // Append it to the select
+                    $('#employee_id').append(newOption)
+                }
+                $('#employee_id').trigger('change');
+            },
+            error: function (xhr, status, text) {
+                main.showLoading(false)
+				const pesan = xhr.responseText;
+				bootbox.alert('Terjadi error di server \n' + pesan, function () {});
+			}
+        })
     }
 </script>
 @endpush

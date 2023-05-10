@@ -110,7 +110,8 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
         $details = [];
         $takeHomePay = 0;
         $overtimeSalary = 0;
-        $dailySalary = 0;        
+        $dailySalary = 0;     
+        
         foreach($employee->salaryBenefits as $benefit){
             if($benefit->component->getRawOriginal('code') == 'GP'){
                 $dailySalary = $benefit->getRawOriginal('benefit_value') / $this->defaultHariKerja;
@@ -147,7 +148,7 @@ class PayrollPeriodMonthlyRepository extends PayrollPeriodRepository
                                 }                            
                         }
                     }   
-
+                    // jika tidak memiliki absent yang valid sama sekali, anggap saja resign
                     if($workDayCount <= 0){
                         $tmp['benefit_value'] = 0;
                     }
