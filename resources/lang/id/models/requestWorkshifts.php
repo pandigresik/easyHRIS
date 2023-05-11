@@ -12,5 +12,6 @@ return array (
     'work_date' => 'Work Date',
     'status' => 'Status',
     'description' => 'Description',
+    'startFrom' => 'Berlaku Mulai'
   ),
 );

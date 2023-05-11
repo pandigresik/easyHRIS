@@ -120,6 +120,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('workshifts.manual', [App\Http\Controllers\Hr\WorkshiftController::class, 'manual'])->name('hr.workshifts.manual');
         Route::resource('requestWorkshifts', Hr\RequestWorkshiftController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::resource('requestWorkshiftApproves', Hr\RequestWorkshiftApproveController::class, ["as" => 'hr'])->only(['index', 'update']);
+        Route::resource('requestWorkshiftPermanents', Hr\RequestWorkshiftPermanentController::class, ["as" => 'hr'])->only(['index', 'store']);
         Route::resource('workshiftGroups', Hr\WorkshiftGroupController::class, ["as" => 'hr', 'middleware' => ['easyauth']]);
         Route::get('workshiftGroups.generate', [App\Http\Controllers\Hr\WorkshiftGroupController::class, 'generate'])->name('hr.workshiftGroups.generate');
 
