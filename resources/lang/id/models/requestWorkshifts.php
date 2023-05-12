@@ -12,6 +12,8 @@ return array (
     'work_date' => 'Work Date',
     'status' => 'Status',
     'description' => 'Description',
-    'startFrom' => 'Berlaku Mulai'
+    'startFrom' => 'Berlaku Mulai',
+    'shiftment_group_id_current' => 'Group Shift Current',
+    'shiftment_group_id_destination' => 'Group Shift New',
   ),
 );

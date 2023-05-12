@@ -17,13 +17,13 @@
     @php
         $period = \Carbon\CarbonPeriod::create($startDate, $endDate);
         
-        $dataEmployees = $datas->sortBy('code')->groupBy('employee_id' , true)->map(function($item){
-            return $item->keyBy('state');
-        });
-        
-        // $dataEmployees = $datas->groupBy('employee_id' , true)->map(function($item){
+        // $dataEmployees = $datas->sortBy('code')->groupBy('employee_id' , true)->map(function($item){
         //     return $item->keyBy('state');
         // });
+        
+        $dataEmployees = $datas->groupBy('employee_id' , true)->map(function($item){
+            return $item->keyBy('state');
+        });
         
         $totalState = [];
         foreach($absentReason as $k => $ar){
