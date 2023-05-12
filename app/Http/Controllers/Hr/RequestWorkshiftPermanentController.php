@@ -13,6 +13,7 @@ use App\Repositories\Hr\JobTitleRepository;
 use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use App\Repositories\Hr\ShiftmentGroupRepository;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 
 class RequestWorkshiftPermanentController extends AppBaseController
@@ -52,23 +53,24 @@ class RequestWorkshiftPermanentController extends AppBaseController
 
             if(!empty($error)){                
                 return $this->sendError($error);
-            }                    
-            
+            }
+            $startDate = createLocalFormatDate($startDate);  
+            $endDate = Carbon::parse($startDate->format('Y-m-d'))->addDays(7); 
             $filterData = [
-                'startDate' => createLocalFormatDate($startDate), 
-                'employeeFilter' => $employeeFilter,
-                'shiftmentGroupCurrent' => $shiftmentGroupCurrent,
+                'startDate' => $startDate,
+                'endDate' => $endDate, 
+                'employeeFilter' => $employeeFilter,                
                 'shiftmentGroupNew' => $shiftmentGroupNew                
             ];
             $datas = $this->getRepositoryObj()->list($filterData);                 
-
-            return view('hr.request_workshift_permanent_list')
+            \Log::error($datas);
+            return view('hr.request_workshift_permanent/list')
                 ->with([
-                    'datas' => $datas, 
+                    'workshifts' => $datas['workshifts'], 
+                    'employees' => $datas['employees'], 
                     'startDate' => $startDate->format('Y-m-d'), 
-                    // 'endDate' => $endDate->format('Y-m-d'),                    
-                    // 'employees' => $employees,
-                    // 'payrollGroup' => $payrollGroup                                        
+                    'endDate' => $endDate->format('Y-m-d'),
+                    'periodRange' => CarbonPeriod::create($startDate, $endDate)                    
                 ]);
         }
 

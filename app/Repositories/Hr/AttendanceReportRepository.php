@@ -53,6 +53,7 @@ class AttendanceReportRepository extends BaseRepository
                 $datas->selectRaw('count(*) as total, state, employee_id, employees.code')
                     ->join('employees', 'employees.id','=','attendances.employee_id')
                     // ->orderBy('cast(employees.code as unsigned)')
+                    ->orderBy('employee_id')
                     ->groupBy('employee_id')
                     ->groupBy('employees.code');
                 break;

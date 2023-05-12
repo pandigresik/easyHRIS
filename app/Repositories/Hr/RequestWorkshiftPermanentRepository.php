@@ -4,7 +4,9 @@ namespace App\Repositories\Hr;
 
 use App\Jobs\AttendanceProcess;
 use App\Models\Base\Setting;
+use App\Models\Hr\Employee;
 use App\Models\Hr\RequestWorkshift;
+use App\Models\Hr\WorkshiftGroup;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -47,32 +49,27 @@ class RequestWorkshiftPermanentRepository extends BaseRepository
     {
         return RequestWorkshift::class;
     }
-
+    // return array list new schedule in 8 day 
     public function list($filterData){
         $startDate = $filterData['startDate'];
-        $employeeFilter = $filterData['employeeFilter'];
-        $shiftmentGroupCurrent = $filterData['shiftmentGroupCurrent'];
+        $employeeFilter = $filterData['employeeFilter'];        
         $shiftmentGroupNew = $filterData['shiftmentGroupNew'];
-        
+        $endDate = $filterData['endDate'];
+        $workshiftGroup = WorkshiftGroup::with(['shiftment'])->whereBetween('work_date', [$startDate, $endDate])
+                ->where(['shiftment_group_id' => $shiftmentGroupNew])
+                ->get()->keyBy(function($q){ return $q->getRawOriginal('work_date');});
+        return [
+            'workshifts' =>  $workshiftGroup->toArray(),
+            'employees' => Employee::select(['id','full_name', 'code'])->whereIn('id', $employeeFilter)->get()
+        ];
     }
 
     public function create($input)
     {
         $this->model->getConnection()->beginTransaction();
         try {
-            $setting = Setting::where(['type' => 'approval'])->get()->keyBy('name');
-            $workDate = generatePeriod($input['work_date']);
-            unset($input['work_date']);
-            $employees = $input['employee_id'];
-            unset($input['employee_id']);            
-            $this->setMaxStepApproval(intval($setting['max_approval_request_workshift']->value ?? 0));
-            foreach($employees as $employeeId){
-                foreach(CarbonPeriod::create($workDate['startDate'], $workDate['endDate']) as $date){
-                    $model = $this->generateWorkshift($employeeId, $input, $date->format('Y-m-d'));
-                }
-            }            
-            $this->model->getConnection()->commit();
-            return $model;
+            
+            return;
         } catch (\Exception $e) {
             $this->model->getConnection()->rollBack();
             return $e;
