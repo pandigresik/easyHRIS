@@ -3,14 +3,11 @@
 namespace App\Repositories\Hr;
 
 use App\Jobs\AttendanceProcess;
-use App\Models\Base\Setting;
 use App\Models\Hr\Employee;
 use App\Models\Hr\RequestWorkshift;
 use App\Models\Hr\WorkshiftGroup;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use Exception;
 
 /**
  * Class RequestWorkshiftRepository
@@ -55,7 +52,7 @@ class RequestWorkshiftPermanentRepository extends BaseRepository
         $employeeFilter = $filterData['employeeFilter'];        
         $shiftmentGroupNew = $filterData['shiftmentGroupNew'];
         $endDate = $filterData['endDate'];
-        $workshiftGroup = WorkshiftGroup::with(['shiftment'])->whereBetween('work_date', [$startDate, $endDate])
+        $workshiftGroup = WorkshiftGroup::with(['shiftment'])->whereBetween('work_date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
                 ->where(['shiftment_group_id' => $shiftmentGroupNew])
                 ->get()->keyBy(function($q){ return $q->getRawOriginal('work_date');});
         return [
@@ -67,21 +64,24 @@ class RequestWorkshiftPermanentRepository extends BaseRepository
     public function create($input)
     {
         $this->model->getConnection()->beginTransaction();
-        try {
+        try {            
+            $shiftmentGroupNew = $input['shiftment_group_id_destination'];            
+            $startDate = $input['start_from'];            
+            $endDate = WorkshiftGroup::where(['shiftment_group_id' => $shiftmentGroupNew])->max('work_date');
             
-            return;
+            $employeeFilter =  $input['employee_id'];
+            Employee::whereIn('id', $employeeFilter)->update(['shiftment_group_id' => $shiftmentGroupNew]);
+            $workshift = new WorkshiftRepository();
+            $inputWorkshift = $input;
+            $inputWorkshift['shiftment_group_id'] = [$shiftmentGroupNew];
+            $inputWorkshift['work_date_period'] = implode([$startDate,'__',$endDate]);
+            $workshift->generateSchedule($inputWorkshift);            
+            $this->model->getConnection()->commit();
+            return $this->model;
         } catch (\Exception $e) {
             $this->model->getConnection()->rollBack();
+            \Log::error($e->getMessage());
             return $e;
         }
     }    
-
-    private function generateJob($item, $delay = 2){
-        // execute job attendance process after 30 seconds                
-        if($item->getRawOriginal('status') == $item->getFinalState()){
-            if($item->getRawOriginal('work_date') < Carbon::now()->format('Y-m-d')){
-                AttendanceProcess::dispatch($item->employee_id, $item->getRawOriginal('work_date'), $item->getRawOriginal('work_date'))->delay(now()->addSeconds($delay));
-            }
-        }        
-    }
 }

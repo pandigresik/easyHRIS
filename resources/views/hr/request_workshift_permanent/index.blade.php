@@ -62,8 +62,7 @@
                             {!! Form::label('department_id', __('models/employees.fields.department_id').':', ['class' => 'col-md-3
                             col-form-label']) !!}
                             <div class="col-md-9">
-                                {!! Form::select('department_id', $departmentItems, null, ['class' => 'form-control select2', 'required' =>
-                                'required', 'onchange' => 'updateFilterEmployee(this)']) !!}
+                                {!! Form::select('department_id', $departmentItems, null, ['class' => 'form-control select2', 'onchange' => 'updateFilterEmployee(this)']) !!}
                             </div>
                         </div>
 

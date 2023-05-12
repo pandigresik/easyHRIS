@@ -14,7 +14,9 @@ use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use App\Repositories\Hr\ShiftmentGroupRepository;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Exception;
 use Illuminate\Http\Request;
+use Flash;
 
 class RequestWorkshiftPermanentController extends AppBaseController
 {
@@ -55,7 +57,7 @@ class RequestWorkshiftPermanentController extends AppBaseController
                 return $this->sendError($error);
             }
             $startDate = createLocalFormatDate($startDate);  
-            $endDate = Carbon::parse($startDate->format('Y-m-d'))->addDays(7); 
+            $endDate = Carbon::parse($startDate->format('Y-m-d'))->addDays(8); 
             $filterData = [
                 'startDate' => $startDate,
                 'endDate' => $endDate, 
@@ -63,7 +65,7 @@ class RequestWorkshiftPermanentController extends AppBaseController
                 'shiftmentGroupNew' => $shiftmentGroupNew                
             ];
             $datas = $this->getRepositoryObj()->list($filterData);                 
-            \Log::error($datas);
+            
             return view('hr.request_workshift_permanent/list')
                 ->with([
                     'workshifts' => $datas['workshifts'], 
@@ -76,6 +78,27 @@ class RequestWorkshiftPermanentController extends AppBaseController
 
         return view('hr.request_workshift_permanent.index')->with($this->getOptionItems());
     }    
+
+    /**
+     * Store a newly created PayrollPeriod in storage.
+     *
+     * @param CreatePayrollPeriodRequest $request
+     *
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        $input = $request->all();
+        $payrollPeriod = $this->getRepositoryObj()->create($input);
+        
+        if($payrollPeriod instanceof Exception){                                    
+            return redirect()->back()->withInput()->withErrors(['error', $payrollPeriod->getMessage()]);
+        }
+        
+        Flash::success(__('messages.saved', ['model' => __('models/payrollPeriods.singular')]));
+
+        return redirect(route('hr.requestWorkshiftPermanents'.'.index'));
+    }
 
     private function getOptionItems()
     {        

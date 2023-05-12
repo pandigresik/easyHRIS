@@ -1,5 +1,5 @@
 <div class="text-center">
-    <h3>Simulasi Jadwal Baru Periode {{ localFormatDate($startDate) }} sd {{ localFormatDate($endDate) }}</h3>
+    <h3>Simulasi Jadwal Baru Berlaku Mulai {{ localFormatDate($startDate) }} </h3>
 </div>
 <br>
 <br>
