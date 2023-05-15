@@ -75,7 +75,7 @@ class RequestWorkshiftPermanentRepository extends BaseRepository
             $inputWorkshift = $input;
             $inputWorkshift['shiftment_group_id'] = [$shiftmentGroupNew];
             $inputWorkshift['work_date_period'] = implode([$startDate,'__',$endDate]);
-            $workshift->generateSchedule($inputWorkshift);            
+            $workshift->generateSchedule($inputWorkshift);
             $this->model->getConnection()->commit();
             return $this->model;
         } catch (\Exception $e) {

@@ -243,4 +243,24 @@ class WorkshiftGroupController extends AppBaseController
         }
         return ['dataInsert' => $dataInsert, 'events' => $events];
     }
+
+    public function generateAndSave($params = [])
+    {        
+        $shiftmentGroup = $params['shiftmentGroup'];        
+        $data = [
+            'startDate' => $params['startDate'],
+            'endDate' => $params['endDate'],
+            'shiftmentGroup' => $shiftmentGroup
+        ];        
+        $workshifts = $this->getRepositoryObj()->generateWorkshift($data);        
+        $dataInserts = ['work_date_shiftment'];
+        
+        
+        foreach($workshifts as $shiftmentGroup => $workshift){
+            $tmpDataInsert = $this->generateInsertData($workshift);
+            $dataInserts['work_date_shiftment'][$shiftmentGroup] = json_encode($tmpDataInsert['dataInsert']);            
+        }
+        
+        return $this->getRepositoryObj()->generateSchedule($dataInserts);
+    }
 }

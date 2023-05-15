@@ -239,7 +239,7 @@ class WorkshiftGroupRepository extends BaseRepository
             foreach($input['work_date_shiftment'] as $shiftmentGroup => $shiftmentWorkDate){
                 $workshiftDate = json_decode($shiftmentWorkDate, 1);
                 $upsertData = [];
-                $userId = \Auth::id();
+                $userId = \Auth::id() ?? 1;
                 foreach($workshiftDate as $item){                
                     $item['shiftment_group_id'] = $shiftmentGroup;
                     $item['created_by'] = $userId;
