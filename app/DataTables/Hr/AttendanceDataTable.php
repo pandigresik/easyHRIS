@@ -24,7 +24,9 @@ class AttendanceDataTable extends DataTable
         'employee.payroll_period_group_id' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
         'employee.payroll_entity' =>  \App\DataTables\FilterClass\PayrollEntityGroupKeyword::class,
         'attendance_date' => \App\DataTables\FilterClass\BetweenKeyword::class,        
-        'employee.jobtitle_id' => \App\DataTables\FilterClass\RelationInKeyword::class
+        'employee.jobtitle_id' => \App\DataTables\FilterClass\RelationInKeyword::class,
+        'check_in' => \App\DataTables\FilterClass\NotNullKeyword::class,
+        'check_out' => \App\DataTables\FilterClass\NotNullKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -137,6 +139,8 @@ class AttendanceDataTable extends DataTable
     {
         $payrollGroupRepository = new PayrollPeriodGroupRepository();
         $stateItem = convertArrayPairValueWithKey(Attendance::STATE + AbsentReason::pluck('code', 'code')->toArray());
+        $checkInItem = [['text' => 'Pilih ', 'value' => ''],['text' => 'Kosong ', 'value' => '0'],['text' => 'Tidak kosong', 'value' => '1']];
+        $checkOutItem = [['text' => 'Pilih ', 'value' => ''],['text' => 'Kosong ', 'value' => '0'],['text' => 'Tidak kosong', 'value' => '1']];
         $jobTitleRepository = new JobTitleRepository();
         $jobTitleItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($jobTitleRepository->pluck()));
         $payrollGroupItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupRepository->pluck()));
@@ -150,8 +154,8 @@ class AttendanceDataTable extends DataTable
             //'description' => new Column(['title' => __('models/attendances.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
             'check_in_schedule' => new Column(['title' => __('models/attendances.fields.check_in_schedule'),'name' => 'check_in_schedule', 'data' => 'check_in_schedule', 'searchable' => false, 'elmsearch' => 'text']),
             'check_out_schedule' => new Column(['title' => __('models/attendances.fields.check_out_schedule'),'name' => 'check_out_schedule', 'data' => 'check_out_schedule', 'searchable' => false, 'elmsearch' => 'text']),
-            'check_in' => new Column(['title' => __('models/attendances.fields.check_in'),'name' => 'check_in', 'data' => 'check_in', 'searchable' => false, 'elmsearch' => 'text']),
-            'check_out' => new Column(['title' => __('models/attendances.fields.check_out'),'name' => 'check_out', 'data' => 'check_out', 'searchable' => false, 'elmsearch' => 'text']),
+            'check_in' => new Column(['title' => __('models/attendances.fields.check_in'),'name' => 'check_in', 'data' => 'check_in', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $checkInItem]),
+            'check_out' => new Column(['title' => __('models/attendances.fields.check_out'),'name' => 'check_out', 'data' => 'check_out', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $checkOutItem]),
             // 'early_in' => new Column(['title' => __('models/attendances.fields.early_in').' (minutes)','name' => 'early_in', 'data' => 'early_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'early_out' => new Column(['title' => __('models/attendances.fields.early_out').' (minutes)','name' => 'early_out', 'data' => 'early_out', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'late_in' => new Column(['title' => __('models/attendances.fields.late_in').' (minutes)','name' => 'late_in', 'data' => 'late_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
