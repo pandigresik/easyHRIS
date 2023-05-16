@@ -47,7 +47,7 @@ class OvertimeController extends AppBaseController
         $maxEntry = $timeline->value ?? 5;
         $endOvertime = $maxEndOvertime->value ?? 7;
         if(\Auth::user()->can('user-hr')){  
-            $maxEntry = 45;
+            $maxEntry = 60;
         }
         $minDate = localFormatDate(Carbon::now()->subDays($maxEntry)->format('Y-m-d'));
         $maxDate = localFormatDate(Carbon::now()->addDays($endOvertime)->format('Y-m-d'));
