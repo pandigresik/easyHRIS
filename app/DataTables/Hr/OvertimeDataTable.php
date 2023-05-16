@@ -175,13 +175,15 @@ FUNC
             'status' => new Column(['title' => __('models/overtimes.fields.status'),'name' => 'status', 'data' => 'status', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $statusItem, 'multiple' => 'multiple']),            
             'breaktime_value' => new Column(['title' => __('models/overtimes.fields.breaktime_value').'<br>( Hour ) ','name' => 'calculated_value', 'data' => 'breaktime_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             'calculated_value' => new Column(['title' => __('models/overtimes.fields.calculated_value').'<br>( Hour ) ','name' => 'calculated_value', 'data' => 'calculated_value', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
-            // 'holiday' => new Column(['title' => __('models/overtimes.fields.holiday'),'name' => 'holiday', 'data' => 'holiday', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'description' => new Column(['title' => __('models/overtimes.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
+            // 'holiday' => new Column(['title' => __('models/overtimes.fields.holiday'),'name' => 'holiday', 'data' => 'holiday', 'searchable' => false, 'elmsearch' => 'text']),            
             // 'overday' => new Column(['title' => __('models/overtimes.fields.overday'),'name' => 'overday', 'data' => 'overday', 'searchable' => false, 'elmsearch' => 'text']),            
             // 'description' => new Column(['title' => __('models/overtimes.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
         if(\Auth::user()->can('overtimes-view-amount')){
             $columnDefault['payroll_calculated_value'] = new Column(['title' => __('models/overtimes.fields.payroll_calculated_value'),'name' => 'payroll_calculated_value', 'data' => 'payroll_calculated_value', 'searchable' => false, 'elmsearch' => 'numberrange', 'className' => 'text-end']);
             $columnDefault['amount'] = new Column(['title' => __('models/overtimes.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'numberrange', 'className' => 'text-end']);
+            $columnDefault['created_at'] = new Column(['title' => __('models/overtimes.fields.created_at'),'name' => 'amount', 'data' => 'created_at', 'searchable' => false, 'elmsearch' => 'text']);
         }
         
         return $columnDefault;

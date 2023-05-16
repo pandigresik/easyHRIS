@@ -134,7 +134,7 @@ class User extends Authenticatable
                 ->get()
             ;
         });
-
+        
         return $roles->where('model_id', $this->id);
     }
 

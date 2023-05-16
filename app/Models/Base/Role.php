@@ -3,9 +3,10 @@
 namespace App\Models\Base;
 
 use App\Traits\SearchModelTrait;
+use Spatie\Permission\PermissionRegistrar;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Models\Role as Model;
-
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 /**
  * @SWG\Definition(
  *      definition="Role",
@@ -42,6 +43,7 @@ use Spatie\Permission\Models\Role as Model;
  */
 class Role extends Model
 {
+    use Cachable;
     use SearchModelTrait;
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -93,5 +95,5 @@ class Role extends Model
     public function units(): BelongsToMany
     {
         return $this->belongsToMany(Units::class, 'role_units', 'role_id', 'unit_id');
-    }
+    }    
 }

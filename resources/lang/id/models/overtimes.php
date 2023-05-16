@@ -25,6 +25,7 @@ return array (
     'description' => 'Description',
     'status' => 'Status',
     'payroll_calculated_value' => 'Payroll Calculate',
-    'period' => 'Periode'
+    'period' => 'Periode',
+    'created_at' => 'Created At'
   ),
 );
