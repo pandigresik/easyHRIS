@@ -49,9 +49,9 @@ class RequestWorkshiftPermanentController extends AppBaseController
                 $error[] = 'new shiftment group must filled';
             }
 
-            if(empty($shiftmentGroupCurrent)){
-                $error[] = 'current shiftment group must filled';
-            }
+            // if(empty($shiftmentGroupCurrent)){
+            //     $error[] = 'current shiftment group must filled';
+            // }
 
             if(!empty($error)){                
                 return $this->sendError($error);
@@ -119,7 +119,7 @@ class RequestWorkshiftPermanentController extends AppBaseController
             'joblevelItems' =>  $jobLevel->pluck(),
             'jobtitleItems' =>  $jobTitle->pluck(),
             'supervisorItems' => ['' => __('crud.option.supervisor_placeholder')] + $employee->allQuery()->supervisor()->get()->pluck('code_name','id')->toArray(),
-            'shiftmentGroupItems' => $shiftmentGroup->pluck(),
+            'shiftmentGroupItems' => ['' => __('crud.option.supervisor_placeholder')] + $shiftmentGroup->pluck(),
             'minDate' => $minDate
         ];        
         

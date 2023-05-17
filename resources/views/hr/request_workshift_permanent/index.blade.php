@@ -101,7 +101,7 @@
                             {!! Form::label('shiftment_group_id', __('models/requestWorkshifts.fields.shiftment_group_id_current').':', ['class' =>
                             'col-md-3 col-form-label']) !!}
                             <div class="col-md-9">
-                                {!! Form::select('shiftment_group_id', $shiftmentGroupItems, null, ['id' => 'shiftment_group_id', 'class' => 'form-control select2', 'required' => 'required', 'onchange' => 'updateFilterEmployee(this)']) !!}                                
+                                {!! Form::select('shiftment_group_id', $shiftmentGroupItems, null, ['id' => 'shiftment_group_id', 'class' => 'form-control select2', 'onchange' => 'updateFilterEmployee(this)']) !!}
                             </div>
                         </div>
 
