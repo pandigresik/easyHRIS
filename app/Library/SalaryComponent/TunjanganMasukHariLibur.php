@@ -4,7 +4,7 @@ class TunjanganMasukHariLibur extends Component{
     protected $code = 'TMHL';
     private $dataOvertime;
     private $value;
-    private $minimumOvertime = 8;
+    private $minimumOvertime = 7;
 
     function __construct($dataOvertime, $value)
     {
