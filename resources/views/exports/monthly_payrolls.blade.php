@@ -12,20 +12,23 @@
             <th rowspan="2">BISNIS UNIT</th>
             <th rowspan="2">DEPARTEMEN</th>
             <th rowspan="2">Jabatan / Divisi</th>            
-            <td colspan=9>PENERIMAAN</td>
-            <td colspan=8>POTONGAN</td>            
+            <td colspan=10>PENERIMAAN</td>
+            <td colspan=10>POTONGAN</td>            
             <td rowspan="2">NETTO</td>
         </tr>
         <tr>
             <td>GAPOK</td>
             <td>TJ JABATAN</td>
             <td>LAIN2-1</td>
-            <td>PREMI HADIR DESEMBER 2022</td>
-            <td>UPAH LEMBUR / JAM</td>
+            <td>PREMI HADIR {{$premiMonth}}</td>
+            <td>UPAH LEMBUR / JAM</td>            
+            <td>LEMBUR (JAM)</td>
             <td>TOTAL LEMBUR</td>
             <td>UM</td>
             <td>UML</td>
             <td>TOTAL PENERIMAAN</td>
+            <td>Total Hari</td>
+            <td>Total Jam</td>
             <td>Hari</td>
             <td>Jam</td>
             <td>BPJS TK/JHT</td>
@@ -55,7 +58,7 @@
             @endphp
             @foreach($payrollLevels as $payroll)
             @php
-                $additionalInfo = $payroll->additional_info;
+                $additionalInfo = $payroll->additional_info;                
                 $payrollDetails = $payroll->payrollDetails->keyBy('component_id');            
                 $salaryComponent = $payrollDetails[$component['GP']] ?? [];            
                 $overtimeComponent = $payrollDetails[$component['OT']] ?? [];
@@ -115,13 +118,16 @@
                 <td>{{ $positionComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
                 <td>{{ $summaryOtherComponent }}</td>
                 <td>{{ $premiComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
-                <td>{{ $overtimeSalary }}</td>            
+                <td>{{ $overtimeSalary }}</td>
+                <td>{{ minuteToHour($overtime) }}</td>
                 <td>{{ $overtimeComponent->getRawOriginal('benefit_value') ?? 0 }}</td>            
                 <td>{{ $uangMakanComponent ? ($uangMakanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
                 <td>{{ $uangMakanLemburComponent ? ($uangMakanLemburComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>            
-                <td>{{ $totalPenerimaan }}</td>            
+                <td>{{ $totalPenerimaan }}</td>
+                <td>{{ $absent }}</td>              
+                <td>{{ round(minuteToHour($lateEarly),2) }}</td>
                 <td>{{ $absent * $dailySalary }}</td>  
-                <td>{{ round($dailySalary/7 * minuteToHour($lateEarly),2) }}</td>          
+                <td>{{ round($dailySalary/7 * minuteToHour($lateEarly),2) }}</td>
                 <td>{{ $potonganBpjsJhtComponent ? ($potonganBpjsJhtComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
                 <td>{{ $potonganBpjsJpComponent ? ($potonganBpjsJpComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>  
                 <td>{{ $potonganBpjsKesehatanComponent ? ($potonganBpjsKesehatanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>                
@@ -155,6 +161,9 @@
             <td>=sum(V{{ $awalBarisData + $awalBarisKosong }}:V{{ $no + $barisKosong + $awalBarisData }})</td>
             <td>=sum(W{{ $awalBarisData + $awalBarisKosong }}:W{{ $no + $barisKosong + $awalBarisData }})</td>
             <td>=sum(X{{ $awalBarisData + $awalBarisKosong }}:X{{ $no + $barisKosong + $awalBarisData }})</td>
+            <td>=sum(Y{{ $awalBarisData + $awalBarisKosong }}:Y{{ $no + $barisKosong + $awalBarisData }})</td>
+            <td>=sum(Z{{ $awalBarisData + $awalBarisKosong }}:Z{{ $no + $barisKosong + $awalBarisData }})</td>
+            <td>=sum(AA{{ $awalBarisData + $awalBarisKosong }}:AA{{ $no + $barisKosong + $awalBarisData }})</td>
         </tr>
     </tbody>
 </table>

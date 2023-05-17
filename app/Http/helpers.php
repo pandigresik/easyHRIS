@@ -13,6 +13,14 @@ if (!function_exists('localFormatDate')) {
     }
 }
 
+if (!function_exists('localFormatFullDate')) {
+    function localFormatFullDate($value)
+    {
+        if(is_null($value)) return NULL;
+        return Date::parse($value)->format(config('local.date_full_format'));
+    }
+}
+
 if (!function_exists('localFormatMonth')) {
     function localFormatMonth($value)
     {

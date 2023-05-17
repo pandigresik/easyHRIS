@@ -38,6 +38,7 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
                 'payrolls' => $this->collection,
                 'component' => $this->salaryComponent,
                 'periodTitle' => $this->payrollPeriod->range_period,
+                'premiMonth' => substr(localFormatFullDate($this->payrollPeriod->getRawOriginal('start_period')), 2),
                 'periodMonth' => Carbon::parse($this->payrollPeriod->getRawOriginal('start_period'))->format('F Y')
             ]);    
         }
@@ -46,6 +47,7 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
             'payrolls' => $this->collection,
             'component' => $this->salaryComponent,
             'periodTitle' => $this->payrollPeriod->range_period,
+            'premiMonth' => substr(localFormatFullDate($this->payrollPeriod->getRawOriginal('start_period')), 2),
             'periodMonth' => Carbon::parse($this->payrollPeriod->getRawOriginal('start_period'))->format('F Y')
         ]);
     }
@@ -67,20 +69,23 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
             'H' => $formatNumber,
             'I' => $formatNumber,
             'J' => $formatNumber,
-            'K' => $formatNumberDecimal,
-            'L' => $formatNumber,
+            'K' => $formatNumber,
+            'L' => $formatNumberDecimal,
             'M' => $formatNumber,
             'N' => $formatNumber,
             'O' => $formatNumber,
             'P' => $formatNumber,
             'Q' => $formatNumber,
-            'R' => $formatNumber,
+            'R' => $formatNumberDecimal,
             'S' => $formatNumber,
             'T' => $formatNumber,
             'U' => $formatNumber,
             'V' => $formatNumber,
             'W' => $formatNumber,
-            'X' => $formatNumber                   
+            'X' => $formatNumber,
+            'Y' => $formatNumber,
+            'Z' => $formatNumber,
+            'AA' => $formatNumber                   
         ];
     }
 
@@ -88,10 +93,10 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
     {
         return [
             AfterSheet::class => function(AfterSheet $event){
-                $headerCellRange = 'A4:X5';                
+                $headerCellRange = 'A4:AA5';                
                 $worksheet = $event->sheet->getDelegate();
                 $lastRow = $worksheet->getHighestDataRow();
-                $tableRange = 'A4:X'.$lastRow;
+                $tableRange = 'A4:AA'.$lastRow;
                 $worksheet->freezePane('A6');
                 $worksheet->getStyle($headerCellRange)->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)

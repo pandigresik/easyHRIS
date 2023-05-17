@@ -30,6 +30,7 @@ return [
     'datesingle' => ['singleDatePicker' => true, 'locale' => ['format' => 'DD MMM YYYY'] ],
     'time' => ['timePicker' => true,'locale' => ['format' => 'HH:mm']],
     'date_format' => 'd M Y',
+    'date_full_format' => 'd F Y',
     'datetime_format' => 'd M Y H:i:s',
     'date_format_javascript' => 'DD MMM YYYY',
     'datetime_format_javascript' => 'DD MMM YYYY HH:mm:ss',
