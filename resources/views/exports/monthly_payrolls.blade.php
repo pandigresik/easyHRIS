@@ -27,10 +27,10 @@
             <td>UM</td>
             <td>UML</td>
             <td>TOTAL PENERIMAAN</td>
-            <td>Total Hari</td>
-            <td>Total Jam</td>
-            <td>Hari</td>
-            <td>Jam</td>
+            <td>Juml Hari</td>            
+            <td>Total Hari (Rp)</td>
+            <td>Juml Jam</td>
+            <td>Total Jam (Rp)</td>
             <td>BPJS TK/JHT</td>
             <td>BPJS TK/JP</td>
             <td>BPJS KES</td>
@@ -124,9 +124,9 @@
                 <td>{{ $uangMakanComponent ? ($uangMakanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
                 <td>{{ $uangMakanLemburComponent ? ($uangMakanLemburComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>            
                 <td>{{ $totalPenerimaan }}</td>
-                <td>{{ $absent }}</td>              
-                <td>{{ round(minuteToHour($lateEarly),2) }}</td>
-                <td>{{ $absent * $dailySalary }}</td>  
+                <td>{{ $absent }}</td>                              
+                <td>{{ $absent * $dailySalary }}</td>
+                <td>{{ round(minuteToHour($lateEarly),2) }}</td>  
                 <td>{{ round($dailySalary/7 * minuteToHour($lateEarly),2) }}</td>
                 <td>{{ $potonganBpjsJhtComponent ? ($potonganBpjsJhtComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
                 <td>{{ $potonganBpjsJpComponent ? ($potonganBpjsJpComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>  
