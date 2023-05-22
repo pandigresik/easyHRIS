@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\BlameableCustomTrait;
 use App\Traits\SearchModelTrait;
 use App\Traits\ShowColumnOptionTrait;
+use Carbon\Carbon;
 use DigitalCloud\Blameable\Traits\Blameable;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
@@ -60,12 +61,12 @@ class Base extends Model
         return $this->belongsTo(\App\Models\Base\User::class, static::UPDATED_BY);
     }
 
-    public function getCreatedAtAttribute($value){
-        return localFormatDateTime($value);
+    public function getCreatedAtAttribute($value){        
+        return localFormatDateTime((new Carbon($value))->setTimezone(config('app.timezone')));
     }
 
     public function getUpdatedAtAttribute($value){
-        return localFormatDateTime($value);
+        return localFormatDateTime((new Carbon($value))->setTimezone(config('app.timezone')));
     }
 
     protected function scopeEmployeeDescendants($query, $column = 'employee_id'){

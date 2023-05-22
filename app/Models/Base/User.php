@@ -130,7 +130,7 @@ class User extends Authenticatable
     {
         $roles = Cache::rememberForever('roles_cache', function () {
             return Role::select('roles.*', 'model_has_roles.*')
-                ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
+                ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')                
                 ->get()
             ;
         });
