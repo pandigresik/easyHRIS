@@ -27,7 +27,7 @@ class AttendanceLogfingerImport implements ToCollection, WithHeadingRow, WithBat
     }
     public function collection(Collection $rows)    
     {
-        foreach ($rows as $row) {
+        foreach ($rows as $row) {            
             if(isset($this->mapEmployee[$row[$this->mapColumn['employee_id']]])){
                 $raw = [
                     'employee_id' => $this->mapEmployee[$row[$this->mapColumn['employee_id']]],

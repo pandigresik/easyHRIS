@@ -10,6 +10,10 @@ use App\Repositories\Hr\ShiftmentRepository;
 use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Hr\EmployeeSupervisorRepository;
+use App\Repositories\Hr\JobTitleRepository;
+use App\Repositories\Hr\PayrollPeriodGroupRepository;
+use App\Repositories\Hr\ShiftmentGroupRepository;
 use Response;
 use Exception;
 
@@ -174,9 +178,28 @@ class RequestWorkshiftController extends AppBaseController
      */
     private function getOptionItems(){        
         $shiftment = new ShiftmentRepository();
+        $payrollPeriodGroupItem = [];
+        $employeeSupervisorItem = [];
+        $shiftmentGroupItem = [];
+        $jobTitleItem = [];
+        if(\Auth::user()->can('user-hr')){
+            $employeeSupervisor = new EmployeeSupervisorRepository();
+            $payrollPeriodGroup = new PayrollPeriodGroupRepository();
+            $payrollPeriodGroupItem = $payrollPeriodGroup->pluck();
+            $employeeSupervisorItem = $employeeSupervisor->allQuery()->supervisor()->get()->pluck('code_name','id')->toArray();
+            $shiftmentGroup = new ShiftmentGroupRepository();
+            $shiftmentGroupItem = $shiftmentGroup->pluck();
+            $jobTitle = new JobTitleRepository();
+            $jobTitleItem = $jobTitle->pluck();
+        }
+
         return [
             'shiftmentItems' => ['' => __('crud.option.shiftment_placeholder')] + $shiftment->pluck(),
-            'employeeItems' => [],                   
+            'employeeItems' => [],    
+            'supervisorItems' => ['' => __('crud.option.supervisor_placeholder')] + $employeeSupervisorItem,
+            'payrollPeriodGroupItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $payrollPeriodGroupItem,
+            'shiftmentGroupItems' => ['' => __('crud.option.supervisor_placeholder')] + $shiftmentGroupItem,
+            'jobtitleItems' =>  $jobTitleItem,
         ];
     }
 }

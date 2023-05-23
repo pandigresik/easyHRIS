@@ -106,7 +106,30 @@ FUNC
                        'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
                     ],
                 ];
-                
+        if(!\Auth::user()->can('user-hr')){
+            $buttons = [                
+                [
+                   'extend' => 'export',
+                   'className' => 'btn btn-default btn-sm no-corner',
+                   'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
+                ],                
+                [
+                   'extend' => 'print',
+                   'className' => 'btn btn-default btn-sm no-corner',
+                   'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
+                ],
+                [
+                   'extend' => 'reset',
+                   'className' => 'btn btn-default btn-sm no-corner',
+                   'text' => '<i class="fa fa-undo"></i> ' .__('auth.app.reset').''
+                ],
+                [
+                   'extend' => 'reload',
+                   'className' => 'btn btn-default btn-sm no-corner',
+                   'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
+                ],
+            ];
+        }
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
