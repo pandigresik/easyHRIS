@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Hr;
 
 use App\DataTables\Hr\RitaseDriverDataTable;
-use App\Http\Requests\Hr;
 use App\Http\Requests\Hr\CreateRitaseDriverRequest;
 use App\Http\Requests\Hr\UpdateRitaseDriverRequest;
 use App\Repositories\Hr\RitaseDriverRepository;
-use App\Repositories\Hr\EmployeeRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Hr\Employee;
@@ -173,8 +171,8 @@ class RitaseDriverController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $employee = Employee::driver()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id');
-        $kernet = Employee::kernet()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id');
+        $employee = Employee::driver()->active()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id');
+        $kernet = Employee::kernet()->active()->selectRaw('id, concat(full_name," (",code,")") as name ')->pluck('name', 'id');
         return [
             'employeeItems' => ['' => __('crud.option.employee_placeholder')] + $employee->toArray() + $kernet->toArray()
         ];
