@@ -78,9 +78,11 @@ class OvertimeDay{
                         }else{
                             $ot->end_hour_real = $checkOutRealObj->format('H:i:s');
                             $rawValue = Carbon::parse($startOvertime)->diffInMinutes($checkOutRealObj);
-                        }                                                                        
+                        }              
                         $ot->raw_value = $rawValue;
                         $finalCalculateValue = $rawValue - $breakTime;
+                        // maksimum tanpa istirahat dianggap 60 menit
+                        $finalCalculateValue = $finalCalculateValue > 60 ? 60 : $finalCalculateValue;
                     }
                 }
             }
@@ -101,7 +103,7 @@ class OvertimeDay{
                     $calculateValue = $rawValue;
                     if($checkOutRealObj->greaterThanOrEqualTo($endOvertime)){
                         $calculateValue = Carbon::parse($startOvertime)->diffInMinutes($endOvertime);
-                    }                                        
+                    }
                     
                     $ot->raw_value = $rawValue;
                     $finalCalculateValue = $calculateValue - $breakTime;

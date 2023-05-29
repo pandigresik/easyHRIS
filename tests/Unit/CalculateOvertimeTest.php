@@ -42,7 +42,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '06:50:00',
                     'end_hour_real' => '08:00:00',
                     'raw_value' => 70,
-                    'calculated_value' => 60
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
                 ]))->toArray()
             ]
         ];
@@ -79,7 +80,46 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '12:00:00',
                     'end_hour_real' => '13:00:00',
                     'raw_value' => 60,
-                    'calculated_value' => 60
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
+                ]))->toArray()
+            ]
+        ];
+        $overday = new OvertimeDay($workshift, $logFingers, $overtimes, $this->constraint);
+        $result = $overday->getResult();
+        $result['overtimes'] = collect($result['overtimes'])->map(function($item){
+            return $item->toArray();
+        })->toArray();        
+        $this->assertEquals($expected, $result);
+    }
+
+    public function test_lemburtengah_maximal_satu_jam()
+    {
+        $workshift = new Workshift(['start_hour' => '2022-10-10 08:00:59', 'end_hour' => '2022-10-10 15:59:59', 'work_date' => '2022-10-10']);
+        $workshift->syncOriginal();
+        $logFingers = [
+            (new AttendanceLogfinger(['fingertime' => '2022-10-10 07:50:00']))->syncOriginal(),
+            (new AttendanceLogfinger(['fingertime' => '2022-10-10 16:00:45']))->syncOriginal()
+        ];
+        $overtimes = [
+            (new Overtime(['start_hour' => '12:00:00', 'end_hour' => '14:00:00', 'breaktime_value' => 0, 'overtime_date' => '2022-10-10', 'overday' => 0]))->syncOriginal()
+        ];
+        
+        $expected = [
+            'checkin' => '2022-10-10 07:50:00',
+            'checkout' => '2022-10-10 16:00:45',
+            'overtimes' => [
+                (new Overtime([
+                    'start_hour' => '12:00:00', 
+                    'end_hour' => '14:00:00', 
+                    'breaktime_value' => 0, 
+                    'overtime_date' => '2022-10-10', 
+                    'overday' => 0, 
+                    'start_hour_real' => '12:00:00',
+                    'end_hour_real' => '14:00:00',
+                    'raw_value' => 120,
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
                 ]))->toArray()
             ]
         ];
@@ -116,7 +156,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '13:00:00',
                     'end_hour_real' => '14:00:45',
                     'raw_value' => 60,
-                    'calculated_value' => 60
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
                 ]))->toArray()
             ]
         ];
@@ -154,7 +195,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '06:50:00',
                     'end_hour_real' => '08:00:00',
                     'raw_value' => 70,
-                    'calculated_value' => 60
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
                 ]))->toArray(),
                 (new Overtime([
                     'start_hour' => '12:00:00', 
@@ -165,7 +207,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '12:00:00',
                     'end_hour_real' => '13:00:00',
                     'raw_value' => 60,
-                    'calculated_value' => 60
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
                 ]))->toArray()
             ]
         ];
@@ -205,7 +248,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '06:50:00',
                     'end_hour_real' => '08:00:00',
                     'raw_value' => 70,
-                    'calculated_value' => 60
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
                 ]))->toArray(),
                 (new Overtime([
                     'start_hour' => '12:00:00', 
@@ -216,7 +260,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '12:00:00',
                     'end_hour_real' => '13:00:00',
                     'raw_value' => 60,
-                    'calculated_value' => 60
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
                 ]))->toArray(),
                 (new Overtime([
                     'start_hour' => '16:00:00', 
@@ -227,7 +272,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '16:00:00',
                     'end_hour_real' => '17:10:45',
                     'raw_value' => 70,
-                    'calculated_value' => 40
+                    'calculated_value' => 40,
+                    'payroll_calculated_value' => 30
                 ]))->toArray(),
             ]
         ];
@@ -266,7 +312,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '06:50:00',
                     'end_hour_real' => '08:00:00',
                     'raw_value' => 70,
-                    'calculated_value' => 60
+                    'calculated_value' => 60,
+                    'payroll_calculated_value' => 60
                 ]))->toArray(),                
                 (new Overtime([
                     'start_hour' => '16:00:00', 
@@ -277,7 +324,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '16:00:00',
                     'end_hour_real' => '17:10:45',
                     'raw_value' => 70,
-                    'calculated_value' => 40
+                    'calculated_value' => 40,
+                    'payroll_calculated_value' => 30
                 ]))->toArray(),
             ]
         ];
@@ -374,7 +422,8 @@ class CalculateOvertimeTest extends TestCase
                     'start_hour_real' => '08:15:00',
                     'end_hour_real' => '15:45:00',
                     'raw_value' => 450,
-                    'calculated_value' => 390 
+                    'calculated_value' => 390,
+                    'payroll_calculated_value' => 390
                 ]))->toArray()
             ]
         ];

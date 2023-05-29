@@ -42,7 +42,8 @@ class CalculateOvertimeShift3Test extends TestCase
                     'start_hour_real' => '21:50:00',
                     'end_hour_real' => '00:00:00',
                     'raw_value' => 130,
-                    'calculated_value' => 120
+                    'calculated_value' => 120,
+                    'payroll_calculated_value' => 120
                 ]))->toArray()
             ]
         ];
