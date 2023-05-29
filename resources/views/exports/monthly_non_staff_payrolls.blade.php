@@ -116,13 +116,13 @@
                 <td>{{ $payroll->employee->businessUnit->name ?? '' }}</td>
                 <td>{{ $payroll->employee->department->name ?? '' }}</td>
                 <td>{{ $payroll->employee->jobtitle->name ?? '' }}</td>                                   
-                <td>{{ $salaryComponent->getRawOriginal('benefit_value') ?? 0 }}</td>                        
-                <td>{{ $positionComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
+                <td>{{ $salaryComponent ? $salaryComponent->getRawOriginal('benefit_value') : 0 }}</td>                        
+                <td>{{ $positionComponent ? $positionComponent->getRawOriginal('benefit_value') : 0 }}</td>
                 <td>{{ $summaryOtherComponent }}</td>
-                <td>{{ $premiComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
+                <td>{{ $premiComponent ? $premiComponent->getRawOriginal('benefit_value') : 0 }}</td>
                 <td>{{ $overtimeSalary }}</td>            
                 <td>{{ minuteToHour($overtime) }}</td>
-                <td>{{ $overtimeComponent->getRawOriginal('benefit_value') ?? 0 }}</td>            
+                <td>{{ $overtimeComponent ? $overtimeComponent->getRawOriginal('benefit_value') : 0 }}</td>            
                 <td>{{ $uangMakanComponent ? ($uangMakanComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
                 <td>{{ $uangMakanLemburComponent ? ($uangMakanLemburComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>            
                 <td>{{ $totalPenerimaan }}</td>

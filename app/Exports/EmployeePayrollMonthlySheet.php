@@ -32,7 +32,7 @@ class EmployeePayrollMonthlySheet implements FromView, WithColumnFormatting, Wit
     */
     public function view(): View
     {
-        if($this->sheetName == 'LJP Non Staff'){
+        if( \Str::contains('Non Staff', $this->sheetName)){
             return view('exports.monthly_non_staff_payrolls', [
                 'jobLevel' => (new JobLevelRepository())->pluck(),
                 'payrolls' => $this->collection,
