@@ -10,6 +10,7 @@ use App\Models\Hr\SalaryBenefit;
 use App\Models\Hr\SalaryGroupDetail;
 use App\Models\Hr\Workshift;
 use App\Repositories\BaseRepository;
+use Exception;
 
 /**
  * Class EmployeeRepository
@@ -76,14 +77,14 @@ class EmployeeRepository extends BaseRepository
         $this->model->getConnection()->beginTransaction();
 
         try {
-            $model = parent::create($input);
+            $this->isEmployeeExist($input['code']);
+            $model = parent::create($input);            
             if($input['contract_id']){
                 $this->updateContract($input['contract_id']);
-            }
-            $salaryGroupId = $input['salary_group_id'];
-            $this->createSalaryBenefit($model, $salaryGroupId);
+            }            
+            $this->createSalaryBenefit($model);                        
             $this->model->getConnection()->commit();
-        } catch (\Exception $e) {            
+        } catch (\Exception $e) { 
             $this->model->getConnection()->rollBack();
 
             return $e;
@@ -201,13 +202,20 @@ class EmployeeRepository extends BaseRepository
         }
     }
 
-    private function createSalaryBenefit($model, $salaryGroupId){        
-        $newBenefit = SalaryGroupDetail::where(['salary_group_id' => $salaryGroupId])->get();
+    private function createSalaryBenefit($model){        
+        $newBenefit = SalaryGroupDetail::where(['salary_group_id' => $model->salary_group_id])->get();
         
         foreach($newBenefit as $item){                                
             $insertBenefit = ['employee_id' => $model->id, 'component_id' => $item->component_id, 'benefit_value' => $item->component_value];
             SalaryBenefit::create($insertBenefit);                
         }
         
+    }
+
+    private function isEmployeeExist($code){
+        $first = Employee::where(['code' => $code])->first();
+        if($first){            
+            throw new Exception("Data karyawan dengan nik ".$code." sudah ada");
+        }
     }
 }
