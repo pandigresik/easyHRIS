@@ -80,7 +80,8 @@ class EmployeeRepository extends BaseRepository
             if($input['contract_id']){
                 $this->updateContract($input['contract_id']);
             }
-            $this->createSalaryBenefit($model);
+            $salaryGroupId = $input['salary_group_id'];
+            $this->createSalaryBenefit($model, $salaryGroupId);
             $this->model->getConnection()->commit();
         } catch (\Exception $e) {            
             $this->model->getConnection()->rollBack();
