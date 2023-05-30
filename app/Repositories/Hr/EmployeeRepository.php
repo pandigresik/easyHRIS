@@ -201,8 +201,8 @@ class EmployeeRepository extends BaseRepository
         }
     }
 
-    private function createSalaryBenefit($model){        
-        $newBenefit = SalaryGroupDetail::where(['salary_group_id' => $model->salary_group_id])->get();
+    private function createSalaryBenefit($model, $salaryGroupId){        
+        $newBenefit = SalaryGroupDetail::where(['salary_group_id' => $salaryGroupId])->get();
         
         foreach($newBenefit as $item){                                
             $insertBenefit = ['employee_id' => $model->id, 'component_id' => $item->component_id, 'benefit_value' => $item->component_value];
