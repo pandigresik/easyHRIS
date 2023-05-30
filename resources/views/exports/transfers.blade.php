@@ -1,5 +1,5 @@
 <table>
-    <tr><td colspan="6">REKAP TOTAL DAN DAFTAR TRANSFER GAJI HARIAN</td></tr>
+    <tr><td colspan="6">REKAP TOTAL DAN DAFTAR TRANSFER GAJI</td></tr>
     <tr><td>Periode </td><td colspan="5"> : {{ $periodTitle }}</td></tr>    
 </table>
 

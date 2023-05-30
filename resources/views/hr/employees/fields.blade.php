@@ -99,7 +99,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('employee_status', __('models/employees.fields.employee_status').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('employee_status', null, ['class' => 'form-control','maxlength' => 10, 'required' => 'required']) !!}
+    {!! Form::select('employee_status', $employeeStatusItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -123,7 +123,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('gender', __('models/employees.fields.gender').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('gender', null, ['class' => 'form-control','maxlength' => 1,'maxlength' => 1, 'required' => 'required']) !!}
+    {!! Form::select('gender', $genderItems, null, ['class' => 'form-control select2','maxlength' => 1,'maxlength' => 1, 'required' => 'required']) !!}
 </div>
 </div>
 
@@ -155,7 +155,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('identity_type', __('models/employees.fields.identity_type').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('identity_type', null, ['class' => 'form-control','maxlength' => 10]) !!}
+    {!! Form::select('identity_type', $identityItems,null, ['class' => 'form-control select2']) !!}
 </div>
 </div>
 
@@ -163,7 +163,7 @@
 <div class="form-group row mb-3">
     {!! Form::label('marital_status', __('models/employees.fields.marital_status').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('marital_status', null, ['class' => 'form-control','maxlength' => 2]) !!}
+    {!! Form::select('marital_status', $marriedItems, null, ['class' => 'form-control select2']) !!}
 </div>
 </div>
 

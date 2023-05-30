@@ -202,6 +202,10 @@ class EmployeeController extends AppBaseController
         $shiftmentGroup = new ShiftmentGroupRepository();
         $salaryGroup = new SalaryGroupRepository();
         $payrollPeriodGroup = new PayrollPeriodGroupRepository();
+        $genderList = ['M' => 'Pria', 'F' => 'Wanita'];
+        $identityList = ['KTP' => 'KTP', 'SIM' => 'SIM'];
+        $employeeStatusList = ['PKWT' => 'PKWT', 'PKWTT' => 'PKWTT', 'HL' => 'HL', 'PEMB' => 'PEMBARUAN', 'TRAINEE' => 'TRAINEE'];        
+        $marriedList = ['TK' => 'Tidak/Belum Kawin', 'K0' => 'Kawin anak 0', 'K1' => 'Kawin anak 1', 'K2' => 'Kawin anak 2', 'K3' => 'Kawin anak 3'];
         return [
             'contractItems' => ['' => __('crud.option.contract_placeholder')] + $contract->allQuery(['used' => 0])->active()->pluck('letter_number', 'id')->toArray(),
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
@@ -218,6 +222,11 @@ class EmployeeController extends AppBaseController
             'shiftmentGroupItems' => ['' => __('crud.option.shiftment_group_placeholder')] + $shiftmentGroup->pluck(),
             'payrollPeriodGroupItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $payrollPeriodGroup->pluck(),
             'gradeItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + array_combine(Employee::GRADE, Employee::GRADE),
+            'genderItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $genderList,
+            'marriedItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $marriedList,
+            'identityItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $identityList,
+            'employeeStatusItems' => ['' => __('crud.option.payroll_period_group_palceholder')] + $employeeStatusList,
+            
         ];
     }
 }
