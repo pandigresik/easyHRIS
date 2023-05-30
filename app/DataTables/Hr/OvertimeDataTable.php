@@ -4,6 +4,7 @@ namespace App\DataTables\Hr;
 
 use App\Models\Hr\Overtime;
 use App\DataTables\BaseDataTable as DataTable;
+use App\Repositories\Hr\PayrollPeriodGroupRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
@@ -30,6 +31,7 @@ class OvertimeDataTable extends DataTable
     private $columnFilterOperator = [
         'employee.full_name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         'employee.code' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'employee.payroll_period_group_id' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
         'overtime_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
         'amount' =>  \App\DataTables\FilterClass\BiggerNolKeyword::class,
         'payroll_calculated_value' => \App\DataTables\FilterClass\BiggerNolKeyword::class,
@@ -83,7 +85,7 @@ class OvertimeDataTable extends DataTable
     {
         // get own data user and all employee descendant        
         return $model->employeeDescendants()->selectRaw($model->getTable().'.*')->with(['employee' => function($q){
-            $q->with(['jobtitle', 'department']);
+            $q->with(['jobtitle', 'department', 'payrollPeriodGroup']);
         }])->newQuery();
     }
 
@@ -183,8 +185,11 @@ FUNC
             // 'description' => new Column(['title' => __('models/overtimes.fields.description'),'name' => 'description', 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
         if(\Auth::user()->can('overtimes-view-amount')){
+            $payrollGroupRepository = new PayrollPeriodGroupRepository();
+            $payrollGroupItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupRepository->pluck()));
             $columnDefault['payroll_calculated_value'] = new Column(['title' => __('models/overtimes.fields.payroll_calculated_value'),'name' => 'payroll_calculated_value', 'data' => 'payroll_calculated_value', 'searchable' => true, 'className' => 'text-end', 'elmsearch' => 'dropdown', 'listItem' => $nolItem]);
             $columnDefault['amount'] = new Column(['title' => __('models/overtimes.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => true, 'className' => 'text-end','elmsearch' => 'dropdown', 'listItem' => $nolItem]);
+            $columnDefault['employee.payroll_period_group_id'] = new Column(['title' => __('models/attendances.fields.employee_payroll'),'name' => 'employee.payroll_period_group_id', 'data' => 'employee.payroll_period_group.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupItem]);
             $columnDefault['created_at'] = new Column(['title' => __('models/overtimes.fields.created_at'),'name' => 'amount', 'data' => 'created_at', 'searchable' => false, 'elmsearch' => 'text']);
         }
         
