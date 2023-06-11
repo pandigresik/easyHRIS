@@ -134,8 +134,8 @@ class OvertimeRepository extends BaseRepository
     private function isOvertimeExist($overtime, $model = NULL){
         $first = Overtime::where(['employee_id' => $overtime['employee_id'], 'start_hour' => $overtime['start_hour'], 'overtime_date' => $overtime['overtime_date']])->first();
         if($first){
-            if($model){                
-                if($model->id == $first->id){                    
+            if($model){
+                if($model->id == $first->id){
                     // allow update data except overtime_date and start_hour 
                     if($model->getRawOriginal('overtime_date') == $first->getRawOriginal('overtime_date')){
                         if($model->getRawOriginal('start_hour') == $first->getRawOriginal('start_hour')){

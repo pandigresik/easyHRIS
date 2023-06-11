@@ -34,7 +34,12 @@ class OvertimeDay{
         $startWorkshift = $this->workshift->getRawOriginal('start_hour');
         $endWorkshift = $this->workshift->getRawOriginal('end_hour');
         $checkInReal = $this->result['checkin'];
-        $checkOutReal = $this->result['checkout'];        
+        $checkOutReal = $this->result['checkout'];   
+        $overtimeType = [
+            'start' => 0,
+            'middle' => 0,
+            'end' => 0
+        ];     
         
         if(is_null($checkInReal) || is_null($checkOutReal)){
             foreach($this->overtimes as $ot){
@@ -55,7 +60,7 @@ class OvertimeDay{
             $ot->calculated_value = null;
             $finalCalculateValue = 0;            
             // lembur awal, ada kemungkinan karyawan datang terlambat            
-            if($checkInRealObj->lessThanOrEqualTo($endOvertime)){                
+            if($checkInRealObj->lessThanOrEqualTo($endOvertime)){
                 if($startOvertime < $startWorkshift){ 
                     if($endOvertime < $endWorkshift){
                         $ot->start_hour_real = Carbon::parse($checkInReal)->format('H:i:s');
@@ -65,8 +70,17 @@ class OvertimeDay{
                         $rawValue = $checkInRealObj->diffInMinutes($endOvertime);                        
                         $ot->raw_value = $rawValue;
                         $finalCalculateValue = $calculateValue - $breakTime;
+                        // pastikan lembur hanya dihitung satu kali untuk jenis yang sama
+                        $overtimeType['start']++;
+                        // \Log::error('id '.$ot->id.' data '.$ot->start_hour.' - '.$ot->end_hour.' type start');
                     }
-                }            
+
+                    if($overtimeType['start'] > 1){
+                        $finalCalculateValue = 0;
+                    }
+
+                    
+                }
                 
                 // lembur tengah
                 if($startOvertime > $startWorkshift){ 
@@ -83,13 +97,22 @@ class OvertimeDay{
                         $finalCalculateValue = $rawValue - $breakTime;
                         // maksimum tanpa istirahat dianggap 60 menit
                         $finalCalculateValue = $finalCalculateValue > 60 ? 60 : $finalCalculateValue;
+
+                        // pastikan lembur hanya dihitung satu kali untuk jenis yang sama
+                        $overtimeType['middle']++;
+                        // \Log::error('id '.$ot->id.' data '.$ot->start_hour.' - '.$ot->end_hour.' type middle');
                     }
+
+                    if($overtimeType['middle'] > 1){
+                        $finalCalculateValue = 0;
+                    }
+                    
                 }
             }
             
             if($checkOutRealObj->greaterThanOrEqualTo($startOvertime)){
-                // lembur akhir
-                if($endOvertime >= $endWorkshift){
+                // lembur akhir dimulai minimal jam pulang jadwal asli
+                if($startOvertime >= $endWorkshift){
                     $ot->start_hour_real = $ot->getRawOriginal('start_hour');
                     $ot->end_hour_real = $checkOutRealObj->format('H:i:s');
                     // case hari libur
@@ -107,7 +130,16 @@ class OvertimeDay{
                     
                     $ot->raw_value = $rawValue;
                     $finalCalculateValue = $calculateValue - $breakTime;
+
+                    // pastikan lembur hanya dihitung satu kali untuk jenis yang sama
+                    $overtimeType['end']++;
+                    // \Log::error('id '.$ot->id.' data '.$ot->start_hour.' - '.$ot->end_hour.' type end');
                 }
+
+                if($overtimeType['end'] > 1){
+                    $finalCalculateValue = 0;
+                }
+                
             }
             
             $raw_calculated_value = $finalCalculateValue > 0 ? $finalCalculateValue : 0;
