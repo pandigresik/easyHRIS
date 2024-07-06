@@ -115,7 +115,10 @@ class EmployeeImport implements ToCollection, WithHeadingRow, WithBatchInserts, 
         $salaryDay = $this->payrollGroup[$payrollGroup]->type_period == 'monthly' ? ($salary / 25) : $salary;
         Employee::upsert($row->toArray(), ['code']);
         (new Employee())->flushCache();  
-        $employee = Employee::whereCode($row['code'])->first();
+        $employee = Employee::whereCode($row['code'])->withTrashed()->first();
+        if ($employee->deleted_at) {
+            $employee->restore();
+        }
         $salaryDetails = $this->salaryGroup[$salaryGroup]->salaryGroupDetails ?? NULL;
         $this->createSalaryBenefit($employee, $salaryDetails ,[
             $this->salaryComponent['OT']->id => $overtime, 

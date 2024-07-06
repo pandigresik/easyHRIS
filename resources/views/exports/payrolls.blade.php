@@ -76,6 +76,7 @@
             if(!$salaryComponent){
                 $salaryComponent = $payrollDetails[$component['GP']] ?? [];
             }
+            
             $overtimeComponent = $payrollDetails[$component['OT']] ?? [];
             $sundayOvertimeComponent = $payrollDetails[$component['TUMLM']] ?? [];
             /* jenis tunjangan jabatan ada 2, ada yang tunjangan jabatan bulanan dan harian, cara hitungnya beda*/
@@ -145,14 +146,14 @@
             <td>{{ $payroll->employee->employee_status }}</td>
             <td>{{ $dailySalary }}</td>
             <td>{{ $workday }}</td>
-            <td>{{ $salaryComponent->getRawOriginal('benefit_value') ?? 0 }}</td>                        
+            <td>{{ is_array($salaryComponent) ? 0 : ($salaryComponent->getRawOriginal('benefit_value') ?? 0) }}</td>                        
             <td>{{ minuteToHour($overtime) }}</td>
             <td>{{ $overtimeSalary }}</td>
-            <td>{{ $overtimeComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
-            <td>{{ $sundayOvertimeComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
-            <td>{{ $positionComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
+            <td>{{ is_array($overtimeComponent) ? 0 : ($overtimeComponent->getRawOriginal('benefit_value') ?? 0) }}</td>
+            <td>{{ is_array($sundayOvertimeComponent) ? 0 : ($sundayOvertimeComponent->getRawOriginal('benefit_value') ?? 0) }}</td>
+            <td>{{ is_array($positionComponent) ? 0 : ($positionComponent->getRawOriginal('benefit_value') ?? 0) }}</td>
             <td>{{ $otherComponent ? $otherComponent->getRawOriginal('benefit_value') : 0 }}</td>
-            <td>{{ $premiComponent->getRawOriginal('benefit_value') ?? 0 }}</td>
+            <td>{{ is_array($premiComponent) ? 0 : ($premiComponent->getRawOriginal('benefit_value') ?? 0) }}</td>
             <td>{{ $km }}</td>
             <td>{{ $kmComponent ? ($kmComponent->getRawOriginal('benefit_value') ?? 0) : 0 }}</td>
             <td>{{ $doubleRit }}</td>

@@ -25,7 +25,8 @@
             $awalBarisData = 5;
             $barisPemisah = 5;
         @endphp
-        @foreach($collection as $idEntity => $payrolls)            
+        @foreach($collection as $idEntity => $payrolls)
+            @if(empty($payroll->employee)) @continue @endif
             <tr>
                 <td colspan="10">{{ $payrollEntity[$idEntity] ?? '-' }}</td>
             </tr>
