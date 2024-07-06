@@ -40,7 +40,7 @@
         "babel-loader": "^8.2.2",
         "bootbox": "^5.5.2",
         "bootstrap-daterangepicker": "^3.1.0",
-        "ckeditor4": "^4.19.1",
+        "ckeditor4": "^4.24.0",
         "css-loader": "^6.6.0",
         "datatables.net": "^1.10.25",
         "datatables.net-bs4": "^1.12.1",

@@ -2052,10 +2052,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-ckeditor4@^4.19.1:
-  version "4.19.1"
-  resolved "https://registry.yarnpkg.com/ckeditor4/-/ckeditor4-4.19.1.tgz#73e786c4194e9ee6072a0fa267ac32f230d69174"
-  integrity sha512-eK/tilHSUpLc9mrD7Lvt07LJfJ13BBa4ftxJBxIX49sGMlWg5WaB81C+MRBZwnntcfpjVdyCLpZAptAHTDB65Q==
+ckeditor4@^4.24.0:
+  version "4.24.0"
+  resolved "https://registry.yarnpkg.com/ckeditor4/-/ckeditor4-4.24.0.tgz#9699ddbce7eaa9cb1063f7f7d75b0ae761106405"
+  integrity sha512-ShtIqZMMNmP5r8AhZqnysSaONsx+qKjI/zf5AkU9wKxl0yHVw2/CSxWYmdd40u3dMjJR2kOthQ6USahz528lbw==
 
 clean-css@^4.2.3:
   version "4.2.4"
