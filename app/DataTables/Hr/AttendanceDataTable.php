@@ -54,7 +54,10 @@ class AttendanceDataTable extends DataTable
             return localFormatDateTime($item->check_in_schedule);
         })->editColumn('state', function($item){
             return '<div>'.$item->state.'</div><div class="note">'.$item->description.'</div>  <i class="fa fa-pencil" data-url="'.route('attendances.updateDescription', $item->id).'" onclick="updateDescription(this)" ></i>';
-        })->escapeColumns([]);
+        })->editColumn('note_hrd', function($item){
+            return '<div class="note">'.$item->note_hrd.'</div>  <i class="fa fa-pencil" data-url="'.route('attendances.updateNote', $item->id).'" onclick="updateNote(this)" ></i>';
+        })
+        ->escapeColumns([]);
         return $dataTable->addColumn('action', 'hr.attendances.datatables_actions');
     }
 
@@ -161,14 +164,15 @@ class AttendanceDataTable extends DataTable
             'late_in' => new Column(['title' => __('models/attendances.fields.late_in').' (minutes)','name' => 'late_in', 'data' => 'late_in', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             // 'late_out' => new Column(['title' => __('models/attendances.fields.late_out').' (minutes)','name' => 'late_out', 'data' => 'late_out', 'searchable' => false, 'elmsearch' => 'text', 'className' => 'text-end']),
             // 'absent' => new Column(['title' => __('models/attendances.fields.absent'),'name' => 'absent', 'data' => 'absent', 'searchable' => true, 'elmsearch' => 'text']),
-            'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple']),
-            'employee.payroll_period_group_id' => new Column(['title' => __('models/attendances.fields.employee_payroll'),'name' => 'employee.payroll_period_group_id', 'data' => 'employee.payroll_period_group.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupItem])
+            'state' => new Column(['title' => __('models/attendances.fields.state'),'name' => 'state', 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem, 'multiple' => 'multiple']),                        
         ];
-        if(\Auth::user()->can('user-hr')){                                     
+        if(\Auth::user()->can('user-hr')){              
+            $columnDefault['note_hrd'] = new Column(['title' => 'Keterangan','defaultContent'=> '','name' => 'note_hrd', 'data' => 'note_hrd', 'searchable' => true, 'elmsearch' => 'text']);
             $payrollGroupReportRepository = new GroupingPayrollEntityRepository ();            
             $payrollGroupReportItem = array_merge([['text' => 'Pilih '.__('models/shifments.fields.singular'), 'value' => '']], convertArrayPairValueWithKey($payrollGroupReportRepository->pluck()));            
             $columnDefault['employee.payroll_entity'] = new Column(['title' => __('models/attendances.fields.payroll_entity'),'name' => 'employee.payroll_entity', 'data' => 'employee.payroll_entity.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupReportItem, 'multiple' => 'multiple']);
         }
+        $columnDefault['employee.payroll_period_group_id'] = new Column(['title' => __('models/attendances.fields.employee_payroll'),'name' => 'employee.payroll_period_group_id', 'data' => 'employee.payroll_period_group.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $payrollGroupItem]);
         return $columnDefault;
     }
 

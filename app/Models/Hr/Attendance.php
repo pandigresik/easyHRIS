@@ -136,7 +136,8 @@ class Attendance extends Model
         'late_in',
         'late_out',
         'absent',
-        'state'
+        'state',
+        'note_hrd'
     ];
 
     /**

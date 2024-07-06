@@ -154,6 +154,24 @@ class AttendanceController extends AppBaseController
     }
 
     /**
+     * Update the specified Attendance in storage.
+     *
+     * @param  int              $id
+     * @param UpdateAttendanceRequest $request
+     *
+     * @return Response
+     */
+    public function updateNote($id, Request $request)
+    {
+        $attendance = $this->getRepositoryObj()->update(['note_hrd' => $request->get('note_hrd')], $id);
+        if($attendance instanceof Exception){
+            return $this->sendError('note_hrd updated failed '.$attendance->getMessage());
+        }        
+
+        return $this->sendSuccess('note_hrd updated success');
+    }
+
+    /**
      * Remove the specified Attendance from storage.
      *
      * @param  int $id

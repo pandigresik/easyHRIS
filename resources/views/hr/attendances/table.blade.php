@@ -38,6 +38,38 @@
                 _dialog.find('textarea').val(_defaultDescription)
             });
         }
+
+        function updateNote(elm){            
+            const _defaultDescription = $(elm).closest('td').find('div.note').text();
+            bootbox.prompt({
+                title: 'Note HRD',
+                inputType: 'textarea',
+                required: true,
+                callback: function (result) {                    
+                    if(!_.isEmpty(result)){
+                        if($.trim(result).length >= 5){                            
+                            const _url = $(elm).data('url')
+                            // save to server
+                            $.post(_url, {note_hrd: result }, function(data){                                
+                                if(data.success){
+                                    $(elm).closest('td').find('div.note').html(result)
+                                }else{
+                                    main.alertDialog('Warning', data.message)
+                                }
+                            }, 'json')
+                        }else{
+                            bootbox.alert('Note minimal 5 karakter', function(){
+                                $(elm).click()
+                            })
+                        }                        
+                    }
+                    return
+                }
+            }).on('shown.coreui.modal', function(e) {
+                const _dialog = $(e.target)
+                _dialog.find('textarea').val(_defaultDescription)
+            });
+        }
         
         const columnSearch = {!! json_encode($dataTable->getOptions()['columns']) !!}
         const newTr = $('#dataTableBuilder thead>tr').clone();
